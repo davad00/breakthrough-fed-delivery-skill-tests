@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "breakthrough-fed": {
+      "source": "davad00/breakthrough-fed-delivery",
+      "sourceType": "github",
+      "skillPath": "skill/SKILL.md",
+      "computedHash": "f4219da162c64f013eaa5b84a8dbabce3889ae1298dd9218ba9d6071f33d1d9d"
+    }
+  }
+}
