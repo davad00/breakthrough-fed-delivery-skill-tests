@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OASIS — Luxury Meditation Retreat</title>
+    <meta name="description" content="A high-end luxury meditation retreat where serenity meets architectural design.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Inter:wght@300&family=Inconsolata:wght@500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0B0E1A;
+            color: #FFFFFF;
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        .cursor {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #D4AF37;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            mix-blend-mode: normal;
+            transition: width 0.3s, height 0.3s, mix-blend-mode 0.3s;
+        }
+
+        .cursor.hover {
+            width: 60px;
+            height: 60px;
+            mix-blend-mode: difference;
+        }
+
+        #lotus-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+        }
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5vw;
+            position: relative;
+        }
+
+        .hero {
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .display-huge {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 14vw;
+            font-weight: 300;
+            line-height: 0.85;
+            letter-spacing: -0.05em;
+            opacity: 0;
+            transform: translateY(120px);
+        }
+
+        .display-large {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 8vw;
+            font-weight: 300;
+            line-height: 0.9;
+            letter-spacing: -0.03em;
+            opacity: 0;
+            transform: translateY(80px);
+        }
+
+        .h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 5vw;
+            font-weight: 400;
+            line-height: 1;
+            letter-spacing: -0.02em;
+            margin-bottom: 2rem;
+        }
+
+        .body-md {
+            font-size: 16px;
+            line-height: 1.8;
+            letter-spacing: 0.01em;
+            max-width: 600px;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .label-micro {
+            font-family: 'Inconsolata', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #8B8B8B;
+        }
+
+        .btn-primary {
+            background: #D4AF37;
+            color: #0B0E1A;
+            padding: 18px 48px;
+            border-radius: 9999px;
+            border: none;
+            font-family: 'Inconsolata', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            cursor: none;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+        }
+
+        .section-label {
+            position: absolute;
+            top: 5vh;
+            left: 5vw;
+        }
+
+        .philosophy {
+            margin-top: 25vw;
+        }
+
+        .experience {
+            margin-top: 25vw;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .sanctuary {
+            margin-top: 25vw;
+            flex-direction: column;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .display-huge {
+                font-size: 18vw;
+            }
+            .display-large {
+                font-size: 12vw;
+            }
+            .h1 {
+                font-size: 10vw;
+            }
+            body {
+                cursor: auto;
+            }
+            .cursor {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div id="lotus-container"></div>
+    
+    <div class="content">
+        <section class="hero">
+            <h1 class="display-huge">OASIS</h1>
+            <p class="body-md" style="margin-top: 2rem; text-align: center;">A sanctuary where silence becomes architecture and breath becomes ritual.</p>
+            <button class="btn-primary" data-magnetic style="margin-top: 3rem;">BOOK RETREAT</button>
+        </section>
+
+        <section class="philosophy">
+            <div class="section-label label-micro">001 — Philosophy</div>
+            <div>
+                <h2 class="h1">Luxury through<br>absence</h2>
+                <p class="body-md">In a world of constant noise, we offer the rarest luxury: profound stillness. Our retreat is designed as a vessel for transformation, where every element serves the singular purpose of deepening your practice.</p>
+            </div>
+        </section>
+
+        <section class="experience">
+            <div class="section-label label-micro">002 — Experience</div>
+            <h2 class="display-large">Breathe</h2>
+            <p class="body-md" style="margin-top: 2rem;">Seven days of guided meditation in a space designed by award-winning architects. Private chambers overlooking ancient forests. Silence as the foundation of every moment.</p>
+        </section>
+
+        <section class="sanctuary">
+            <div class="section-label label-micro">003 — Sanctuary</div>
+            <h2 class="h1">Your journey begins<br>in stillness</h2>
+            <button class="btn-primary" data-magnetic style="margin-top: 2rem;">RESERVE YOUR SANCTUARY</button>
+        </section>
+    </div>
+
+    <script>
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (!prefersReducedMotion) {
+            // Lenis smooth scroll
+            const lenis = new Lenis({
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+            });
+
+            function raf(time) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+            requestAnimationFrame(raf);
+
+            gsap.registerPlugin(ScrollTrigger);
+
+            lenis.on('scroll', ScrollTrigger.update);
+            gsap.ticker.add((time) => lenis.raf(time * 1000));
+            gsap.ticker.lagSmoothing(0);
+
+            // Three.js Lotus
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById('lotus-container').appendChild(renderer.domElement);
+
+            const geometry = new THREE.TorusKnotGeometry(2, 0.6, 100, 16);
+            const material = new THREE.MeshPhongMaterial({ 
+                color: 0xD4AF37,
+                emissive: 0xD4AF37,
+                emissiveIntensity: 0.2,
+                shininess: 100
+            });
+            const lotus = new THREE.Mesh(geometry, material);
+            scene.add(lotus);
+
+            const light = new THREE.PointLight(0xffffff, 1, 100);
+            light.position.set(10, 10, 10);
+            scene.add(light);
+
+            const ambientLight = new THREE.AmbientLight(0x404040);
+            scene.add(ambientLight);
+
+            camera.position.z = 8;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                lotus.rotation.x += 0.002;
+                lotus.rotation.y += 0.003;
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Scroll-driven camera
+            ScrollTrigger.create({
+                trigger: 'body',
+                start: 'top top',
+                end: 'bottom bottom',
+                scrub: 2,
+                onUpdate: (self) => {
+                    camera.position.z = gsap.utils.interpolate(8, 12, self.progress);
+                    lotus.rotation.z = self.progress * Math.PI * 2;
+                }
+            });
+
+            // Text reveals
+            gsap.to('.display-huge', {
+                scrollTrigger: {
+                    trigger: '.display-huge',
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                },
+                y: 0,
+                opacity: 1,
+                duration: 1.5,
+                ease: 'cubic-bezier(0.4, 0, 0.2, 1)'
+            });
+
+            gsap.to('.display-large', {
+                scrollTrigger: {
+                    trigger: '.display-large',
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                },
+                y: 0,
+                opacity: 1,
+                duration: 1.5,
+                ease: 'cubic-bezier(0.4, 0, 0.2, 1)'
+            });
+
+            document.querySelectorAll('.body-md, .btn-primary').forEach((el, i) => {
+                gsap.to(el, {
+                    scrollTrigger: {
+                        trigger: el,
+                        start: 'top 85%',
+                        toggleActions: 'play none none reverse'
+                    },
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.2,
+                    delay: i * 0.1,
+                    ease: 'cubic-bezier(0.4, 0, 0.2, 1)'
+                });
+            });
+
+            // Custom cursor
+            const cursor = document.querySelector('.cursor');
+            const magneticElements = document.querySelectorAll('[data-magnetic]');
+
+            document.addEventListener('mousemove', (e) => {
+                gsap.to(cursor, {
+                    x: e.clientX - 5,
+                    y: e.clientY - 5,
+                    duration: 0.8,
+                    ease: 'power3.out'
+                });
+            });
+
+            magneticElements.forEach((el) => {
+                el.addEventListener('mouseenter', () => {
+                    cursor.classList.add('hover');
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursor.classList.remove('hover');
+                });
+            });
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        } else {
+            document.querySelectorAll('.display-huge, .display-large, .body-md, .btn-primary').forEach(el => {
+                el.style.opacity = '1';
+                el.style.transform = 'none';
+            });
+        }
+    </script>
+</body>
+</html>

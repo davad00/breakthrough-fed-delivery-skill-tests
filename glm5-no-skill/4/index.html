@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis | Premium Meditation Retreat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background: #f7f4ef;
+            color: #333;
+        }
+
+        header {
+            background: #f7f4ef;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.6rem;
+            color: #2c5530;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 400;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #2c5530;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 4rem 4rem;
+            gap: 4rem;
+        }
+
+        .hero-content {
+            flex: 1;
+        }
+
+        .hero-visual {
+            flex: 1;
+            height: 70vh;
+            background: linear-gradient(135deg, #2c5530 0%, #1a331d 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero-visual::after {
+            content: '🌿';
+            font-size: 5rem;
+            opacity: 0.3;
+        }
+
+        .overline {
+            font-size: 0.75rem;
+            letter-spacing: 0.25rem;
+            color: #2c5530;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .hero h1 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: #1a1a1a;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 2rem;
+            max-width: 500px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-primary {
+            padding: 1rem 2rem;
+            background: #2c5530;
+            color: #fff;
+            border: none;
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #1a331d;
+        }
+
+        .btn-secondary {
+            padding: 1rem 2rem;
+            background: transparent;
+            color: #2c5530;
+            border: 2px solid #2c5530;
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: #2c5530;
+            color: #fff;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            background: #2c5530;
+            padding: 4rem;
+            text-align: center;
+            color: #fff;
+        }
+
+        .stat-item h3 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-item p {
+            font-weight: 300;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .offerings {
+            padding: 6rem 4rem;
+            background: #fff;
+        }
+
+        .section-title {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .offering-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .offering-card {
+            padding: 2.5rem;
+            background: #f7f4ef;
+            border-radius: 4px;
+        }
+
+        .offering-card h3 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #2c5530;
+        }
+
+        .offering-card p {
+            line-height: 1.7;
+            color: #555;
+        }
+
+        .offering-card ul {
+            margin-top: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .offering-card li {
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+
+        .testimonial {
+            padding: 6rem 4rem;
+            background: #f7f4ef;
+            text-align: center;
+        }
+
+        .testimonial blockquote {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.6rem;
+            font-style: italic;
+            max-width: 700px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.6;
+        }
+
+        .testimonial cite {
+            font-style: normal;
+            font-size: 0.9rem;
+            color: #2c5530;
+        }
+
+        .contact {
+            padding: 5rem 4rem;
+            background: #1a1a1a;
+            color: #fff;
+            text-align: center;
+        }
+
+        .contact h2 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact p {
+            font-weight: 300;
+            margin-bottom: 2rem;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .contact-info a {
+            color: #8fb996;
+            text-decoration: none;
+        }
+
+        footer {
+            padding: 2rem 4rem;
+            background: #111;
+            color: #666;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 900px) {
+            .hero {
+                flex-direction: column;
+            }
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .offering-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Oasis</div>
+        <nav>
+            <ul>
+                <li><a href="#offerings">Offerings</a></li>
+                <li><a href="#testimonial">Stories</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <p class="overline">PREMIUM MEDITATION RETREAT</p>
+            <h1>Reconnect with Your True Self</h1>
+            <p>Escape to a world of serenity. Oasis offers transformative meditation experiences in an environment of uncompromising luxury and natural beauty.</p>
+            <div class="btn-group">
+                <button class="btn-primary">Book Your Stay</button>
+                <button class="btn-secondary">View Retreats</button>
+            </div>
+        </div>
+        <div class="hero-visual"></div>
+    </section>
+
+    <section class="stats">
+        <div class="stat-item">
+            <h3>15+</h3>
+            <p>Years of Excellence</p>
+        </div>
+        <div class="stat-item">
+            <h3>2,500</h3>
+            <p>Lives Transformed</p>
+        </div>
+        <div class="stat-item">
+            <h3>12</h3>
+            <p>Guests per Retreat</p>
+        </div>
+        <div class="stat-item">
+            <h3>98%</h3>
+            <p>Guest Satisfaction</p>
+        </div>
+    </section>
+
+    <section class="offerings" id="offerings">
+        <h2 class="section-title">Our Retreat Programs</h2>
+        <div class="offering-grid">
+            <div class="offering-card">
+                <h3>Foundation Journey</h3>
+                <p>A 7-day introduction to meditation and mindfulness practices.</p>
+                <ul>
+                    <li>Daily guided sessions</li>
+                    <li>Private accommodation</li>
+                    <li>Wellness consultations</li>
+                </ul>
+            </div>
+            <div class="offering-card">
+                <h3>Deep Dive Immersion</h3>
+                <p>14 days of intensive practice for serious practitioners.</p>
+                <ul>
+                    <li>Extended silent periods</li>
+                    <li>Master teacher guidance</li>
+                    <li>Personalized instruction</li>
+                </ul>
+            </div>
+            <div class="offering-card">
+                <h3>Executive Renewal</h3>
+                <p>A bespoke 5-day program designed for leaders.</p>
+                <ul>
+                    <li>Stress management focus</li>
+                    <li>Private villa accommodation</li>
+                    <li>Flexible scheduling</li>
+                </ul>
+            </div>
+            <div class="offering-card">
+                <h3>Seasonal Retreats</h3>
+                <p>Special programs aligned with nature's rhythms.</p>
+                <ul>
+                    <li>Spring awakening</li>
+                    <li>Summer solstice</li>
+                    <li>Winter reflection</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonial" id="testimonial">
+        <blockquote>"Oasis gave me the space and guidance to finally quiet my mind. The experience was nothing short of life-changing."</blockquote>
+        <cite>— Sarah M., CEO & Three-Time Guest</cite>
+    </section>
+
+    <section class="contact" id="contact">
+        <h2>Ready to Transform?</h2>
+        <p>Our retreat consultants are available to help you find your perfect program.</p>
+        <div class="contact-info">
+            <a href="mailto:reservations@oasis-retreat.com">reservations@oasis-retreat.com</a>
+            <span>|</span>
+            <a href="tel:+18886274758">+1 (888) OASIS-LUX</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Oasis Premium Meditation Retreat. All rights reserved.</p>
+    </footer>
+</body>
+</html>

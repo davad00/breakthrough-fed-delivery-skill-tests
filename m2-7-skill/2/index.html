@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis — Zen Meditation Retreat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400&family=Noto+Serif+JP:wght@200;300;400&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1A1A1A;
+            --secondary: #8A8A8A;
+            --accent: #2D5A4A;
+            --paper: #F7F5F2;
+            --text-dark: #2C2C2C;
+            --ease-zen: cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--paper);
+            color: var(--primary);
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            line-height: 2;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        .cursor {
+            width: 24px;
+            height: 24px;
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            mix-blend-mode: difference;
+            transition: all 0.4s var(--ease-zen);
+        }
+
+        .cursor.hover {
+            width: 48px;
+            height: 8px;
+            border-radius: 4px;
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .cursor-dot {
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10001;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 40px 64px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 18px;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+        }
+
+        .nav-cta {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            color: var(--accent);
+            text-decoration: none;
+            padding: 12px 28px;
+            border: 1px solid var(--accent);
+            transition: all 0.4s var(--ease-zen);
+        }
+
+        .nav-cta:hover {
+            background: var(--accent);
+            color: var(--paper);
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 12vw;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 700px;
+        }
+
+        .hero-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--secondary);
+            margin-bottom: 32px;
+            opacity: 0;
+        }
+
+        .hero-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 9vw;
+            font-weight: 200;
+            letter-spacing: 0em;
+            line-height: 1;
+            margin-bottom: 48px;
+            opacity: 0;
+        }
+
+        .hero-subtitle {
+            font-size: 17px;
+            color: var(--secondary);
+            max-width: 400px;
+            opacity: 0;
+        }
+
+        .hero-line {
+            position: absolute;
+            left: 12vw;
+            bottom: 20vh;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+        }
+
+        .hero-shape {
+            position: absolute;
+            right: 15vw;
+            top: 30vh;
+            width: 300px;
+            height: 300px;
+            opacity: 0;
+        }
+
+        .hero-shape svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .hero-shape path {
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 0.5;
+            animation: floatShape 8s ease-in-out infinite;
+        }
+
+        @keyframes floatShape {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(10px, -15px) rotate(2deg); }
+            50% { transform: translate(-5px, 10px) rotate(-1deg); }
+            75% { transform: translate(15px, 5px) rotate(1deg); }
+        }
+
+        .hero-scroll {
+            position: absolute;
+            right: 12vw;
+            bottom: 20vh;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            opacity: 0;
+        }
+
+        .hero-scroll-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--secondary);
+        }
+
+        .hero-scroll-line {
+            width: 48px;
+            height: 1px;
+            background: var(--secondary);
+        }
+
+        .principles {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 15vw 12vw;
+        }
+
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8vw;
+            width: 100%;
+        }
+
+        .principle {
+            opacity: 0;
+        }
+
+        .principle-number {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: var(--accent);
+            margin-bottom: 24px;
+        }
+
+        .principle-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2.5vw;
+            font-weight: 300;
+            margin-bottom: 20px;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+            height: 200px;
+        }
+
+        .principle-text {
+            font-size: 14px;
+            color: var(--secondary);
+            line-height: 1.9;
+        }
+
+        .spaces {
+            padding: 10vw 0;
+            overflow: hidden;
+        }
+
+        .spaces-header {
+            padding: 0 12vw;
+            margin-bottom: 8vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .spaces-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 4vw;
+            font-weight: 300;
+            opacity: 0;
+        }
+
+        .spaces-subtitle {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--secondary);
+            opacity: 0;
+        }
+
+        .spaces-scroll {
+            display: flex;
+            gap: 4vw;
+            padding: 0 12vw;
+            cursor: grab;
+        }
+
+        .spaces-scroll:active {
+            cursor: grabbing;
+        }
+
+        .space-card {
+            flex: 0 0 35vw;
+            height: 50vw;
+            max-height: 500px;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .space-card-bg {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #e8e4df 0%, #d4cfc8 100%);
+            transition: transform 0.8s var(--ease-zen);
+        }
+
+        .space-card:hover .space-card-bg {
+            transform: scale(1.05);
+        }
+
+        .space-card-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 32px;
+        }
+
+        .space-card-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2vw;
+            font-weight: 300;
+            margin-bottom: 8px;
+        }
+
+        .space-card-desc {
+            font-size: 13px;
+            color: var(--secondary);
+        }
+
+        .practice {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15vw;
+            text-align: center;
+        }
+
+        .practice-text {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 4vw;
+            font-weight: 200;
+            line-height: 1.4;
+            max-width: 900px;
+            opacity: 0;
+        }
+
+        .practice-text span {
+            color: var(--accent);
+        }
+
+        .booking {
+            padding: 15vw 12vw;
+            display: flex;
+            justify-content: center;
+        }
+
+        .booking-content {
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .booking-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 3vw;
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 64px;
+            opacity: 0;
+        }
+
+        .booking-form {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            opacity: 0;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+            padding: 16px 0;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: 300;
+            color: var(--primary);
+            outline: none;
+            transition: border-color 0.4s var(--ease-zen);
+        }
+
+        .form-input:focus {
+            border-color: var(--accent);
+        }
+
+        .form-input::placeholder {
+            color: var(--secondary);
+        }
+
+        .btn-primary {
+            display: block;
+            width: 100%;
+            background: var(--accent);
+            color: var(--paper);
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 20px;
+            border: none;
+            cursor: none;
+            transition: all 0.4s var(--ease-zen);
+            margin-top: 16px;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary);
+            letter-spacing: 0.15em;
+        }
+
+        .footer {
+            padding: 64px 12vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .footer-logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 14px;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            color: var(--secondary);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .footer-link {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.05em;
+            color: var(--secondary);
+            text-decoration: none;
+            transition: color 0.3s var(--ease-zen);
+        }
+
+        .footer-link:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 14vw;
+            }
+
+            .principles-grid {
+                grid-template-columns: 1fr;
+                gap: 15vw;
+            }
+
+            .principle-title {
+                writing-mode: horizontal-tb;
+                transform: none;
+                height: auto;
+            }
+
+            .space-card {
+                flex: 0 0 80vw;
+                height: 60vw;
+            }
+
+            .practice-text {
+                font-size: 6vw;
+            }
+
+            .booking-title {
+                font-size: 6vw;
+            }
+
+            .nav {
+                padding: 24px;
+            }
+
+            .cursor,
+            .cursor-dot {
+                display: none;
+            }
+
+            body {
+                cursor: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+
+    <nav class="nav">
+        <div class="nav-logo">Oasis</div>
+        <a href="#booking" class="nav-cta">Begin Practice</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-label">Mountain Sanctuary, Japan</span>
+            <h1 class="hero-title">静寂の場</h1>
+            <p class="hero-subtitle">A retreat where time dissolves and presence becomes the only reality. Nestled in ancient cedar forest at 1200 meters.</p>
+        </div>
+        <div class="hero-line"></div>
+        <div class="hero-scroll">
+            <span class="hero-scroll-text">Discover</span>
+            <div class="hero-scroll-line"></div>
+        </div>
+        <div class="hero-shape">
+            <svg viewBox="0 0 200 200">
+                <path d="M100,20 Q160,50 180,100 T100,180 Q40,150 20,100 T100,20" />
+            </svg>
+        </div>
+    </section>
+
+    <section class="principles">
+        <div class="principles-grid">
+            <div class="principle">
+                <span class="principle-number">01</span>
+                <h3 class="principle-title">空</h3>
+                <p class="principle-text">Embracing emptiness as a path to fullness. In the space between breaths, we find everything.</p>
+            </div>
+            <div class="principle">
+                <span class="principle-number">02</span>
+                <h3 class="principle-title">現在</h3>
+                <p class="principle-text">Only this moment exists. The past is memory, the future is imagination. Both dissolve in practice.</p>
+            </div>
+            <div class="principle">
+                <span class="principle-number">03</span>
+                <h3 class="principle-title">調和</h3>
+                <p class="principle-text">Living in rhythm with natural cycles. Wake with dawn, rest with darkness, breathe with the forest.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="spaces">
+        <div class="spaces-header">
+            <h2 class="spaces-title">Sacred Spaces</h2>
+            <span class="spaces-subtitle">Drag to explore</span>
+        </div>
+        <div class="spaces-scroll">
+            <article class="space-card">
+                <div class="space-card-bg"></div>
+                <div class="space-card-content">
+                    <h3 class="space-card-title">The Tea Pavilion</h3>
+                    <p class="space-card-desc">400-year-old structure, hand-hewn hinoki cypress</p>
+                </div>
+            </article>
+            <article class="space-card">
+                <div class="space-card-bg" style="background: linear-gradient(135deg, #d4cfc8 0%, #c4bfb6 100%);"></div>
+                <div class="space-card-content">
+                    <h3 class="space-card-title">Meditation Hall</h3>
+                    <p class="space-card-desc">Seats 40, earth floor, mountain view windows</p>
+                </div>
+            </article>
+            <article class="space-card">
+                <div class="space-card-bg" style="background: linear-gradient(135deg, #e2ddd6 0%, #cec9c0 100%);"></div>
+                <div class="space-card-content">
+                    <h3 class="space-card-title">Hot Spring Baths</h3>
+                    <p class="space-card-desc">Natural onsen fed by volcanic springs, outdoor</p>
+                </div>
+            </article>
+            <article class="space-card">
+                <div class="space-card-bg" style="background: linear-gradient(135deg, #dad6cf 0%, #c8c3ba 100%);"></div>
+                <div class="space-card-content">
+                    <h3 class="space-card-title">The Zendo</h3>
+                    <p class="space-card-desc">Dawn and dusk meditation, resident roshi</p>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section class="practice">
+        <p class="practice-text">
+            "In the practice of stillness, we discover that we were never truly moving. In the embrace of silence, we hear the <span>universe singing</span>."
+        </p>
+    </section>
+
+    <section class="booking" id="booking">
+        <div class="booking-content">
+            <h2 class="booking-title">Request Your Stay</h2>
+            <form class="booking-form">
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" class="form-input" placeholder="Email Address" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="Preferred Dates">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="Practice Experience">
+                </div>
+                <button type="submit" class="btn-primary">Request Invitation</button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-logo">Oasis</div>
+        <div class="footer-links">
+            <a href="#" class="footer-link">Privacy</a>
+            <a href="#" class="footer-link">Instagram</a>
+            <a href="#" class="footer-link">Contact</a>
+        </div>
+    </footer>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        const cursor = document.querySelector('.cursor');
+        const cursorDot = document.querySelector('.cursor-dot');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.08;
+            cursorY += (mouseY - cursorY) * 0.08;
+            cursorDot.style.left = mouseX - 2 + 'px';
+            cursorDot.style.top = mouseY - 2 + 'px';
+            cursor.style.left = cursorX - 12 + 'px';
+            cursor.style.top = cursorY - 12 + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        const hoverElements = document.querySelectorAll('a, button, .space-card, .form-input');
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        const heroTl = gsap.timeline({ delay: 0.5 });
+        heroTl
+            .to('.hero-label', { opacity: 1, duration: 1.5, ease: 'power2.out' })
+            .to('.hero-title', { opacity: 1, duration: 2, ease: 'power2.out' }, '-=1')
+            .to('.hero-subtitle', { opacity: 1, duration: 1.5, ease: 'power2.out' }, '-=1')
+            .to('.hero-line', { width: 120, duration: 1.5, ease: 'power2.out' }, '-=0.5')
+            .to('.hero-scroll', { opacity: 1, duration: 1, ease: 'power2.out' }, '-=0.5')
+            .to('.hero-shape', { opacity: 0.6, duration: 2, ease: 'power2.out' }, '-=1.5');
+
+        gsap.to('.hero-shape path', {
+            attr: { d: 'M100,30 Q150,60 170,100 T100,170 Q50,140 30,100 T100,30' },
+            duration: 4,
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut'
+        });
+
+        gsap.to('.principle', {
+            scrollTrigger: {
+                trigger: '.principles',
+                start: 'top 60%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            duration: 1.5,
+            stagger: 0.3,
+            ease: 'power2.out'
+        });
+
+        gsap.to('.spaces-title', {
+            scrollTrigger: {
+                trigger: '.spaces',
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            duration: 1.2,
+            ease: 'power2.out'
+        });
+
+        gsap.to('.spaces-subtitle', {
+            scrollTrigger: {
+                trigger: '.spaces',
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            duration: 1,
+            delay: 0.3,
+            ease: 'power2.out'
+        });
+
+        gsap.to('.space-card', {
+            scrollTrigger: {
+                trigger: '.spaces-scroll',
+                start: 'top 70%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: 'power2.out'
+        });
+
+        let isDragging = false;
+        let startX;
+        let scrollLeft;
+        const scrollContainer = document.querySelector('.spaces-scroll');
+
+        scrollContainer.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.pageX - scrollContainer.offsetLeft;
+            scrollLeft = scrollContainer.scrollLeft;
+        });
+
+        scrollContainer.addEventListener('mouseleave', () => isDragging = false);
+        scrollContainer.addEventListener('mouseup', () => isDragging = false);
+        scrollContainer.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const x = e.pageX - scrollContainer.offsetLeft;
+            const walk = (x - startX) * 1.5;
+            scrollContainer.scrollLeft = scrollLeft - walk;
+        });
+
+        gsap.to('.practice-text', {
+            scrollTrigger: {
+                trigger: '.practice',
+                start: 'top 60%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            duration: 2,
+            ease: 'power2.out'
+        });
+
+        gsap.to('.booking-title', {
+            scrollTrigger: {
+                trigger: '.booking',
+                start: 'top 70%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            duration: 1.2,
+            ease: 'power2.out'
+        });
+
+        gsap.to('.booking-form', {
+            scrollTrigger: {
+                trigger: '.booking',
+                start: 'top 60%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            duration: 1,
+            delay: 0.3,
+            ease: 'power2.out'
+        });
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            gsap.globalTimeline.timeScale(0);
+        }
+    </script>
+</body>
+</html>

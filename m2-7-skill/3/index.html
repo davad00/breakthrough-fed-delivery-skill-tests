@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis — Nature Immersion Retreat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Playfair+Display:wght@400;500;600&family=Source+Sans+Pro:wght@300;400&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #E8E4DC;
+            --secondary: #4A4A4A;
+            --accent: #8B7355;
+            --forest: #1C1C1C;
+            --text-light: #F0EDE6;
+            --ease-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--forest);
+            color: var(--primary);
+            font-family: 'Source Sans Pro', sans-serif;
+            font-weight: 300;
+            line-height: 1.85;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            transition: all 0.3s var(--ease-smooth);
+        }
+
+        .cursor.hover {
+            transform: scale(2.5);
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .cursor-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10001;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 32px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            mix-blend-mode: difference;
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-link {
+            font-family: 'Fira Code', monospace;
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--primary);
+            text-decoration: none;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .nav-link:hover {
+            opacity: 1;
+        }
+
+        .hero {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: -20%;
+            background: url('https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=1920&q=80') center/cover no-repeat;
+            will-change: transform;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(28, 28, 28, 0.3) 0%,
+                rgba(28, 28, 28, 0.5) 50%,
+                rgba(28, 28, 28, 0.9) 100%
+            );
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .hero-label {
+            font-family: 'Fira Code', monospace;
+            font-size: 10px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 24px;
+            opacity: 0;
+            filter: blur(10px);
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 12vw;
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            line-height: 0.9;
+            margin-bottom: 32px;
+            opacity: 0;
+            filter: blur(10px);
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--primary);
+            max-width: 500px;
+            margin: 0 auto;
+            opacity: 0;
+            filter: blur(10px);
+        }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: 48px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+        }
+
+        .hero-scroll-line {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, var(--accent), transparent);
+            animation: scrollPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+            50% { opacity: 1; transform: scaleY(1); }
+        }
+
+        .philosophy {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .philosophy-image {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 50%;
+            background: url('https://images.unsplash.com/photo-1448375240586-882707db888b?w=1200&q=80') center/cover no-repeat;
+            opacity: 0;
+        }
+
+        .philosophy-content {
+            margin-left: 50%;
+            padding: 15vw;
+            max-width: 700px;
+        }
+
+        .philosophy-label {
+            font-family: 'Fira Code', monospace;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 32px;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .philosophy-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4vw;
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 32px;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .philosophy-text {
+            font-size: 17px;
+            color: var(--primary);
+            opacity: 0.8;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .retreats {
+            position: relative;
+            padding: 15vw;
+            overflow: hidden;
+        }
+
+        .retreats-bg {
+            position: absolute;
+            inset: 0;
+            background: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1920&q=80') center/cover no-repeat fixed;
+            opacity: 0.15;
+        }
+
+        .retreats-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .retreats-header {
+            text-align: center;
+            margin-bottom: 10vw;
+        }
+
+        .retreats-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 5vw;
+            font-weight: 400;
+            margin-bottom: 16px;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .retreats-subtitle {
+            font-family: 'Fira Code', monospace;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--secondary);
+            opacity: 0;
+        }
+
+        .retreats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3vw;
+        }
+
+        .retreat-card {
+            background: rgba(28, 28, 28, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(139, 115, 85, 0.2);
+            padding: 5vw 3vw;
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 0.5s var(--ease-smooth);
+        }
+
+        .retreat-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-8px);
+        }
+
+        .retreat-number {
+            font-family: 'Fira Code', monospace;
+            font-size: 10px;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .retreat-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5vw;
+            font-weight: 400;
+            margin-bottom: 16px;
+        }
+
+        .retreat-desc {
+            font-size: 14px;
+            color: var(--primary);
+            opacity: 0.7;
+            line-height: 1.7;
+        }
+
+        .retreat-link {
+            display: inline-block;
+            margin-top: 24px;
+            font-family: 'Fira Code', monospace;
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent);
+            text-decoration: none;
+            transition: letter-spacing 0.3s;
+        }
+
+        .retreat-link:hover {
+            letter-spacing: 0.2em;
+        }
+
+        .experience {
+            position: relative;
+            height: 120vh;
+            overflow: hidden;
+        }
+
+        .experience-panel {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 50%;
+            overflow: hidden;
+        }
+
+        .experience-panel:nth-child(1) {
+            top: 0;
+        }
+
+        .experience-panel:nth-child(2) {
+            top: 50%;
+        }
+
+        .experience-bg {
+            position: absolute;
+            inset: -20%;
+            background-size: cover;
+            background-position: center;
+            will-change: transform;
+        }
+
+        .experience-panel:nth-child(1) .experience-bg {
+            background: url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1920&q=80') center/cover no-repeat;
+        }
+
+        .experience-panel:nth-child(2) .experience-bg {
+            background: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80') center/cover no-repeat;
+        }
+
+        .experience-content {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(28, 28, 28, 0.6);
+            z-index: 2;
+        }
+
+        .experience-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 4vw;
+            font-weight: 400;
+            text-align: center;
+            max-width: 800px;
+            padding: 20px;
+            opacity: 0;
+            filter: blur(10px);
+        }
+
+        .journey {
+            position: relative;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .journey-bg {
+            position: absolute;
+            inset: -30%;
+            background: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80') center/cover no-repeat;
+            opacity: 0.3;
+        }
+
+        .journey-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .journey-label {
+            font-family: 'Fira Code', monospace;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 24px;
+            opacity: 0;
+        }
+
+        .journey-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 5vw;
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 48px;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--forest);
+            font-family: 'Fira Code', monospace;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 20px 56px;
+            border: none;
+            cursor: none;
+            text-decoration: none;
+            transition: all 0.4s var(--ease-smooth);
+            opacity: 0;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .journey-rings {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            opacity: 0.1;
+        }
+
+        .journey-ring {
+            position: absolute;
+            inset: 0;
+            border: 1px solid var(--accent);
+            border-radius: 50%;
+            animation: ringExpand 6s ease-out infinite;
+        }
+
+        .journey-ring:nth-child(2) {
+            animation-delay: 2s;
+        }
+
+        .journey-ring:nth-child(3) {
+            animation-delay: 4s;
+        }
+
+        @keyframes ringExpand {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        .footer {
+            padding: 80px 48px;
+            text-align: center;
+            border-top: 1px solid rgba(232, 228, 220, 0.1);
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 24px;
+            opacity: 0.5;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        .footer-link {
+            font-family: 'Fira Code', monospace;
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--primary);
+            text-decoration: none;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+
+        .footer-link:hover {
+            opacity: 1;
+        }
+
+        .footer-copy {
+            font-family: 'Fira Code', monospace;
+            font-size: 9px;
+            color: var(--secondary);
+            opacity: 0.4;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 16vw;
+            }
+
+            .philosophy-image {
+                position: relative;
+                width: 100%;
+                height: 50vh;
+            }
+
+            .philosophy-content {
+                margin-left: 0;
+                padding: 15vw;
+            }
+
+            .philosophy-title {
+                font-size: 8vw;
+            }
+
+            .retreats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .retreat-name {
+                font-size: 6vw;
+            }
+
+            .experience-text {
+                font-size: 7vw;
+            }
+
+            .journey-title {
+                font-size: 8vw;
+            }
+
+            .nav {
+                padding: 24px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .cursor,
+            .cursor-dot {
+                display: none;
+            }
+
+            body {
+                cursor: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+
+    <nav class="nav">
+        <div class="nav-logo">Oasis</div>
+        <div class="nav-links">
+            <a href="#philosophy" class="nav-link">Philosophy</a>
+            <a href="#retreats" class="nav-link">Retreats</a>
+            <a href="#journey" class="nav-link">Journey</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <span class="hero-label">Swiss Alps Sanctuary</span>
+            <h1 class="hero-title">Oasis</h1>
+            <p class="hero-subtitle">Where the mountains whisper ancient wisdom and the forest holds space for transformation.</p>
+        </div>
+        <div class="hero-scroll">
+            <div class="hero-scroll-line"></div>
+        </div>
+    </section>
+
+    <section class="philosophy" id="philosophy">
+        <div class="philosophy-image"></div>
+        <div class="philosophy-content">
+            <span class="philosophy-label">Our Philosophy</span>
+            <h2 class="philosophy-title">Nature is the teacher, stillness is the practice.</h2>
+            <p class="philosophy-text">
+                For thousands of years, contemplatives have sought the mountains, forests, and waters for deep transformation. At Oasis, we continue this ancient tradition with modern comfort. Our retreat sits at 1,800 meters in the Swiss Alps, surrounded by peaks that have witnessed centuries of human seeking.
+            </p>
+        </div>
+    </section>
+
+    <section class="retreats" id="retreats">
+        <div class="retreats-bg"></div>
+        <div class="retreats-content">
+            <div class="retreats-header">
+                <h2 class="retreats-title">Sacred Journeys</h2>
+                <span class="retreats-subtitle">Choose your path</span>
+            </div>
+            <div class="retreats-grid">
+                <article class="retreat-card">
+                    <span class="retreat-number">01</span>
+                    <h3 class="retreat-name">Forest Bathing</h3>
+                    <p class="retreat-desc">Shinrin-yoku in ancient pine forests. Slow walks, mindful presence, forest immersion.</p>
+                    <a href="#" class="retreat-link">Learn More</a>
+                </article>
+                <article class="retreat-card">
+                    <span class="retreat-number">02</span>
+                    <h3 class="retreat-name">Mountain Vigil</h3>
+                    <p class="retreat-desc">Five days of solo practice in mountain huts. Radical solitude, dawn to dusk.</p>
+                    <a href="#" class="retreat-link">Learn More</a>
+                </article>
+                <article class="retreat-card">
+                    <span class="retreat-number">03</span>
+                    <h3 class="retreat-name">Water Ceremony</h3>
+                    <p class="retreat-desc">Cold water immersion, breathwork, and lakeside meditation at altitude.</p>
+                    <a href="#" class="retreat-link">Learn More</a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="experience">
+        <div class="experience-panel">
+            <div class="experience-bg"></div>
+            <div class="experience-content">
+                <p class="experience-text">The mountains are calling and I must go.</p>
+            </div>
+        </div>
+        <div class="experience-panel">
+            <div class="experience-bg"></div>
+            <div class="experience-content">
+                <p class="experience-text">In the silence of nature, we find our own.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="journey" id="journey">
+        <div class="journey-bg"></div>
+        <div class="journey-rings">
+            <div class="journey-ring"></div>
+            <div class="journey-ring"></div>
+            <div class="journey-ring"></div>
+        </div>
+        <div class="journey-content">
+            <span class="journey-label">Begin Your Journey</span>
+            <h2 class="journey-title">The path to transformation<br>starts with a single step.</h2>
+            <a href="#" class="btn-primary">Request Invitation</a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-logo">Oasis</div>
+        <div class="footer-links">
+            <a href="#" class="footer-link">Privacy</a>
+            <a href="#" class="footer-link">Instagram</a>
+            <a href="#" class="footer-link">Contact</a>
+        </div>
+        <p class="footer-copy">© 2026 Oasis Retreat. Swiss Alps.</p>
+    </footer>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        const cursor = document.querySelector('.cursor');
+        const cursorDot = document.querySelector('.cursor-dot');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.12;
+            cursorY += (mouseY - cursorY) * 0.12;
+            cursorDot.style.left = mouseX - 3 + 'px';
+            cursorDot.style.top = mouseY - 3 + 'px';
+            cursor.style.left = cursorX - 10 + 'px';
+            cursor.style.top = cursorY - 10 + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        const hoverElements = document.querySelectorAll('a, button, .retreat-card');
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        const heroTl = gsap.timeline({ delay: 0.5 });
+        heroTl
+            .to('.hero-label', { opacity: 1, filter: 'blur(0)', duration: 1.5, ease: 'power3.out' })
+            .to('.hero-title', { opacity: 1, filter: 'blur(0)', duration: 1.8, ease: 'power3.out' }, '-=1')
+            .to('.hero-subtitle', { opacity: 1, filter: 'blur(0)', duration: 1.5, ease: 'power3.out' }, '-=1')
+            .to('.hero-scroll', { opacity: 1, duration: 1, ease: 'power3.out' }, '-=0.5');
+
+        gsap.to('.hero-bg', {
+            scrollTrigger: {
+                trigger: '.hero',
+                start: 'top top',
+                end: 'bottom top',
+                scrub: 1
+            },
+            y: '30%',
+            ease: 'none'
+        });
+
+        gsap.to('.philosophy-image', {
+            scrollTrigger: {
+                trigger: '.philosophy',
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            duration: 1.5,
+            ease: 'power3.out'
+        });
+
+        gsap.to('.philosophy-label', {
+            scrollTrigger: {
+                trigger: '.philosophy',
+                start: 'top 60%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: 'power3.out'
+        });
+
+        gsap.to('.philosophy-title', {
+            scrollTrigger: {
+                trigger: '.philosophy',
+                start: 'top 50%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: 'power3.out'
+        });
+
+        gsap.to('.philosophy-text', {
+            scrollTrigger: {
+                trigger: '.philosophy',
+                start: 'top 40%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 0.2,
+            ease: 'power3.out'
+        });
+
+        gsap.to('.retreats-title', {
+            scrollTrigger: {
+                trigger: '.retreats',
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: 'power3.out'
+        });
+
+        gsap.to('.retreats-subtitle', {
+            scrollTrigger: {
+                trigger: '.retreats',
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            duration: 1,
+            delay: 0.3,
+            ease: 'power3.out'
+        });
+
+        gsap.to('.retreat-card', {
+            scrollTrigger: {
+                trigger: '.retreats-grid',
+                start: 'top 70%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: 'power3.out'
+        });
+
+        document.querySelectorAll('.experience-panel').forEach((panel, i) => {
+            const bg = panel.querySelector('.experience-bg');
+
+            gsap.to(bg, {
+                scrollTrigger: {
+                    trigger: panel,
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: 1
+                },
+                y: '15%',
+                ease: 'none'
+            });
+
+            gsap.to(panel.querySelector('.experience-text'), {
+                scrollTrigger: {
+                    trigger: panel,
+                    start: 'top 60%',
+                    toggleActions: 'play none none reverse'
+                },
+                opacity: 1,
+                filter: 'blur(0)',
+                duration: 1.5,
+                ease: 'power3.out'
+            });
+        });
+
+        gsap.to('.journey-bg', {
+            scrollTrigger: {
+                trigger: '.journey',
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 1
+            },
+            y: '20%',
+            ease: 'none'
+        });
+
+        gsap.to('.journey-label', {
+            scrollTrigger: {
+                trigger: '.journey',
+                start: 'top 70%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            duration: 1,
+            ease: 'power3.out'
+        });
+
+        gsap.to('.journey-title', {
+            scrollTrigger: {
+                trigger: '.journey',
+                start: 'top 60%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: 'power3.out'
+        });
+
+        gsap.to('.btn-primary', {
+            scrollTrigger: {
+                trigger: '.journey',
+                start: 'top 50%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            duration: 1,
+            delay: 0.3,
+            ease: 'power3.out'
+        });
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            gsap.globalTimeline.timeScale(0);
+        }
+    </script>
+</body>
+</html>

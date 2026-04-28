@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OASIS — Organic Meditation Retreat</title>
+    <meta name="description" content="Reconnect with the earth through natural luxury meditation.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;400;500&family=Inter:wght@300&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0F1410;
+            color: #F5F5F0;
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        .cursor {
+            position: fixed;
+            width: 14px;
+            height: 14px;
+            background: #8BA888;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transition: border-radius 0.4s;
+        }
+
+        .cursor.hover {
+            width: 50px;
+            height: 50px;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            animation: morph 3s ease-in-out infinite;
+        }
+
+        @keyframes morph {
+            0%, 100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+            25% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+            50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+            75% { border-radius: 70% 30% 50% 50% / 30% 60% 70% 40%; }
+        }
+
+        .blob {
+            position: fixed;
+            background: rgba(139, 168, 136, 0.1);
+            filter: blur(60px);
+            z-index: 0;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .blob1 {
+            width: 400px;
+            height: 400px;
+            top: 10%;
+            left: 10%;
+        }
+
+        .blob2 {
+            width: 500px;
+            height: 500px;
+            bottom: 20%;
+            right: 10%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(120deg); }
+            66% { transform: translate(-20px, 20px) rotate(240deg); }
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+        }
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5vw;
+            position: relative;
+        }
+
+        .hero {
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .display-huge {
+            font-family: 'Fraunces', serif;
+            font-size: 11vw;
+            font-weight: 300;
+            line-height: 0.9;
+            letter-spacing: -0.03em;
+            opacity: 0;
+            transform: translateY(100px);
+        }
+
+        .display-large {
+            font-family: 'Fraunces', serif;
+            font-size: 6.5vw;
+            font-weight: 400;
+            line-height: 0.95;
+            letter-spacing: -0.02em;
+            opacity: 0;
+            transform: translateY(80px);
+        }
+
+        .body-md {
+            font-size: 17px;
+            line-height: 1.75;
+            max-width: 580px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .label-micro {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #9A9A8F;
+        }
+
+        .btn-primary {
+            background: #8BA888;
+            color: #0F1410;
+            padding: 20px 52px;
+            border-radius: 9999px;
+            border: none;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            cursor: none;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.08);
+        }
+
+        .section-label {
+            position: absolute;
+            top: 5vh;
+            left: 5vw;
+        }
+
+        .earth {
+            margin-top: 22vw;
+        }
+
+        .roots {
+            margin-top: 22vw;
+            flex-direction: column;
+            align-items: flex-end;
+            padding-right: 10vw;
+        }
+
+        .grow {
+            margin-top: 22vw;
+            flex-direction: column;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .display-huge {
+                font-size: 16vw;
+            }
+            .display-large {
+                font-size: 12vw;
+            }
+            body {
+                cursor: auto;
+            }
+            .cursor {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="blob blob1"></div>
+    <div class="blob blob2"></div>
+    <div class="cursor"></div>
+    
+    <div class="content">
+        <section class="hero">
+            <h1 class="display-huge">OASIS</h1>
+            <p class="body-md" style="margin-top: 2.5rem;">Where meditation returns to its roots. Barefoot on moss. Breathing forest air. Reconnecting with the earth.</p>
+            <button class="btn-primary" data-magnetic style="margin-top: 3.5rem;">RETURN TO NATURE</button>
+        </section>
+
+        <section class="earth">
+            <div class="section-label label-micro">Grounded</div>
+            <div style="text-align: center;">
+                <h2 class="display-large">Forest<br>Bathing</h2>
+                <p class="body-md" style="margin-top: 2.5rem;">Our retreat is built into the landscape, not imposed upon it. Structures made from reclaimed wood and stone. Meditation chambers open to the elements. Every surface invites touch.</p>
+            </div>
+        </section>
+
+        <section class="roots">
+            <div class="section-label label-micro">Organic</div>
+            <h2 class="display-large">Breathe</h2>
+            <p class="body-md" style="margin-top: 2rem; text-align: right;">Seven days of walking meditation through ancient forests. Private cabins with living roofs. Silence punctuated only by birdsong and wind.</p>
+        </section>
+
+        <section class="grow">
+            <div class="section-label label-micro">Flourish</div>
+            <h2 class="display-large">Grow</h2>
+            <button class="btn-primary" data-magnetic style="margin-top: 2.5rem;">PLANT YOUR ROOTS</button>
+        </section>
+    </div>
+
+    <script>
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (!prefersReducedMotion) {
+            // Lenis smooth scroll
+            const lenis = new Lenis({
+                duration: 1.4,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+            });
+
+            function raf(time) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+            requestAnimationFrame(raf);
+
+            gsap.registerPlugin(ScrollTrigger);
+
+            lenis.on('scroll', ScrollTrigger.update);
+            gsap.ticker.add((time) => lenis.raf(time * 1000));
+            gsap.ticker.lagSmoothing(0);
+
+            // Text reveals with organic easing
+            gsap.to('.display-huge', {
+                scrollTrigger: {
+                    trigger: '.display-huge',
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                },
+                y: 0,
+                opacity: 1,
+                duration: 1.8,
+                ease: 'cubic-bezier(0.34, 1.56, 0.64, 1)'
+            });
+
+            document.querySelectorAll('.display-large').forEach((el) => {
+                gsap.to(el, {
+                    scrollTrigger: {
+                        trigger: el,
+                        start: 'top 80%',
+                        toggleActions: 'play none none reverse'
+                    },
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.6,
+                    ease: 'cubic-bezier(0.34, 1.56, 0.64, 1)'
+                });
+            });
+
+            document.querySelectorAll('.body-md, .btn-primary').forEach((el) => {
+                gsap.to(el, {
+                    scrollTrigger: {
+                        trigger: el,
+                        start: 'top 85%',
+                        toggleActions: 'play none none reverse'
+                    },
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.4,
+                    ease: 'cubic-bezier(0.34, 1.56, 0.64, 1)'
+                });
+            });
+
+            // Custom cursor with organic morph
+            const cursor = document.querySelector('.cursor');
+            const magneticElements = document.querySelectorAll('[data-magnetic]');
+
+            document.addEventListener('mousemove', (e) => {
+                gsap.to(cursor, {
+                    x: e.clientX - 7,
+                    y: e.clientY - 7,
+                    duration: 0.7,
+                    ease: 'power2.out'
+                });
+            });
+
+            magneticElements.forEach((el) => {
+                el.addEventListener('mouseenter', () => {
+                    cursor.classList.add('hover');
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursor.classList.remove('hover');
+                });
+            });
+        } else {
+            document.querySelectorAll('.display-huge, .display-large, .body-md, .btn-primary').forEach(el => {
+                el.style.opacity = '1';
+                el.style.transform = 'none';
+            });
+        }
+    </script>
+</body>
+</html>

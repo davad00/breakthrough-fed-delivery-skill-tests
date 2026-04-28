@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis | Zen Typographic</title>
+    <style>
+        :root {
+            --bg: #ecece8;
+            --text: #1a1a1a;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Shippori Mincho', serif;
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 100px 1fr 100px;
+            grid-template-rows: 100px 1fr 100px;
+        }
+        .header {
+            grid-column: 1 / -1;
+            grid-row: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 3rem;
+        }
+        .logo {
+            font-size: 1.2rem;
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+        }
+        .lang {
+            font-size: 0.9rem;
+            font-family: sans-serif;
+            letter-spacing: 1px;
+        }
+        .vertical-text-left {
+            grid-column: 1;
+            grid-row: 2;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            letter-spacing: 0.2em;
+            color: #666;
+        }
+        .vertical-text-right {
+            grid-column: 3;
+            grid-row: 2;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+        .main-content {
+            grid-column: 2;
+            grid-row: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .kanji {
+            font-size: 12rem;
+            line-height: 1;
+            color: rgba(26, 26, 26, 0.05);
+            position: absolute;
+            z-index: 0;
+        }
+        h1 {
+            font-size: 4rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        p {
+            max-width: 400px;
+            line-height: 2;
+            font-size: 1.1rem;
+            color: #444;
+            position: relative;
+            z-index: 1;
+        }
+        .footer {
+            grid-column: 1 / -1;
+            grid-row: 3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .circle-btn {
+            width: 60px;
+            height: 60px;
+            border: 1px solid var(--text);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.4s ease;
+        }
+        .circle-btn:hover {
+            background-color: var(--text);
+            color: var(--bg);
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">Oasis</div>
+        <div class="lang">EN / JP</div>
+    </header>
+    
+    <div class="vertical-text-left">
+        静寂 — Silence
+    </div>
+
+    <main class="main-content">
+        <div class="kanji">無</div>
+        <h1>Emptiness is form.</h1>
+        <p>A minimalist sanctuary stripped of excess. Focus on the breath, the mind, and the space between thoughts.</p>
+    </main>
+
+    <div class="vertical-text-right">
+        Reserve
+    </div>
+
+    <footer class="footer">
+        <a href="#" class="circle-btn">↓</a>
+    </footer>
+</body>
+</html>

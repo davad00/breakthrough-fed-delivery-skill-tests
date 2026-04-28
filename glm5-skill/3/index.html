@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis Ethereal | Luxury Meditation Retreat</title>
+    <meta name="description" content="Oasis - A dreamlike meditation experience. Transcend the ordinary in our ethereal sanctuary.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Nunito+Sans:wght@300;400&family=Outfit:wght@400&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #F8F8FF;
+            --color-secondary: #9BA4B4;
+            --color-tertiary: #7B68EE;
+            --color-neutral: #0B0B14;
+            --color-on-tertiary: #FFFFFF;
+            --ease-float: cubic-bezier(0.25, 0.1, 0.25, 1);
+            --ease-dream: cubic-bezier(0.4, 0, 0.6, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Nunito Sans', sans-serif;
+            background-color: var(--color-neutral);
+            color: var(--color-primary);
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            width: 16px;
+            height: 16px;
+            background: var(--color-tertiary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 100;
+            box-shadow: 0 0 20px var(--color-tertiary);
+            mix-blend-mode: screen;
+        }
+
+        .cursor.hover {
+            width: 52px;
+            height: 52px;
+            background: var(--color-primary);
+            box-shadow: 0 0 40px var(--color-primary);
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 40px 64px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 20;
+        }
+
+        .nav-logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--color-secondary);
+        }
+
+        .nav-menu-btn {
+            font-family: 'Outfit', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--color-secondary);
+            background: transparent;
+            border: none;
+            cursor: none;
+            padding: 14px 28px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 9999px;
+            transition: all 0.6s var(--ease-float);
+        }
+
+        .nav-menu-btn:hover {
+            color: var(--color-primary);
+            border-color: var(--color-primary);
+        }
+
+        /* Ambient Background */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .ambient-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.2;
+        }
+
+        .blob-1 {
+            width: 800px;
+            height: 800px;
+            background: var(--color-tertiary);
+            top: -300px;
+            left: -200px;
+            animation: float1 30s ease-in-out infinite;
+        }
+
+        .blob-2 {
+            width: 600px;
+            height: 600px;
+            background: #4a3a8a;
+            bottom: -200px;
+            right: -100px;
+            animation: float2 35s ease-in-out infinite;
+        }
+
+        .blob-3 {
+            width: 400px;
+            height: 400px;
+            background: #6a5acd;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: float3 25s ease-in-out infinite;
+        }
+
+        @keyframes float1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(100px, 50px) scale(1.1); }
+            66% { transform: translate(-50px, 100px) scale(0.9); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-80px, -60px) scale(0.95); }
+            66% { transform: translate(60px, -40px) scale(1.05); }
+        }
+
+        @keyframes float3 {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 0 64px;
+            z-index: 10;
+        }
+
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 14vw;
+            font-weight: 300;
+            line-height: 0.88;
+            letter-spacing: -0.01em;
+            text-align: center;
+            opacity: 0;
+            filter: blur(30px);
+            transform: scale(0.9);
+        }
+
+        .hero-subtitle {
+            font-family: 'Outfit', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--color-secondary);
+            margin-top: 48px;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .hero-cta {
+            margin-top: 80px;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .btn-primary {
+            font-family: 'Outfit', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            background: var(--color-tertiary);
+            color: var(--color-on-tertiary);
+            border: none;
+            padding: 18px 40px;
+            border-radius: 9999px;
+            cursor: none;
+            transition: all 0.6s var(--ease-float);
+            box-shadow: 0 0 30px rgba(123, 104, 238, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 50px rgba(123, 104, 238, 0.6);
+        }
+
+        /* Philosophy Section */
+        .philosophy {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 144px 64px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .philosophy-content {
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .philosophy-label {
+            font-family: 'Outfit', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--color-tertiary);
+            margin-bottom: 40px;
+            opacity: 0;
+            filter: blur(10px);
+        }
+
+        .philosophy-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 7vw;
+            font-weight: 300;
+            line-height: 0.92;
+            margin-bottom: 48px;
+            opacity: 0;
+            filter: blur(15px);
+        }
+
+        .philosophy-text {
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 1.75;
+            letter-spacing: 0.01em;
+            color: var(--color-secondary);
+            opacity: 0;
+            filter: blur(10px);
+        }
+
+        /* Experiences Section */
+        .experiences {
+            min-height: 100vh;
+            padding: 144px 64px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .experiences-header {
+            text-align: center;
+            margin-bottom: 128px;
+        }
+
+        .experiences-label {
+            font-family: 'Outfit', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--color-tertiary);
+            margin-bottom: 32px;
+            opacity: 0;
+            filter: blur(10px);
+        }
+
+        .experiences-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 7vw;
+            font-weight: 300;
+            line-height: 0.92;
+            opacity: 0;
+            filter: blur(15px);
+        }
+
+        .experience-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 48px;
+        }
+
+        .experience-card {
+            padding: 48px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            filter: blur(10px);
+            transform: translateY(40px);
+            transition: all 0.8s var(--ease-float);
+        }
+
+        .experience-card:hover {
+            border-color: var(--color-tertiary);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(123, 104, 238, 0.2);
+        }
+
+        .experience-number {
+            font-family: 'Outfit', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            color: var(--color-tertiary);
+            margin-bottom: 24px;
+        }
+
+        .experience-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.8vw;
+            font-weight: 400;
+            margin-bottom: 24px;
+        }
+
+        .experience-desc {
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 1.75;
+            color: var(--color-secondary);
+        }
+
+        /* Journey Section */
+        .journey {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 144px 64px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .journey-content {
+            max-width: 900px;
+        }
+
+        .journey-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 14vw;
+            font-weight: 300;
+            line-height: 0.88;
+            margin-bottom: 48px;
+            opacity: 0;
+            filter: blur(20px);
+        }
+
+        .journey-text {
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 1.75;
+            color: var(--color-secondary);
+            margin-bottom: 64px;
+            opacity: 0;
+            filter: blur(10px);
+        }
+
+        .btn-ghost {
+            font-family: 'Outfit', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            background: transparent;
+            color: var(--color-primary);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 18px 40px;
+            border-radius: 9999px;
+            cursor: none;
+            transition: all 0.6s var(--ease-float);
+            opacity: 0;
+            filter: blur(10px);
+        }
+
+        .btn-ghost:hover {
+            background: var(--color-primary);
+            color: var(--color-neutral);
+            border-color: var(--color-primary);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 64px 64px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--color-secondary);
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 64px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            opacity: 0;
+        }
+
+        .scroll-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--color-secondary);
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, var(--color-tertiary), transparent);
+            animation: scrollPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 1; transform: scaleY(1); }
+            50% { opacity: 0.3; transform: scaleY(0.6); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                padding: 32px;
+            }
+
+            .hero {
+                padding: 0 32px;
+            }
+
+            .hero-title {
+                font-size: 20vw;
+            }
+
+            .philosophy, .experiences, .journey {
+                padding: 72px 32px;
+            }
+
+            .experience-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .experience-name {
+                font-size: 10vw;
+            }
+
+            .footer {
+                padding: 32px 32px;
+            }
+
+            .cursor {
+                display: none;
+            }
+
+            body {
+                cursor: auto;
+            }
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !{}
+important;
+                transition-duration: 0.01ms !important;
+            }
+
+            .hero-title, .hero-subtitle, .hero-cta, .philosophy-label, .philosophy-title, .philosophy-text, .experiences-label, .experiences-title, .experience-card, .journey-title, .journey-text, .btn-ghost, .scroll-indicator {
+                opacity: 1 !important;
+                transform: none !important;
+                filter: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Ambient Background -->
+    <div class="ambient-bg">
+        <div class="ambient-blob blob-1"></div>
+        <div class="ambient-blob blob-2"></div>
+        <div class="ambient-blob blob-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-logo">Oasis</div>
+        <button class="nav-menu-btn">Menu</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 class="hero-title">OASIS</h1>
+        <p class="hero-subtitle">Luxury Meditation Retreat</p>
+        <div class="hero-cta">
+            <button class="btn-primary">Enter the Dream</button>
+        </div>
+        <div class="scroll-indicator">
+            <span class="scroll-text">Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- Philosophy Section -->
+    <section class="philosophy">
+        <div class="philosophy-content">
+            <span class="philosophy-label">Our Philosophy</span>
+            <h2 class="philosophy-title">Between sleep and waking lies infinite peace</h2>
+            <p class="philosophy-text">Oasis exists in the liminal space—the threshold between worlds. Here, time dissolves. The boundaries between self and universe soften. In this ethereal sanctuary, you will discover that the peace you seek has always been within you, waiting in the space between your thoughts.</p>
+        </div>
+    </section>
+
+    <!-- Experiences Section -->
+    <section class="experiences">
+        <div class="experiences-header">
+            <span class="experiences-label">Experiences</span>
+            <h2 class="experiences-title">Dream Journeys</h2>
+        </div>
+        <div class="experience-grid">
+            <div class="experience-card">
+                <span class="experience-number">01</span>
+                <h3 class="experience-name">Lucid Rest</h3>
+                <p class="experience-desc">Guided hypnagogic meditation that opens doorways to the creative unconscious.</p>
+            </div>
+            <div class="experience-card">
+                <span class="experience-number">02</span>
+                <h3 class="experience-name">Celestial Sound</h3>
+                <p class="experience-desc">Ambient soundscapes designed to induce theta states and deep relaxation.</p>
+            </div>
+            <div class="experience-card">
+                <span class="experience-number">03</span>
+                <h3 class="experience-name">Float Therapy</h3>
+                <p class="experience-desc">Weightless suspension in sensory deprivation pods that dissolve the boundary between self and void.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Journey Section -->
+    <section class="journey">
+        <div class="journey-content">
+            <h2 class="journey-title">Transcend</h2>
+            <p class="journey-text">Step through the veil. Discover what lies beyond ordinary consciousness.</p>
+            <button class="btn-ghost">Begin Your Journey</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <span class="footer-text">Oasis Retreats 2024</span>
+            <span class="footer-text">Where Dreams Begin</span>
+        </div>
+    </footer>
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script>
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (!prefersReducedMotion) {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Custom Cursor
+            const cursor = document.querySelector('.cursor');
+            const interactiveElements = document.querySelectorAll('button, a, .experience-card');
+
+            document.addEventListener('mousemove', (e) => {
+                gsap.to(cursor, {
+                    x: e.clientX - 8,
+                    y: e.clientY - 8,
+                    duration: 1,
+                    ease: 'power2.out'
+                });
+            });
+
+            interactiveElements.forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+            });
+
+            // Dream Fade Animation
+            const heroTl = gsap.timeline({ delay: 0.5 });
+            
+            heroTl.to('.hero-title', {
+                opacity: 1,
+                filter: 'blur(0px)',
+                scale: 1,
+                duration: 3,
+                ease: 'power2.out'
+            })
+            .to('.hero-subtitle', {
+                opacity: 1,
+                y: 0,
+                duration: 1.5,
+                ease: 'power2.out'
+            }, '-=1.5')
+            .to('.hero-cta', {
+                opacity: 1,
+                y: 0,
+                duration: 1.5,
+                ease: 'power2.out'
+            }, '-=1')
+            .to('.scroll-indicator', {
+                opacity: 1,
+                duration: 1,
+                ease: 'power2.out'
+            }, '-=0.5');
+
+            // Philosophy Section
+            gsap.to('.philosophy-label', {
+                scrollTrigger: {
+                    trigger: '.philosophy',
+                    start: 'top 70%',
+                    toggleActions: 'play none none reverse'
+                },
+                opacity: 1,
+                filter: 'blur(0px)',
+                duration: 1.5,
+                ease: 'power2.out'
+            });
+
+            gsap.to('.philosophy-title', {
+                scrollTrigger: {
+                    trigger: '.philosophy',
+                    start: 'top 60%',
+                    toggleActions: 'play none none reverse'
+                },
+                opacity: 1,
+                filter: 'blur(0px)',
+                duration: 2,
+                ease: 'power2.out'
+            });
+
+            gsap.to('.philosophy-text', {
+                scrollTrigger: {
+                    trigger: '.philosophy',
+                    start: 'top 50%',
+                    toggleActions: 'play none none reverse'
+                },
+                opacity: 1,
+                filter: 'blur(0px)',
+                duration: 1.5,
+                ease: 'power2.out'
+            });
+
+            // Experiences Section
+            gsap.to('.experiences-label', {
+                scrollTrigger: {
+                    trigger: '.experiences',
+                    start: 'top 70%',
+                    toggleActions: 'play none none reverse'
+                },
+                opacity: 1,
+                filter: 'blur(0px)',
+                duration: 1.5,
+                ease: 'power2.out'
+            });
+
+            gsap.to('.experiences-title', {
+                scrollTrigger: {
+                    trigger: '.experiences',
+                    start: 'top 60%',
+                    toggleActions: 'play none none reverse'
+                },
+                opacity: 1,
+                filter: 'blur(0px)',
+                duration: 2,
+                ease: 'power2.out'
+            });
+
+            gsap.utils.toArray('.experience-card').forEach((card, i) => {
+                gsap.to(card, {
+                    scrollTrigger: {
+                        trigger: card,
+                        start: 'top 80%',
+                        toggleActions: 'play none none reverse'
+                    },
+                    opacity: 1,
+                    filter: 'blur(0px)',
+                    y: 0,
+                    duration: 1.5,
+                    delay: i * 0.2,
+                    ease: 'power2.out'
+                });
+            });
+
+            // Journey Section
+            gsap.to('.journey-title', {
+                scrollTrigger: {
+                    trigger: '.journey',
+                    start: 'top 60%',
+                    toggleActions: 'play none none reverse'
+                },
+                opacity: 1,
+                filter: 'blur(0px)',
+                duration: 2.5,
+                ease: 'power2.out'
+            });
+
+            gsap.to('.journey-text', {
+                scrollTrigger: {
+                    trigger: '.journey',
+                    start: 'top 50%',
+                    toggleActions: 'play none none reverse'
+                },
+                opacity: 1,
+                filter: 'blur(0px)',
+                duration: 1.5,
+                ease: 'power2.out'
+            });
+
+            gsap.to('.btn-ghost', {
+                scrollTrigger: {
+                    trigger: '.journey',
+                    start: 'top 40%',
+                    toggleActions: 'play none none reverse'
+                },
+                opacity: 1,
+                filter: 'blur(0px)',
+                duration: 1.5,
+                ease: 'power2.out'
+            });
+        } else {
+            document.querySelectorAll('.hero-title, .hero-subtitle, .hero-cta, .philosophy-label, .philosophy-title, .philosophy-text, .experiences-label, .experiences-title, .experience-card, .journey-title, .journey-text, .btn-ghost, .scroll-indicator').forEach(el => {
+                el.style.opacity = '1';
+                el.style.transform = 'none';
+                el.style.filter = 'none';
+            });
+        }
+    </script>
+</body>
+</html>

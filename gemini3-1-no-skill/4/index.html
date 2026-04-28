@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis | Earthy Organic Retreat</title>
+    <style>
+        :root {
+            --bg-color: #f4eee8;
+            --accent-terracotta: #c67b5c;
+            --accent-sage: #8a9a86;
+            --text-main: #4a4036;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Lora', serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+        }
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        .left-panel {
+            flex: 1;
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .right-panel {
+            flex: 1;
+            background-color: var(--accent-sage);
+            position: relative;
+            overflow: hidden;
+            border-radius: 40px 0 0 40px;
+            margin: 2rem 0;
+        }
+        .right-panel img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.9;
+            mix-blend-mode: multiply;
+        }
+        .brand {
+            font-size: 1.8rem;
+            font-style: italic;
+            color: var(--accent-terracotta);
+        }
+        .main-content {
+            max-width: 500px;
+        }
+        h1 {
+            font-size: 4.5rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+        }
+        p {
+            font-family: 'Karla', sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+            color: #6a5c4f;
+        }
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-terracotta);
+            color: #fff;
+            padding: 1.2rem 2.5rem;
+            text-decoration: none;
+            border-radius: 30px;
+            font-family: 'Karla', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #a86448;
+        }
+        .socials {
+            font-family: 'Karla', sans-serif;
+            font-size: 0.9rem;
+            display: flex;
+            gap: 1.5rem;
+        }
+        .socials a {
+            color: var(--text-main);
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+        .shape {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background-color: var(--accent-terracotta);
+            border-radius: 50%;
+            bottom: -150px;
+            right: -150px;
+            opacity: 0.2;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Karla:wght@400;600&family=Lora:ital,wght@0,400;1,400&display=swap');
+        
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+            }
+            .right-panel {
+                min-height: 50vh;
+                margin: 0 2rem 2rem;
+                border-radius: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <div class="brand">Oasis</div>
+            <div class="main-content">
+                <h1>Rooted in nature.</h1>
+                <p>Ground yourself in our organic architecture and sustainable luxury. A meditation retreat designed to harmonize with the earth and your soul.</p>
+                <a href="#" class="btn">Plan Your Stay</a>
+            </div>
+            <div class="socials">
+                <a href="#">Instagram</a>
+                <a href="#">Journal</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+        <div class="right-panel">
+            <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Forest path">
+            <div class="shape"></div>
+        </div>
+    </div>
+</body>
+</html>

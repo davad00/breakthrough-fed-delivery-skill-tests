@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oasis — Big Sur, California</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --color-primary: #D4E4F2;
+      --color-secondary: #2D5F7A;
+      --color-tertiary: #41BFBF;
+      --color-neutral: #040914;
+      --color-on-tertiary: #040914;
+      --color-card: #080F1E;
+
+      --font-serif: 'Libre Baskerville', Georgia, serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+
+      --ease-tide: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-depth: cubic-bezier(0.45, 0, 0.55, 1);
+    }
+
+    html {
+      background-color: var(--color-neutral);
+      color: var(--color-primary);
+      font-family: var(--font-mono);
+      cursor: none;
+      overflow-x: hidden;
+    }
+
+    body {
+      background-color: var(--color-neutral);
+      overflow-x: hidden;
+    }
+
+    ::selection {
+      background: var(--color-tertiary);
+      color: var(--color-on-tertiary);
+    }
+
+    /* ─── CURSOR ─────────────────────────────────────────────── */
+    .cursor {
+      position: fixed;
+      width: 16px;
+      height: 16px;
+      border: 1px solid var(--color-primary);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 100;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: normal;
+      transition: border-color 0.3s var(--ease-depth), width 0.3s var(--ease-tide), height 0.3s var(--ease-tide);
+      will-change: transform;
+    }
+
+    .cursor.hover {
+      width: 52px;
+      height: 52px;
+      border-color: var(--color-tertiary);
+    }
+
+    .cursor.text-hover {
+      mix-blend-mode: difference;
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+    }
+
+    /* ─── FIXED UI ────────────────────────────────────────────── */
+    .fixed-ui {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 32px 40px;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    .fixed-ui.visible {
+      pointer-events: all;
+    }
+
+    .wordmark {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      text-decoration: none;
+    }
+
+    .reserve-link {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      text-decoration: none;
+      data-magnetic="true";
+    }
+
+    /* ─── DOT NAVIGATION ─────────────────────────────────────── */
+    .dot-nav {
+      position: fixed;
+      right: 32px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: flex-end;
+    }
+
+    .dot-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: none;
+    }
+
+    .dot-nav-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-secondary);
+      opacity: 0;
+      transform: translateX(8px);
+      white-space: nowrap;
+    }
+
+    .dot-nav-item:hover .dot-nav-label {
+      opacity: 1;
+      transform: translateX(0);
+      transition: opacity 0.3s var(--ease-depth), transform 0.3s var(--ease-depth);
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-secondary);
+      flex-shrink: 0;
+      transition: width 0.3s var(--ease-tide), height 0.3s var(--ease-tide), background 0.3s var(--ease-depth), box-shadow 0.3s var(--ease-depth);
+    }
+
+    .dot-nav-item.active .dot {
+      width: 8px;
+      height: 8px;
+      background: var(--color-tertiary);
+      box-shadow: 0 0 8px var(--color-tertiary), 0 0 16px rgba(65, 191, 191, 0.3);
+    }
+
+    /* ─── HERO ────────────────────────────────────────────────── */
+    #hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #water-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .hero-pre-title {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--color-secondary);
+      margin-bottom: 28px;
+      display: block;
+    }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: 12vw;
+      font-weight: 400;
+      line-height: 0.88;
+      letter-spacing: -0.02em;
+      color: var(--color-primary);
+      display: block;
+      will-change: transform;
+    }
+
+    .hero-location {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-secondary);
+      margin-top: 36px;
+      display: block;
+    }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-secondary);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, var(--color-secondary), transparent);
+    }
+
+    /* ─── SECTIONS SHARED ─────────────────────────────────────── */
+    section {
+      padding: 18vw 8vw;
+      position: relative;
+    }
+
+    .section-index {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--color-secondary);
+      margin-bottom: 80px;
+      display: block;
+    }
+
+    /* ─── DEPTH SECTION ───────────────────────────────────────── */
+    #depth {
+      display: grid;
+      grid-template-columns: 55% 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .wave-art {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.3;
+      color: var(--color-secondary);
+      letter-spacing: 0.04em;
+      white-space: pre;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .depth-content {
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    .depth-quote {
+      font-family: var(--font-serif);
+      font-size: 5vw;
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.05;
+      color: var(--color-primary);
+    }
+
+    .depth-body {
+      font-family: var(--font-mono);
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--color-secondary);
+      max-width: 400px;
+    }
+
+    /* ─── IMMERSIONS SECTION ──────────────────────────────────── */
+    #immersions {
+      border-top: 1px solid rgba(45, 95, 122, 0.3);
+    }
+
+    .immersions-title {
+      font-family: var(--font-serif);
+      font-size: 7vw;
+      font-weight: 400;
+      line-height: 0.92;
+      letter-spacing: -0.01em;
+      color: var(--color-primary);
+      margin-bottom: 100px;
+    }
+
+    .experience-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .experience-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 28px 0;
+      border-bottom: 1px solid rgba(45, 95, 122, 0.2);
+      border-left: 2px solid transparent;
+      padding-left: 0;
+      cursor: none;
+      position: relative;
+    }
+
+    .experience-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--color-tertiary);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.4s var(--ease-tide);
+    }
+
+    .experience-item:hover::before {
+      transform: scaleY(1);
+    }
+
+    .experience-name {
+      font-family: var(--font-serif);
+      font-size: clamp(20px, 2.5vw, 30px);
+      font-weight: 400;
+      color: var(--color-primary);
+      padding-left: 24px;
+    }
+
+    .experience-meta {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-secondary);
+      text-align: right;
+      flex-shrink: 0;
+      padding-left: 40px;
+    }
+
+    .experience-price {
+      display: block;
+      color: var(--color-tertiary);
+      margin-top: 4px;
+    }
+
+    /* ─── SUITES SECTION ──────────────────────────────────────── */
+    #suites {
+      border-top: 1px solid rgba(45, 95, 122, 0.3);
+    }
+
+    .suites-header {
+      margin-bottom: 100px;
+    }
+
+    .suites-header-title {
+      font-family: var(--font-serif);
+      font-size: 7vw;
+      font-weight: 400;
+      line-height: 0.92;
+      letter-spacing: -0.01em;
+      color: var(--color-primary);
+    }
+
+    .suites-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+
+    .suite-card {
+      background: var(--color-card);
+      padding: 56px 48px 64px;
+      border-top: 2px solid rgba(45, 95, 122, 0.3);
+      position: relative;
+      overflow: hidden;
+      cursor: none;
+    }
+
+    .suite-card::after {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--color-tertiary);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.6s var(--ease-tide);
+    }
+
+    .suite-card:hover::after {
+      transform: scaleX(1);
+    }
+
+    .suite-number {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--color-secondary);
+      margin-bottom: 40px;
+      display: block;
+    }
+
+    .suite-name {
+      font-family: var(--font-serif);
+      font-size: clamp(28px, 3.5vw, 52px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      color: var(--color-primary);
+      margin-bottom: 32px;
+    }
+
+    .suite-desc {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.75;
+      color: var(--color-secondary);
+      margin-bottom: 48px;
+    }
+
+    .suite-details {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-secondary);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      border-top: 1px solid rgba(45, 95, 122, 0.25);
+      padding-top: 24px;
+    }
+
+    .suite-detail-row {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .suite-detail-value {
+      color: var(--color-primary);
+    }
+
+    /* ─── VOICES SECTION ──────────────────────────────────────── */
+    #voices {
+      border-top: 1px solid rgba(45, 95, 122, 0.3);
+    }
+
+    .voices-title {
+      font-family: var(--font-serif);
+      font-size: 7vw;
+      font-weight: 400;
+      line-height: 0.92;
+      letter-spacing: -0.01em;
+      color: var(--color-primary);
+      margin-bottom: 100px;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+
+    .testimonial-card {
+      background: var(--color-card);
+      padding: 40px;
+      border-top: 2px solid var(--color-tertiary);
+    }
+
+    .testimonial-quote {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-style: italic;
+      line-height: 1.75;
+      color: var(--color-primary);
+      margin-bottom: 32px;
+    }
+
+    .testimonial-name {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-secondary);
+    }
+
+    .testimonial-detail {
+      display: block;
+      margin-top: 4px;
+      color: var(--color-tertiary);
+    }
+
+    /* ─── RESERVE SECTION ─────────────────────────────────────── */
+    #reserve {
+      border-top: 1px solid rgba(45, 95, 122, 0.3);
+      text-align: center;
+      padding: 18vw 8vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 64px;
+    }
+
+    .reserve-title {
+      font-family: var(--font-serif);
+      font-size: 7vw;
+      font-weight: 400;
+      font-style: italic;
+      line-height: 0.92;
+      letter-spacing: -0.01em;
+      color: var(--color-primary);
+    }
+
+    .reserve-subtitle {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.75;
+      color: var(--color-secondary);
+      max-width: 480px;
+    }
+
+    .btn-primary {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-on-tertiary);
+      background: var(--color-tertiary);
+      border: none;
+      border-radius: 9999px;
+      padding: 18px 48px;
+      cursor: none;
+      position: relative;
+      display: inline-block;
+      text-decoration: none;
+    }
+
+    .btn-ghost {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      background: transparent;
+      border: 1px solid var(--color-primary);
+      border-radius: 9999px;
+      padding: 18px 48px;
+      cursor: none;
+      display: inline-block;
+      text-decoration: none;
+    }
+
+    .reserve-coords {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--color-secondary);
+      opacity: 0.5;
+    }
+
+    /* ─── FOOTER ──────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid rgba(45, 95, 122, 0.3);
+      padding: 64px 8vw;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 40px;
+      align-items: end;
+    }
+
+    .footer-brand {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--color-primary);
+    }
+
+    .footer-legal {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: var(--color-secondary);
+      line-height: 1.8;
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-align: right;
+    }
+
+    .footer-links a {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-secondary);
+      text-decoration: none;
+      cursor: none;
+    }
+
+    .footer-links a:hover {
+      color: var(--color-primary);
+    }
+
+    /* ─── MOBILE ──────────────────────────────────────────────── */
+    .static-hero-bg {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse at 50% 60%, rgba(65, 191, 191, 0.08) 0%, var(--color-neutral) 70%);
+      z-index: 0;
+    }
+
+    @media (max-width: 768px) {
+      #water-canvas { display: none; }
+      .static-hero-bg { display: block; }
+
+      .hero-title { font-size: 20vw; }
+      .depth-quote { font-size: 9vw; }
+      .immersions-title { font-size: 12vw; }
+      .suites-header-title { font-size: 12vw; }
+      .voices-title { font-size: 12vw; }
+      .reserve-title { font-size: 12vw; }
+
+      #depth { grid-template-columns: 1fr; }
+      .wave-art { display: none; }
+      .suites-grid { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      footer { grid-template-columns: 1fr; }
+      .footer-links { text-align: left; }
+
+      .dot-nav { display: none; }
+
+      section { padding: 24vw 6vw; }
+    }
+
+    /* ─── GSAP INITIAL STATES ─────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(80px);
+    }
+
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-60px);
+    }
+
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(60px);
+    }
+
+    .stagger-reveal > * {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <div class="cursor" id="cursor"></div>
+
+  <!-- Fixed Header UI -->
+  <div class="fixed-ui" id="fixed-ui">
+    <a href="#hero" class="wordmark" data-magnetic>Oasis</a>
+    <a href="#reserve" class="reserve-link" data-magnetic>Reserve →</a>
+  </div>
+
+  <!-- Dot Navigation -->
+  <nav class="dot-nav" id="dot-nav" aria-label="Section navigation">
+    <div class="dot-nav-item active" data-section="hero">
+      <span class="dot-nav-label">Surface</span>
+      <span class="dot"></span>
+    </div>
+    <div class="dot-nav-item" data-section="depth">
+      <span class="dot-nav-label">Depth</span>
+      <span class="dot"></span>
+    </div>
+    <div class="dot-nav-item" data-section="immersions">
+      <span class="dot-nav-label">Immersions</span>
+      <span class="dot"></span>
+    </div>
+    <div class="dot-nav-item" data-section="suites">
+      <span class="dot-nav-label">Suites</span>
+      <span class="dot"></span>
+    </div>
+    <div class="dot-nav-item" data-section="reserve">
+      <span class="dot-nav-label">Reserve</span>
+      <span class="dot"></span>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- HERO                                                        -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <section id="hero">
+    <canvas id="water-canvas"></canvas>
+    <div class="static-hero-bg"></div>
+
+    <div class="hero-content">
+      <span class="hero-pre-title">The Tide</span>
+      <span class="hero-title" id="hero-title">Oasis</span>
+      <span class="hero-location">36.2704° N &nbsp;·&nbsp; 121.8081° W &nbsp;·&nbsp; Big Sur, California</span>
+    </div>
+
+    <div class="hero-scroll-hint">
+      <div class="scroll-line"></div>
+      <span>Descend</span>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- DEPTH — Philosophy                                          -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <section id="depth">
+    <div class="wave-art reveal-left" aria-hidden="true">
+<span style="color:rgba(65,191,191,0.12)">~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~</span>
+<span style="color:rgba(65,191,191,0.18)">  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  </span>
+<span style="color:rgba(65,191,191,0.24)">~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~</span>
+<span style="color:rgba(65,191,191,0.30)">  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  </span>
+<span style="color:rgba(65,191,191,0.36)">~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~</span>
+<span style="color:rgba(65,191,191,0.42)">  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  </span>
+<span style="color:rgba(65,191,191,0.48)">~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~</span>
+<span style="color:rgba(65,191,191,0.54)">  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  </span>
+<span style="color:rgba(65,191,191,0.60)">~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~</span>
+<span style="color:rgba(65,191,191,0.66)">  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  </span>
+<span style="color:rgba(65,191,191,0.72)">~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~</span>
+<span style="color:rgba(65,191,191,0.78)">  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  </span>
+<span style="color:rgba(65,191,191,0.84)">~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~</span>
+<span style="color:rgba(65,191,191,0.90)">  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  </span>
+<span style="color:rgba(65,191,191,0.96)">~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~</span>
+<span style="color:rgba(65,191,191,1.00)">  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  </span>
+<span style="color:rgba(65,191,191,0.96)">~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~</span>
+<span style="color:rgba(65,191,191,0.90)">  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  </span>
+<span style="color:rgba(65,191,191,0.84)">~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~</span>
+<span style="color:rgba(65,191,191,0.78)">  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  </span>
+<span style="color:rgba(65,191,191,0.72)">~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~</span>
+<span style="color:rgba(65,191,191,0.66)">  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  </span>
+<span style="color:rgba(65,191,191,0.60)">~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~</span>
+<span style="color:rgba(65,191,191,0.54)">  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  </span>
+<span style="color:rgba(65,191,191,0.48)">~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~</span>
+<span style="color:rgba(65,191,191,0.42)">  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  </span>
+<span style="color:rgba(65,191,191,0.36)">~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~</span>
+<span style="color:rgba(65,191,191,0.30)">  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  </span>
+<span style="color:rgba(65,191,191,0.24)">~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~</span>
+<span style="color:rgba(65,191,191,0.18)">  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  </span>
+<span style="color:rgba(65,191,191,0.12)">~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~</span></div>
+
+    <div class="depth-content">
+      <span class="section-index reveal">01 — Depth</span>
+      <p class="depth-quote reveal">"The mind is like water. When it is turbulent, it is difficult to see. When it is calm, everything becomes clear."</p>
+      <p class="depth-body reveal">Oasis exists at the edge where California's granite cliffs fall into the Pacific. We built nothing until we understood what the land asked of us. The answer was space — radical, uncomfortable, clarifying space. Seven days on the California coast where the only obligation is to go under and come back changed.</p>
+      <p class="depth-body reveal">Not a spa. Not a hotel. A laboratory for the interior life, where the ocean's indifference becomes the practitioner's greatest teacher.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- IMMERSIONS — Experiences                                    -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <section id="immersions">
+    <span class="section-index reveal">02 — Immersions</span>
+    <h2 class="immersions-title reveal">What the<br>water offers.</h2>
+
+    <ul class="experience-list stagger-reveal">
+      <li class="experience-item" data-magnetic>
+        <span class="experience-name">Dawn Immersion</span>
+        <div class="experience-meta">
+          4:30 — 7:00 AM · Daily
+          <span class="experience-price">$0 — Included</span>
+        </div>
+      </li>
+      <li class="experience-item" data-magnetic>
+        <span class="experience-name">Cold Plunge Protocol</span>
+        <div class="experience-meta">
+          3 Sessions · 90 min
+          <span class="experience-price">$280 / session</span>
+        </div>
+      </li>
+      <li class="experience-item" data-magnetic>
+        <span class="experience-name">Tide Pool Contemplation</span>
+        <div class="experience-meta">
+          Solo · 3 Hours
+          <span class="experience-price">$195 / session</span>
+        </div>
+      </li>
+      <li class="experience-item" data-magnetic>
+        <span class="experience-name">Somatic Breathwork</span>
+        <div class="experience-meta">
+          7 Participants · 2 Hours
+          <span class="experience-price">$350 / session</span>
+        </div>
+      </li>
+      <li class="experience-item" data-magnetic>
+        <span class="experience-name">Night Sky Sit</span>
+        <div class="experience-meta">
+          10 PM — 1 AM · Clear Nights
+          <span class="experience-price">$0 — Included</span>
+        </div>
+      </li>
+      <li class="experience-item" data-magnetic>
+        <span class="experience-name">Meridian Bodywork</span>
+        <div class="experience-meta">
+          2 Hours · Private
+          <span class="experience-price">$580 / session</span>
+        </div>
+      </li>
+      <li class="experience-item" data-magnetic>
+        <span class="experience-name">7-Day Silence Retreat</span>
+        <div class="experience-meta">
+          Full Immersion · No Devices
+          <span class="experience-price">From $6,400</span>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- SUITES                                                      -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <section id="suites">
+    <div class="suites-header">
+      <span class="section-index reveal">03 — The Suites</span>
+      <h2 class="suites-header-title reveal">Sleep at the<br>edge of it.</h2>
+    </div>
+
+    <div class="suites-grid">
+      <div class="suite-card reveal">
+        <span class="suite-number">Suite 01</span>
+        <h3 class="suite-name">The Littoral</h3>
+        <p class="suite-desc">Cantilevered directly above the waterline. Concrete, glass, and the sound of the ocean below the floorboards. No curtains — the light is the alarm clock. The tide determines your sleep.</p>
+        <div class="suite-details">
+          <div class="suite-detail-row">
+            <span>Aspect</span>
+            <span class="suite-detail-value">Full Pacific</span>
+          </div>
+          <div class="suite-detail-row">
+            <span>Size</span>
+            <span class="suite-detail-value">680 sq ft</span>
+          </div>
+          <div class="suite-detail-row">
+            <span>Rate</span>
+            <span class="suite-detail-value" style="color: var(--color-tertiary)">$1,400 / night</span>
+          </div>
+          <div class="suite-detail-row">
+            <span>Availability</span>
+            <span class="suite-detail-value">Limited</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="suite-card reveal">
+        <span class="suite-number">Suite 02</span>
+        <h3 class="suite-name">The Kelp Forest</h3>
+        <p class="suite-desc">Below grade, embedded into the cliff face. Natural rock walls, a single deep-cut window framing the horizon. The soundscape is filtered through 40 feet of stone. Absolute silence in the morning.</p>
+        <div class="suite-details">
+          <div class="suite-detail-row">
+            <span>Aspect</span>
+            <span class="suite-detail-value">Horizon Line</span>
+          </div>
+          <div class="suite-detail-row">
+            <span>Size</span>
+            <span class="suite-detail-value">520 sq ft</span>
+          </div>
+          <div class="suite-detail-row">
+            <span>Rate</span>
+            <span class="suite-detail-value" style="color: var(--color-tertiary)">$980 / night</span>
+          </div>
+          <div class="suite-detail-row">
+            <span>Availability</span>
+            <span class="suite-detail-value">Available</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="suite-card reveal">
+        <span class="suite-number">Suite 03</span>
+        <h3 class="suite-name">The Meridian</h3>
+        <p class="suite-desc">The oldest structure on the property, built from salvaged redwood in 1962. Restored without alteration. A bathtub cut directly into the cliff stone, filled daily with mineral-heated seawater. No television. A single candle.</p>
+        <div class="suite-details">
+          <div class="suite-detail-row">
+            <span>Aspect</span>
+            <span class="suite-detail-value">North Garden</span>
+          </div>
+          <div class="suite-detail-row">
+            <span>Size</span>
+            <span class="suite-detail-value">820 sq ft</span>
+          </div>
+          <div class="suite-detail-row">
+            <span>Rate</span>
+            <span class="suite-detail-value" style="color: var(--color-tertiary)">$1,850 / night</span>
+          </div>
+          <div class="suite-detail-row">
+            <span>Availability</span>
+            <span class="suite-detail-value">By Request</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- VOICES — Testimonials                                       -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <section id="voices">
+    <span class="section-index reveal">04 — Voices</span>
+    <h2 class="voices-title reveal">What remains<br>when you surface.</h2>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal">
+        <p class="testimonial-quote">"I went to Oasis expecting a retreat. I came back with the uncomfortable realization that I had not been present for the last four years of my life. The water did that. The silence did that. Nothing else."</p>
+        <span class="testimonial-name">
+          M. Tanaka
+          <span class="testimonial-detail">CEO · Tokyo, Japan · July 2024</span>
+        </span>
+      </div>
+
+      <div class="testimonial-card reveal">
+        <p class="testimonial-quote">"I've been to Esalen. I've done Vipassana. I've done the Hoffman Process. Oasis is different because it doesn't try to teach you anything. It just removes everything that isn't you and asks you to see what's left."</p>
+        <span class="testimonial-name">
+          Dr. S. Okonkwo
+          <span class="testimonial-detail">Neuroscientist · London, UK · March 2024</span>
+        </span>
+      </div>
+
+      <div class="testimonial-card reveal">
+        <p class="testimonial-quote">"The 3am tide woke me on the fourth night and I sat with it for two hours. I didn't meditate. I didn't breathe. I just sat. I haven't needed my anxiety medication since."</p>
+        <span class="testimonial-name">
+          R. Beaumont
+          <span class="testimonial-detail">Architect · New York, USA · November 2024</span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- RESERVE — CTA                                               -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <section id="reserve">
+    <span class="section-index reveal">05 — Reserve</span>
+    <h2 class="reserve-title reveal">Surrender<br>to the tide.</h2>
+    <p class="reserve-subtitle reveal">Seven days. Eight nights. No itinerary. The ocean makes the schedule. Availability is intentionally limited to six guests at any time. The next available window opens in 2025.</p>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;" class="reveal">
+      <a href="#" class="btn-primary" data-magnetic>Begin Your Inquiry</a>
+      <a href="#" class="btn-ghost" data-magnetic>Download Prospectus</a>
+    </div>
+    <p class="reserve-coords reveal">36.2704° N / 121.8081° W / Elevation: 280ft / California Coast Highway 1</p>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- FOOTER                                                      -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <footer>
+    <div class="footer-brand">
+      Oasis<br>
+      <span style="color: var(--color-secondary); font-weight: 400; letter-spacing: 0.08em;">Big Sur, California</span>
+    </div>
+    <div class="footer-legal">
+      © 2025 Oasis Retreat Inc.<br>
+      All experiences subject to availability.<br>
+      Rates are per night, exclusive of tax.<br>
+      <span style="color: rgba(45,95,122,0.5)">v4 — The Tide</span>
+    </div>
+    <ul class="footer-links">
+      <li><a href="#">Philosophy</a></li>
+      <li><a href="#">Immersions</a></li>
+      <li><a href="#">Suites</a></li>
+      <li><a href="#">Press</a></li>
+      <li><a href="#">Privacy</a></li>
+    </ul>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- SCRIPTS                                                     -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <script>
+  (function () {
+    'use strict';
+
+    const isMobile = window.innerWidth < 768;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ─── WATER RIPPLE SIMULATION ─────────────────────────────── */
+    if (!isMobile && !prefersReducedMotion) {
+      const canvas = document.getElementById('water-canvas');
+      const ctx = canvas.getContext('2d');
+
+      let W, H, cols, rows;
+      let buf0, buf1;
+      let imageData, pixels;
+      let mouseX = -1, mouseY = -1;
+      let animFrame;
+
+      const CELL = 3;
+      const DAMPING = 0.99;
+
+      const R_BASE = 4, G_BASE = 9, B_BASE = 20;
+      const R_HIGH = 65, G_HIGH = 191, B_HIGH = 191;
+
+      function initCanvas() {
+        W = canvas.offsetWidth;
+        H = canvas.offsetHeight;
+        canvas.width = W;
+        canvas.height = H;
+        cols = Math.ceil(W / CELL);
+        rows = Math.ceil(H / CELL);
+        buf0 = new Float32Array(cols * rows);
+        buf1 = new Float32Array(cols * rows);
+        imageData = ctx.createImageData(W, H);
+        pixels = imageData.data;
+        for (let i = 3; i < pixels.length; i += 4) pixels[i] = 255;
+      }
+
+      function idx(x, y) { return y * cols + x; }
+
+      function ripple(cx, cy, radius, strength) {
+        const cellX = Math.floor(cx / CELL);
+        const cellY = Math.floor(cy / CELL);
+        const r = Math.ceil(radius / CELL);
+        for (let dy = -r; dy <= r; dy++) {
+          for (let dx = -r; dx <= r; dx++) {
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist <= r) {
+              const nx = cellX + dx;
+              const ny = cellY + dy;
+              if (nx >= 0 && nx < cols && ny >= 0 && ny < rows) {
+                buf0[idx(nx, ny)] += strength * (1 - dist / r);
+              }
+            }
+          }
+        }
+      }
+
+      function step() {
+        for (let y = 1; y < rows - 1; y++) {
+          for (let x = 1; x < cols - 1; x++) {
+            const i = idx(x, y);
+            const val = (
+              buf0[idx(x - 1, y)] +
+              buf0[idx(x + 1, y)] +
+              buf0[idx(x, y - 1)] +
+              buf0[idx(x, y + 1)]
+            ) / 2 - buf1[i];
+            buf1[i] = val * DAMPING;
+          }
+        }
+        const tmp = buf0; buf0 = buf1; buf1 = tmp;
+      }
+
+      function render() {
+        for (let y = 0; y < rows; y++) {
+          for (let x = 0; x < cols; x++) {
+            const h = Math.min(1, Math.max(0, (buf0[idx(x, y)] + 2) / 4));
+            const r = Math.round(R_BASE + h * (R_HIGH - R_BASE));
+            const g = Math.round(G_BASE + h * (G_HIGH - G_BASE));
+            const b = Math.round(B_BASE + h * (B_HIGH - B_BASE));
+
+            const x0 = x * CELL;
+            const y0 = y * CELL;
+            const xEnd = Math.min(x0 + CELL, W);
+            const yEnd = Math.min(y0 + CELL, H);
+
+            for (let py = y0; py < yEnd; py++) {
+              for (let px = x0; px < xEnd; px++) {
+                const pi = (py * W + px) * 4;
+                pixels[pi]     = r;
+                pixels[pi + 1] = g;
+                pixels[pi + 2] = b;
+              }
+            }
+          }
+        }
+        ctx.putImageData(imageData, 0, 0);
+      }
+
+      let lastAmbient = 0;
+      function loop(ts) {
+        step();
+
+        if (ts - lastAmbient > 800) {
+          lastAmbient = ts;
+          const ax = Math.random() * cols;
+          const ay = Math.random() * rows;
+          ripple(ax * CELL, ay * CELL, 12, 0.4);
+        }
+
+        render();
+        animFrame = requestAnimationFrame(loop);
+      }
+
+      canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        mouseX = e.clientX - rect.left;
+        mouseY = e.clientY - rect.top;
+        ripple(mouseX, mouseY, 28, 1.8);
+      });
+
+      canvas.addEventListener('mouseleave', () => {
+        mouseX = -1; mouseY = -1;
+      });
+
+      initCanvas();
+      requestAnimationFrame(loop);
+
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          cancelAnimationFrame(animFrame);
+          initCanvas();
+          requestAnimationFrame(loop);
+        }, 200);
+      });
+    }
+
+    /* ─── GSAP + LENIS SETUP ──────────────────────────────────── */
+    if (!prefersReducedMotion) {
+      gsap.registerPlugin(ScrollTrigger);
+
+      const lenis = new Lenis({ lerp: 0.08, smoothWheel: true });
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+
+      /* Hero title breathing */
+      gsap.to('#hero-title', {
+        scale: 1.012,
+        duration: 2,
+        ease: 'sine.inOut',
+        yoyo: true,
+        repeat: -1
+      });
+
+      /* Hero content parallax exit */
+      gsap.to('.hero-content', {
+        scrollTrigger: {
+          trigger: '#hero',
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1.5
+        },
+        y: -120,
+        opacity: 0.3
+      });
+
+      /* Fixed UI reveal after hero */
+      ScrollTrigger.create({
+        trigger: '#depth',
+        start: 'top 90%',
+        onEnter: () => {
+          gsap.to('#fixed-ui', { opacity: 1, duration: 0.8, ease: 'power2.out' });
+          document.getElementById('fixed-ui').classList.add('visible');
+        },
+        onLeaveBack: () => {
+          gsap.to('#fixed-ui', { opacity: 0, duration: 0.5, ease: 'power2.in' });
+          document.getElementById('fixed-ui').classList.remove('visible');
+        }
+      });
+
+      /* Generic reveal animations */
+      document.querySelectorAll('.reveal').forEach((el) => {
+        gsap.fromTo(el, { opacity: 0, y: 80 }, {
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse'
+          },
+          opacity: 1,
+          y: 0,
+          duration: 1.2,
+          ease: 'power4.out'
+        });
+      });
+
+      document.querySelectorAll('.reveal-left').forEach((el) => {
+        gsap.fromTo(el, { opacity: 0, x: -60 }, {
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse'
+          },
+          opacity: 1,
+          x: 0,
+          duration: 1.4,
+          ease: 'power4.out'
+        });
+      });
+
+      document.querySelectorAll('.reveal-right').forEach((el) => {
+        gsap.fromTo(el, { opacity: 0, x: 60 }, {
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse'
+          },
+          opacity: 1,
+          x: 0,
+          duration: 1.4,
+          ease: 'power4.out'
+        });
+      });
+
+      /* Stagger reveals */
+      document.querySelectorAll('.stagger-reveal').forEach((container) => {
+        const children = container.querySelectorAll(':scope > *');
+        gsap.fromTo(children, { opacity: 0, y: 40 }, {
+          scrollTrigger: {
+            trigger: container,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse'
+          },
+          opacity: 1,
+          y: 0,
+          duration: 0.9,
+          ease: 'power4.out',
+          stagger: 0.08
+        });
+      });
+
+      /* Experience item hover GSAP */
+      document.querySelectorAll('.experience-item').forEach((item) => {
+        item.addEventListener('mouseenter', () => {
+          gsap.to(item, { x: 8, duration: 0.4, ease: 'power2.out' });
+          gsap.to(item.querySelector('.experience-name'), { color: '#D4E4F2', duration: 0.3 });
+        });
+        item.addEventListener('mouseleave', () => {
+          gsap.to(item, { x: 0, duration: 0.6, ease: 'elastic.out(1, 0.5)' });
+        });
+      });
+
+      /* Magnetic effect */
+      document.querySelectorAll('[data-magnetic]').forEach((el) => {
+        el.addEventListener('mousemove', (e) => {
+          const rect = el.getBoundingClientRect();
+          const relX = e.clientX - rect.left - rect.width / 2;
+          const relY = e.clientY - rect.top - rect.height / 2;
+          gsap.to(el, { x: relX * 0.25, y: relY * 0.25, duration: 0.4, ease: 'power2.out' });
+        });
+        el.addEventListener('mouseleave', () => {
+          gsap.to(el, { x: 0, y: 0, duration: 0.8, ease: 'elastic.out(1, 0.4)' });
+        });
+      });
+
+    } else {
+      /* Static fallback: show all content */
+      document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+      document.querySelectorAll('.stagger-reveal > *').forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+    }
+
+    /* ─── CUSTOM CURSOR ───────────────────────────────────────── */
+    const cursor = document.getElementById('cursor');
+
+    if (!isMobile) {
+      gsap.set(cursor, { xPercent: -50, yPercent: -50 });
+
+      document.addEventListener('mousemove', (e) => {
+        gsap.to(cursor, {
+          x: e.clientX,
+          y: e.clientY,
+          duration: 0.5,
+          ease: 'power3.out'
+        });
+      });
+
+      document.querySelectorAll('a, button, [data-magnetic], .experience-item, .dot-nav-item').forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+      });
+
+      document.querySelectorAll('p, h1, h2, h3, .depth-quote, .testimonial-quote').forEach(el => {
+        el.addEventListener('mouseenter', () => { cursor.classList.add('text-hover'); cursor.classList.remove('hover'); });
+        el.addEventListener('mouseleave', () => cursor.classList.remove('text-hover'));
+      });
+    } else {
+      cursor.style.display = 'none';
+    }
+
+    /* ─── DOT NAVIGATION ─────────────────────────────────────── */
+    const dotItems = document.querySelectorAll('.dot-nav-item');
+    const sections = ['hero', 'depth', 'immersions', 'suites', 'reserve'];
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '-40% 0px -40% 0px',
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          dotItems.forEach(item => {
+            item.classList.toggle('active', item.dataset.section === id);
+          });
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    dotItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const target = document.getElementById(item.dataset.section);
+        if (target) {
+          if (!prefersReducedMotion && window.lenis) {
+            window.lenis.scrollTo(target);
+          } else {
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+
+    /* ─── SCROLL HINT FADE ────────────────────────────────────── */
+    if (!prefersReducedMotion) {
+      ScrollTrigger.create({
+        trigger: '#hero',
+        start: 'top top',
+        end: '30% top',
+        onUpdate: (self) => {
+          const hint = document.querySelector('.hero-scroll-hint');
+          if (hint) hint.style.opacity = 1 - self.progress * 3;
+        }
+      });
+
+      /* Scroll hint bounce */
+      gsap.to('.scroll-line', {
+        scaleY: 0.3,
+        transformOrigin: 'top center',
+        duration: 1,
+        ease: 'sine.inOut',
+        yoyo: true,
+        repeat: -1
+      });
+    }
+
+  })();
+  </script>
+</body>
+</html>

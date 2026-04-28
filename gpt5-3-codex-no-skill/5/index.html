@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oasis Retreat | Dawn Minimal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ivory: #fffdf8;
+      --mist: #ece8de;
+      --char: #1e1b17;
+      --soft: #676057;
+      --bronze: #b98f5d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", sans-serif;
+      color: var(--char);
+      background: linear-gradient(to bottom, #fffdf8, #f2eee5);
+    }
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+    }
+    .content {
+      padding: clamp(1.4rem, 4vw, 3rem);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      border-right: 1px solid var(--mist);
+    }
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    .brand {
+      font-family: "Playfair Display", serif;
+      letter-spacing: 0.1em;
+      font-size: 1.15rem;
+    }
+    .links a {
+      color: var(--soft);
+      text-decoration: none;
+      margin-left: 1rem;
+      font-size: 0.88rem;
+    }
+    .block {
+      align-self: center;
+      max-width: 660px;
+    }
+    .tag {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.72rem;
+      color: var(--bronze);
+    }
+    h1 {
+      margin: 0.8rem 0 1rem;
+      font-family: "Playfair Display", serif;
+      font-size: clamp(2.5rem, 7vw, 6.1rem);
+      line-height: 0.92;
+      font-weight: 600;
+      max-width: 9ch;
+    }
+    .lead {
+      color: var(--soft);
+      line-height: 1.85;
+      max-width: 48ch;
+      margin-bottom: 1.9rem;
+    }
+    .cta {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .btn {
+      text-decoration: none;
+      font-size: 0.77rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border: 1px solid var(--char);
+      color: var(--char);
+      padding: 0.75rem 1rem;
+      transition: 170ms ease;
+    }
+    .btn.primary {
+      background: var(--char);
+      color: var(--ivory);
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .foot {
+      border-top: 1px solid var(--mist);
+      padding-top: 1rem;
+      color: var(--soft);
+      font-size: 0.85rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .visual {
+      position: relative;
+      background:
+        linear-gradient(to bottom, rgba(255,253,248,0.04), rgba(30,27,23,0.44)),
+        url("https://images.unsplash.com/photo-1519834785169-98be25ec3f84?auto=format&fit=crop&w=1300&q=80") center/cover;
+      display: grid;
+      place-items: end center;
+      padding: 2rem;
+    }
+    .panel {
+      width: min(450px, 95%);
+      background: rgba(255,253,248,0.9);
+      border: 1px solid var(--mist);
+      padding: 1rem 1.1rem;
+      display: grid;
+      gap: 0.55rem;
+      color: var(--soft);
+      font-size: 0.86rem;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+    }
+    .row strong { color: var(--char); font-weight: 600; }
+    @media (max-width: 920px) {
+      .hero { grid-template-columns: 1fr; }
+      .content { border-right: 0; }
+      .visual { min-height: 360px; }
+      .links { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="hero">
+    <section class="content">
+      <header class="nav">
+        <div class="brand">OASIS</div>
+        <nav class="links">
+          <a href="#">Experience</a>
+          <a href="#">Wellness</a>
+          <a href="#">Stories</a>
+          <a href="#">Book</a>
+        </nav>
+      </header>
+      <article class="block">
+        <div class="tag">Bespoke Meditation Escape</div>
+        <h1>Luxury For The Inner Life.</h1>
+        <p class="lead">
+          Oasis creates rare space for deep restoration with private meditation mentors, architectural serenity, and discreet five-star service tailored to your rhythm.
+        </p>
+        <div class="cta">
+          <a class="btn primary" href="#">Book Consultation</a>
+          <a class="btn" href="#">See Availability</a>
+        </div>
+      </article>
+      <footer class="foot">
+        <span>Included airport transfer</span>
+        <span>Custom nutrition protocol</span>
+        <span>24-hour wellness concierge</span>
+      </footer>
+    </section>
+    <aside class="visual" role="img" aria-label="Meditation retreat sunrise terrace">
+      <div class="panel">
+        <div class="row"><span>Seasonal Collection</span><strong>Autumn 2026</strong></div>
+        <div class="row"><span>Earliest Arrival</span><strong>Sep 18</strong></div>
+        <div class="row"><span>Suite Inventory</span><strong>Limited</strong></div>
+      </div>
+    </aside>
+  </main>
+</body>
+</html>

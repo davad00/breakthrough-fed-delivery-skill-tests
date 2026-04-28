@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis | Coastal Meditation Retreat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-sea: #E8F4F3;
+            --color-deep: #1A3A4A;
+            --color-mid: #4A7C8C;
+            --color-sky: #8FBFCC;
+            --color-foam: #FAFCFC;
+            --color-sand: #D4CFC5;
+            --font-display: 'Cormorant', serif;
+            --font-body: 'Manrope', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-foam);
+            color: var(--color-deep);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            background: linear-gradient(
+                180deg,
+                var(--color-foam) 0%,
+                var(--color-sea) 50%,
+                var(--color-sky) 100%
+            );
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 80%, rgba(138, 197, 204, 0.4) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(74, 124, 140, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.5) 0%, transparent 70%);
+            animation: waveFloat 15s ease-in-out infinite;
+        }
+
+        @keyframes waveFloat {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-20px) scale(1.02);
+                opacity: 0.8;
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: clamp(4rem, 12vw, 10rem);
+            font-weight: 300;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--color-deep);
+            position: relative;
+            opacity: 0;
+            animation: waterReveal 2s ease forwards;
+        }
+
+        @keyframes waterReveal {
+            0% {
+                opacity: 0;
+                letter-spacing: 0.5em;
+                filter: blur(20px);
+            }
+            100% {
+                opacity: 1;
+                letter-spacing: 0.25em;
+                filter: blur(0);
+            }
+        }
+
+        .tagline {
+            font-family: var(--font-body);
+            font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+            font-weight: 300;
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            color: var(--color-mid);
+            margin-top: 1.5rem;
+            opacity: 0;
+            animation: fadeUp 1.5s ease 0.6s forwards;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .wave-divider {
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--color-mid), transparent);
+            margin: 2.5rem auto 0;
+            opacity: 0;
+            animation: fadeUp 1.5s ease 0.8s forwards;
+        }
+
+        .scroll-prompt {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+            animation: fadeUp 1.5s ease 1s forwards;
+        }
+
+        .scroll-prompt span {
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-mid);
+        }
+
+        .scroll-icon {
+            width: 24px;
+            height: 40px;
+            border: 1px solid var(--color-mid);
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .scroll-icon::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 8px;
+            background: var(--color-mid);
+            border-radius: 2px;
+            animation: scrollDot 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollDot {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+            50% {
+                transform: translateX(-50%) translateY(12px);
+                opacity: 0.3;
+            }
+        }
+
+        section {
+            padding: 8rem 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .intro {
+            text-align: center;
+            background: var(--color-foam);
+            position: relative;
+        }
+
+        .intro::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(180deg, var(--color-sky) 0%, transparent 100%);
+            opacity: 0.3;
+        }
+
+        .intro-content {
+            position: relative;
+        }
+
+        .intro h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            font-style: italic;
+            margin-bottom: 2rem;
+            color: var(--color-deep);
+        }
+
+        .intro p {
+            font-size: 1.05rem;
+            font-weight: 300;
+            max-width: 700px;
+            margin: 0 auto;
+            color: var(--color-mid);
+            line-height: 2;
+        }
+
+        .philosophy {
+            background: var(--color-deep);
+            color: var(--color-foam);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .philosophy::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 60%;
+            height: 200%;
+            background: radial-gradient(ellipse, rgba(138, 197, 204, 0.1) 0%, transparent 70%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        .philosophy-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+            position: relative;
+        }
+
+        .philosophy-text {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 2.5vw, 2rem);
+            font-weight: 300;
+            line-height: 1.9;
+        }
+
+        .philosophy-text em {
+            color: var(--color-sky);
+            font-style: italic;
+        }
+
+        .philosophy-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .philosophy-circle {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 1px solid rgba(138, 197, 204, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .philosophy-circle::before {
+            content: 'Ω';
+            font-family: var(--font-display);
+            font-size: 6rem;
+            color: var(--color-sky);
+            opacity: 0.6;
+            animation: rotate 30s linear infinite reverse;
+        }
+
+        .retreats {
+            background: linear-gradient(180deg, var(--color-foam) 0%, var(--color-sea) 100%);
+        }
+
+        .retreats-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .retreats-header span {
+            font-size: 0.7rem;
+            font-weight: 400;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--color-mid);
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .retreats-header h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 300;
+            color: var(--color-deep);
+        }
+
+        .retreat-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .retreat-card {
+            background: var(--color-foam);
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.5s ease;
+            border: 1px solid transparent;
+        }
+
+        .retreat-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--color-sky);
+            box-shadow: 0 20px 40px rgba(26, 58, 74, 0.1);
+        }
+
+        .retreat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--color-mid);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .retreat-card:hover::before {
+            opacity: 1;
+        }
+
+        .retreat-icon {
+            font-size: 2rem;
+            color: var(--color-sky);
+            margin-bottom: 1.5rem;
+        }
+
+        .retreat-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            font-style: italic;
+            margin-bottom: 1rem;
+            color: var(--color-deep);
+        }
+
+        .retreat-card p {
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: var(--color-mid);
+            line-height: 1.8;
+        }
+
+        .retreat-duration {
+            display: block;
+            margin-top: 1.5rem;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-deep);
+        }
+
+        .ocean {
+            background: var(--color-deep);
+            position: relative;
+        }
+
+        .ocean-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+
+        .ocean-text h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 3.5vw, 2.8rem);
+            font-weight: 300;
+            font-style: italic;
+            color: var(--color-foam);
+            margin-bottom: 2rem;
+            line-height: 1.3;
+        }
+
+        .ocean-text p {
+            font-size: 0.95rem;
+            font-weight: 300;
+            color: rgba(248, 252, 252, 0.7);
+            line-height: 2;
+            margin-bottom: 1.5rem;
+        }
+
+        .ocean-visual {
+            height: 400px;
+            background: linear-gradient(
+                180deg,
+                var(--color-sky) 0%,
+                var(--color-mid) 50%,
+                var(--color-deep) 100%
+            );
+            border-radius: 50% 50% 0 0 / 30% 30% 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            color: var(--color-foam);
+            opacity: 0.8;
+        }
+
+        .testimonial {
+            text-align: center;
+            padding: 8rem 2rem;
+            background: var(--color-sea);
+        }
+
+        .testimonial blockquote {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 300;
+            font-style: italic;
+            max-width: 900px;
+            margin: 0 auto 2rem;
+            line-height: 1.7;
+            color: var(--color-deep);
+        }
+
+        .testimonial cite {
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-mid);
+            font-style: normal;
+        }
+
+        .cta-water {
+            text-align: center;
+            padding: 10rem 2rem;
+            background: linear-gradient(180deg, var(--color-sea) 0%, var(--color-sky) 100%);
+            position: relative;
+        }
+
+        .cta-water h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            font-style: italic;
+            color: var(--color-deep);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-water p {
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: var(--color-mid);
+            margin-bottom: 3rem;
+            letter-spacing: 0.05em;
+        }
+
+        .btn-water {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: var(--color-deep);
+            border: none;
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--color-foam);
+            transition: all 0.4s ease;
+        }
+
+        .btn-water:hover {
+            background: var(--color-mid);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(26, 58, 74, 0.2);
+        }
+
+        footer {
+            padding: 4rem 2rem;
+            text-align: center;
+            background: var(--color-deep);
+            color: var(--color-foam);
+        }
+
+        footer p {
+            font-size: 0.75rem;
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 1024px) {
+            .philosophy-grid,
+            .ocean-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .philosophy-visual {
+                order: -1;
+            }
+
+            .retreat-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .ocean-visual {
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            section {
+                padding: 5rem 1.5rem;
+            }
+
+            .philosophy-circle {
+                width: 200px;
+                height: 200px;
+            }
+
+            .philosophy-circle::before {
+                font-size: 4rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="logo">Oasis</h1>
+            <p class="tagline">Coastal Sanctuary</p>
+            <div class="wave-divider"></div>
+        </div>
+        <div class="scroll-prompt">
+            <span>Explore</span>
+            <div class="scroll-icon"></div>
+        </div>
+    </section>
+
+    <section class="intro">
+        <div class="container">
+            <div class="intro-content">
+                <h2>"The sea is nothing but a collection of drops, yet without them, there would be no sea."</h2>
+                <p>At Oasis, we gather these drops—individual souls seeking the same infinite horizon. Our coastal sanctuary offers a rare medicine: the combination of saltwater, silence, and the profound teaching that stillness and movement are not opposites, but dance partners in the eternal rhythm of existence.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="philosophy">
+        <div class="container">
+            <div class="philosophy-grid">
+                <div class="philosophy-text">
+                    <p>The ancient Greeks had two words for time: <em>chronos</em>, the linear progression of seconds and years, and <em>kairos</em>, the qualitative experience of the right or fitting moment.</p>
+                    <br>
+                    <p>At Oasis, <em>kairos</em> is the only time that matters. We exist outside the tyranny of schedules. The tide determines the rhythm. The sunrise calls us to醒了. The moon invites us to surrender.</p>
+                </div>
+                <div class="philosophy-visual">
+                    <div class="philosophy-circle"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="retreats">
+        <div class="container">
+            <div class="retreats-header">
+                <span>Tidal Journeys</span>
+                <h2>Programs of Renewal</h2>
+            </div>
+            <div class="retreat-cards">
+                <div class="retreat-card">
+                    <div class="retreat-icon">◦</div>
+                    <h3>Morning Mist</h3>
+                    <p>Dawn beach meditation followed by silent coastal walks. Afternoons reserved for rest, reading, or private practice in your ocean-view quarters.</p>
+                    <span class="retreat-duration">5 Days</span>
+                </div>
+                <div class="retreat-card">
+                    <div class="retreat-icon">❍</div>
+                    <h3>Blue Mind Immersion</h3>
+                    <p>Seven days exploring the neuroscience of water and why proximity to the ocean induces flow states. Includes daily cold-water exposure and breathwork.</p>
+                    <span class="retreat-duration">7 Days</span>
+                </div>
+                <div class="retreat-card">
+                    <div class="retreat-icon">≋</div>
+                    <h3>The Deep Current</h3>
+                    <p>Our most profound program—ten days of continuous silence, sunrise yoga, ocean swimming, and evening dharma talks around the fire pit.</p>
+                    <span class="retreat-duration">10 Days</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ocean">
+        <div class="container">
+            <div class="ocean-content">
+                <div class="ocean-text">
+                    <h2>Where the Mountain Meets the Sea</h2>
+                    <p>Our sanctuary occupies a rare geography—the final ridge of the Andes descending directly into the Pacific. The setting creates a natural amphitheater where morning fog rolls in from the ocean and evening winds carry the scent of ancient cypress.</p>
+                    <p>No roads visible from the property. No sounds of civilization. Only the eternal conversation between rock and wave.</p>
+                </div>
+                <div class="ocean-visual">🌊</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonial">
+        <div class="container">
+            <blockquote>"I arrived a CEO. I left simply myself. The ocean had nothing to do with it—it was the absence of everything else."</blockquote>
+            <cite>— Yuki Tanaka, Founder, Meridian Ventures</cite>
+        </div>
+    </section>
+
+    <section class="cta-water">
+        <div class="container">
+            <h2>Answer the Call of the Tides</h2>
+            <p>Sixteen guests per season · November through March</p>
+            <a href="#" class="btn-water">Apply for Residence</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>Oasis Coastal Sanctuary · Atacama Coast, Chile · +56 9 5555 0187</p>
+    </footer>
+</body>
+</html>

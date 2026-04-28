@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OASIS — Kinetic Meditation Retreat</title>
+    <meta name="description" content="Meditation redefined for the digital age. Intense. Transformative. Modern.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400&family=Roboto+Mono:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0D0D0D;
+            color: #FFFFFF;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        .glitch-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                #0D0D0D 0px,
+                #0D0D0D 2px,
+                #111111 2px,
+                #111111 4px
+            );
+            opacity: 0.3;
+        }
+
+        .cursor {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: #9D4EDD;
+            pointer-events: none;
+            z-index: 10000;
+        }
+
+        .cursor.hover {
+            width: 120px;
+            height: 120px;
+            mix-blend-mode: difference;
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+        }
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5vw;
+            position: relative;
+        }
+
+        .hero {
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .display-huge {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 16vw;
+            font-weight: 900;
+            line-height: 0.75;
+            letter-spacing: -0.08em;
+            opacity: 0;
+        }
+
+        .display-huge span {
+            display: inline-block;
+        }
+
+        .display-large {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 9vw;
+            font-weight: 900;
+            line-height: 0.8;
+            letter-spacing: -0.05em;
+            opacity: 0;
+            transform: translateY(120px);
+        }
+
+        .body-md {
+            font-size: 15px;
+            line-height: 1.6;
+            max-width: 550px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .label-micro {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #6E6E6E;
+        }
+
+        .btn-primary {
+            background: #9D4EDD;
+            color: #FFFFFF;
+            padding: 16px 48px;
+            border: none;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: none;
+            opacity: 0;
+            transform: translateY(40px);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s cubic-bezier(0.95, 0.05, 0.795, 0.035);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.3s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.02);
+        }
+
+        .section-label {
+            position: absolute;
+            top: 5vh;
+            left: 5vw;
+        }
+
+        .transform {
+            margin-top: 35vw;
+            flex-direction: column;
+        }
+
+        .intensity {
+            margin-top: 35vw;
+            flex-direction: column;
+            align-items: flex-end;
+            padding-right: 10vw;
+        }
+
+        .surge {
+            margin-top: 35vw;
+            flex-direction: column;
+        }
+
+        .glitch {
+            position: relative;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+
+        .glitch::before {
+            color: #9D4EDD;
+            animation: glitch1 0.3s infinite;
+        }
+
+        .glitch::after {
+            color: #00F0FF;
+            animation: glitch2 0.3s infinite;
+        }
+
+        @keyframes glitch1 {
+            0%, 100% { transform: translate(0); opacity: 0; }
+            50% { transform: translate(-2px, 2px); opacity: 0.8; }
+        }
+
+        @keyframes glitch2 {
+            0%, 100% { transform: translate(0); opacity: 0; }
+            50% { transform: translate(2px, -2px); opacity: 0.8; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .display-huge {
+                font-size: 24vw;
+            }
+            .display-large {
+                font-size: 16vw;
+            }
+            body {
+                cursor: auto;
+            }
+            .cursor {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="glitch-bg"></div>
+    <div class="cursor"></div>
+    
+    <div class="content">
+        <section class="hero">
+            <h1 class="display-huge glitch" data-text="OASIS">OASIS</h1>
+            <p class="body-md" style="margin-top: 3rem;">Meditation for the digital age. Intense sensory experiences that heighten perception. Transformation through controlled intensity.</p>
+            <button class="btn-primary" data-magnetic style="margin-top: 4rem;">TRANSFORM</button>
+        </section>
+
+        <section class="transform">
+            <div class="section-label label-micro">001</div>
+            <h2 class="display-large glitch" data-text="DIGITAL">DIGITAL</h2>
+            <p class="body-md" style="margin-top: 3rem;">Our retreat redefines meditation for modern consciousness. Sensory deprivation chambers. Biometric feedback systems. Technology as a tool for transcendence.</p>
+        </section>
+
+        <section class="intensity">
+            <div class="section-label label-micro">010</div>
+            <h2 class="display-large glitch" data-text="SURGE">SURGE</h2>
+            <p class="body-md" style="margin-top: 2.5rem; text-align: right;">Seven days of intensive practice. Guided by neuroscience. Measured by results. Meditation as performance optimization.</p>
+        </section>
+
+        <section class="surge">
+            <div class="section-label label-micro">011</div>
+            <h2 class="display-large glitch" data-text="ASCEND">ASCEND</h2>
+            <button class="btn-primary" data-magnetic style="margin-top: 3rem;">ENTER THE SYSTEM</button>
+        </section>
+    </div>
+
+    <script>
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (!prefersReducedMotion) {
+            // Lenis smooth scroll
+            const lenis = new Lenis({
+                duration: 0.8,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+            });
+
+            function raf(time) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+            requestAnimationFrame(raf);
+
+            gsap.registerPlugin(ScrollTrigger);
+
+            lenis.on('scroll', ScrollTrigger.update);
+            gsap.ticker.add((time) => lenis.raf(time * 1000));
+            gsap.ticker.lagSmoothing(0);
+
+            // Kinetic typography - letters break apart and reassemble
+            const heroTitle = document.querySelector('.hero .display-huge');
+            const letters = heroTitle.textContent.split('');
+            heroTitle.textContent = '';
+            
+            letters.forEach((letter, i) => {
+                const span = document.createElement('span');
+                span.textContent = letter;
+                span.style.display = 'inline-block';
+                span.style.opacity = '0';
+                heroTitle.appendChild(span);
+                
+                gsap.to(span, {
+                    opacity: 1,
+                    y: 0,
+                    rotation: 0,
+                    duration: 0.6,
+                    delay: i * 0.05,
+                    ease: 'cubic-bezier(0.95, 0.05, 0.795, 0.035)',
+                    onStart: function() {
+                        gsap.from(span, {
+                            y: Math.random() * 200 - 100,
+                            x: Math.random() * 200 - 100,
+                            rotation: Math.random() * 360,
+                            scale: Math.random() * 2
+                        });
+                    }
+                });
+            });
+
+            // Text reveals with snap easing
+            document.querySelectorAll('.display-large').forEach((el) => {
+                gsap.to(el, {
+                    scrollTrigger: {
+                        trigger: el,
+                        start: 'top 80%',
+                        toggleActions: 'play none none reverse'
+                    },
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.8,
+                    ease: 'cubic-bezier(0.95, 0.05, 0.795, 0.035)'
+                });
+            });
+
+            document.querySelectorAll('.body-md, .btn-primary').forEach((el) => {
+                gsap.to(el, {
+                    scrollTrigger: {
+                        trigger: el,
+                        start: 'top 85%',
+                        toggleActions: 'play none none reverse'
+                    },
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.6,
+                    ease: 'cubic-bezier(0.95, 0.05, 0.795, 0.035)'
+                });
+            });
+
+            // Custom cursor with instant tracking
+            const cursor = document.querySelector('.cursor');
+            const magneticElements = document.querySelectorAll('[data-magnetic]');
+
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX - 2 + 'px';
+                cursor.style.top = e.clientY - 2 + 'px';
+            });
+
+            magneticElements.forEach((el) => {
+                el.addEventListener('mouseenter', () => {
+                    cursor.classList.add('hover');
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursor.classList.remove('hover');
+                });
+            });
+
+            // Glitch effect on scroll
+            document.querySelectorAll('.glitch').forEach((el) => {
+                ScrollTrigger.create({
+                    trigger: el,
+                    start: 'top 80%',
+                    onEnter: () => {
+                        el.style.animation = 'none';
+                        setTimeout(() => {
+                            el.style.animation = '';
+                        }, 10);
+                    }
+                });
+            });
+        } else {
+            document.querySelectorAll('.display-huge, .display-large, .body-md, .btn-primary').forEach(el => {
+                el.style.opacity = '1';
+                el.style.transform = 'none';
+            });
+        }
+    </script>
+</body>
+</html>

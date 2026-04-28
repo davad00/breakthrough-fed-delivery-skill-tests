@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis | Where Stillness Meets Luxury</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: #faf8f5;
+            color: #2d2d2d;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(250, 248, 245, 0.95);
+            z-index: 100;
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: #8b7355;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #2d2d2d;
+            font-size: 0.85rem;
+            letter-spacing: 0.1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #8b7355;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 10%;
+            background: linear-gradient(to right, #faf8f5 60%, #e8e4dc 100%);
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero-label {
+            font-size: 0.8rem;
+            letter-spacing: 0.3rem;
+            color: #8b7355;
+            margin-bottom: 1rem;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.5rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: #2d2d2d;
+        }
+
+        .hero-description {
+            font-weight: 300;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            color: #666;
+        }
+
+        .btn-primary {
+            padding: 1rem 2.5rem;
+            background: #8b7355;
+            color: #fff;
+            border: none;
+            font-family: 'Raleway', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.15rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #6d5a43;
+        }
+
+        .experiences {
+            padding: 8rem 10%;
+            background: #fff;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            letter-spacing: 0.3rem;
+            color: #8b7355;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+        }
+
+        .experience-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .experience-card {
+            padding: 3rem 2rem;
+            background: #faf8f5;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .experience-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .experience-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: #d4c4b0;
+            margin-bottom: 1rem;
+        }
+
+        .experience-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .experience-card p {
+            font-weight: 300;
+            line-height: 1.7;
+            color: #666;
+        }
+
+        .sanctuary {
+            padding: 8rem 10%;
+            display: flex;
+            gap: 6rem;
+            align-items: center;
+            background: #f5f2ed;
+        }
+
+        .sanctuary-content {
+            flex: 1;
+        }
+
+        .sanctuary-visual {
+            flex: 1;
+            height: 500px;
+            background: linear-gradient(135deg, #d4c4b0 0%, #b8a898 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sanctuary-visual span {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #fff;
+            opacity: 0.8;
+        }
+
+        .sanctuary-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .sanctuary-content p {
+            font-weight: 300;
+            line-height: 1.9;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .footer {
+            padding: 4rem 10%;
+            background: #2d2d2d;
+            color: #faf8f5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+        }
+
+        .footer-text {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .experience-grid {
+                grid-template-columns: 1fr;
+            }
+            .sanctuary {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-logo">Oasis</div>
+        <ul class="nav-links">
+            <li><a href="#experiences">Experiences</a></li>
+            <li><a href="#sanctuary">Sanctuary</a></li>
+            <li><a href="#reserve">Reserve</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <p class="hero-label">LUXURY MEDITATION RETREAT</p>
+            <h1 class="hero-title">Discover Your Inner Sanctuary</h1>
+            <p class="hero-description">A transformative journey awaits at Oasis, where ancient wisdom meets modern luxury in perfect harmony.</p>
+            <button class="btn-primary">EXPLORE RETREATS</button>
+        </div>
+    </section>
+
+    <section class="experiences" id="experiences">
+        <div class="section-header">
+            <p class="section-label">CURATED EXPERIENCES</p>
+            <h2 class="section-title">Paths to Inner Peace</h2>
+        </div>
+        <div class="experience-grid">
+            <div class="experience-card">
+                <div class="experience-number">01</div>
+                <h3>Mindful Movement</h3>
+                <p>Sunrise yoga, tai chi, and walking meditations in our sacred groves.</p>
+            </div>
+            <div class="experience-card">
+                <div class="experience-number">02</div>
+                <h3>Deep Stillness</h3>
+                <p>Extended silent retreats with personalized guidance from master practitioners.</p>
+            </div>
+            <div class="experience-card">
+                <div class="experience-number">03</div>
+                <h3>Healing Arts</h3>
+                <p>Traditional therapies, energy work, and restorative spa rituals.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="sanctuary" id="sanctuary">
+        <div class="sanctuary-content">
+            <p class="section-label">YOUR SANCTUARY AWAITS</p>
+            <h2>A Place of Profound Transformation</h2>
+            <p>Every element at Oasis has been thoughtfully designed to support your journey inward. From our handcrafted meditation cushions to our organic farm-to-table cuisine, luxury here means authenticity.</p>
+            <p>Our retreats range from weekend escapes to month-long immersions, each tailored to meet you exactly where you are.</p>
+        </div>
+        <div class="sanctuary-visual">
+            <span>Serenity Visualized</span>
+        </div>
+    </section>
+
+    <footer class="footer" id="reserve">
+        <div class="footer-logo">Oasis</div>
+        <div class="footer-text">reservations@oasis-retreat.com | +1 (888) OASIS-LUX</div>
+    </footer>
+</body>
+</html>

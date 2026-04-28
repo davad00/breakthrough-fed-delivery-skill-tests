@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis - Luxury Meditation Retreat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Futura', 'Trebuchet MS', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+        }
+        
+        .hero-fullscreen {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            overflow: hidden;
+        }
+        
+        .hero-fullscreen::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 0%, transparent 50%);
+        }
+        
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+        }
+        
+        .hero-content h1 {
+            font-size: 8rem;
+            font-weight: 100;
+            letter-spacing: 1em;
+            margin-bottom: 2rem;
+            text-indent: 1em;
+        }
+        
+        .hero-content .tagline {
+            font-size: 1.5rem;
+            letter-spacing: 0.5em;
+            opacity: 0.7;
+            font-weight: 300;
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            letter-spacing: 0.3em;
+            opacity: 0.5;
+        }
+        
+        .intro-section {
+            padding: 10rem 4rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .intro-section h2 {
+            font-size: 3rem;
+            font-weight: 200;
+            margin-bottom: 3rem;
+            letter-spacing: 0.2em;
+        }
+        
+        .intro-section p {
+            font-size: 1.3rem;
+            line-height: 2;
+            opacity: 0.8;
+            font-weight: 300;
+        }
+        
+        .split-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        
+        .split-content {
+            padding: 6rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .split-content h3 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            letter-spacing: 0.1em;
+        }
+        
+        .split-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            opacity: 0.8;
+            margin-bottom: 2rem;
+        }
+        
+        .split-image {
+            background: linear-gradient(rgba(255,255,255,0.05), rgba(255,255,255,0.05)),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800"><rect fill="%231a1a2e" width="600" height="800"/><circle cx="300" cy="400" r="150" fill="%230f3460" opacity="0.3"/></svg>');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .dark-section {
+            background: #000000;
+            padding: 8rem 4rem;
+        }
+        
+        .experience-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .experience-item {
+            border-left: 2px solid #ffffff;
+            padding-left: 2rem;
+        }
+        
+        .experience-item h4 {
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            letter-spacing: 0.1em;
+        }
+        
+        .experience-item p {
+            opacity: 0.7;
+            line-height: 1.8;
+        }
+        
+        .cta-section {
+            padding: 10rem 4rem;
+            text-align: center;
+            background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
+        }
+        
+        .cta-section h2 {
+            font-size: 4rem;
+            font-weight: 200;
+            margin-bottom: 3rem;
+            letter-spacing: 0.2em;
+        }
+        
+        .btn-light {
+            display: inline-block;
+            padding: 1.5rem 4rem;
+            background: white;
+            color: #0a0a0a;
+            text-decoration: none;
+            font-size: 1rem;
+            letter-spacing: 0.3em;
+            transition: all 0.3s;
+            border: 2px solid white;
+        }
+        
+        .btn-light:hover {
+            background: transparent;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <section class="hero-fullscreen">
+        <div class="hero-content">
+            <h1>OASIS</h1>
+            <div class="tagline">LUXURY REDEFINED</div>
+        </div>
+        <div class="scroll-indicator">SCROLL</div>
+    </section>
+    
+    <section class="intro-section">
+        <h2>THE ULTIMATE RETREAT</h2>
+        <p>Where silence becomes luxury and meditation becomes art. Oasis represents the pinnacle of contemplative living, offering an experience that transcends the ordinary.</p>
+    </section>
+    
+    <section class="split-section">
+        <div class="split-image"></div>
+        <div class="split-content">
+            <h3>Architectural Serenity</h3>
+            <p>Our minimalist design philosophy creates spaces that quiet the mind and elevate the spirit. Every detail has been considered to support your practice.</p>
+            <p>Floor-to-ceiling windows frame mountain vistas, while natural materials ground you in the present moment.</p>
+        </div>
+    </section>
+    
+    <section class="dark-section">
+        <div class="experience-grid">
+            <div class="experience-item">
+                <h4>Private Sessions</h4>
+                <p>One-on-one guidance with meditation masters who have dedicated their lives to the practice.</p>
+            </div>
+            <div class="experience-item">
+                <h4>Silence Retreats</h4>
+                <p>Extended periods of noble silence in our secluded meditation halls.</p>
+            </div>
+            <div class="experience-item">
+                <h4>Gourmet Mindfulness</h4>
+                <p>Michelin-trained chefs create plant-based cuisine that nourishes body and soul.</p>
+            </div>
+            <div class="experience-item">
+                <h4>Wellness Integration</h4>
+                <p>Comprehensive programs combining meditation, movement, and holistic therapies.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="cta-section">
+        <h2>RESERVE YOUR SPACE</h2>
+        <a href="#" class="btn-light">INQUIRE NOW</a>
+    </section>
+</body>
+</html>

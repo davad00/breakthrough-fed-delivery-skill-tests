@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oasis Retreat | Midnight Water</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #070a12;
+      --text: #e8edf6;
+      --muted: #95a2b5;
+      --aqua: #7de4d8;
+      --violet: #7167ff;
+      --panel: rgba(10, 16, 34, 0.6);
+      --line: rgba(125, 228, 216, 0.35);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: "DM Sans", sans-serif;
+      background:
+        radial-gradient(80rem 50rem at 10% 0%, rgba(113, 103, 255, 0.28), transparent 55%),
+        radial-gradient(60rem 40rem at 90% 100%, rgba(125, 228, 216, 0.22), transparent 50%),
+        var(--bg);
+    }
+    .shell {
+      width: min(1180px, 92vw);
+      margin: 2.2rem auto;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px;
+      padding: 1.1rem;
+      backdrop-filter: blur(10px);
+      background: rgba(255,255,255,0.03);
+    }
+    .card {
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+      overflow: hidden;
+    }
+    header {
+      padding: 1.2rem 1.4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .brand {
+      font-family: "Syne", sans-serif;
+      letter-spacing: 0.14em;
+      font-size: 0.95rem;
+    }
+    .pill {
+      border: 1px solid var(--line);
+      color: var(--aqua);
+      padding: 0.4rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 72vh;
+    }
+    .left {
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1.3rem;
+    }
+    h1 {
+      margin: 0;
+      font-family: "Syne", sans-serif;
+      font-size: clamp(2.7rem, 8vw, 6rem);
+      line-height: 0.86;
+      letter-spacing: -0.03em;
+      max-width: 8ch;
+    }
+    .lead {
+      margin: 0;
+      max-width: 47ch;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+    .btn {
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 0.75rem 1rem;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transition: 180ms ease;
+    }
+    .btn.primary {
+      background: linear-gradient(90deg, var(--violet), #5f8fff);
+      border: 0;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .right {
+      position: relative;
+      min-height: 100%;
+      background:
+        linear-gradient(to bottom, rgba(7,10,18,0.18), rgba(7,10,18,0.8)),
+        url("https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&fit=crop&w=1300&q=80") center/cover;
+    }
+    .stats {
+      position: absolute;
+      right: 1rem;
+      bottom: 1rem;
+      display: grid;
+      gap: 0.5rem;
+      width: min(310px, 90%);
+    }
+    .stat {
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 12px;
+      padding: 0.8rem 0.95rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .stat strong { color: var(--text); font-weight: 600; }
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .left { padding: 2rem 1.4rem; }
+      .right { min-height: 360px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="card">
+      <header>
+        <div class="brand">OASIS RETREAT</div>
+        <div class="pill">2026 Signature Season</div>
+      </header>
+      <div class="hero">
+        <div class="left">
+          <h1>Luxury Stillness In Motion.</h1>
+          <p class="lead">
+            Oasis blends neuroscience-informed meditation with five-star hospitality. Days begin with guided breath immersion and end with candlelit floating therapy beneath a clear sky.
+          </p>
+          <div class="cta">
+            <a class="btn primary" href="#">Begin Application</a>
+            <a class="btn" href="#">Explore Program</a>
+          </div>
+        </div>
+        <aside class="right" role="img" aria-label="Luxury meditation pool at dusk">
+          <div class="stats">
+            <div class="stat"><span>Guest to teacher ratio</span><strong>3:1</strong></div>
+            <div class="stat"><span>Personalized daily rituals</span><strong>100%</strong></div>
+            <div class="stat"><span>Average sleep gain</span><strong>+96 min</strong></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

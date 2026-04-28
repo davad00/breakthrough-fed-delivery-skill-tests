@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis | The Art of Stillness</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0c0c0c;
+            color: #f0f0f0;
+            overflow-x: hidden;
+        }
+
+        .cursor-glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(180, 140, 100, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+            transform: translate(-50%, -50%);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(180deg, rgba(12, 12, 12, 0.9) 0%, transparent 100%);
+        }
+
+        .logo {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.8rem;
+            color: #b48c64;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: #f0f0f0;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 300;
+            letter-spacing: 0.05rem;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #b48c64;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 80%, rgba(180, 140, 100, 0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(180, 140, 100, 0.05) 0%, transparent 50%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-label {
+            font-size: 0.7rem;
+            letter-spacing: 0.4rem;
+            color: #b48c64;
+            margin-bottom: 2rem;
+        }
+
+        .hero-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(3rem, 8vw, 7rem);
+            line-height: 1;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            font-weight: 300;
+            max-width: 500px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+            color: #a0a0a0;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(180deg, #b48c64 0%, transparent 100%);
+        }
+
+        .scroll-text {
+            font-size: 0.65rem;
+            letter-spacing: 0.2rem;
+            color: #666;
+        }
+
+        .section {
+            padding: 8rem 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-label {
+            font-size: 0.7rem;
+            letter-spacing: 0.3rem;
+            color: #b48c64;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 3rem;
+        }
+
+        .pillars {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: #1a1a1a;
+        }
+
+        .pillar {
+            background: #0c0c0c;
+            padding: 4rem 3rem;
+            text-align: center;
+            transition: background 0.4s;
+        }
+
+        .pillar:hover {
+            background: #111;
+        }
+
+        .pillar-number {
+            font-family: 'DM Serif Display', serif;
+            font-size: 4rem;
+            color: #2a2a2a;
+            line-height: 1;
+            margin-bottom: 1.5rem;
+        }
+
+        .pillar h3 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #b48c64;
+        }
+
+        .pillar p {
+            font-weight: 300;
+            line-height: 1.7;
+            color: #888;
+        }
+
+        .experience {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 80vh;
+        }
+
+        .experience-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 4rem;
+        }
+
+        .experience-visual {
+            background: linear-gradient(135deg, #1a1512 0%, #0c0c0c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .experience-visual-inner {
+            width: 200px;
+            height: 200px;
+            border: 1px solid rgba(180, 140, 100, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: breathe 6s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .experience-visual-inner span {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.2rem;
+            color: #b48c64;
+        }
+
+        .experience h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .experience p {
+            font-weight: 300;
+            line-height: 1.9;
+            color: #888;
+            margin-bottom: 1rem;
+        }
+
+        .amenities-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .amenity {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 300;
+            color: #a0a0a0;
+        }
+
+        .amenity::before {
+            content: '—';
+            color: #b48c64;
+        }
+
+        .cta-section {
+            padding: 8rem 2rem;
+            text-align: center;
+            background: linear-gradient(180deg, #0c0c0c 0%, #111 100%);
+        }
+
+        .cta-section h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-weight: 300;
+            color: #888;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: transparent;
+            border: 1px solid #b48c64;
+            color: #b48c64;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.1rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #b48c64;
+            color: #0c0c0c;
+        }
+
+        footer {
+            padding: 3rem 2rem;
+            border-top: 1px solid #1a1a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-left {
+            font-size: 0.8rem;
+            color: #555;
+        }
+
+        .footer-right {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.8rem;
+        }
+
+        .footer-right a {
+            color: #888;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-right a:hover {
+            color: #b48c64;
+        }
+
+        @media (max-width: 900px) {
+            .pillars {
+                grid-template-columns: 1fr;
+            }
+            .experience {
+                grid-template-columns: 1fr;
+            }
+            .amenities-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor-glow" id="cursorGlow"></div>
+
+    <nav>
+        <div class="logo">Oasis</div>
+        <ul class="nav-menu">
+            <li><a href="#pillars">Philosophy</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#reserve">Reserve</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <p class="hero-label">LUXURY MEDITATION RETREAT</p>
+            <h1 class="hero-title">The Art of Stillness</h1>
+            <p class="hero-subtitle">Where ancient wisdom meets contemporary luxury. A sanctuary designed for profound transformation.</p>
+        </div>
+        <div class="scroll-indicator">
+            <span class="scroll-text">SCROLL</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <section class="section" id="pillars">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-label">OUR FOUNDATION</p>
+                <h2 class="section-title">Three Pillars of Transformation</h2>
+            </div>
+        </div>
+        <div class="pillars">
+            <div class="pillar">
+                <div class="pillar-number">01</div>
+                <h3>Stillness</h3>
+                <p>Master the art of inner quiet through guided practices in our architecturally-acclaimed meditation halls.</p>
+            </div>
+            <div class="pillar">
+                <div class="pillar-number">02</div>
+                <h3>Nature</h3>
+                <p>Immerse yourself in 200 acres of protected wilderness, designed to reconnect you with the natural world.</p>
+            </div>
+            <div class="pillar">
+                <div class="pillar-number">03</div>
+                <h3>Nourishment</h3>
+                <p>Organic, plant-based cuisine crafted by our Michelin-trained culinary team to support your practice.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="experience" id="experience">
+        <div class="experience-content">
+            <p class="section-label">THE OASIS DIFFERENCE</p>
+            <h2>An Unparalleled Journey</h2>
+            <p>Every detail at Oasis has been considered. From the thread count of your organic linens to the precise acoustics of our meditation pavilions, luxury here serves a deeper purpose.</p>
+            <p>Our retreats are limited to 12 guests, ensuring intimate guidance from our team of master practitioners.</p>
+            <div class="amenities-list">
+                <div class="amenity">Private meditation villas</div>
+                <div class="amenity">Onsen-style baths</div>
+                <div class="amenity">Tea ceremony pavilion</div>
+                <div class="amenity">Forest walking trails</div>
+                <div class="amenity">Sound healing dome</div>
+                <div class="amenity">Organic spa treatments</div>
+            </div>
+        </div>
+        <div class="experience-visual">
+            <div class="experience-visual-inner">
+                <span>breathe</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="reserve">
+        <h2>Begin Your Journey</h2>
+        <p>Reservations for our upcoming season are now open.</p>
+        <a href="mailto:reservations@oasis-retreat.com" class="btn">RESERVE YOUR SPACE</a>
+        <p style="margin-top: 2rem; font-size: 0.85rem; color: #666;">
+            reservations@oasis-retreat.com | +1 (888) OASIS-LUX
+        </p>
+    </section>
+
+    <footer>
+        <div class="footer-left">&copy; 2026 Oasis. All rights reserved.</div>
+        <div class="footer-right">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Contact</a>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('mousemove', (e) => {
+            const glow = document.getElementById('cursorGlow');
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
+        });
+    </script>
+</body>
+</html>

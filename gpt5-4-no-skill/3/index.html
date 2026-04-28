@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oasis | Immersion in Indigo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #07111b;
+      --bg-2: #0d1d2d;
+      --text: #e9edf2;
+      --muted: #9cacbe;
+      --line: rgba(255,255,255,0.12);
+      --aqua: #8ccfd7;
+      --glass: rgba(255,255,255,0.07);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(140, 207, 215, 0.13), transparent 26%),
+        radial-gradient(circle at 85% 12%, rgba(119, 143, 206, 0.2), transparent 28%),
+        linear-gradient(180deg, #07111b 0%, #0a1623 55%, #07111b 100%);
+    }
+    a { color: inherit; text-decoration: none; }
+    .frame {
+      width: min(1220px, calc(100vw - 40px));
+      margin: 0 auto;
+      padding-bottom: 70px;
+    }
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 22px;
+      align-items: center;
+      padding: 22px 0 46px;
+    }
+    .brand-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 24px;
+      grid-column: 1 / -1;
+    }
+    .brand, h1, h2, .capsule strong {
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 600;
+    }
+    .brand {
+      letter-spacing: 0.32rem;
+      font-size: 1.5rem;
+    }
+    .menu {
+      display: flex;
+      gap: 22px;
+      color: var(--muted);
+      font-size: 0.84rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1rem;
+    }
+    .tag {
+      display: inline-flex;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 14px;
+      color: var(--aqua);
+      background: rgba(140, 207, 215, 0.08);
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12rem;
+    }
+    h1 {
+      font-size: clamp(4rem, 11vw, 8rem);
+      line-height: 0.9;
+      margin: 20px 0 20px;
+      max-width: 9ch;
+    }
+    .lead {
+      max-width: 54ch;
+      color: var(--muted);
+      line-height: 1.9;
+      margin-bottom: 32px;
+    }
+    .cta {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 15px 22px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      text-transform: uppercase;
+      letter-spacing: 0.11rem;
+      font-size: 0.8rem;
+      background: transparent;
+    }
+    .btn.primary {
+      background: linear-gradient(135deg, #9edee3, #77a7ca);
+      color: #07111b;
+      border: none;
+    }
+    .glass {
+      background: var(--glass);
+      border: 1px solid var(--line);
+      box-shadow: 0 26px 90px rgba(0, 0, 0, 0.28);
+      backdrop-filter: blur(26px);
+      border-radius: 28px;
+    }
+    .hero-card {
+      padding: 20px;
+    }
+    .hero-visual {
+      min-height: 560px;
+      border-radius: 22px;
+      background:
+        linear-gradient(180deg, rgba(7,17,27,0.1), rgba(7,17,27,0.75)),
+        url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80") center/cover;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: end;
+      padding: 22px;
+    }
+    .hero-visual::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(140, 207, 215, 0.05), transparent 30%, rgba(7, 17, 27, 0.62));
+    }
+    .capsules {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 12px;
+      width: 100%;
+    }
+    .capsule {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 18px;
+      border-radius: 18px;
+      background: rgba(7,17,27,0.36);
+      border: 1px solid rgba(255,255,255,0.11);
+    }
+    section {
+      padding: 72px 0 0;
+    }
+    .overview {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .panel {
+      padding: 24px;
+    }
+    h2 {
+      font-size: clamp(2.4rem, 5vw, 4.6rem);
+      margin: 0 0 14px;
+      line-height: 0.96;
+    }
+    .copy {
+      color: var(--muted);
+      line-height: 1.9;
+    }
+    .journey {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 18px;
+      align-items: start;
+    }
+    .steps {
+      display: grid;
+      gap: 14px;
+    }
+    .step {
+      padding: 18px 20px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+    }
+    .step small {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--aqua);
+      text-transform: uppercase;
+      letter-spacing: 0.12rem;
+    }
+    .closing {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      align-items: stretch;
+      padding-bottom: 12px;
+    }
+    .contact {
+      min-height: 100%;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    footer {
+      padding: 38px 0 24px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      font-size: 0.92rem;
+    }
+    @media (max-width: 980px) {
+      .hero, .overview, .journey, .closing { grid-template-columns: 1fr; }
+      .brand-row { gap: 20px; }
+    }
+    @media (max-width: 720px) {
+      .frame { width: min(100vw - 28px, 1220px); }
+      .menu { display: none; }
+      .capsule { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <section class="hero">
+      <div class="brand-row">
+        <div class="brand">OASIS</div>
+        <div class="menu">
+          <a href="#overview">Overview</a>
+          <a href="#journey">Journey</a>
+          <a href="#reserve">Reserve</a>
+        </div>
+      </div>
+      <div>
+        <div class="tag">Meditation retreat · coastal nocturne</div>
+        <h1>Drift into stillness with the sea below.</h1>
+        <p class="lead">Set high above a private shoreline, Oasis offers an immersive retreat where indigo horizons, sound baths, and personalized meditation sessions create a rare feeling of total distance from urgency.</p>
+        <div class="cta">
+          <a class="btn primary" href="#reserve">Plan your arrival</a>
+          <a class="btn" href="#journey">View daily flow</a>
+        </div>
+      </div>
+      <div class="glass hero-card">
+        <div class="hero-visual">
+          <div class="capsules">
+            <div class="capsule"><strong>Arrival note</strong><span>Private transfer from regional airstrip</span></div>
+            <div class="capsule"><strong>Environment</strong><span>Ocean-facing villas, thermal pools, quiet library</span></div>
+            <div class="capsule"><strong>Atmosphere</strong><span>Soft lighting, reduced digital access, guided silence</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="overview">
+      <div class="overview">
+        <article class="glass panel">
+          <h2>Restored by design.</h2>
+          <p class="copy">Architecture and programming are shaped around nervous system recovery: fewer decisions, more beauty, and long intervals of uninterrupted quiet.</p>
+        </article>
+        <article class="glass panel">
+          <h3>Signature spaces</h3>
+          <p class="copy">Moon pool terraces, cedar steam rooms, a listening lounge, and open-air sanctuaries positioned for sunrise and evening reflection.</p>
+        </article>
+        <article class="glass panel">
+          <h3>Tailored guidance</h3>
+          <p class="copy">Every guest is matched with a lead practitioner who adjusts breath, meditation, and recovery rituals to pace and preference.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="journey">
+      <div class="journey">
+        <div>
+          <h2>An immersion with room to disappear.</h2>
+          <p class="copy">Oasis uses a gentle structure that supports restoration while preserving the freedom to follow your own rhythm.</p>
+        </div>
+        <div class="steps">
+          <div class="step"><small>Morning</small><strong>Sea-facing meditation</strong><div class="copy">A guided session with tonal breath cues, warm citrus infusion, and time in the reflection court.</div></div>
+          <div class="step"><small>Afternoon</small><strong>Body and water recovery</strong><div class="copy">Circuit access to thermal pools, aquatic movement therapy, and quiet lunch service beside the gardens.</div></div>
+          <div class="step"><small>Evening</small><strong>Sound and silence</strong><div class="copy">A resonant sound bath followed by candlelit supper and optional moon terrace journaling.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="reserve">
+      <div class="closing">
+        <article class="glass panel">
+          <h2>Reserve the horizon for yourself.</h2>
+          <p class="copy">Retreat windows are released in small numbers. Share your preferred season and length of stay to receive a private proposal.</p>
+        </article>
+        <article class="glass contact">
+          <strong>Private bookings</strong>
+          <p class="copy">concierge@oasis-retreat.com<br />+1 (888) 901-4420<br />Seven-night and ten-night immersions</p>
+        </article>
+      </div>
+    </section>
+
+    <footer>
+      <span>Oasis luxury meditation retreat</span>
+      <span>Exceptional privacy, calibrated ritual, sea-bound calm</span>
+    </footer>
+  </div>
+</body>
+</html>

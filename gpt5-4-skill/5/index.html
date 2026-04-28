@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oasis — Verdant Pulse</title>
+  <meta name="description" content="Oasis in a verdant, rarefied luxury art direction with breathing gradients and private retreat rituals." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07100d;
+      --text: #f2f1eb;
+      --muted: #99a59d;
+      --accent: #9cff76;
+      --secondary: #6db891;
+      --line: rgba(242, 241, 235, 0.14);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 78% 18%, rgba(156, 255, 118, 0.14), transparent 24%),
+        radial-gradient(circle at 18% 4%, rgba(109, 184, 145, 0.16), transparent 20%),
+        linear-gradient(180deg, #04100b 0%, var(--bg) 100%);
+      overflow-x: hidden;
+      cursor: none;
+    }
+    .cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      pointer-events: none;
+      z-index: 100;
+      mix-blend-mode: difference;
+    }
+    .menu-btn {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 30;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 14px 18px;
+      background: rgba(7, 16, 13, 0.62);
+      backdrop-filter: blur(18px);
+      color: var(--text);
+      font: 500 11px/1 "JetBrains Mono", monospace;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 25;
+      background: rgba(4, 11, 9, 0.97);
+      display: grid;
+      place-items: center;
+      transform: translateY(-100%);
+    }
+    .overlay nav {
+      display: grid;
+      gap: 16px;
+      text-align: center;
+    }
+    .overlay a {
+      color: var(--text);
+      text-decoration: none;
+      font: 600 clamp(2.7rem, 8vw, 8rem)/0.92 "Cormorant Garamond", serif;
+      letter-spacing: -0.03em;
+    }
+    .hero {
+      min-height: 100vh;
+      padding: 11vh 7vw 8vh;
+      display: grid;
+      grid-template-columns: 0.95fr 1fr;
+      gap: 4vw;
+      align-items: center;
+    }
+    .eyebrow,
+    .micro,
+    .label {
+      color: var(--muted);
+      font: 500 11px/1 "JetBrains Mono", monospace;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 18px 0 0;
+      max-width: 5.2ch;
+      font: 600 clamp(4.5rem, 10.8vw, 13rem)/0.82 "Cormorant Garamond", serif;
+      letter-spacing: -0.04em;
+    }
+    .lead {
+      max-width: 43ch;
+      line-height: 1.82;
+      color: #d7ddd6;
+      margin-top: 24px;
+    }
+    .cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 15px 20px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      text-decoration: none;
+      text-transform: uppercase;
+      color: var(--text);
+      font: 500 11px/1 "JetBrains Mono", monospace;
+      letter-spacing: 0.14em;
+    }
+    .btn-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #071006;
+    }
+    .pulse-stage {
+      min-height: 74vh;
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+    .pulse-field {
+      width: min(44vw, 470px);
+      aspect-ratio: 1;
+      border-radius: 32% 68% 48% 52% / 42% 30% 70% 58%;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.42), transparent 18%),
+        radial-gradient(circle at 72% 70%, rgba(156, 255, 118, 0.34), transparent 24%),
+        linear-gradient(135deg, #123125 0%, #1f5f44 34%, #79d18f 70%, #0b1a13 100%);
+      box-shadow: 0 0 130px rgba(156, 255, 118, 0.14), 0 34px 100px rgba(0, 0, 0, 0.36), inset 0 -40px 70px rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .pulse-field::before,
+    .pulse-field::after {
+      content: "";
+      position: absolute;
+      inset: 12%;
+      border-radius: inherit;
+      border: 1px solid rgba(255,255,255,0.16);
+      transform: rotate(10deg);
+    }
+    .pulse-field::after {
+      inset: 26%;
+      border-color: rgba(156, 255, 118, 0.28);
+      transform: rotate(-10deg);
+    }
+    .seed {
+      position: absolute;
+      width: 22%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle, #ebffd8 0%, #b6ff97 44%, rgba(182,255,151,0.02) 100%);
+      filter: blur(8px);
+      top: 36%;
+      left: 38%;
+      transform: translate(-50%, -50%);
+    }
+    .ledger {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 40px;
+      max-width: 700px;
+    }
+    .ledger-item {
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
+    }
+    .ledger-item strong {
+      display: block;
+      margin-top: 12px;
+      font: 600 clamp(1.9rem, 4vw, 3.6rem)/0.9 "Cormorant Garamond", serif;
+      letter-spacing: -0.03em;
+    }
+    .sections {
+      padding: 10vw 7vw 16vw;
+      display: grid;
+      gap: 16vh;
+    }
+    .section {
+      padding: 4vw;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 30px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      backdrop-filter: blur(8px);
+      position: relative;
+      overflow: hidden;
+    }
+    .section::after {
+      content: "";
+      position: absolute;
+      inset: auto -10% -20% auto;
+      width: 38%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(156,255,118,0.18), transparent 68%);
+    }
+    .section h2 {
+      margin: 12px 0 0;
+      max-width: 8ch;
+      font: 600 clamp(2.2rem, 6vw, 6.1rem)/0.9 "Cormorant Garamond", serif;
+      letter-spacing: -0.03em;
+    }
+    .section p {
+      max-width: 42ch;
+      line-height: 1.8;
+      color: #d8ded8;
+      margin-top: 18px;
+    }
+    .focusable:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+    @media (max-width: 980px) {
+      body { cursor: auto; }
+      .cursor { display: none; }
+      .hero { grid-template-columns: 1fr; padding-top: 18vh; }
+      .pulse-stage { min-height: 42vh; }
+      .ledger { grid-template-columns: 1fr; }
+      .sections { gap: 8vh; }
+      .section { padding: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor" aria-hidden="true"></div>
+  <button class="menu-btn focusable" id="menuBtn" data-magnetic>Menu</button>
+  <div class="overlay" id="overlay">
+    <nav>
+      <a href="#arrival" class="focusable">Arrival</a>
+      <a href="#practice" class="focusable">Practice</a>
+      <a href="#continuation" class="focusable">Continuation</a>
+    </nav>
+  </div>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="micro animated">Oasis / Verdant Pulse</div>
+        <h1 class="animated">Meditation As Rare Renewal, Not Escape.</h1>
+        <p class="lead animated">This direction imagines Oasis as a deeply cultivated sanctuary: living greens, humid air, architectural quiet, and a retreat model built for guests who value restoration with exquisite control.</p>
+        <div class="cta animated">
+          <a href="#arrival" class="btn btn-primary focusable" data-magnetic>Reserve Your Stay</a>
+          <a href="#practice" class="btn focusable" data-magnetic>Explore Experience</a>
+        </div>
+        <div class="ledger animated">
+          <div class="ledger-item"><span class="label">Guided Sessions</span><strong>5 Daily</strong></div>
+          <div class="ledger-item"><span class="label">Botanical Suites</span><strong>11 Keys</strong></div>
+          <div class="ledger-item"><span class="label">Air Humidity</span><strong>52%</strong></div>
+        </div>
+      </div>
+      <div class="pulse-stage animated">
+        <div class="pulse-field" id="pulseField">
+          <div class="seed"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sections">
+      <article class="section animated" id="arrival">
+        <div class="eyebrow">Arrival</div>
+        <h2>The First Luxury Is Immediate Physiological Softening.</h2>
+        <p>Warm aromatic air, soft humidity, and low-frequency sound design guide guests out of vigilance and into a slower sensory baseline within minutes of arrival.</p>
+      </article>
+      <article class="section animated" id="practice">
+        <div class="eyebrow">Practice</div>
+        <h2>Your Day Breathes Between Solitude And Guided Precision.</h2>
+        <p>Private meditation, adapted breathwork, hydrotherapy, and restorative dining are spaced with unusual generosity so the entire schedule feels like a long exhale.</p>
+      </article>
+      <article class="section animated" id="continuation">
+        <div class="eyebrow">Continuation</div>
+        <h2>The Retreat Extends Into A Ritualized Return Home.</h2>
+        <p>Guests leave with botanical extracts, sleep calibration recommendations, and a tailored follow-up practice sequence designed to preserve clarity under ordinary pressure.</p>
+      </article>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const overlay = document.getElementById("overlay");
+    const menuBtn = document.getElementById("menuBtn");
+    let menuOpen = false;
+    gsap.set(overlay, { yPercent: -100 });
+
+    menuBtn.addEventListener("click", () => {
+      menuOpen = !menuOpen;
+      gsap.to(overlay, { yPercent: menuOpen ? 0 : -100, duration: 1, ease: "expo.inOut" });
+      menuBtn.textContent = menuOpen ? "Close" : "Menu";
+    });
+
+    if (!reducedMotion && window.Lenis) {
+      const lenis = new Lenis({ duration: 1.15, smoothWheel: true });
+      lenis.on("scroll", ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+    }
+
+    if (!reducedMotion) {
+      gsap.from(".hero .animated", { y: 110, opacity: 0, duration: 1.3, stagger: 0.12, ease: "power4.out" });
+      gsap.to("#pulseField", {
+        borderRadius: "52% 48% 64% 36% / 44% 62% 38% 56%",
+        scale: 1.04,
+        duration: 3.4,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      });
+      gsap.to(".seed", {
+        scale: 1.3,
+        opacity: 0.7,
+        duration: 2.2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      });
+      gsap.from(".section", {
+        scrollTrigger: { trigger: ".sections", start: "top 72%" },
+        y: 120,
+        opacity: 0,
+        duration: 1.2,
+        stagger: 0.16,
+        ease: "power4.out"
+      });
+    } else {
+      document.querySelectorAll(".animated").forEach((el) => {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      });
+    }
+
+    const cursor = document.querySelector(".cursor");
+    const magnets = document.querySelectorAll("[data-magnetic]");
+    if (!reducedMotion && cursor && window.innerWidth > 980) {
+      window.addEventListener("mousemove", (event) => {
+        gsap.to(cursor, { x: event.clientX, y: event.clientY, duration: 0.55, ease: "power3.out" });
+      });
+      magnets.forEach((element) => {
+        element.addEventListener("mousemove", (event) => {
+          const rect = element.getBoundingClientRect();
+          const relX = event.clientX - rect.left - rect.width / 2;
+          const relY = event.clientY - rect.top - rect.height / 2;
+          gsap.to(element, { x: relX * 0.18, y: relY * 0.18, duration: 0.4, ease: "power2.out" });
+          gsap.to(cursor, { scale: 2.6, duration: 0.3 });
+        });
+        element.addEventListener("mouseleave", () => {
+          gsap.to(element, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.4)" });
+          gsap.to(cursor, { scale: 1, duration: 0.3 });
+        });
+      });
+    }
+  </script>
+</body>
+</html>

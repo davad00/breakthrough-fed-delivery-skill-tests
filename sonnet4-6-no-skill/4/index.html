@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oasis — Luxury Meditation Retreat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --warm-white: #F2EEE9;
+  --near-black: #1A1A1A;
+  --coral: #D4583A;
+  --warm-grey: #9B8E7E;
+  --light-grey: #E8E2D9;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--warm-white);
+  color: var(--near-black);
+  font-family: 'Libre Baskerville', serif;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--coral);
+  color: var(--warm-white);
+}
+
+nav {
+  padding: 0 48px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--warm-white);
+}
+
+.nav-rule {
+  height: 1px;
+  background: var(--near-black);
+  width: 100%;
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.nav-est {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--warm-grey);
+}
+
+.nav-wordmark {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 28px;
+  letter-spacing: 0.08em;
+  color: var(--near-black);
+  line-height: 1;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+
+.nav-link {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--near-black);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: var(--coral);
+}
+
+.nav-cta {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--warm-white);
+  background: var(--near-black);
+  border: none;
+  padding: 10px 22px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+  display: inline-block;
+}
+
+.nav-cta:hover {
+  background: var(--coral);
+}
+
+section.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+  border-top: 1px solid var(--near-black);
+}
+
+.hero-left {
+  background: var(--near-black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-oasis-text {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(100px, 18vw, 260px);
+  line-height: 0.88;
+  color: var(--warm-white);
+  letter-spacing: -0.01em;
+  writing-mode: horizontal-tb;
+  text-align: center;
+  word-break: break-all;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-oasis-text span {
+  display: block;
+}
+
+.hero-geo-circle {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border: 1px solid rgba(242,238,233,0.08);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.hero-geo-circle-2 {
+  position: absolute;
+  width: 640px;
+  height: 640px;
+  border: 1px solid rgba(242,238,233,0.04);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.hero-right {
+  display: grid;
+  grid-template-columns: 1fr 56px;
+  background: var(--warm-white);
+  padding: 0;
+}
+
+.hero-right-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 80px 48px 80px 64px;
+  position: relative;
+}
+
+.hero-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--coral);
+  margin-bottom: 32px;
+}
+
+.hero-sub {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(18px, 2.2vw, 28px);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--near-black);
+  max-width: 380px;
+  margin-bottom: 48px;
+}
+
+.hero-sub strong {
+  font-style: normal;
+  font-weight: 700;
+}
+
+.hero-rule {
+  width: 48px;
+  height: 1px;
+  background: var(--near-black);
+  margin-bottom: 48px;
+}
+
+.hero-desc {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--warm-grey);
+  max-width: 340px;
+  margin-bottom: 56px;
+}
+
+.btn-primary {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--warm-white);
+  background: var(--coral);
+  border: none;
+  padding: 16px 36px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.25s;
+  align-self: flex-start;
+}
+
+.btn-primary:hover {
+  background: var(--near-black);
+}
+
+.btn-outline {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--near-black);
+  background: transparent;
+  border: 1px solid var(--near-black);
+  padding: 16px 36px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.25s, color 0.25s;
+}
+
+.btn-outline:hover {
+  background: var(--near-black);
+  color: var(--warm-white);
+}
+
+.hero-vertical-strip {
+  background: var(--coral);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-vertical-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--warm-white);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  white-space: nowrap;
+}
+
+.feature-strip-section {
+  border-top: 1px solid var(--near-black);
+  border-bottom: 1px solid var(--near-black);
+  padding: 0 48px;
+  overflow: hidden;
+}
+
+.feature-strip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--light-grey);
+}
+
+.section-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--warm-grey);
+}
+
+.scroll-hint {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  color: var(--warm-grey);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.scroll-hint::after {
+  content: '';
+  display: block;
+  width: 36px;
+  height: 1px;
+  background: var(--warm-grey);
+}
+
+.feature-track {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  cursor: grab;
+}
+
+.feature-track::-webkit-scrollbar {
+  display: none;
+}
+
+.feature-track:active {
+  cursor: grabbing;
+}
+
+.feature-card {
+  min-width: 320px;
+  padding: 48px 40px 48px 0;
+  border-right: 1px solid var(--light-grey);
+  flex-shrink: 0;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+.feature-card:last-child {
+  border-right: none;
+  padding-right: 0;
+}
+
+.feature-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.feature-num {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 72px;
+  line-height: 1;
+  color: var(--light-grey);
+  margin-bottom: 24px;
+  display: block;
+}
+
+.feature-card-title {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 26px;
+  letter-spacing: 0.05em;
+  color: var(--near-black);
+  margin-bottom: 16px;
+  line-height: 1.1;
+}
+
+.feature-rule {
+  width: 32px;
+  height: 1px;
+  background: var(--coral);
+  margin-bottom: 20px;
+}
+
+.feature-card-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--warm-grey);
+  max-width: 240px;
+}
+
+.about-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 80vh;
+  border-bottom: 1px solid var(--near-black);
+}
+
+.about-left {
+  border-right: 1px solid var(--near-black);
+  padding: 80px 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.about-heading-area {
+  margin-bottom: 48px;
+}
+
+.about-issue {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--warm-grey);
+  margin-bottom: 24px;
+}
+
+.about-heading {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(52px, 6vw, 88px);
+  line-height: 0.9;
+  color: var(--near-black);
+  letter-spacing: 0.02em;
+}
+
+.about-heading em {
+  color: var(--coral);
+  font-style: normal;
+}
+
+.drop-cap-text {
+  font-size: 15px;
+  line-height: 1.9;
+  color: var(--near-black);
+  margin-bottom: 32px;
+}
+
+.drop-cap-text::first-letter {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 88px;
+  line-height: 0.75;
+  float: left;
+  margin-right: 10px;
+  margin-top: 8px;
+  color: var(--coral);
+}
+
+.about-body-text {
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--warm-grey);
+  margin-bottom: 0;
+}
+
+.about-right {
+  padding: 80px 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.pull-quote {
+  border-left: 3px solid var(--coral);
+  padding: 32px 0 32px 40px;
+  margin-bottom: 56px;
+}
+
+.pull-quote-text {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(20px, 2.4vw, 30px);
+  font-style: italic;
+  line-height: 1.45;
+  color: var(--near-black);
+  margin-bottom: 20px;
+}
+
+.pull-quote-attr {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--warm-grey);
+}
+
+.about-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 32px;
+}
+
+.stat-item {
+  border-top: 1px solid var(--light-grey);
+  padding-top: 24px;
+}
+
+.stat-number {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 48px;
+  line-height: 1;
+  color: var(--near-black);
+  margin-bottom: 6px;
+}
+
+.stat-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: var(--warm-grey);
+}
+
+.programs-section {
+  padding: 80px 48px;
+  border-bottom: 1px solid var(--near-black);
+}
+
+.programs-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: end;
+  margin-bottom: 64px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--light-grey);
+}
+
+.programs-title {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(48px, 5.5vw, 80px);
+  line-height: 0.9;
+  color: var(--near-black);
+  letter-spacing: 0.02em;
+}
+
+.programs-intro {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--warm-grey);
+  max-width: 360px;
+  align-self: end;
+  justify-self: end;
+}
+
+.programs-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 0;
+}
+
+.program-card {
+  border-right: 1px solid var(--light-grey);
+  padding: 40px 40px 40px 0;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s, transform 0.6s;
+}
+
+.program-card:last-child {
+  border-right: none;
+  padding-right: 0;
+  padding-left: 40px;
+}
+
+.program-card:nth-child(2) {
+  padding-left: 40px;
+}
+
+.program-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.program-big-num {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(80px, 9vw, 130px);
+  line-height: 1;
+  color: var(--light-grey);
+  display: block;
+  margin-bottom: 0;
+}
+
+.program-tag {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--coral);
+  margin-bottom: 16px;
+  display: block;
+}
+
+.program-name {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(30px, 3.5vw, 48px);
+  line-height: 1;
+  color: var(--near-black);
+  letter-spacing: 0.03em;
+  margin-bottom: 20px;
+}
+
+.program-duration {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: var(--warm-grey);
+  border-top: 1px solid var(--light-grey);
+  padding-top: 16px;
+  margin-top: 16px;
+  margin-bottom: 20px;
+}
+
+.program-desc {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.75;
+  color: var(--warm-grey);
+  margin-bottom: 32px;
+}
+
+.program-link {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--near-black);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.program-link::after {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: var(--near-black);
+  transition: width 0.3s;
+}
+
+.program-link:hover::after {
+  width: 48px;
+}
+
+.program-link:hover {
+  color: var(--coral);
+}
+
+.program-link:hover::after {
+  background: var(--coral);
+}
+
+.process-section {
+  padding: 80px 48px;
+  border-bottom: 1px solid var(--near-black);
+  background: var(--near-black);
+}
+
+.process-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 64px;
+}
+
+.process-title {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(48px, 5.5vw, 80px);
+  line-height: 0.9;
+  color: var(--warm-white);
+  letter-spacing: 0.02em;
+}
+
+.process-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--warm-grey);
+}
+
+.process-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.process-item {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 48px;
+  padding: 48px 0;
+  border-top: 1px solid rgba(242,238,233,0.12);
+  opacity: 0;
+  transform: translateX(-24px);
+  transition: opacity 0.6s, transform 0.6s;
+  align-items: start;
+}
+
+.process-item.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.process-step-num {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 80px;
+  line-height: 1;
+  color: rgba(242,238,233,0.12);
+}
+
+.process-step-content {
+  padding-top: 8px;
+}
+
+.process-step-tag {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--coral);
+  margin-bottom: 16px;
+}
+
+.process-step-title {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 36px;
+  letter-spacing: 0.04em;
+  color: var(--warm-white);
+  margin-bottom: 16px;
+}
+
+.process-step-desc {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--warm-grey);
+  max-width: 560px;
+}
+
+.quote-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 48px;
+  border-bottom: 1px solid var(--near-black);
+  position: relative;
+  overflow: hidden;
+  background: var(--warm-white);
+}
+
+.quote-geo-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--light-grey);
+  pointer-events: none;
+}
+
+.quote-geo-line-v {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--light-grey);
+  pointer-events: none;
+}
+
+.quote-inner {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 1100px;
+}
+
+.quote-mark {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(100px, 16vw, 220px);
+  line-height: 0.7;
+  color: var(--light-grey);
+  display: block;
+  margin-bottom: 0;
+}
+
+.quote-text {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(24px, 4vw, 54px);
+  font-style: italic;
+  line-height: 1.3;
+  color: var(--near-black);
+  margin-bottom: 48px;
+}
+
+.quote-text em {
+  color: var(--coral);
+  font-style: italic;
+}
+
+.quote-attribution {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.quote-attr-line {
+  width: 48px;
+  height: 1px;
+  background: var(--warm-grey);
+}
+
+.quote-attr-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--warm-grey);
+}
+
+.application-section {
+  padding: 80px 48px;
+  border-bottom: 1px solid var(--near-black);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+}
+
+.application-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.application-heading {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(52px, 6vw, 88px);
+  line-height: 0.9;
+  color: var(--near-black);
+  letter-spacing: 0.02em;
+  margin-bottom: 32px;
+}
+
+.application-heading span {
+  color: var(--coral);
+}
+
+.application-desc {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--warm-grey);
+  max-width: 380px;
+  margin-bottom: 48px;
+}
+
+.application-cta-group {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.application-right {
+  padding-top: 8px;
+}
+
+.application-list {
+  list-style: none;
+}
+
+.application-item {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 24px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--light-grey);
+  align-items: start;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+.application-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.app-item-num {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--coral);
+  padding-top: 4px;
+}
+
+.app-item-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--near-black);
+  margin-bottom: 8px;
+}
+
+.app-item-desc {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--warm-grey);
+}
+
+footer {
+  background: var(--near-black);
+  padding: 72px 48px 40px;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  padding-bottom: 48px;
+  border-bottom: 1px solid rgba(242,238,233,0.12);
+}
+
+.footer-brand-name {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 52px;
+  line-height: 1;
+  color: var(--warm-white);
+  letter-spacing: 0.04em;
+  margin-bottom: 16px;
+}
+
+.footer-brand-tagline {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--warm-grey);
+  max-width: 280px;
+  margin-bottom: 32px;
+}
+
+.footer-col-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--warm-grey);
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(242,238,233,0.08);
+}
+
+.footer-col-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.footer-col-link {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--warm-grey);
+  text-decoration: none;
+  transition: color 0.2s;
+  letter-spacing: 0.04em;
+}
+
+.footer-col-link:hover {
+  color: var(--warm-white);
+}
+
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 32px;
+}
+
+.footer-copy {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: var(--warm-grey);
+}
+
+.footer-copy span {
+  color: var(--coral);
+}
+
+.footer-legal {
+  display: flex;
+  gap: 32px;
+}
+
+.footer-legal-link {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: var(--warm-grey);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-legal-link:hover {
+  color: var(--warm-white);
+}
+
+.animate-entry {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.animate-entry.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 900px) {
+  nav {
+    padding: 0 24px;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  section.hero {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+  }
+
+  .hero-left {
+    min-height: 50vh;
+  }
+
+  .hero-oasis-text {
+    font-size: clamp(80px, 22vw, 180px);
+  }
+
+  .hero-right {
+    grid-template-columns: 1fr 44px;
+  }
+
+  .hero-right-content {
+    padding: 48px 32px;
+  }
+
+  .about-section {
+    grid-template-columns: 1fr;
+  }
+
+  .about-left {
+    border-right: none;
+    border-bottom: 1px solid var(--near-black);
+    padding: 48px 24px;
+  }
+
+  .about-right {
+    padding: 48px 24px;
+  }
+
+  .programs-section {
+    padding: 48px 24px;
+  }
+
+  .programs-header {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .programs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .program-card {
+    border-right: none;
+    border-bottom: 1px solid var(--light-grey);
+    padding: 32px 0;
+  }
+
+  .program-card:last-child {
+    border-bottom: none;
+    padding-left: 0;
+  }
+
+  .program-card:nth-child(2) {
+    padding-left: 0;
+  }
+
+  .process-section {
+    padding: 48px 24px;
+  }
+
+  .process-item {
+    grid-template-columns: 80px 1fr;
+    gap: 24px;
+  }
+
+  .application-section {
+    grid-template-columns: 1fr;
+    gap: 48px;
+    padding: 48px 24px;
+  }
+
+  .footer-top {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  footer {
+    padding: 48px 24px 32px;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .feature-strip-section {
+    padding: 0 24px;
+  }
+
+  .quote-section {
+    padding: 60px 24px;
+  }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-rule"></div>
+  <div class="nav-inner">
+    <div class="nav-left">
+      <span class="nav-est">EST. 2008 — Issue No. 16</span>
+      <span class="nav-wordmark">OASIS</span>
+    </div>
+    <div class="nav-links">
+      <a href="#about" class="nav-link">Philosophy</a>
+      <a href="#programs" class="nav-link">Programs</a>
+      <a href="#process" class="nav-link">Process</a>
+      <a href="#application" class="nav-link">Apply</a>
+    </div>
+    <a href="#application" class="nav-cta">Reserve a Stay</a>
+  </div>
+  <div class="nav-rule"></div>
+</nav>
+
+<section class="hero" id="hero">
+  <div class="hero-left">
+    <div class="hero-geo-circle"></div>
+    <div class="hero-geo-circle-2"></div>
+    <div class="hero-oasis-text" id="heroText" aria-label="OASIS">
+      <span>O</span>
+      <span>A</span>
+      <span>S</span>
+      <span>I</span>
+      <span>S</span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-right-content">
+      <p class="hero-label">The New Paradigm of Rest</p>
+      <h1 class="hero-sub"><strong>Stillness</strong> as a practice.<br>Presence as a philosophy.<br><em>Luxury as the vessel.</em></h1>
+      <div class="hero-rule"></div>
+      <p class="hero-desc">A curated sanctuary where the ancient science of meditation meets the exacting standards of modern luxury — crafted for those who know the true value of silence.</p>
+      <a href="#application" class="btn-primary">Begin Your Journey</a>
+    </div>
+    <div class="hero-vertical-strip">
+      <span class="hero-vertical-text">Luxury Meditation Retreat — Since 2008</span>
+    </div>
+  </div>
+</section>
+
+<div class="feature-strip-section">
+  <div class="feature-strip-header">
+    <span class="section-label">What We Offer</span>
+    <span class="scroll-hint">Scroll to explore</span>
+  </div>
+  <div class="feature-track" id="featureTrack">
+    <div class="feature-card">
+      <span class="feature-num">01</span>
+      <div class="feature-card-title">Silent Immersion Suites</div>
+      <div class="feature-rule"></div>
+      <p class="feature-card-text">Acoustically engineered sanctuaries calibrated to 20 decibels — quieter than a whisper. Obsidian stone, Japanese hinoki wood, zero visual clutter.</p>
+    </div>
+    <div class="feature-card" style="padding-left: 40px;">
+      <span class="feature-num">02</span>
+      <div class="feature-card-title">Vedic Meditation Masters</div>
+      <div class="feature-rule"></div>
+      <p class="feature-card-text">Resident teachers trained in the Himalayan lineage with a combined 140 years of practice. One-to-one sessions by appointment, woven into your daily rhythm.</p>
+    </div>
+    <div class="feature-card" style="padding-left: 40px;">
+      <span class="feature-num">03</span>
+      <div class="feature-card-title">Botanical Cuisine</div>
+      <div class="feature-rule"></div>
+      <p class="feature-card-text">A Michelin-trained kitchen practising Sattvic principles. Every meal timed to your circadian cycle, sourced within forty miles, and prepared in meditative silence.</p>
+    </div>
+    <div class="feature-card" style="padding-left: 40px;">
+      <span class="feature-num">04</span>
+      <div class="feature-card-title">Thermal Purification Ritual</div>
+      <div class="feature-rule"></div>
+      <p class="feature-card-text">A six-stage hydrotherapy sequence drawn from Finnish sauna tradition and Ayurvedic steam therapy — the body's deepest architectural reset.</p>
+    </div>
+    <div class="feature-card" style="padding-left: 40px;">
+      <span class="feature-num">05</span>
+      <div class="feature-card-title">Digital Severance Protocol</div>
+      <div class="feature-rule"></div>
+      <p class="feature-card-text">A structured withdrawal from technology beginning 48 hours before arrival. Devices held in bespoke leather cases. The outside world waits. You will not miss it.</p>
+    </div>
+  </div>
+</div>
+
+<section class="about-section" id="about">
+  <div class="about-left">
+    <div class="about-heading-area">
+      <p class="about-issue">Philosophy — Vol. IV</p>
+      <h2 class="about-heading">THE ART<br>OF DEEP<br><em>REST</em></h2>
+    </div>
+    <p class="drop-cap-text">We built Oasis on a radical premise: that genuine rest is not the absence of activity but the presence of awareness. That the body, given true silence, knows exactly how to heal itself. That luxury — real luxury — is nothing more than the careful removal of obstacles between a person and their own depth.</p>
+    <p class="about-body-text">Founded in 2008 by neuroscientist Dr. Mara Solano and contemplative scholar Ren Asahi, Oasis occupies a 340-acre estate in the high desert. Every material decision, every schedule, every silence has been chosen to serve one purpose: the radical restoration of the human interior.</p>
+  </div>
+  <div class="about-right">
+    <div class="pull-quote">
+      <p class="pull-quote-text">"The most subversive act in modern life is to sit completely still and pay attention to what arises."</p>
+      <p class="pull-quote-attr">— Dr. Mara Solano, Co-Founder</p>
+    </div>
+    <p class="about-body-text" style="margin-bottom: 40px;">Our approach is empirical as much as experiential. Every retreat is preceded by a comprehensive neurological baseline assessment and followed with post-retreat data — cortisol panels, HRV readings, cognitive performance metrics — because we believe transformation should be measurable.</p>
+    <div class="about-stats">
+      <div class="stat-item">
+        <div class="stat-number">94%</div>
+        <div class="stat-label">Report measurable stress reduction</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">340</div>
+        <div class="stat-label">Acres of protected high-desert land</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">12</div>
+        <div class="stat-label">Resident meditation masters</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">16</div>
+        <div class="stat-label">Years of continuous operation</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="programs-section" id="programs">
+  <div class="programs-header">
+    <h2 class="programs-title">Our<br>Programs</h2>
+    <p class="programs-intro">Three pathways into stillness — each designed for a different depth of engagement, a different appetite for transformation.</p>
+  </div>
+  <div class="programs-grid">
+    <div class="program-card">
+      <span class="program-big-num">001</span>
+      <span class="program-tag">Foundation</span>
+      <div class="program-name">The Immersion</div>
+      <div class="program-duration">7 Nights — High Desert Estate</div>
+      <p class="program-desc">An introduction to structured silence. Seven days of guided meditation, breathwork, and somatic release work — punctuated by one-to-one sessions, thermal rituals, and the botanical table. Designed for those who are new to practice or returning after a long absence.</p>
+      <a href="#application" class="program-link">Apply Now</a>
+    </div>
+    <div class="program-card">
+      <span class="program-big-num">002</span>
+      <span class="program-tag">Advanced</span>
+      <div class="program-name">The Deepening</div>
+      <div class="program-duration">14 Nights — Full Estate Access</div>
+      <p class="program-desc">A rigorous two-week journey for serious practitioners. Incorporates extended silent periods, Vedic fire ceremony, advanced pranayama, and neurological assessment. Entry by application only.</p>
+      <a href="#application" class="program-link">Apply Now</a>
+    </div>
+    <div class="program-card">
+      <span class="program-big-num">003</span>
+      <span class="program-tag">Bespoke</span>
+      <div class="program-name">The Private Arc</div>
+      <div class="program-duration">Bespoke Duration — Exclusive Estate</div>
+      <p class="program-desc">Exclusive use of the estate for individuals or small private groups. Fully bespoke programming, private kitchen team, resident teachers on call. The rarest offering — available to six guests per year.</p>
+      <a href="#application" class="program-link">Enquire</a>
+    </div>
+  </div>
+</section>
+
+<section class="process-section" id="process">
+  <div class="process-header">
+    <h2 class="process-title">The Path<br>to Arrival</h2>
+    <span class="process-label">Process — Four Stages</span>
+  </div>
+  <div class="process-list">
+    <div class="process-item">
+      <div class="process-step-num">01</div>
+      <div class="process-step-content">
+        <div class="process-step-tag">Initial Contact</div>
+        <div class="process-step-title">The Enquiry</div>
+        <p class="process-step-desc">Submit a brief written enquiry outlining your intentions. We read every submission personally. There is no automated system. A member of our curatorial team will respond within 72 hours.</p>
+      </div>
+    </div>
+    <div class="process-item">
+      <div class="process-step-num">02</div>
+      <div class="process-step-content">
+        <div class="process-step-tag">Consultation</div>
+        <div class="process-step-title">The Conversation</div>
+        <p class="process-step-desc">A sixty-minute call with one of our senior practitioners. We discuss your practice history, your nervous system, your intentions. This is how we understand what you need — and whether we are the right vessel for it.</p>
+      </div>
+    </div>
+    <div class="process-item">
+      <div class="process-step-num">03</div>
+      <div class="process-step-content">
+        <div class="process-step-tag">Preparation</div>
+        <div class="process-step-title">The Readying</div>
+        <p class="process-step-desc">Two weeks before arrival, you receive a preparation guide: dietary recommendations, a gentle preliminary practice, a list of what to bring — and what to leave behind. The retreat begins before you arrive.</p>
+      </div>
+    </div>
+    <div class="process-item">
+      <div class="process-step-num">04</div>
+      <div class="process-step-content">
+        <div class="process-step-tag">Arrival</div>
+        <div class="process-step-title">The Threshold</div>
+        <p class="process-step-desc">You are met at the gate by your personal guide. Devices are received with care. You cross into a different frequency. What happens next is yours alone to discover.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="quote-section">
+  <div class="quote-geo-line"></div>
+  <div class="quote-geo-line-v"></div>
+  <div class="quote-inner animate-entry">
+    <span class="quote-mark">"</span>
+    <p class="quote-text">Silence is not the absence of sound. It is the presence of <em>everything</em> you have been too busy to hear.</p>
+    <div class="quote-attribution">
+      <div class="quote-attr-line"></div>
+      <span class="quote-attr-text">Ren Asahi — Co-Founder, Oasis</span>
+      <div class="quote-attr-line"></div>
+    </div>
+  </div>
+</section>
+
+<section class="application-section" id="application">
+  <div class="application-left">
+    <div>
+      <p class="section-label" style="margin-bottom: 24px;">Begin the Process</p>
+      <h2 class="application-heading">APPLY<br>FOR A<br><span>STAY</span></h2>
+      <p class="application-desc">We accept a maximum of 24 guests per season. Each application is reviewed individually. There are no waiting lists — only the right moment, which is always now.</p>
+    </div>
+    <div class="application-cta-group">
+      <a href="#" class="btn-primary">Submit Enquiry</a>
+      <a href="#" class="btn-outline">Download Guide</a>
+    </div>
+  </div>
+  <div class="application-right">
+    <ul class="application-list">
+      <li class="application-item">
+        <span class="app-item-num">01</span>
+        <div>
+          <div class="app-item-title">Complete the Written Enquiry</div>
+          <p class="app-item-desc">Three paragraphs. What brings you here. What you are carrying. What you are hoping to set down. We read between the lines.</p>
+        </div>
+      </li>
+      <li class="application-item">
+        <span class="app-item-num">02</span>
+        <div>
+          <div class="app-item-title">Await Our Response</div>
+          <p class="app-item-desc">Within 72 hours, a member of our team will reach out to schedule your consultation call. Response is not guaranteed — but sincerity always is noticed.</p>
+        </div>
+      </li>
+      <li class="application-item">
+        <span class="app-item-num">03</span>
+        <div>
+          <div class="app-item-title">Complete the Practitioner Consultation</div>
+          <p class="app-item-desc">A private 60-minute dialogue to assess fit, establish intentions, and begin the relationship that will shape your entire stay.</p>
+        </div>
+      </li>
+      <li class="application-item">
+        <span class="app-item-num">04</span>
+        <div>
+          <div class="app-item-title">Receive Your Invitation</div>
+          <p class="app-item-desc">If the timing and the fit are right, you will receive a formal letter of invitation — accompanied by your personal preparation guide and arrival instructions.</p>
+        </div>
+      </li>
+      <li class="application-item">
+        <span class="app-item-num">05</span>
+        <div>
+          <div class="app-item-title">Confirm and Secure</div>
+          <p class="app-item-desc">A modest deposit secures your place. The balance is due thirty days prior to arrival. Cancellation terms are humane — because life, unlike retreat, is unpredictable.</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand-name">OASIS</div>
+      <p class="footer-brand-tagline">A sanctuary built at the intersection of ancient wisdom and modern luxury. High desert. Deep silence. Radical rest.</p>
+      <p style="font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 400; letter-spacing: 0.1em; color: var(--warm-grey);">340 Acre Estate, High Desert<br>By invitation only</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Navigate</div>
+      <ul class="footer-col-links">
+        <li><a href="#about" class="footer-col-link">Philosophy</a></li>
+        <li><a href="#programs" class="footer-col-link">Programs</a></li>
+        <li><a href="#process" class="footer-col-link">Process</a></li>
+        <li><a href="#application" class="footer-col-link">Apply</a></li>
+        <li><a href="#" class="footer-col-link">The Estate</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Programs</div>
+      <ul class="footer-col-links">
+        <li><a href="#programs" class="footer-col-link">The Immersion</a></li>
+        <li><a href="#programs" class="footer-col-link">The Deepening</a></li>
+        <li><a href="#programs" class="footer-col-link">The Private Arc</a></li>
+        <li><a href="#" class="footer-col-link">Corporate Retreats</a></li>
+        <li><a href="#" class="footer-col-link">Gift an Oasis</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Contact</div>
+      <ul class="footer-col-links">
+        <li><a href="#" class="footer-col-link">Enquiries</a></li>
+        <li><a href="#" class="footer-col-link">Press Office</a></li>
+        <li><a href="#" class="footer-col-link">Partnerships</a></li>
+        <li><a href="#" class="footer-col-link">Careers</a></li>
+        <li style="margin-top: 8px;"><a href="mailto:enquiries@oasisretreat.com" class="footer-col-link" style="color: var(--coral);">enquiries@oasis.com</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2024 Oasis Retreat Ltd. All rights reserved. <span>—</span> Est. 2008</p>
+    <div class="footer-legal">
+      <a href="#" class="footer-legal-link">Privacy Policy</a>
+      <a href="#" class="footer-legal-link">Terms of Stay</a>
+      <a href="#" class="footer-legal-link">Cookie Preferences</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&';
+  const letters = ['O', 'A', 'S', 'I', 'S'];
+  const spans = document.querySelectorAll('#heroText span');
+  let rafId;
+
+  function scrambleLetter(span, finalChar, duration) {
+    const start = performance.now();
+    function frame(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      if (progress < 1) {
+        span.textContent = CHARS[Math.floor(Math.random() * CHARS.length)];
+        rafId = requestAnimationFrame(frame);
+      } else {
+        span.textContent = finalChar;
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function runScramble() {
+    spans.forEach((span, i) => {
+      setTimeout(() => {
+        scrambleLetter(span, letters[i], 700 + i * 80);
+      }, i * 140);
+    });
+  }
+
+  runScramble();
+  setInterval(runScramble, 6000);
+
+  const featureTrack = document.getElementById('featureTrack');
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+
+  featureTrack.addEventListener('mousedown', function (e) {
+    isDown = true;
+    featureTrack.style.cursor = 'grabbing';
+    startX = e.pageX - featureTrack.offsetLeft;
+    scrollLeft = featureTrack.scrollLeft;
+  });
+
+  featureTrack.addEventListener('mouseleave', function () {
+    isDown = false;
+    featureTrack.style.cursor = 'grab';
+  });
+
+  featureTrack.addEventListener('mouseup', function () {
+    isDown = false;
+    featureTrack.style.cursor = 'grab';
+  });
+
+  featureTrack.addEventListener('mousemove', function (e) {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - featureTrack.offsetLeft;
+    const walk = (x - startX) * 1.4;
+    featureTrack.scrollLeft = scrollLeft - walk;
+  });
+
+  const observerConfig = { threshold: 0.12, rootMargin: '0px 0px -60px 0px' };
+
+  const staggerObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        const items = entry.target.querySelectorAll(
+          '.feature-card, .program-card, .process-item, .application-item'
+        );
+        items.forEach(function (item, i) {
+          setTimeout(function () {
+            item.classList.add('visible');
+          }, i * 120);
+        });
+        staggerObserver.unobserve(entry.target);
+      }
+    });
+  }, observerConfig);
+
+  document.querySelectorAll(
+    '.feature-strip-section, .programs-grid, .process-list, .application-list'
+  ).forEach(function (el) {
+    staggerObserver.observe(el);
+  });
+
+  const entryObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        entryObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.animate-entry').forEach(function (el) {
+    entryObserver.observe(el);
+  });
+
+  const navLinks = document.querySelectorAll('a[href^="#"]');
+  navLinks.forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      const href = link.getAttribute('href');
+      if (href === '#') return;
+      const target = document.querySelector(href);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oasis — Kyoto Forest Retreat</title>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --color-neutral: #060E09;
+      --color-neutral-2: #0E1E13;
+      --color-neutral-3: #132618;
+      --color-primary: #D4E6C3;
+      --color-secondary: #4A6352;
+      --color-tertiary: #7FBC8C;
+      --color-on-tertiary: #060E09;
+      --ease-forest: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-breath: cubic-bezier(0.45, 0, 0.55, 1);
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: auto;
+    }
+
+    body {
+      background-color: var(--color-neutral);
+      color: var(--color-primary);
+      font-family: 'Courier Prime', monospace;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    ::selection {
+      background: var(--color-tertiary);
+      color: var(--color-on-tertiary);
+    }
+
+    /* ── CURSOR ── */
+    .cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 10px;
+      height: 10px;
+      background: var(--color-tertiary);
+      border-radius: 9999px;
+      pointer-events: none;
+      z-index: 100;
+      transform: translate(-50%, -50%);
+      transition: width 0.25s var(--ease-forest), height 0.25s var(--ease-forest), background 0.25s var(--ease-forest), border-radius 0.25s var(--ease-forest);
+      will-change: transform;
+    }
+    .cursor.is-hover {
+      width: 40px;
+      height: 40px;
+      background: var(--color-primary);
+      mix-blend-mode: difference;
+    }
+    .cursor.is-drag {
+      width: 48px;
+      height: 48px;
+      background: transparent;
+      border: 1.5px solid var(--color-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cursor-drag-arrow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 101;
+      transform: translate(-50%, -50%);
+      font-family: 'Courier Prime', monospace;
+      font-size: 14px;
+      color: var(--color-tertiary);
+      opacity: 0;
+      transition: opacity 0.25s var(--ease-forest);
+      will-change: transform;
+    }
+    .cursor-drag-arrow.visible {
+      opacity: 1;
+    }
+
+    /* ── TYPOGRAPHY ── */
+    .type-display-huge {
+      font-family: 'EB Garamond', serif;
+      font-size: 12vw;
+      font-weight: 400;
+      line-height: 0.88;
+      letter-spacing: -0.02em;
+    }
+    .type-display-large {
+      font-family: 'EB Garamond', serif;
+      font-size: 7vw;
+      font-weight: 400;
+      line-height: 0.92;
+      letter-spacing: -0.02em;
+    }
+    .type-display-italic {
+      font-family: 'EB Garamond', serif;
+      font-size: 5vw;
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+    }
+    .type-h1 {
+      font-family: 'EB Garamond', serif;
+      font-size: 3.5vw;
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -0.015em;
+    }
+    .type-body {
+      font-family: 'Courier Prime', monospace;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.75;
+      letter-spacing: 0.01em;
+    }
+    .type-micro {
+      font-family: 'Courier Prime', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    /* ── BUTTONS ── */
+    .btn-primary {
+      display: inline-block;
+      background: var(--color-tertiary);
+      color: var(--color-on-tertiary);
+      border: none;
+      border-radius: 9999px;
+      padding: 14px 28px;
+      font-family: 'Courier Prime', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: none;
+    }
+    .btn-ghost {
+      display: inline-block;
+      background: transparent;
+      color: var(--color-primary);
+      border: 1px solid var(--color-primary);
+      border-radius: 9999px;
+      padding: 14px 28px;
+      font-family: 'Courier Prime', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: none;
+    }
+
+    /* ── NAVIGATION ── */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 48px;
+    }
+    .nav-wordmark {
+      font-family: 'Courier Prime', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-secondary);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      padding: 0 48px 80px;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    /* CSS Particles */
+    .particle {
+      position: absolute;
+      background: var(--color-tertiary);
+      border-radius: 9999px;
+      opacity: 0;
+      animation: breathe var(--duration) var(--delay) infinite var(--ease-breath);
+    }
+    @keyframes breathe {
+      0%, 100% { opacity: 0; transform: scale(0.5); }
+      50% { opacity: var(--max-opacity); transform: scale(1); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 60fr 40fr;
+      gap: 0;
+      align-items: flex-end;
+    }
+    .hero-left {
+      position: relative;
+    }
+    .hero-title {
+      display: block;
+      color: var(--color-primary);
+      will-change: transform, opacity;
+    }
+    .hero-tag {
+      color: var(--color-secondary);
+      margin-bottom: 20px;
+    }
+    .hero-right {
+      padding-left: 48px;
+      padding-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+    .hero-subtitle {
+      color: var(--color-primary);
+      opacity: 0.8;
+    }
+    .hero-details {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .hero-detail-line {
+      color: var(--color-secondary);
+      border-top: 1px solid var(--color-neutral-3);
+      padding-top: 10px;
+    }
+    .hero-scroll-hint {
+      color: var(--color-secondary);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-scroll-line {
+      width: 40px;
+      height: 1px;
+      background: var(--color-secondary);
+    }
+
+    /* ── PHILOSOPHY ── */
+    .philosophy {
+      padding: 18vw 48px;
+      max-width: 960px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+    }
+    .philosophy-statement {
+      color: var(--color-primary);
+      margin-bottom: 48px;
+      will-change: transform, opacity;
+    }
+    .philosophy-body {
+      color: var(--color-secondary);
+      max-width: 620px;
+      margin: 0 auto;
+      will-change: opacity;
+    }
+    .philosophy-rule {
+      width: 1px;
+      height: 80px;
+      background: var(--color-secondary);
+      margin: 0 auto 64px;
+      opacity: 0.4;
+    }
+
+    /* ── JOURNEY SECTION ── */
+    .journey-section {
+      position: relative;
+      overflow: hidden;
+      will-change: transform;
+    }
+    .journey-label {
+      position: absolute;
+      top: 40px;
+      left: 48px;
+      z-index: 15;
+      color: var(--color-secondary);
+    }
+    .journey-counter {
+      position: absolute;
+      top: 40px;
+      right: 48px;
+      z-index: 15;
+      color: var(--color-secondary);
+    }
+    .journey-track {
+      display: flex;
+      width: 500vw;
+      will-change: transform;
+    }
+
+    /* ── PANELS ── */
+    .panel {
+      width: 100vw;
+      height: 100vh;
+      flex-shrink: 0;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 80px 48px;
+      overflow: hidden;
+    }
+    .panel:nth-child(odd) {
+      background: var(--color-neutral);
+    }
+    .panel:nth-child(even) {
+      background: var(--color-neutral-2);
+    }
+    .panel-number {
+      position: absolute;
+      top: 80px;
+      left: 48px;
+      color: var(--color-secondary);
+      opacity: 0.5;
+    }
+    .panel-title {
+      color: var(--color-primary);
+      margin-bottom: 32px;
+      max-width: 700px;
+    }
+    .panel-body {
+      color: var(--color-secondary);
+      max-width: 520px;
+      line-height: 1.8;
+    }
+    .panel-stat {
+      position: absolute;
+      bottom: 80px;
+      right: 48px;
+      text-align: right;
+    }
+    .panel-stat-number {
+      font-family: 'EB Garamond', serif;
+      font-size: 4vw;
+      font-weight: 400;
+      color: var(--color-tertiary);
+      line-height: 1;
+      display: block;
+    }
+    .panel-stat-label {
+      color: var(--color-secondary);
+    }
+    .panel-border {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--color-secondary), transparent);
+      opacity: 0.2;
+    }
+    .journey-drag-hint {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 15;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--color-secondary);
+    }
+    .drag-hint-line {
+      width: 32px;
+      height: 1px;
+      background: var(--color-secondary);
+      opacity: 0.5;
+    }
+
+    /* ── CTA SECTION ── */
+    .cta-section {
+      padding: 18vw 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 48px;
+      will-change: transform, opacity;
+    }
+    .cta-tag {
+      color: var(--color-secondary);
+    }
+    .cta-title {
+      color: var(--color-primary);
+      display: inline-block;
+      transform-origin: left center;
+    }
+    .cta-title-rotate {
+      display: inline-block;
+      transform: rotate(-2deg);
+    }
+    .cta-details {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+    }
+    .cta-detail {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .cta-detail-value {
+      font-family: 'EB Garamond', serif;
+      font-size: 2.5vw;
+      font-weight: 400;
+      color: var(--color-primary);
+      line-height: 1;
+    }
+    .cta-detail-label {
+      color: var(--color-secondary);
+    }
+    .cta-divider {
+      width: 1px;
+      height: 48px;
+      background: var(--color-secondary);
+      opacity: 0.3;
+    }
+    .cta-bg-text {
+      position: absolute;
+      bottom: -6vw;
+      right: -2vw;
+      font-family: 'EB Garamond', serif;
+      font-size: 22vw;
+      font-weight: 400;
+      color: var(--color-neutral-2);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      padding: 48px 48px;
+      border-top: 1px solid var(--color-neutral-3);
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+    .footer-brand {
+      color: var(--color-secondary);
+    }
+    .footer-center {
+      text-align: center;
+      color: var(--color-secondary);
+      opacity: 0.4;
+    }
+    .footer-right {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .footer-link {
+      color: var(--color-secondary);
+      text-decoration: none;
+      opacity: 0.6;
+    }
+
+    /* ── FLOATING RESERVE ── */
+    .float-reserve {
+      position: fixed;
+      bottom: 40px;
+      right: 40px;
+      z-index: 20;
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+    }
+    .float-reserve.visible {
+      pointer-events: all;
+    }
+
+    /* ── SECTION DIVIDERS ── */
+    .section-rule {
+      width: 100%;
+      height: 1px;
+      background: var(--color-neutral-3);
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      body { cursor: auto; }
+      .cursor, .cursor-drag-arrow { display: none; }
+      .nav { padding: 20px 24px; }
+      .hero { padding: 0 24px 60px; }
+      .hero-content {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        gap: 40px;
+      }
+      .hero-right { padding-left: 0; }
+      .type-display-huge { font-size: 18vw; }
+      .type-display-large { font-size: 11vw; }
+      .type-display-italic { font-size: 8vw; }
+      .type-h1 { font-size: 6vw; }
+
+      .philosophy { padding: 80px 24px; }
+      .philosophy-statement { font-size: 7vw; }
+
+      .journey-section { overflow: visible; }
+      .journey-label, .journey-counter, .journey-drag-hint { display: none; }
+      .journey-track {
+        flex-direction: column;
+        width: 100%;
+      }
+      .panel {
+        width: 100%;
+        height: auto;
+        min-height: 80vh;
+        padding: 80px 24px 60px;
+      }
+      .panel-stat {
+        position: static;
+        text-align: left;
+        margin-top: 32px;
+      }
+      .panel-stat-number { font-size: 8vw; }
+
+      .cta-section { padding: 80px 24px; }
+      .cta-title { font-size: 11vw; }
+      .cta-details { flex-direction: column; gap: 24px; align-items: flex-start; }
+      .cta-divider { display: none; }
+      .cta-detail-value { font-size: 6vw; }
+      .cta-bg-text { display: none; }
+
+      .footer {
+        grid-template-columns: 1fr;
+        padding: 40px 24px;
+      }
+      .footer-center, .footer-right { text-align: left; }
+
+      .float-reserve { bottom: 24px; right: 24px; }
+    }
+
+    /* ── REDUCED MOTION STATIC FALLBACK ── */
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+      .cursor, .cursor-drag-arrow { display: none; }
+      body { cursor: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CURSOR -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-drag-arrow" id="cursorArrow">↔</div>
+
+  <!-- NAVIGATION -->
+  <nav class="nav" id="mainNav">
+    <span class="nav-wordmark type-micro">Oasis — Kyoto</span>
+    <a href="#journey" class="btn-primary" data-hover>Begin ↓</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg" id="heroBg">
+      <!-- Particles injected by JS -->
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-left">
+        <p class="type-micro hero-tag" style="margin-bottom:24px;" id="heroTag">Retreat — Kyoto — Since 2020</p>
+        <h1 class="type-display-huge hero-title" id="heroTitle">Oasis</h1>
+      </div>
+      <div class="hero-right" id="heroRight">
+        <p class="type-display-italic hero-subtitle">The grove<br>remembers</p>
+        <div class="hero-details">
+          <div class="hero-detail-line type-micro">Forest Meditation Retreat</div>
+          <div class="hero-detail-line type-micro">35.0116° N, 135.7681° E</div>
+          <div class="hero-detail-line type-micro">Est. 2020 — 12 Guests Max</div>
+        </div>
+        <div class="hero-scroll-hint type-micro">
+          <span class="hero-scroll-line"></span>
+          <span>Scroll to enter</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHILOSOPHY -->
+  <section class="philosophy" id="philosophy">
+    <div class="philosophy-rule"></div>
+    <p class="type-display-italic philosophy-statement" id="philStatement">
+      The forest is<br>the oldest teacher
+    </p>
+    <p class="type-body philosophy-body" id="philBody">
+      Before language, before scripture, before the first meditation hall was built from cedar and intention — there was the forest. It has been teaching silence longer than we have been listening. Oasis exists at the boundary of that knowledge. Three days in the ancient grove outside Kyoto. Twelve guests at a time. The curriculum is written in bark and moss and the sound of water moving over stone.
+    </p>
+  </section>
+
+  <!-- HORIZONTAL JOURNEY -->
+  <section class="journey-section" id="journey">
+    <span class="type-micro journey-label" id="journeyLabel">The Journey</span>
+    <span class="type-micro journey-counter" id="journeyCounter">01 / 05</span>
+
+    <div class="journey-track" id="journeyTrack">
+
+      <!-- PANEL 1: THE ARRIVAL -->
+      <div class="panel" data-panel="1">
+        <div class="panel-border"></div>
+        <span class="type-micro panel-number">01</span>
+        <h2 class="type-display-large panel-title">The Arrival</h2>
+        <p class="type-body panel-body">
+          The driver does not speak. That is not rudeness — it is the first instruction. The road from Kyoto winds upward for forty minutes, through cedar forest so dense the sky disappears. By the time you reach the gate, something has already begun to shift. You arrive not to a building but to a silence that has been waiting for you.
+        </p>
+        <div class="panel-stat">
+          <span class="panel-stat-number">12</span>
+          <span class="type-micro panel-stat-label">Guests maximum</span>
+        </div>
+      </div>
+
+      <!-- PANEL 2: THE FOREST BATH -->
+      <div class="panel" data-panel="2">
+        <div class="panel-border"></div>
+        <span class="type-micro panel-number">02</span>
+        <h2 class="type-display-large panel-title">The Forest Bath</h2>
+        <p class="type-body panel-body">
+          Shinrin-yoku — forest bathing — is not a metaphor. The phytoncides released by cedar, the sub-bass vibration of ancient root systems, the mycorrhizal network underfoot: they act on the nervous system measurably, chemically, profoundly. Our guide leads you in silence. You do not walk briskly. You do not have a destination. For the first time in years, that is enough.
+        </p>
+        <div class="panel-stat">
+          <span class="panel-stat-number">3h</span>
+          <span class="type-micro panel-stat-label">Daily forest immersion</span>
+        </div>
+      </div>
+
+      <!-- PANEL 3: THE MEDITATION HALL -->
+      <div class="panel" data-panel="3">
+        <div class="panel-border"></div>
+        <span class="type-micro panel-number">03</span>
+        <h2 class="type-display-large panel-title">The Meditation Hall</h2>
+        <p class="type-body panel-body">
+          Built by a master carpenter from Nara, entirely from cedar salvaged from a fallen 200-year-old tree. The hall sits on a clearing where morning fog pools. Cushions face the treeline. Sessions begin before dawn, when the forest is still deciding whether to become day. Nothing in the room competes with the silence. That is the architecture.
+        </p>
+        <div class="panel-stat">
+          <span class="panel-stat-number">200</span>
+          <span class="type-micro panel-stat-label">Year-old cedar timber</span>
+        </div>
+      </div>
+
+      <!-- PANEL 4: THE TEA CEREMONY -->
+      <div class="panel" data-panel="4">
+        <div class="panel-border"></div>
+        <span class="type-micro panel-number">04</span>
+        <h2 class="type-display-large panel-title">The Tea Ceremony</h2>
+        <p class="type-body panel-body">
+          Each afternoon, alone or in pairs, you are welcomed into a private chashitsu at the grove's edge. Yamamoto-san has practiced chado for thirty-one years. She does not rush. She does not explain. The ceremony is not about tea — it is about the complete occupation of a single moment. Afterward, guests report that they have forgotten what they were worried about.
+        </p>
+        <div class="panel-stat">
+          <span class="panel-stat-number">31</span>
+          <span class="type-micro panel-stat-label">Years of practice</span>
+        </div>
+      </div>
+
+      <!-- PANEL 5: THE RETURN -->
+      <div class="panel" data-panel="5">
+        <div class="panel-border"></div>
+        <span class="type-micro panel-number">05</span>
+        <h2 class="type-display-large panel-title">The Return</h2>
+        <p class="type-body panel-body">
+          On the morning of departure, guests sit in the clearing at dawn for a final silent hour. The forest does what it has always done — breathes, continues, holds what you have left within it. The drive back to the city takes forty minutes. Most guests say nothing the entire way. Not from sadness. From the rare, difficult grace of having been genuinely still.
+        </p>
+        <div class="panel-stat">
+          <span class="panel-stat-number">3</span>
+          <span class="type-micro panel-stat-label">Days, one life</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="journey-drag-hint" id="dragHint">
+      <span class="drag-hint-line"></span>
+      <span class="type-micro">Drag to journey</span>
+      <span class="drag-hint-line"></span>
+    </div>
+  </section>
+
+  <div class="section-rule"></div>
+
+  <!-- CTA -->
+  <section class="cta-section" id="ctaSection">
+    <span class="cta-bg-text" aria-hidden="true">Grove</span>
+    <div class="cta-inner" id="ctaInner">
+      <span class="type-micro cta-tag">— Reserve your place</span>
+      <div class="cta-title-rotate">
+        <h2 class="type-display-large cta-title">Reserve<br>your grove</h2>
+      </div>
+      <div class="cta-details">
+        <div class="cta-detail">
+          <span class="cta-detail-value">3</span>
+          <span class="type-micro cta-detail-label">Nights</span>
+        </div>
+        <div class="cta-divider"></div>
+        <div class="cta-detail">
+          <span class="cta-detail-value">12</span>
+          <span class="type-micro cta-detail-label">Guests maximum</span>
+        </div>
+        <div class="cta-divider"></div>
+        <div class="cta-detail">
+          <span class="cta-detail-value">Kyoto</span>
+          <span class="type-micro cta-detail-label">Forest, Japan</span>
+        </div>
+      </div>
+      <a href="#" class="btn-primary" data-hover style="margin-top:16px;">Reserve a Session</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-brand">
+      <p class="type-micro" style="color: var(--color-secondary);">Oasis — Kyoto Forest Retreat</p>
+      <p class="type-micro" style="color: var(--color-secondary); opacity: 0.4; margin-top: 8px;">© 2025 Oasis. All rights reserved.</p>
+    </div>
+    <div class="footer-center">
+      <p class="type-micro">35.0116° N, 135.7681° E</p>
+    </div>
+    <div class="footer-right">
+      <a href="#" class="footer-link type-micro">Instagram</a>
+      <a href="#" class="footer-link type-micro">Press</a>
+      <a href="#" class="footer-link type-micro">Contact</a>
+    </div>
+  </footer>
+
+  <!-- FLOATING RESERVE -->
+  <a href="#" class="float-reserve btn-primary" id="floatReserve" data-hover>Reserve</a>
+
+  <script>
+  (function() {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.innerWidth <= 768;
+
+    /* ── PARTICLES (CSS, no canvas) ── */
+    (function buildParticles() {
+      const bg = document.getElementById('heroBg');
+      if (!bg) return;
+      const count = 44;
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const size = 2 + Math.random() * 3;
+        const duration = 6 + Math.random() * 12;
+        const delay = -(Math.random() * duration);
+        const maxOpacity = 0.15 + Math.random() * 0.35;
+        p.style.cssText = [
+          'width:' + size + 'px',
+          'height:' + size + 'px',
+          'top:' + (Math.random() * 100) + '%',
+          'left:' + (Math.random() * 100) + '%',
+          '--duration:' + duration + 's',
+          '--delay:' + delay + 's',
+          '--max-opacity:' + maxOpacity
+        ].join(';');
+        bg.appendChild(p);
+      }
+    })();
+
+    if (prefersReducedMotion) {
+      document.querySelectorAll('.animated').forEach(function(el) {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+      return;
+    }
+
+    /* ── LENIS SMOOTH SCROLL ── */
+    var lenis;
+    if (typeof Lenis !== 'undefined' && !isMobile) {
+      lenis = new Lenis({ lerp: 0.08, smoothWheel: true });
+      lenis.on('scroll', function() {
+        if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.update();
+      });
+      gsap.ticker.add(function(time) { lenis.raf(time * 1000); });
+      gsap.ticker.lagSmoothing(0);
+    }
+
+    /* ── GSAP SETUP ── */
+    gsap.registerPlugin(ScrollTrigger);
+    if (typeof Draggable !== 'undefined') gsap.registerPlugin(Draggable);
+
+    /* ── CUSTOM CURSOR ── */
+    if (!isMobile) {
+      var cursor = document.getElementById('cursor');
+      var cursorArrow = document.getElementById('cursorArrow');
+      var cursorX = 0, cursorY = 0;
+
+      document.addEventListener('mousemove', function(e) {
+        cursorX = e.clientX;
+        cursorY = e.clientY;
+        gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.6, ease: 'power3.out' });
+        gsap.to(cursorArrow, { x: e.clientX, y: e.clientY, duration: 0.5, ease: 'power3.out' });
+      });
+
+      document.querySelectorAll('[data-hover], a, button').forEach(function(el) {
+        el.addEventListener('mouseenter', function() {
+          cursor.classList.add('is-hover');
+        });
+        el.addEventListener('mouseleave', function() {
+          cursor.classList.remove('is-hover');
+        });
+      });
+
+      var journeySection = document.getElementById('journey');
+      if (journeySection) {
+        journeySection.addEventListener('mouseenter', function() {
+          cursor.classList.add('is-drag');
+          cursorArrow.classList.add('visible');
+        });
+        journeySection.addEventListener('mouseleave', function() {
+          cursor.classList.remove('is-drag');
+          cursorArrow.classList.remove('visible');
+        });
+      }
+    }
+
+    /* ── NAV FADE ── */
+    gsap.from('#mainNav', {
+      y: -20,
+      opacity: 0,
+      duration: 1.2,
+      ease: 'power4.out',
+      delay: 0.3
+    });
+
+    /* ── HERO ANIMATIONS ── */
+    var heroTl = gsap.timeline({ delay: 0.6 });
+    heroTl.from('#heroTag', { y: 20, opacity: 0, duration: 0.8, ease: 'power4.out' })
+          .from('#heroTitle', { y: 80, opacity: 0, duration: 1.4, ease: 'power4.out' }, '-=0.4')
+          .from('#heroRight', { y: 40, opacity: 0, duration: 1.0, ease: 'power4.out' }, '-=0.8');
+
+    /* ── PHILOSOPHY REVEAL ── */
+    gsap.from('#philStatement', {
+      scrollTrigger: {
+        trigger: '#philosophy',
+        start: 'top 75%',
+        toggleActions: 'play none none reverse'
+      },
+      y: 60,
+      opacity: 0,
+      duration: 1.4,
+      ease: 'power4.out'
+    });
+    gsap.from('#philBody', {
+      scrollTrigger: {
+        trigger: '#philosophy',
+        start: 'top 65%',
+        toggleActions: 'play none none reverse'
+      },
+      y: 30,
+      opacity: 0,
+      duration: 1.0,
+      ease: 'power4.out',
+      delay: 0.3
+    });
+
+    /* ── HORIZONTAL DRAG JOURNEY ── */
+    if (!isMobile) {
+      var track = document.getElementById('journeyTrack');
+      var panels = track.querySelectorAll('.panel');
+      var totalPanels = panels.length;
+      var panelWidth = window.innerWidth;
+      var maxX = 0;
+      var minX = -(panelWidth * (totalPanels - 1));
+      var currentPanel = 0;
+      var counter = document.getElementById('journeyCounter');
+      var dragHint = document.getElementById('dragHint');
+
+      function padNum(n) { return n < 10 ? '0' + n : '' + n; }
+      function updateCounter(idx) {
+        if (counter) counter.textContent = padNum(idx + 1) + ' / ' + padNum(totalPanels);
+      }
+      function snapToPanel(idx) {
+        idx = Math.max(0, Math.min(totalPanels - 1, idx));
+        currentPanel = idx;
+        gsap.to(track, {
+          x: -(panelWidth * idx),
+          duration: 0.9,
+          ease: 'power4.out'
+        });
+        updateCounter(idx);
+      }
+
+      if (typeof Draggable !== 'undefined') {
+        Draggable.create(track, {
+          type: 'x',
+          bounds: { minX: minX, maxX: maxX },
+          inertia: false,
+          cursor: 'none',
+          onDragStart: function() {
+            gsap.killTweensOf(track);
+            if (dragHint) gsap.to(dragHint, { opacity: 0, duration: 0.3 });
+          },
+          onDragEnd: function() {
+            var x = gsap.getProperty(track, 'x');
+            var closestPanel = Math.round(-x / panelWidth);
+            snapToPanel(closestPanel);
+          }
+        });
+      } else {
+        /* Fallback: manual pointer drag */
+        var isDragging = false;
+        var startX = 0;
+        var startTrackX = 0;
+        var currentTrackX = 0;
+
+        track.addEventListener('pointerdown', function(e) {
+          isDragging = true;
+          startX = e.clientX;
+          startTrackX = currentTrackX;
+          track.setPointerCapture(e.pointerId);
+        });
+        track.addEventListener('pointermove', function(e) {
+          if (!isDragging) return;
+          var dx = e.clientX - startX;
+          var newX = Math.max(minX, Math.min(maxX, startTrackX + dx));
+          currentTrackX = newX;
+          gsap.set(track, { x: newX });
+        });
+        track.addEventListener('pointerup', function(e) {
+          if (!isDragging) return;
+          isDragging = false;
+          var closestPanel = Math.round(-currentTrackX / panelWidth);
+          currentTrackX = -(panelWidth * Math.max(0, Math.min(totalPanels - 1, closestPanel)));
+          snapToPanel(closestPanel);
+        });
+      }
+
+      /* Keyboard nav */
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight') snapToPanel(currentPanel + 1);
+        if (e.key === 'ArrowLeft') snapToPanel(currentPanel - 1);
+      });
+
+      /* Touch support */
+      var touchStartX = 0;
+      var trackStartX = 0;
+      track.addEventListener('touchstart', function(e) {
+        touchStartX = e.touches[0].clientX;
+        trackStartX = gsap.getProperty(track, 'x');
+        gsap.killTweensOf(track);
+        if (dragHint) gsap.to(dragHint, { opacity: 0, duration: 0.3 });
+      }, { passive: true });
+      track.addEventListener('touchmove', function(e) {
+        var dx = e.touches[0].clientX - touchStartX;
+        var newX = Math.max(minX, Math.min(maxX, trackStartX + dx));
+        gsap.set(track, { x: newX });
+      }, { passive: true });
+      track.addEventListener('touchend', function(e) {
+        var x = gsap.getProperty(track, 'x');
+        var closestPanel = Math.round(-x / panelWidth);
+        snapToPanel(closestPanel);
+      });
+
+      /* Handle resize */
+      window.addEventListener('resize', function() {
+        panelWidth = window.innerWidth;
+        minX = -(panelWidth * (totalPanels - 1));
+        snapToPanel(currentPanel);
+      });
+
+    } else {
+      /* MOBILE: stacked panels, no drag */
+      var track = document.getElementById('journeyTrack');
+      track.style.flexDirection = 'column';
+      track.style.width = '100%';
+    }
+
+    /* ── CTA REVEAL ── */
+    gsap.from('#ctaInner', {
+      scrollTrigger: {
+        trigger: '#ctaSection',
+        start: 'top 70%',
+        toggleActions: 'play none none reverse'
+      },
+      y: 60,
+      opacity: 0,
+      duration: 1.2,
+      ease: 'power4.out'
+    });
+
+    /* ── FLOATING RESERVE ── */
+    var floatReserve = document.getElementById('floatReserve');
+    ScrollTrigger.create({
+      trigger: 'body',
+      start: function() { return document.body.scrollHeight * 0.6 + ' top'; },
+      onEnter: function() {
+        floatReserve.classList.add('visible');
+        gsap.to(floatReserve, {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: 'power4.out'
+        });
+      },
+      onLeaveBack: function() {
+        gsap.to(floatReserve, {
+          opacity: 0,
+          y: 20,
+          duration: 0.5,
+          ease: 'power2.in',
+          onComplete: function() { floatReserve.classList.remove('visible'); }
+        });
+      }
+    });
+
+    /* ── JOURNEY LABEL ENTRANCE ── */
+    gsap.from(['#journeyLabel', '#journeyCounter'], {
+      scrollTrigger: {
+        trigger: '#journey',
+        start: 'top 80%'
+      },
+      opacity: 0,
+      y: 10,
+      duration: 0.8,
+      ease: 'power4.out',
+      stagger: 0.1
+    });
+
+    /* ── PANEL CONTENT ENTRANCE (first panel visible on load, others on drag) ── */
+    gsap.from('#journey .panel:first-child .panel-title', {
+      scrollTrigger: { trigger: '#journey', start: 'top 75%' },
+      y: 50,
+      opacity: 0,
+      duration: 1.2,
+      ease: 'power4.out'
+    });
+    gsap.from('#journey .panel:first-child .panel-body', {
+      scrollTrigger: { trigger: '#journey', start: 'top 70%' },
+      y: 30,
+      opacity: 0,
+      duration: 1.0,
+      ease: 'power4.out',
+      delay: 0.2
+    });
+
+  })();
+  </script>
+</body>
+</html>

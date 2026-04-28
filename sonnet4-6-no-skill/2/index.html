@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oasis — Luxury Meditation Retreat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0D0D0B;
+    --bg-card: #1A1A16;
+    --gold: #C9A96E;
+    --gold-light: #DFC08A;
+    --gold-dim: rgba(201,169,110,0.15);
+    --gold-dim2: rgba(201,169,110,0.06);
+    --text: #F5F0E8;
+    --text-muted: rgba(245,240,232,0.55);
+    --border: #2A2A22;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  ::selection { background: var(--gold); color: var(--bg); }
+
+  @keyframes particleDrift {
+    0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 0.6; }
+    100% { transform: translateY(-120vh) translateX(var(--drift-x, 30px)) scale(0.3); opacity: 0; }
+  }
+
+  @keyframes goldPulse {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0.65; transform: scale(1.08); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes lineExpand {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+
+  @keyframes revealClip {
+    from { clip-path: inset(0 100% 0 0); }
+    to { clip-path: inset(0 0% 0 0); }
+  }
+
+  @keyframes counterUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(48px);
+    transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.22s; }
+  .reveal-delay-3 { transition-delay: 0.34s; }
+  .reveal-delay-4 { transition-delay: 0.46s; }
+
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 56px;
+    height: 80px;
+    background: rgba(13,13,11,0.88);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(42,42,34,0.5);
+    transition: background 0.4s;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+    position: relative;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--gold);
+    transition: width 0.35s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .nav-line {
+    width: 48px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+  }
+
+  .nav-line.right {
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+
+  .wordmark {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.35em;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .nav-cta {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    border: 1px solid rgba(201,169,110,0.4);
+    padding: 9px 22px;
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
+  }
+
+  .nav-cta:hover {
+    background: var(--gold);
+    color: var(--bg);
+    border-color: var(--gold);
+  }
+
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    padding: 120px 40px 80px;
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -55%);
+    width: 900px;
+    height: 900px;
+    background: radial-gradient(ellipse at center, rgba(201,169,110,0.09) 0%, rgba(201,169,110,0.04) 35%, transparent 70%);
+    pointer-events: none;
+    animation: goldPulse 7s ease-in-out infinite;
+  }
+
+  .particles-container {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .particle {
+    position: absolute;
+    bottom: -10px;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: particleDrift linear infinite;
+  }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(52px, 8vw, 110px);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeUp 1.1s cubic-bezier(0.16,1,0.3,1) 0.5s forwards;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .ornament {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin: 0 auto 36px;
+    opacity: 0;
+    animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 0.75s forwards;
+  }
+
+  .ornament-line {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+  }
+
+  .ornament-line.right {
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+
+  .ornament-diamond {
+    width: 8px;
+    height: 8px;
+    border: 1px solid var(--gold);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+
+  .ornament-inner-diamond {
+    width: 3px;
+    height: 3px;
+    background: var(--gold);
+    transform: rotate(45deg);
+    margin: 2px auto;
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--text-muted);
+    max-width: 480px;
+    line-height: 1.75;
+    margin-bottom: 52px;
+    opacity: 0;
+    animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 0.9s forwards;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 1.1s forwards;
+  }
+
+  .btn-gold {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--bg);
+    background: var(--gold);
+    padding: 18px 42px;
+    display: inline-block;
+    transition: background 0.3s, transform 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-gold::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold-light);
+    transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .btn-gold:hover::before { transform: translateX(0); }
+  .btn-gold:hover { transform: translateY(-2px); }
+  .btn-gold span { position: relative; z-index: 1; }
+
+  .btn-ghost {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 18px 42px;
+    display: inline-block;
+    transition: border-color 0.3s, color 0.3s, transform 0.3s;
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    transform: translateY(-2px);
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 44px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 1.5s forwards;
+  }
+
+  .hero-scroll span {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: lineExpand 1.5s ease-in-out infinite alternate;
+  }
+
+  .stats {
+    padding: 100px 56px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .stat-item {
+    text-align: center;
+    padding: 48px 40px;
+    position: relative;
+  }
+
+  .stat-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 60px;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--border), transparent);
+  }
+
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px;
+    font-weight: 400;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .about {
+    padding: 140px 56px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .about-inner {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    padding: 80px 90px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .about-inner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(ellipse at top right, rgba(201,169,110,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .about-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 36px;
+    display: block;
+  }
+
+  .about-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--text);
+    margin-bottom: 48px;
+    max-width: 680px;
+  }
+
+  .about-divider {
+    width: 48px;
+    height: 1px;
+    background: var(--gold);
+    margin-bottom: 28px;
+  }
+
+  .about-attribution {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .about-attribution-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: 0.05em;
+  }
+
+  .about-attribution-title {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    margin-top: 3px;
+  }
+
+  .about-geo {
+    position: absolute;
+    bottom: 40px;
+    right: 60px;
+    opacity: 0.06;
+  }
+
+  .experiences {
+    padding: 80px 56px 140px;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 72px;
+  }
+
+  .section-eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--text);
+  }
+
+  .experiences-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .exp-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--gold);
+    padding: 52px 44px;
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s cubic-bezier(0.16,1,0.3,1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .exp-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(201,169,110,0.07) 0%, transparent 65%);
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+  }
+
+  .exp-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 32px 64px rgba(201,169,110,0.12), 0 8px 24px rgba(0,0,0,0.5);
+  }
+
+  .exp-card:hover::before { opacity: 1; }
+
+  .exp-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 64px;
+    font-weight: 400;
+    color: rgba(201,169,110,0.12);
+    line-height: 1;
+    margin-bottom: 28px;
+  }
+
+  .exp-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 18px;
+    line-height: 1.3;
+  }
+
+  .exp-body {
+    font-size: 14.5px;
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin-bottom: 36px;
+  }
+
+  .exp-link {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+  }
+
+  .exp-link::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--gold);
+    transition: width 0.35s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .exp-link:hover::after { width: 100%; }
+
+  .space-section {
+    padding: 140px 0;
+    background: var(--bg-card);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .space-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 56px;
+  }
+
+  .space-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 80px;
+    margin-bottom: 80px;
+  }
+
+  .space-title-wrap { flex: 0 0 auto; }
+
+  .space-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 5vw, 62px);
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--text);
+    max-width: 340px;
+  }
+
+  .space-body-wrap {
+    flex: 1;
+    padding-top: 8px;
+  }
+
+  .space-body {
+    font-size: 17px;
+    color: var(--text-muted);
+    line-height: 1.85;
+    margin-bottom: 28px;
+  }
+
+  .space-divider {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin: 60px 0;
+  }
+
+  .space-divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+  }
+
+  .space-divider-ornament {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gold);
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+
+  .space-features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+
+  .space-feature-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+
+  .space-feature-text {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.8;
+  }
+
+  .testimonials {
+    padding: 140px 56px;
+  }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+    max-width: 1100px;
+    margin: 72px auto 0;
+  }
+
+  .testi-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 60px 56px;
+    position: relative;
+  }
+
+  .testi-quote-mark {
+    position: absolute;
+    top: 40px;
+    left: 44px;
+    font-family: 'Playfair Display', serif;
+    font-size: 88px;
+    line-height: 1;
+    color: var(--gold);
+    opacity: 0.18;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .testi-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.7;
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .testi-divider {
+    width: 36px;
+    height: 1px;
+    background: var(--gold);
+    margin-bottom: 24px;
+  }
+
+  .testi-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: 0.08em;
+  }
+
+  .testi-detail {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    letter-spacing: 0.06em;
+  }
+
+  .pricing {
+    padding: 80px 56px 140px;
+    background: radial-gradient(ellipse at 50% 0%, rgba(201,169,110,0.04) 0%, transparent 60%);
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1100px;
+    margin: 72px auto 0;
+    align-items: start;
+  }
+
+  .price-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 52px 44px;
+    position: relative;
+    transition: transform 0.3s;
+  }
+
+  .price-card:hover { transform: translateY(-4px); }
+
+  .price-card.featured {
+    border-color: var(--gold);
+    padding: 64px 44px;
+    background: linear-gradient(160deg, rgba(201,169,110,0.08) 0%, var(--bg-card) 60%);
+    box-shadow: 0 0 60px rgba(201,169,110,0.07), 0 0 0 1px rgba(201,169,110,0.3);
+  }
+
+  .price-card.featured::before {
+    content: 'Most Selected';
+    position: absolute;
+    top: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--gold);
+    color: var(--bg);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 6px 20px;
+  }
+
+  .price-tier {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+
+  .price-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .price-tagline {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+    line-height: 1.6;
+  }
+
+  .price-amount {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px;
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .price-amount sup {
+    font-size: 22px;
+    vertical-align: super;
+    color: var(--gold);
+  }
+
+  .price-period {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 44px;
+  }
+
+  .price-divider {
+    height: 1px;
+    background: var(--border);
+    margin-bottom: 36px;
+  }
+
+  .price-features {
+    list-style: none;
+    margin-bottom: 44px;
+  }
+
+  .price-features li {
+    font-size: 14px;
+    color: var(--text-muted);
+    padding: 9px 0;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid rgba(42,42,34,0.5);
+  }
+
+  .price-features li::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border: 1px solid var(--gold);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+
+  .price-cta {
+    display: block;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 16px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    transition: all 0.3s;
+  }
+
+  .price-cta:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .price-card.featured .price-cta {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--bg);
+  }
+
+  .price-card.featured .price-cta:hover {
+    background: var(--gold-light);
+  }
+
+  .final-cta {
+    background: var(--gold);
+    padding: 140px 56px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .final-cta::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    left: -60px;
+    right: -60px;
+    bottom: -60px;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(255,255,255,0.03) 40px,
+      rgba(255,255,255,0.03) 80px
+    );
+    pointer-events: none;
+  }
+
+  .final-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: rgba(13,13,11,0.6);
+    margin-bottom: 28px;
+  }
+
+  .final-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(38px, 6vw, 74px);
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--bg);
+    margin-bottom: 28px;
+    position: relative;
+  }
+
+  .final-sub {
+    font-size: 17px;
+    color: rgba(13,13,11,0.65);
+    max-width: 480px;
+    margin: 0 auto 56px;
+    line-height: 1.75;
+    position: relative;
+  }
+
+  .final-ctas {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+  }
+
+  .btn-dark {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--gold);
+    background: var(--bg);
+    padding: 18px 42px;
+    display: inline-block;
+    transition: background 0.3s, transform 0.3s;
+  }
+
+  .btn-dark:hover {
+    background: #1A1A16;
+    transform: translateY(-2px);
+  }
+
+  .btn-outline-dark {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--bg);
+    border: 1px solid rgba(13,13,11,0.35);
+    padding: 18px 42px;
+    display: inline-block;
+    transition: background 0.3s, transform 0.3s;
+  }
+
+  .btn-outline-dark:hover {
+    background: rgba(13,13,11,0.08);
+    transform: translateY(-2px);
+  }
+
+  footer {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 80px 56px 48px;
+  }
+
+  .footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 64px;
+    flex-wrap: wrap;
+    gap: 48px;
+  }
+
+  .footer-wordmark {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .footer-wordmark .wordmark {
+    font-size: 22px;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+  }
+
+  .footer-tagline {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    max-width: 220px;
+    line-height: 1.7;
+  }
+
+  .footer-nav {
+    display: flex;
+    gap: 80px;
+  }
+
+  .footer-col-title {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 22px;
+  }
+
+  .footer-col-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .footer-col-links a {
+    font-size: 13px;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .footer-col-links a:hover { color: var(--gold); }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 36px;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-copy {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .footer-legal {
+    display: flex;
+    gap: 28px;
+  }
+
+  .footer-legal a {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .footer-legal a:hover { color: var(--gold); }
+
+  @media (max-width: 1024px) {
+    nav { padding: 0 32px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .stat-item:nth-child(2)::after { display: none; }
+    .experiences-grid { grid-template-columns: 1fr; max-width: 600px; }
+    .testimonials-grid { grid-template-columns: 1fr; max-width: 600px; }
+    .pricing-grid { grid-template-columns: 1fr; max-width: 500px; }
+    .space-features { grid-template-columns: 1fr; gap: 28px; }
+    .space-header { flex-direction: column; gap: 40px; }
+    .footer-nav { gap: 48px; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 24px; height: 68px; }
+    .nav-links { display: none; }
+    .about-inner { padding: 48px 36px; }
+    .about { padding: 80px 24px; }
+    .experiences { padding: 60px 24px 100px; }
+    .experiences-grid { padding: 0; max-width: 100%; }
+    .stats { padding: 72px 24px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .stat-item::after { display: none; }
+    .space-inner { padding: 0 24px; }
+    .testimonials { padding: 80px 24px; }
+    .testimonials-grid { max-width: 100%; }
+    .pricing { padding: 60px 24px 100px; }
+    .pricing-grid { max-width: 100%; }
+    .final-cta { padding: 100px 24px; }
+    footer { padding: 60px 24px 36px; }
+    .footer-top { flex-direction: column; }
+    .footer-nav { flex-direction: column; gap: 36px; }
+    .footer-bottom { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="main-nav">
+  <ul class="nav-links">
+    <li><a href="#experiences">Experiences</a></li>
+    <li><a href="#space">The Space</a></li>
+  </ul>
+  <div class="nav-center">
+    <div class="nav-line"></div>
+    <a href="#" class="wordmark">OASIS</a>
+    <div class="nav-line right"></div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#testimonials">Stories</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+  </ul>
+</nav>
+
+<section class="hero" id="hero">
+  <div class="hero-glow"></div>
+  <div class="particles-container" id="particles"></div>
+
+  <p class="hero-eyebrow">Est. 2008 &nbsp;·&nbsp; Sedona, Arizona</p>
+
+  <h1 class="hero-title">
+    Where Silence<br>
+    <em>Becomes Sacred.</em>
+  </h1>
+
+  <div class="ornament">
+    <div class="ornament-line"></div>
+    <div class="ornament-diamond">
+      <div class="ornament-inner-diamond"></div>
+    </div>
+    <svg width="32" height="16" viewBox="0 0 32 16" fill="none">
+      <path d="M16 0 L32 8 L16 16 L0 8 Z" stroke="#C9A96E" stroke-width="0.8" fill="none" opacity="0.7"/>
+      <path d="M16 3 L28 8 L16 13 L4 8 Z" stroke="#C9A96E" stroke-width="0.5" fill="none" opacity="0.4"/>
+    </svg>
+    <div class="ornament-diamond">
+      <div class="ornament-inner-diamond"></div>
+    </div>
+    <div class="ornament-line right"></div>
+  </div>
+
+  <p class="hero-sub">An intimate sanctuary for those who seek transformation. Seven days. Forty guests. One purpose.</p>
+
+  <div class="hero-ctas">
+    <a href="#pricing" class="btn-gold"><span>Reserve Your Retreat</span></a>
+    <a href="#experiences" class="btn-ghost">Explore</a>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Descend</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<section class="stats" id="stats">
+  <div class="stats-grid">
+    <div class="stat-item reveal">
+      <span class="stat-number" data-target="12">12</span>
+      <span class="stat-label">Retreats per Year</span>
+    </div>
+    <div class="stat-item reveal reveal-delay-1">
+      <span class="stat-number" data-target="7">7</span>
+      <span class="stat-label">Master Teachers</span>
+    </div>
+    <div class="stat-item reveal reveal-delay-2">
+      <span class="stat-number" data-target="40">40</span>
+      <span class="stat-label">Guests Maximum</span>
+    </div>
+    <div class="stat-item reveal reveal-delay-3">
+      <span class="stat-number">2008</span>
+      <span class="stat-label">Since</span>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="about-inner reveal">
+    <span class="about-tag">Founder's Vision</span>
+    <blockquote class="about-quote">
+      "We built Oasis not as a retreat from the world, but as a return to yourself. In the stillness of these red rock canyons, something fundamental becomes possible — you remember what you already know."
+    </blockquote>
+    <div class="about-divider"></div>
+    <div class="about-attribution">
+      <div>
+        <div class="about-attribution-name">Elena Vasari</div>
+        <div class="about-attribution-title">Founder & Lead Practitioner</div>
+      </div>
+    </div>
+    <div class="about-geo">
+      <svg width="260" height="260" viewBox="0 0 260 260" fill="none">
+        <circle cx="130" cy="130" r="120" stroke="#C9A96E" stroke-width="0.5"/>
+        <circle cx="130" cy="130" r="90" stroke="#C9A96E" stroke-width="0.5"/>
+        <circle cx="130" cy="130" r="60" stroke="#C9A96E" stroke-width="0.5"/>
+        <circle cx="130" cy="130" r="30" stroke="#C9A96E" stroke-width="0.5"/>
+        <line x1="10" y1="130" x2="250" y2="130" stroke="#C9A96E" stroke-width="0.5"/>
+        <line x1="130" y1="10" x2="130" y2="250" stroke="#C9A96E" stroke-width="0.5"/>
+        <line x1="45" y1="45" x2="215" y2="215" stroke="#C9A96E" stroke-width="0.3"/>
+        <line x1="215" y1="45" x2="45" y2="215" stroke="#C9A96E" stroke-width="0.3"/>
+        <polygon points="130,10 250,130 130,250 10,130" stroke="#C9A96E" stroke-width="0.4" fill="none"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="experiences" id="experiences">
+  <div class="section-header reveal">
+    <span class="section-eyebrow">Curated Paths</span>
+    <h2 class="section-title">The Experiences</h2>
+  </div>
+  <div class="experiences-grid">
+    <div class="exp-card reveal">
+      <div class="exp-num">01</div>
+      <h3 class="exp-title">Silent Dawn Meditation</h3>
+      <p class="exp-body">Each morning begins before language. Guided breathwork and seated meditation in the open-air pavilion as the desert awakens. A practice of radical presence in the hour when the world holds its breath.</p>
+      <a href="#" class="exp-link">Explore Practice</a>
+    </div>
+    <div class="exp-card reveal reveal-delay-1">
+      <div class="exp-num">02</div>
+      <h3 class="exp-title">Canyon Immersion Walks</h3>
+      <p class="exp-body">Guided contemplative walks through Sedona's ancient red rock corridors. Not hiking — witnessing. Each path is chosen for its specific vibrational quality, each step an invitation to listen more deeply.</p>
+      <a href="#" class="exp-link">Explore Practice</a>
+    </div>
+    <div class="exp-card reveal reveal-delay-2">
+      <div class="exp-num">03</div>
+      <h3 class="exp-title">Sound & Resonance Ceremony</h3>
+      <p class="exp-body">Evening sessions with Tibetan singing bowls, Shruti drones, and live string arrangements in our purpose-built resonance hall. The body as instrument. The room as amplifier. Silence as destination.</p>
+      <a href="#" class="exp-link">Explore Practice</a>
+    </div>
+  </div>
+</section>
+
+<section class="space-section" id="space">
+  <div class="space-inner">
+    <div class="space-header">
+      <div class="space-title-wrap reveal">
+        <span class="section-eyebrow" style="text-align:left;">Architecture of Stillness</span>
+        <h2 class="space-title">The Space</h2>
+      </div>
+      <div class="space-body-wrap reveal reveal-delay-1">
+        <p class="space-body">Designed by architect Miro Tanaka in collaboration with indigenous landscape consultants, Oasis occupies 48 acres of protected high-desert terrain. Every structure is oriented to celestial and geological landmarks.</p>
+        <p class="space-body">Materials were sourced within 200 miles. No artificial lighting intrudes past 9pm. The architecture does not impose on the landscape — it dissolves into it.</p>
+      </div>
+    </div>
+
+    <div class="space-divider reveal">
+      <div class="space-divider-line"></div>
+      <div class="space-divider-ornament">
+        <svg width="10" height="10" viewBox="0 0 10 10"><rect x="1" y="1" width="8" height="8" stroke="#C9A96E" stroke-width="0.8" fill="none" transform="rotate(45 5 5)"/></svg>
+        <span>48 Acres</span>
+        <svg width="10" height="10" viewBox="0 0 10 10"><rect x="1" y="1" width="8" height="8" stroke="#C9A96E" stroke-width="0.8" fill="none" transform="rotate(45 5 5)"/></svg>
+      </div>
+      <div class="space-divider-line"></div>
+    </div>
+
+    <div class="space-features">
+      <div class="reveal">
+        <div class="space-feature-title">The Resonance Hall</div>
+        <p class="space-feature-text">A 4,000 square foot structure of rammed earth and glass, tuned to the acoustic properties of the surrounding canyon walls. Used for evening sound ceremonies and group meditation.</p>
+      </div>
+      <div class="reveal reveal-delay-1">
+        <div class="space-feature-title">Private Casitas</div>
+        <p class="space-feature-text">Twenty individual adobe dwellings, each with a private walled garden and outdoor shower. Minimal furnishing, maximum presence. No television. No clocks visible. Every surface intentional.</p>
+      </div>
+      <div class="reveal reveal-delay-2">
+        <div class="space-feature-title">The Living Kitchen</div>
+        <p class="space-feature-text">Chef-crafted plant-based cuisine prepared from our on-site garden and regional farms. Each meal is approached as ceremony — an extension of the practice, eaten in silence or soft conversation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials" id="testimonials">
+  <div class="section-header reveal">
+    <span class="section-eyebrow">Voices From Within</span>
+    <h2 class="section-title">What Remains</h2>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testi-card reveal">
+      <div class="testi-quote-mark">"</div>
+      <p class="testi-text">I have attended retreats on four continents. Nothing prepared me for the quality of silence at Oasis. It is not the absence of noise — it is the presence of something else entirely. I left changed in ways I am still discovering.</p>
+      <div class="testi-divider"></div>
+      <div class="testi-name">Marguerite Chen</div>
+      <div class="testi-detail">Author · Attended Spring Silence, 2024</div>
+    </div>
+    <div class="testi-card reveal reveal-delay-1">
+      <div class="testi-quote-mark">"</div>
+      <p class="testi-text">The teachers here carry something rare. Not technique — presence. By the third morning I understood that the curriculum was not on any schedule. It was happening in the spaces between everything. I return every year.</p>
+      <div class="testi-divider"></div>
+      <div class="testi-name">James Oduya</div>
+      <div class="testi-detail">Surgeon · Attended three times since 2021</div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="section-header reveal">
+    <span class="section-eyebrow">Investment in Stillness</span>
+    <h2 class="section-title">Choose Your Journey</h2>
+  </div>
+  <div class="pricing-grid">
+    <div class="price-card reveal">
+      <div class="price-tier">Foundation</div>
+      <div class="price-name">The Threshold</div>
+      <p class="price-tagline">Your first encounter with Oasis. Five days of guided practice, shared casita accommodation.</p>
+      <div class="price-amount"><sup>$</sup>3,800</div>
+      <div class="price-period">Per person · 5 nights</div>
+      <div class="price-divider"></div>
+      <ul class="price-features">
+        <li>Shared casita accommodation</li>
+        <li>All meals & ceremonies</li>
+        <li>Daily group meditation</li>
+        <li>Canyon immersion walks</li>
+        <li>Welcome & closing rituals</li>
+      </ul>
+      <a href="#" class="price-cta">Apply Now</a>
+    </div>
+
+    <div class="price-card featured reveal reveal-delay-1">
+      <div class="price-tier">Signature</div>
+      <div class="price-name">The Immersion</div>
+      <p class="price-tagline">The complete Oasis experience. Seven nights in a private casita with personal teacher sessions.</p>
+      <div class="price-amount"><sup>$</sup>7,200</div>
+      <div class="price-period">Per person · 7 nights</div>
+      <div class="price-divider"></div>
+      <ul class="price-features">
+        <li>Private casita with garden</li>
+        <li>All meals & ceremonies</li>
+        <li>Two private teacher sessions</li>
+        <li>All group practices</li>
+        <li>Sound ceremony access</li>
+        <li>Integration call post-retreat</li>
+      </ul>
+      <a href="#" class="price-cta">Apply Now</a>
+    </div>
+
+    <div class="price-card reveal reveal-delay-2">
+      <div class="price-tier">Sovereign</div>
+      <div class="price-name">The Sanctuary</div>
+      <p class="price-tagline">A fully bespoke retreat. Private schedule, exclusive casita, dedicated teacher throughout.</p>
+      <div class="price-amount"><sup>$</sup>18,000</div>
+      <div class="price-period">Per person · 7–14 nights</div>
+      <div class="price-divider"></div>
+      <ul class="price-features">
+        <li>Premier casita — full exclusivity</li>
+        <li>Bespoke daily schedule</li>
+        <li>Dedicated senior teacher</li>
+        <li>Private chef consultation</li>
+        <li>Airport transfer included</li>
+        <li>Lifetime alumni access</li>
+      </ul>
+      <a href="#" class="price-cta">Inquire</a>
+    </div>
+  </div>
+</section>
+
+<section class="final-cta">
+  <p class="final-eyebrow reveal">Begin the Return</p>
+  <h2 class="final-title reveal">Your Silence<br>Awaits.</h2>
+  <p class="final-sub reveal">Applications are reviewed individually. We accept those who are ready. Space is limited by design.</p>
+  <div class="final-ctas reveal">
+    <a href="#" class="btn-dark">Reserve Your Retreat</a>
+    <a href="#" class="btn-outline-dark">Request Information</a>
+  </div>
+</section>
+
+<footer id="footer">
+  <div class="footer-top">
+    <div class="footer-wordmark">
+      <a href="#" class="wordmark">OASIS</a>
+      <p class="footer-tagline">A sanctuary for those who seek the sacred in stillness. Sedona, Arizona.</p>
+    </div>
+    <nav class="footer-nav">
+      <div>
+        <div class="footer-col-title">Experience</div>
+        <ul class="footer-col-links">
+          <li><a href="#">Silent Dawn</a></li>
+          <li><a href="#">Canyon Walks</a></li>
+          <li><a href="#">Sound Ceremony</a></li>
+          <li><a href="#">The Space</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Visit</div>
+        <ul class="footer-col-links">
+          <li><a href="#">Upcoming Retreats</a></li>
+          <li><a href="#">How to Apply</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Getting Here</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Connect</div>
+        <ul class="footer-col-links">
+          <li><a href="#">Our Story</a></li>
+          <li><a href="#">Teachers</a></li>
+          <li><a href="#">Journal</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">&copy; 2024 Oasis Retreat. All rights reserved.</p>
+    <nav class="footer-legal">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Cookie Preferences</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  (function() {
+    const container = document.getElementById('particles');
+    const COUNT = 28;
+
+    for (let i = 0; i < COUNT; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = Math.random() * 2.5 + 1;
+      const left = Math.random() * 100;
+      const duration = Math.random() * 18 + 14;
+      const delay = Math.random() * 16;
+      const driftX = (Math.random() - 0.5) * 120;
+      p.style.cssText = `
+        left: ${left}%;
+        width: ${size}px;
+        height: ${size}px;
+        --drift-x: ${driftX}px;
+        animation-duration: ${duration}s;
+        animation-delay: ${delay}s;
+        opacity: 0;
+      `;
+      container.appendChild(p);
+    }
+
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -48px 0px' });
+
+    revealEls.forEach(function(el) { observer.observe(el); });
+
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 60) {
+        nav.style.background = 'rgba(13,13,11,0.97)';
+      } else {
+        nav.style.background = 'rgba(13,13,11,0.88)';
+      }
+    }, { passive: true });
+
+    const finalCta = document.querySelector('.final-cta');
+    if (finalCta) {
+      const ctaRevealEls = finalCta.querySelectorAll('.reveal');
+      const ctaObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            ctaObs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      ctaRevealEls.forEach(function(el) { ctaObs.observe(el); });
+    }
+  })();
+</script>
+</body>
+</html>

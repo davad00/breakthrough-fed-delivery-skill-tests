@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis - Luxury Meditation Retreat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Didot', 'Bodoni MT', serif;
+            color: #3a3a3a;
+            background: #ffffff;
+        }
+        
+        .top-bar {
+            padding: 1rem 3rem;
+            background: #f5f5f0;
+            text-align: center;
+            font-size: 0.9rem;
+            letter-spacing: 0.2em;
+        }
+        
+        header {
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .brand {
+            font-size: 2.5rem;
+            font-weight: 400;
+            letter-spacing: 0.3em;
+        }
+        
+        nav a {
+            margin-left: 3rem;
+            text-decoration: none;
+            color: #3a3a3a;
+            font-size: 0.95rem;
+            letter-spacing: 0.15em;
+        }
+        
+        .hero-banner {
+            height: 85vh;
+            background: linear-gradient(to bottom, rgba(245,245,240,0.3), rgba(245,245,240,0.8)),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900"><rect fill="%23d8d8d0" width="1400" height="900"/><ellipse cx="700" cy="450" rx="400" ry="300" fill="%23c8c8c0" opacity="0.3"/></svg>');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .hero-banner h1 {
+            font-size: 7rem;
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero-banner p {
+            font-size: 1.6rem;
+            font-style: italic;
+            color: #666;
+        }
+        
+        .quote-section {
+            padding: 8rem 4rem;
+            text-align: center;
+            background: #f5f5f0;
+        }
+        
+        .quote-section blockquote {
+            font-size: 2.5rem;
+            font-style: italic;
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.6;
+            color: #555;
+        }
+        
+        .quote-section cite {
+            display: block;
+            margin-top: 2rem;
+            font-size: 1.2rem;
+            font-style: normal;
+            letter-spacing: 0.2em;
+        }
+        
+        .features-elegant {
+            padding: 8rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .features-elegant h2 {
+            text-align: center;
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin-bottom: 6rem;
+            letter-spacing: 0.1em;
+        }
+        
+        .feature-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            margin-bottom: 6rem;
+            align-items: center;
+        }
+        
+        .feature-text h3 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-text p {
+            font-size: 1.2rem;
+            line-height: 1.9;
+            color: #666;
+        }
+        
+        .feature-visual {
+            height: 400px;
+            background: #e8e8e0;
+        }
+        
+        .testimonial {
+            padding: 8rem 4rem;
+            background: #3a3a3a;
+            color: #f5f5f0;
+            text-align: center;
+        }
+        
+        .testimonial p {
+            font-size: 1.8rem;
+            font-style: italic;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            line-height: 1.8;
+        }
+        
+        .testimonial .author {
+            font-size: 1.1rem;
+            letter-spacing: 0.2em;
+            opacity: 0.8;
+        }
+        
+        .booking-section {
+            padding: 10rem 4rem;
+            text-align: center;
+        }
+        
+        .booking-section h2 {
+            font-size: 4rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+        }
+        
+        .booking-section p {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 4rem;
+        }
+        
+        .btn-elegant {
+            display: inline-block;
+            padding: 1.5rem 4rem;
+            background: #3a3a3a;
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            letter-spacing: 0.25em;
+            transition: all 0.4s;
+        }
+        
+        .btn-elegant:hover {
+            background: #555;
+            transform: translateY(-2px);
+        }
+        
+        footer {
+            padding: 3rem 4rem;
+            background: #f5f5f0;
+            text-align: center;
+            font-size: 0.9rem;
+            letter-spacing: 0.15em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        LIMITED AVAILABILITY FOR 2026 SEASON
+    </div>
+    
+    <header>
+        <div class="brand">OASIS</div>
+        <nav>
+            <a href="#">ABOUT</a>
+            <a href="#">EXPERIENCES</a>
+            <a href="#">CONTACT</a>
+        </nav>
+    </header>
+    
+    <section class="hero-banner">
+        <div>
+            <h1>Oasis</h1>
+            <p>Where Luxury Meets Enlightenment</p>
+        </div>
+    </section>
+    
+    <section class="quote-section">
+        <blockquote>
+            "In the midst of movement and chaos, keep stillness inside of you."
+        </blockquote>
+        <cite>— DEEPAK CHOPRA</cite>
+    </section>
+    
+    <section class="features-elegant">
+        <h2>The Oasis Experience</h2>
+        
+        <div class="feature-row">
+            <div class="feature-text">
+                <h3>Bespoke Meditation Programs</h3>
+                <p>Each guest receives a personalized meditation curriculum designed by our resident masters. Whether you're beginning your practice or deepening decades of experience, we craft a journey uniquely yours.</p>
+            </div>
+            <div class="feature-visual"></div>
+        </div>
+        
+        <div class="feature-row">
+            <div class="feature-visual"></div>
+            <div class="feature-text">
+                <h3>Sanctuary Suites</h3>
+                <p>Our accommodations blend Japanese minimalism with Scandinavian comfort. Each suite features private meditation spaces, handcrafted furnishings, and panoramic views of untouched wilderness.</p>
+            </div>
+        </div>
+        
+        <div class="feature-row">
+            <div class="feature-text">
+                <h3>Culinary Artistry</h3>
+                <p>Nourishment as meditation. Our chefs transform organic, locally-sourced ingredients into plant-based masterpieces that honor both tradition and innovation.</p>
+            </div>
+            <div class="feature-visual"></div>
+        </div>
+    </section>
+    
+    <section class="testimonial">
+        <p>"Oasis didn't just change my practice—it transformed my entire relationship with myself. The attention to detail, the profound silence, the exquisite care. This is meditation elevated to its highest form."</p>
+        <div class="author">SARAH CHEN, TECH EXECUTIVE</div>
+    </section>
+    
+    <section class="booking-section">
+        <h2>Begin Your Transformation</h2>
+        <p>Spaces are limited to preserve the intimacy of the experience.</p>
+        <a href="#" class="btn-elegant">REQUEST AVAILABILITY</a>
+    </section>
+    
+    <footer>
+        <p>OASIS MEDITATION RETREAT &copy; 2026</p>
+    </footer>
+</body>
+</html>

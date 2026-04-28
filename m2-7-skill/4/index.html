@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis — Typography Retreat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=Space+Mono:wght@400;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --white: #FFFFFF;
+            --grey: #999999;
+            --vermillion: #FF3D00;
+            --black: #0D0D0D;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--black);
+            color: var(--white);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 400;
+            line-height: 1.7;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        .cursor {
+            width: 16px;
+            height: 16px;
+            border: 1px solid var(--white);
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            transition: transform 0.2s;
+        }
+
+        .cursor.hover {
+            transform: rotate(45deg);
+            background: var(--vermillion);
+            border-color: var(--vermillion);
+        }
+
+        .cursor-dot {
+            width: 4px;
+            height: 4px;
+            background: var(--white);
+            position: fixed;
+            pointer-events: none;
+            z-index: 10001;
+        }
+
+        .nav {
+            position: fixed;
+            top: 40px;
+            left: 48px;
+            z-index: 1000;
+        }
+
+        .nav-wordmark {
+            font-family: 'Syne', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-word {
+            font-family: 'Syne', sans-serif;
+            font-size: 20vw;
+            font-weight: 800;
+            letter-spacing: -0.06em;
+            line-height: 0.85;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-letter {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(100px) rotate(10deg);
+        }
+
+        .hero-side {
+            position: absolute;
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            opacity: 0;
+        }
+
+        .hero-side-left {
+            left: 48px;
+            top: 50%;
+            transform: rotate(-90deg) translateX(-50%);
+            transform-origin: left center;
+        }
+
+        .hero-side-right {
+            right: 48px;
+            top: 50%;
+            transform: rotate(90deg) translateX(50%);
+            transform-origin: right center;
+        }
+
+        .hero-line {
+            position: absolute;
+            bottom: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 0;
+            background: var(--vermillion);
+        }
+
+        .philosophy {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 15vw 10vw;
+        }
+
+        .philosophy-word {
+            font-family: 'Syne', sans-serif;
+            font-size: 15vw;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 0.9;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .philosophy-letter {
+            display: inline-block;
+            transform: translateY(100%);
+        }
+
+        .philosophy-sub {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 18px;
+            color: var(--grey);
+            max-width: 500px;
+            text-align: center;
+            margin-top: 60px;
+            opacity: 0;
+        }
+
+        .offerings {
+            position: relative;
+            padding: 20vw 10vw;
+        }
+
+        .offerings-header {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--vermillion);
+            margin-bottom: 8vw;
+            opacity: 0;
+        }
+
+        .offering-item {
+            font-family: 'Syne', sans-serif;
+            font-size: 8vw;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            cursor: default;
+            overflow: hidden;
+            margin-bottom: 2vw;
+        }
+
+        .offering-word {
+            display: inline-block;
+            transform: translateX(-100%);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .offering-item:hover .offering-word {
+            transform: translateX(5%);
+            color: var(--vermillion);
+        }
+
+        .offering-num {
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            color: var(--grey);
+            margin-right: 24px;
+            vertical-align: top;
+            padding-top: 1.5vw;
+        }
+
+        .experience {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 10vw;
+            overflow: hidden;
+        }
+
+        .experience-quote {
+            font-family: 'Syne', sans-serif;
+            font-size: 7vw;
+            font-weight: 600;
+            line-height: 1.1;
+            max-width: 90vw;
+        }
+
+        .experience-word {
+            display: inline-block;
+            opacity: 0.15;
+            transition: opacity 0.3s;
+        }
+
+        .experience-word.active {
+            opacity: 1;
+        }
+
+        .experience-author {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--grey);
+            margin-top: 60px;
+            opacity: 0;
+        }
+
+        .contact {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .contact-word {
+            font-family: 'Syne', sans-serif;
+            font-size: 25vw;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            opacity: 0;
+        }
+
+        .contact-sub {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 16px;
+            color: var(--grey);
+            margin-top: 40px;
+            opacity: 0;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background: var(--vermillion);
+            color: var(--black);
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 24px 72px;
+            border: none;
+            cursor: none;
+            text-decoration: none;
+            margin-top: 60px;
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .footer {
+            padding: 60px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-wordmark {
+            font-family: 'Syne', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .footer-link {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--grey);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-link:hover {
+            color: var(--white);
+        }
+
+        .footer-copy {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            color: var(--grey);
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .hero-word {
+                font-size: 22vw;
+            }
+
+            .philosophy-word {
+                font-size: 18vw;
+            }
+
+            .offering-item {
+                font-size: 10vw;
+            }
+
+            .experience-quote {
+                font-size: 10vw;
+            }
+
+            .contact-word {
+                font-size: 28vw;
+            }
+
+            .nav {
+                left: 24px;
+                top: 24px;
+            }
+
+            .hero-side {
+                display: none;
+            }
+
+            .cursor,
+            .cursor-dot {
+                display: none;
+            }
+
+            body {
+                cursor: auto;
+            }
+
+            .footer {
+                flex-direction: column;
+                gap: 24px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+
+    <nav class="nav">
+        <div class="nav-wordmark">Oasis</div>
+    </nav>
+
+    <section class="hero">
+        <span class="hero-side hero-side-left">Luxury Meditation Retreat</span>
+        <h1 class="hero-word" data-letters="OASIS">
+            <span class="hero-letter">O</span><span class="hero-letter">A</span><span class="hero-letter">S</span><span class="hero-letter">I</span><span class="hero-letter">S</span>
+        </h1>
+        <span class="hero-side hero-side-right">Swiss Alps 2026</span>
+        <div class="hero-line"></div>
+    </section>
+
+    <section class="philosophy">
+        <h2 class="philosophy-word" data-letters="BESTILL">
+            <span class="philosophy-letter">B</span><span class="philosophy-letter">E</span><span class="philosophy-letter">&nbsp;</span><span class="philosophy-letter">S</span><span class="philosophy-letter">T</span><span class="philosophy-letter">I</span><span class="philosophy-letter">L</span><span class="philosophy-letter">L</span>
+        </h2>
+        <p class="philosophy-sub">
+            In the silence between thoughts, we find everything. Oasis is where the noise fades and the essential remains.
+        </p>
+    </section>
+
+    <section class="offerings">
+        <span class="offerings-header">Sacred Journeys</span>
+        <div class="offering-item">
+            <span class="offering-num">01</span>
+            <span class="offering-word">Mountain Silence</span>
+        </div>
+        <div class="offering-item">
+            <span class="offering-num">02</span>
+            <span class="offering-word">Forest Bathing</span>
+        </div>
+        <div class="offering-item">
+            <span class="offering-num">03</span>
+            <span class="offering-word">Water Ceremony</span>
+        </div>
+        <div class="offering-item">
+            <span class="offering-num">04</span>
+            <span class="offering-word">Dawn Vigil</span>
+        </div>
+    </section>
+
+    <section class="experience">
+        <p class="experience-quote" data-words="The present moment is filled with joy and happiness. If you are attentive, you will see it.|THICH NHAT HANH">
+            <span class="experience-word">The</span>
+            <span class="experience-word">present</span>
+            <span class="experience-word">moment</span>
+            <span class="experience-word">is</span>
+            <span class="experience-word">filled</span>
+            <span class="experience-word">with</span>
+            <span class="experience-word">joy</span>
+            <span class="experience-word">and</span>
+            <span class="experience-word">happiness.</span>
+            <span class="experience-word">If</span>
+            <span class="experience-word">you</span>
+            <span class="experience-word">are</span>
+            <span class="experience-word">attentive,</span>
+            <span class="experience-word">you</span>
+            <span class="experience-word">will</span>
+            <span class="experience-word">see</span>
+            <span class="experience-word">it.</span>
+        </p>
+        <span class="experience-author">— Thich Nhat Hanh</span>
+    </section>
+
+    <section class="contact">
+        <h2 class="contact-word">COME</h2>
+        <p class="contact-sub">Begin your transformation in the Swiss Alps</p>
+        <a href="#" class="btn-primary">Request Invitation</a>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-wordmark">Oasis</div>
+        <div class="footer-links">
+            <a href="#" class="footer-link">Privacy</a>
+            <a href="#" class="footer-link">Instagram</a>
+            <a href="#" class="footer-link">Contact</a>
+        </div>
+        <span class="footer-copy">© 2026</span>
+    </footer>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        const cursor = document.querySelector('.cursor');
+        const cursorDot = document.querySelector('.cursor-dot');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.15;
+            cursorY += (mouseY - cursorY) * 0.15;
+            cursorDot.style.left = mouseX - 2 + 'px';
+            cursorDot.style.top = mouseY - 2 + 'px';
+            cursor.style.left = cursorX - 8 + 'px';
+            cursor.style.top = cursorY - 8 + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        const hoverElements = document.querySelectorAll('a, .offering-item');
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        const heroTl = gsap.timeline({ delay: 0.3 });
+        heroTl
+            .to('.hero-letter', {
+                opacity: 1,
+                y: 0,
+                rotation: 0,
+                duration: 1,
+                stagger: 0.1,
+                ease: 'power4.out'
+            })
+            .to('.hero-side', {
+                opacity: 1,
+                duration: 1,
+                stagger: 0.2,
+                ease: 'power3.out'
+            }, '-=0.5')
+            .to('.hero-line', {
+                height: '8%',
+                duration: 1,
+                ease: 'power3.out'
+            }, '-=0.5');
+
+        gsap.to('.philosophy-letter', {
+            scrollTrigger: {
+                trigger: '.philosophy',
+                start: 'top 70%',
+                toggleActions: 'play none none reverse'
+            },
+            y: 0,
+            duration: 1,
+            stagger: 0.08,
+            ease: 'power4.out'
+        });
+
+        gsap.to('.philosophy-sub', {
+            scrollTrigger: {
+                trigger: '.philosophy',
+                start: 'top 50%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            duration: 1,
+            delay: 0.5,
+            ease: 'power3.out'
+        });
+
+        gsap.to('.offerings-header', {
+            scrollTrigger: {
+                trigger: '.offerings',
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            duration: 0.8,
+            ease: 'power3.out'
+        });
+
+        document.querySelectorAll('.offering-word').forEach((word, i) => {
+            gsap.to(word, {
+                scrollTrigger: {
+                    trigger: word,
+                    start: 'top 85%',
+                    toggleActions: 'play none none reverse'
+                },
+                x: 0,
+                duration: 1,
+                delay: i * 0.1,
+                ease: 'power4.out'
+            });
+        });
+
+        const experienceWords = document.querySelectorAll('.experience-word');
+        gsap.to('.experience-quote', {
+            scrollTrigger: {
+                trigger: '.experience',
+                start: 'top 60%',
+                end: 'bottom 40%',
+                scrub: 1
+            },
+            opacity: 1
+        });
+
+        experienceWords.forEach((word, i) => {
+            gsap.to(word, {
+                scrollTrigger: {
+                    trigger: '.experience',
+                    start: 'top 50%',
+                    end: 'bottom 50%',
+                    scrub: i * 0.3
+                },
+                opacity: 1,
+                stagger: 1
+            });
+        });
+
+        gsap.to('.experience-author', {
+            scrollTrigger: {
+                trigger: '.experience',
+                start: 'top 30%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            duration: 1,
+            ease: 'power3.out'
+        });
+
+        gsap.to('.contact-word', {
+            scrollTrigger: {
+                trigger: '.contact',
+                start: 'top 60%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            duration: 1.5,
+            ease: 'power4.out'
+        });
+
+        gsap.to('.contact-sub', {
+            scrollTrigger: {
+                trigger: '.contact',
+                start: 'top 50%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            duration: 1,
+            delay: 0.5,
+            ease: 'power3.out'
+        });
+
+        gsap.to('.btn-primary', {
+            scrollTrigger: {
+                trigger: '.contact',
+                start: 'top 40%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            duration: 1,
+            delay: 0.8,
+            ease: 'power3.out'
+        });
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            gsap.globalTimeline.timeScale(0);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oasis Retreat | Desert Quiet, Refined Luxury</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0f1215;
+      --bg-soft: #171d22;
+      --text: #ece7dd;
+      --muted: #b3ac9f;
+      --gold: #c6a97a;
+      --line: rgba(198, 169, 122, 0.35);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Manrope", sans-serif;
+      background: radial-gradient(circle at 20% 10%, #1d242b 0%, var(--bg) 50%) fixed;
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .grain::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.06;
+      background-image: radial-gradient(rgba(255,255,255,0.9) 0.4px, transparent 0.4px);
+      background-size: 3px 3px;
+    }
+    .wrap { width: min(1120px, 90vw); margin: 0 auto; }
+    header {
+      padding: 2rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand {
+      font-family: "Cormorant Garamond", serif;
+      letter-spacing: 0.14em;
+      font-size: 1.5rem;
+    }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      margin-left: 1.4rem;
+      font-size: 0.9rem;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 2.5rem;
+      align-items: center;
+      padding: 4rem 0 5.2rem;
+    }
+    .eyebrow {
+      display: inline-block;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0.35rem 0.8rem;
+      color: var(--gold);
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    h1 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(2.6rem, 7vw, 5.3rem);
+      line-height: 0.95;
+      margin: 1rem 0 1.1rem;
+      font-weight: 600;
+      max-width: 10ch;
+    }
+    p.lead {
+      color: var(--muted);
+      max-width: 48ch;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+    .actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn {
+      padding: 0.85rem 1.35rem;
+      border: 1px solid var(--line);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.86rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: 220ms ease;
+    }
+    .btn.primary { background: var(--gold); color: #15110b; border-color: var(--gold); }
+    .btn:hover { transform: translateY(-2px); }
+    .card {
+      background: linear-gradient(165deg, rgba(198,169,122,0.12), rgba(23,29,34,0.92));
+      border: 1px solid var(--line);
+      padding: 1.5rem;
+      border-radius: 20px;
+    }
+    .image {
+      height: 420px;
+      border-radius: 14px;
+      background:
+        linear-gradient(160deg, rgba(15,18,21,0.12), rgba(15,18,21,0.82)),
+        url("https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1200&q=80") center/cover;
+      margin-bottom: 1rem;
+    }
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--line);
+      padding-top: 0.9rem;
+    }
+    .strip {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      margin: 2rem 0 4rem;
+      padding: 1rem 0;
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .image { height: 320px; }
+      nav { display: none; }
+    }
+  </style>
+</head>
+<body class="grain">
+  <div class="wrap">
+    <header>
+      <div class="brand">OASIS</div>
+      <nav>
+        <a href="#">Residences</a>
+        <a href="#">Rituals</a>
+        <a href="#">Cuisine</a>
+        <a href="#">Reserve</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div>
+        <span class="eyebrow">Private Desert Sanctuary</span>
+        <h1>Silence Curated Like Fine Art.</h1>
+        <p class="lead">
+          Oasis is an invitation-only meditation retreat where architecture, breathwork, and stillness meet in exceptional comfort. Every suite opens to endless dunes and sunrise rituals led by masters of contemplative practice.
+        </p>
+        <div class="actions">
+          <a class="btn primary" href="#">Request Reservation</a>
+          <a class="btn" href="#">View Retreat Film</a>
+        </div>
+      </div>
+      <article class="card">
+        <div class="image" role="img" aria-label="Luxury oasis meditation pavilion"></div>
+        <div class="meta">
+          <span>Next Arrival Window</span>
+          <span>October 14 - 21</span>
+        </div>
+      </article>
+    </section>
+
+    <section class="strip">
+      <span>12 private villas</span>
+      <span>Chef-designed nutrition</span>
+      <span>Somatic and sound therapy</span>
+      <span>24/7 concierge and transfers</span>
+    </section>
+  </div>
+</body>
+</html>

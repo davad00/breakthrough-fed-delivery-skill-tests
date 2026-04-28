@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oasis — The Peak / Leh, Ladakh</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --c-neutral: #080B10;
+      --c-primary: #F0F2F5;
+      --c-secondary: #4A5568;
+      --c-tertiary: #64CCC5;
+      --c-on-tertiary: #080B10;
+      --c-mt-far: #0D111A;
+      --c-mt-mid: #111520;
+      --c-mt-near-mid: #151B27;
+      --c-mt-near: #1A2133;
+      --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-atmospheric: cubic-bezier(0.45, 0, 0.55, 1);
+      --f-serif: 'DM Serif Display', Georgia, serif;
+      --f-mono: 'Source Code Pro', monospace;
+    }
+
+    html { scroll-behavior: auto; }
+
+    body {
+      background: var(--c-neutral);
+      color: var(--c-primary);
+      font-family: var(--f-mono);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    ::selection { background: var(--c-tertiary); color: var(--c-on-tertiary); }
+
+    /* ─── CUSTOM CURSOR ─── */
+    .cursor {
+      position: fixed;
+      top: 0; left: 0;
+      width: 16px; height: 16px;
+      pointer-events: none;
+      z-index: 100;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: normal;
+    }
+    .cursor::before,
+    .cursor::after {
+      content: '';
+      position: absolute;
+      background: var(--c-tertiary);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .cursor::before { width: 2px; height: 100%; }
+    .cursor::after  { width: 100%; height: 2px; }
+    .cursor.is-hovering {
+      width: 40px; height: 40px;
+    }
+    .cursor.is-hovering-text {
+      mix-blend-mode: difference;
+    }
+    .cursor.is-hovering-cta {
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    /* ─── NAVIGATION ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      z-index: 20;
+      background: transparent;
+      transition: background 0.6s var(--ease-atmospheric),
+                  backdrop-filter 0.6s var(--ease-atmospheric);
+    }
+    nav.is-scrolled {
+      background: rgba(8, 11, 16, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--c-tertiary);
+    }
+    .nav-wordmark {
+      font-family: var(--f-serif);
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      color: var(--c-primary);
+      text-decoration: none;
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .nav-altitude {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--c-tertiary);
+    }
+    .btn-reserve {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--c-on-tertiary);
+      background: var(--c-tertiary);
+      border: none;
+      border-radius: 9999px;
+      padding: 10px 22px;
+      cursor: none;
+      display: inline-block;
+      text-decoration: none;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .hero-mountains {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .mountain-layer {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+    }
+    .mountain-layer-1 {
+      height: 45%;
+      background: var(--c-mt-far);
+      clip-path: polygon(0% 100%, 5% 58%, 12% 72%, 20% 38%, 28% 55%, 36% 22%, 44% 50%, 50% 30%, 57% 48%, 64% 15%, 72% 40%, 80% 28%, 87% 52%, 93% 35%, 100% 55%, 100% 100%);
+      opacity: 0.6;
+    }
+    .mountain-layer-2 {
+      height: 52%;
+      background: var(--c-mt-mid);
+      clip-path: polygon(0% 100%, 3% 62%, 10% 45%, 16% 70%, 24% 30%, 32% 58%, 40% 18%, 48% 45%, 55% 25%, 63% 55%, 70% 35%, 76% 60%, 83% 22%, 90% 48%, 96% 38%, 100% 62%, 100% 100%);
+      opacity: 0.75;
+    }
+    .mountain-layer-3 {
+      height: 58%;
+      background: var(--c-mt-near-mid);
+      clip-path: polygon(0% 100%, 2% 55%, 8% 72%, 15% 40%, 22% 65%, 30% 20%, 38% 52%, 45% 32%, 52% 58%, 60% 18%, 68% 45%, 74% 28%, 81% 55%, 88% 35%, 94% 60%, 100% 45%, 100% 100%);
+      opacity: 0.88;
+    }
+    .mountain-layer-4 {
+      height: 42%;
+      background: var(--c-mt-near);
+      clip-path: polygon(0% 100%, 6% 38%, 14% 62%, 22% 30%, 30% 55%, 38% 18%, 46% 48%, 54% 28%, 62% 52%, 70% 22%, 78% 45%, 86% 30%, 92% 55%, 100% 38%, 100% 100%);
+      opacity: 1;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .hero-title {
+      font-family: var(--f-serif);
+      font-size: 13vw;
+      font-weight: 400;
+      line-height: 0.88;
+      letter-spacing: -0.03em;
+      color: var(--c-primary);
+      opacity: 0;
+    }
+    .hero-subtitle {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--c-secondary);
+      margin-top: 28px;
+      opacity: 0;
+    }
+    .hero-vertical-text {
+      position: absolute;
+      left: 40px;
+      top: 50%;
+      transform: translateY(-50%) rotate(-90deg);
+      transform-origin: center center;
+      font-family: var(--f-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--c-tertiary);
+      white-space: nowrap;
+      opacity: 0;
+    }
+    .hero-scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+    }
+    .hero-scroll-indicator span {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--c-secondary);
+    }
+    .scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, var(--c-tertiary), transparent);
+    }
+
+    /* ─── PHILOSOPHY ─── */
+    .philosophy {
+      padding: 20vw 80px 20vw 0;
+      display: flex;
+      justify-content: flex-end;
+      position: relative;
+      overflow: hidden;
+    }
+    .philosophy-inner {
+      max-width: 54vw;
+      text-align: right;
+    }
+    .philosophy-label {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--c-tertiary);
+      margin-bottom: 40px;
+      opacity: 0;
+    }
+    .philosophy-quote {
+      font-family: var(--f-serif);
+      font-size: 5vw;
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      color: var(--c-primary);
+      opacity: 0;
+    }
+    .philosophy-detail {
+      font-family: var(--f-mono);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.7;
+      color: var(--c-secondary);
+      margin-top: 48px;
+      max-width: 380px;
+      margin-left: auto;
+      opacity: 0;
+    }
+
+    /* ─── HORIZONTAL SCROLL ─── */
+    .horizontal-section-header {
+      padding: 0 40px 60px;
+    }
+    .horizontal-section-header .section-label {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--c-tertiary);
+      margin-bottom: 16px;
+      opacity: 0;
+    }
+    .horizontal-section-header h2 {
+      font-family: var(--f-serif);
+      font-size: 4vw;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--c-primary);
+      opacity: 0;
+    }
+
+    .horizontal-container {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .horizontal-track {
+      display: flex;
+      height: 100%;
+      width: max-content;
+      will-change: transform;
+    }
+    .vista-panel {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      flex-shrink: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .panel-mountains {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .panel-mountain {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+    }
+
+    .panel-1 { background: #080B10; }
+    .panel-2 { background: #08090F; }
+    .panel-3 { background: #060910; }
+    .panel-4 { background: #04060D; }
+    .panel-5 { background: #080B10; }
+
+    .panel-1 .panel-mountain-1 {
+      height: 48%; background: #0C1018;
+      clip-path: polygon(0% 100%, 7% 50%, 15% 68%, 24% 32%, 33% 58%, 42% 22%, 51% 50%, 60% 30%, 70% 55%, 80% 35%, 90% 60%, 100% 45%, 100% 100%);
+    }
+    .panel-1 .panel-mountain-2 {
+      height: 38%; background: #131A24;
+      clip-path: polygon(0% 100%, 10% 35%, 20% 60%, 30% 20%, 42% 55%, 54% 15%, 65% 48%, 76% 28%, 86% 52%, 100% 35%, 100% 100%);
+    }
+    .panel-2 .panel-mountain-1 {
+      height: 55%; background: #0B0F18;
+      clip-path: polygon(0% 100%, 5% 60%, 12% 40%, 20% 70%, 28% 25%, 36% 55%, 45% 18%, 54% 45%, 63% 32%, 72% 58%, 82% 30%, 90% 50%, 100% 40%, 100% 100%);
+    }
+    .panel-2 .panel-mountain-2 {
+      height: 40%; background: #141C2A;
+      clip-path: polygon(0% 100%, 8% 42%, 18% 65%, 28% 28%, 40% 52%, 52% 20%, 63% 48%, 74% 30%, 84% 55%, 94% 38%, 100% 55%, 100% 100%);
+    }
+    .panel-3 .panel-mountain-1 {
+      height: 52%; background: #090D16;
+      clip-path: polygon(0% 100%, 4% 52%, 11% 38%, 18% 65%, 26% 22%, 34% 55%, 42% 30%, 51% 58%, 60% 20%, 70% 48%, 80% 32%, 88% 55%, 95% 38%, 100% 50%, 100% 100%);
+    }
+    .panel-3 .panel-mountain-2 {
+      height: 42%; background: #131E2C;
+      clip-path: polygon(0% 100%, 9% 38%, 19% 60%, 30% 22%, 42% 50%, 55% 18%, 66% 45%, 77% 28%, 87% 52%, 96% 35%, 100% 50%, 100% 100%);
+    }
+    .panel-4 .panel-mountain-1 {
+      height: 60%; background: #070A12;
+      clip-path: polygon(0% 100%, 3% 48%, 9% 35%, 16% 62%, 23% 28%, 30% 52%, 38% 18%, 47% 45%, 56% 28%, 65% 55%, 74% 22%, 83% 48%, 91% 32%, 97% 55%, 100% 42%, 100% 100%);
+    }
+    .panel-4 .panel-mountain-2 {
+      height: 38%; background: #0F1822;
+      clip-path: polygon(0% 100%, 7% 45%, 16% 65%, 26% 25%, 38% 55%, 50% 20%, 61% 50%, 72% 32%, 82% 58%, 92% 38%, 100% 52%, 100% 100%);
+    }
+    .panel-5 .panel-mountain-1 {
+      height: 50%; background: #0D1018;
+      clip-path: polygon(0% 100%, 6% 55%, 13% 38%, 21% 65%, 29% 28%, 38% 55%, 47% 22%, 56% 48%, 65% 30%, 74% 55%, 83% 28%, 91% 50%, 100% 38%, 100% 100%);
+    }
+    .panel-5 .panel-mountain-2 {
+      height: 40%; background: #141C28;
+      clip-path: polygon(0% 100%, 8% 40%, 18% 62%, 28% 25%, 40% 52%, 52% 18%, 64% 48%, 75% 30%, 85% 55%, 95% 35%, 100% 50%, 100% 100%);
+    }
+
+    .panel-content {
+      position: relative;
+      z-index: 10;
+      padding: 0 80px;
+      max-width: 520px;
+    }
+    .panel-number {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--c-tertiary);
+      margin-bottom: 24px;
+    }
+    .panel-title {
+      font-family: var(--f-serif);
+      font-size: 7vw;
+      font-weight: 400;
+      line-height: 0.92;
+      letter-spacing: -0.02em;
+      color: var(--c-primary);
+      margin-bottom: 32px;
+    }
+    .panel-description {
+      font-family: var(--f-mono);
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--c-secondary);
+      max-width: 340px;
+    }
+    .panel-elevation {
+      position: absolute;
+      bottom: 48px;
+      right: 60px;
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--c-tertiary);
+      opacity: 0.6;
+    }
+
+    /* ─── STAY SECTION ─── */
+    .stay {
+      padding: 20vw 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 60vh;
+    }
+    .stay-left {
+      padding: 80px 60px 80px 80px;
+      border-right: 1px solid rgba(240, 242, 245, 0.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .stay-number {
+      font-family: var(--f-serif);
+      font-size: 13vw;
+      font-weight: 400;
+      line-height: 0.88;
+      letter-spacing: -0.03em;
+      color: var(--c-primary);
+      opacity: 0;
+    }
+    .stay-descriptor {
+      font-family: var(--f-serif);
+      font-size: 4vw;
+      font-weight: 400;
+      font-style: italic;
+      letter-spacing: -0.01em;
+      color: var(--c-secondary);
+      margin-top: 8px;
+      opacity: 0;
+    }
+    .stay-right {
+      padding: 80px 80px 80px 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .stay-label {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--c-tertiary);
+      margin-bottom: 48px;
+      opacity: 0;
+    }
+    .stay-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .stay-feature-item {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      font-family: var(--f-mono);
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--c-primary);
+      opacity: 0;
+    }
+    .stay-feature-item::before {
+      content: '—';
+      color: var(--c-tertiary);
+      flex-shrink: 0;
+    }
+
+    /* ─── VOICES ─── */
+    .voices {
+      padding: 16vw 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .voices-label {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--c-tertiary);
+      margin-bottom: 56px;
+      opacity: 0;
+    }
+    .voices-quote {
+      font-family: var(--f-serif);
+      font-size: 4vw;
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      color: var(--c-primary);
+      max-width: 72vw;
+      opacity: 0;
+    }
+    .voices-attribution {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--c-secondary);
+      margin-top: 40px;
+      opacity: 0;
+    }
+
+    /* ─── CTA ─── */
+    .cta {
+      padding: 16vw 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-mountains {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      opacity: 0.3;
+    }
+    .cta-mountain-1 {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 50%;
+      background: var(--c-mt-mid);
+      clip-path: polygon(0% 100%, 8% 45%, 18% 65%, 28% 28%, 40% 55%, 52% 18%, 64% 48%, 76% 30%, 88% 55%, 100% 38%, 100% 100%);
+    }
+    .cta-mountain-2 {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 35%;
+      background: var(--c-mt-near);
+      clip-path: polygon(0% 100%, 5% 50%, 15% 32%, 26% 60%, 38% 22%, 50% 55%, 62% 28%, 74% 52%, 86% 30%, 96% 55%, 100% 42%, 100% 100%);
+    }
+    .cta-content {
+      position: relative;
+      z-index: 10;
+    }
+    .cta-label {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--c-tertiary);
+      margin-bottom: 40px;
+      opacity: 0;
+    }
+    .cta-headline {
+      font-family: var(--f-serif);
+      font-size: 9vw;
+      font-weight: 400;
+      line-height: 0.9;
+      letter-spacing: -0.03em;
+      color: var(--c-primary);
+      margin-bottom: 64px;
+      opacity: 0;
+    }
+    .cta-actions {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      opacity: 0;
+    }
+    .btn-primary-cta {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--c-on-tertiary);
+      background: var(--c-tertiary);
+      border: none;
+      border-radius: 9999px;
+      padding: 16px 36px;
+      cursor: none;
+      display: inline-block;
+      text-decoration: none;
+    }
+    .btn-ghost-cta {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--c-primary);
+      background: transparent;
+      border: 1px solid rgba(240, 242, 245, 0.3);
+      border-radius: 9999px;
+      padding: 16px 36px;
+      cursor: none;
+      display: inline-block;
+      text-decoration: none;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 60px 80px;
+      border-top: 1px solid rgba(240, 242, 245, 0.08);
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      align-items: end;
+      gap: 40px;
+    }
+    .footer-wordmark {
+      font-family: var(--f-serif);
+      font-size: 24px;
+      font-weight: 400;
+      color: var(--c-primary);
+    }
+    .footer-wordmark span {
+      display: block;
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--c-secondary);
+      margin-top: 8px;
+    }
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .footer-links a {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--c-secondary);
+      text-decoration: none;
+      cursor: none;
+    }
+    .footer-coords {
+      text-align: right;
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--c-secondary);
+      line-height: 2;
+    }
+    .footer-coords .teal { color: var(--c-tertiary); }
+    .footer-bottom {
+      padding: 24px 80px;
+      border-top: 1px solid rgba(240, 242, 245, 0.04);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-copy {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: rgba(74, 85, 104, 0.5);
+    }
+
+    /* ─── MOBILE ─── */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-altitude { display: none; }
+      .hero-title { font-size: 18vw; }
+      .hero-vertical-text { display: none; }
+      .philosophy { padding: 80px 24px; justify-content: flex-start; }
+      .philosophy-inner { max-width: 100%; text-align: left; }
+      .philosophy-quote { font-size: 8vw; }
+      .horizontal-section-header { padding: 0 24px 40px; }
+      .horizontal-section-header h2 { font-size: 7vw; }
+      .horizontal-container { height: auto; overflow: visible; }
+      .horizontal-track { flex-direction: column; width: 100%; height: auto; transform: none !important; }
+      .vista-panel { width: 100%; height: 85vh; }
+      .panel-content { padding: 0 24px; }
+      .panel-title { font-size: 12vw; }
+      .stay { grid-template-columns: 1fr; }
+      .stay-left { padding: 60px 24px 40px; border-right: none; border-bottom: 1px solid rgba(240,242,245,0.08); }
+      .stay-right { padding: 40px 24px 60px; }
+      .stay-number { font-size: 22vw; }
+      .voices { padding: 80px 24px; }
+      .voices-quote { font-size: 7vw; max-width: 100%; }
+      .cta { padding: 80px 24px; }
+      .cta-headline { font-size: 14vw; }
+      .cta-actions { flex-direction: column; align-items: flex-start; }
+      footer { grid-template-columns: 1fr; padding: 40px 24px; }
+      .footer-coords { text-align: left; }
+      .footer-bottom { padding: 20px 24px; flex-direction: column; gap: 12px; text-align: center; }
+    }
+
+    /* ─── MOBILE STATIC FALLBACK ─── */
+    @media (prefers-reduced-motion: reduce) {
+      .hero-title, .hero-subtitle, .hero-vertical-text, .hero-scroll-indicator,
+      .philosophy-label, .philosophy-quote, .philosophy-detail,
+      .stay-number, .stay-descriptor, .stay-label, .stay-feature-item,
+      .voices-label, .voices-quote, .voices-attribution,
+      .cta-label, .cta-headline, .cta-actions,
+      .mountain-layer, .horizontal-section-header .section-label,
+      .horizontal-section-header h2 {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <div class="cursor" id="cursor" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <nav id="main-nav" role="navigation" aria-label="Main navigation">
+    <a href="#" class="nav-wordmark" data-cursor="text">Oasis / Ladakh</a>
+    <div class="nav-right">
+      <span class="nav-altitude">11,562 FT</span>
+      <a href="#reserve" class="btn-reserve" data-cursor="cta" data-magnetic>Reserve</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" aria-label="Hero">
+    <div class="hero-mountains" aria-hidden="true">
+      <div class="mountain-layer mountain-layer-1" id="ml1"></div>
+      <div class="mountain-layer mountain-layer-2" id="ml2"></div>
+      <div class="mountain-layer mountain-layer-3" id="ml3"></div>
+      <div class="mountain-layer mountain-layer-4" id="ml4"></div>
+    </div>
+    <span class="hero-vertical-text" aria-hidden="true">The Peak</span>
+    <div class="hero-content">
+      <h1 class="hero-title" id="hero-title">Oasis</h1>
+      <p class="hero-subtitle" id="hero-subtitle">Leh, Ladakh &nbsp;·&nbsp; 11,562 Feet &nbsp;·&nbsp; By Invitation</p>
+    </div>
+    <div class="hero-scroll-indicator" id="hero-scroll" aria-hidden="true">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- Philosophy -->
+  <section class="philosophy" aria-label="Philosophy">
+    <div class="philosophy-inner">
+      <p class="philosophy-label">Philosophy</p>
+      <blockquote class="philosophy-quote">"The mountain does not hurry.<br>It simply is."</blockquote>
+      <p class="philosophy-detail">Oasis at The Peak is not a retreat from life. It is a return to it. At 11,562 feet above the Indus Valley, where the air carries only what it must and the silence has weight, you begin to remember what you have always known. Seven days. Five practices. No itinerary. Only the mountain, and what it asks of you.</p>
+    </div>
+  </section>
+
+  <!-- Horizontal Experiences -->
+  <div class="horizontal-section-header">
+    <p class="section-label">The Experiences</p>
+    <h2>Five Vistas. One Ascent.</h2>
+  </div>
+
+  <div class="horizontal-container" id="horizontal-container" aria-label="Experiences">
+    <div class="horizontal-track" id="horizontal-track">
+
+      <div class="vista-panel panel-1" role="article" aria-label="Base Camp">
+        <div class="panel-mountains" aria-hidden="true">
+          <div class="panel-mountain panel-mountain-1"></div>
+          <div class="panel-mountain panel-mountain-2"></div>
+        </div>
+        <div class="panel-content">
+          <p class="panel-number">01 / Base Camp</p>
+          <h3 class="panel-title">Arrival</h3>
+          <p class="panel-description">Your body arrives before your mind does. The first two days are acclimatization — silent meals, restorative yoga, walks along the Indus at dawn. The mountain does not rush you. Neither do we.</p>
+        </div>
+        <span class="panel-elevation" aria-hidden="true">3,524 m</span>
+      </div>
+
+      <div class="vista-panel panel-2" role="article" aria-label="The Monastery">
+        <div class="panel-mountains" aria-hidden="true">
+          <div class="panel-mountain panel-mountain-1"></div>
+          <div class="panel-mountain panel-mountain-2"></div>
+        </div>
+        <div class="panel-content">
+          <p class="panel-number">02 / The Monastery</p>
+          <h3 class="panel-title">Stillness</h3>
+          <p class="panel-description">A morning at Thikse Monastery with resident Ladakhi monks. Sitting practice in the gompa at 4 AM. The low drone of horns across the valley. Silence that is not empty but full.</p>
+        </div>
+        <span class="panel-elevation" aria-hidden="true">3,600 m</span>
+      </div>
+
+      <div class="vista-panel panel-3" role="article" aria-label="The Summit Trail">
+        <div class="panel-mountains" aria-hidden="true">
+          <div class="panel-mountain panel-mountain-1"></div>
+          <div class="panel-mountain panel-mountain-2"></div>
+        </div>
+        <div class="panel-content">
+          <p class="panel-number">03 / The Summit Trail</p>
+          <h3 class="panel-title">Ascent</h3>
+          <p class="panel-description">A guided silent trek to the high meditation point at 12,500 ft. Three hours of walking without speaking. The body becomes rhythm. The mind releases its inventory. At the summit, one hour of open-sky sitting practice.</p>
+        </div>
+        <span class="panel-elevation" aria-hidden="true">3,810 m</span>
+      </div>
+
+      <div class="vista-panel panel-4" role="article" aria-label="Star Field">
+        <div class="panel-mountains" aria-hidden="true">
+          <div class="panel-mountain panel-mountain-1"></div>
+          <div class="panel-mountain panel-mountain-2"></div>
+        </div>
+        <div class="panel-content">
+          <p class="panel-number">04 / Star Field</p>
+          <h3 class="panel-title">Cosmos</h3>
+          <p class="panel-description">At altitude, with minimal light pollution, the Milky Way is not a suggestion but a fact. Nighttime astronomy with a resident astrophysicist, followed by open-sky nidra on heated stone platforms. The universe as meditation object.</p>
+        </div>
+        <span class="panel-elevation" aria-hidden="true">3,524 m</span>
+      </div>
+
+      <div class="vista-panel panel-5" role="article" aria-label="The Return">
+        <div class="panel-mountains" aria-hidden="true">
+          <div class="panel-mountain panel-mountain-1"></div>
+          <div class="panel-mountain panel-mountain-2"></div>
+        </div>
+        <div class="panel-content">
+          <p class="panel-number">05 / The Return</p>
+          <h3 class="panel-title">Integration</h3>
+          <p class="panel-description">The final day is not departure — it is translation. Individual integration sessions with your practice guide. A ceremony at the Shanti Stupa at sunset. The mountain returns to stone. You carry it within.</p>
+        </div>
+        <span class="panel-elevation" aria-hidden="true">3,524 m</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Stay Section -->
+  <section class="stay" aria-label="Accommodation">
+    <div class="stay-left">
+      <div class="stay-number" id="stay-number">5</div>
+      <div class="stay-descriptor" id="stay-descriptor">private stone cottages</div>
+    </div>
+    <div class="stay-right">
+      <p class="stay-label" id="stay-label">The Stay</p>
+      <ul class="stay-features" aria-label="Cottage features">
+        <li class="stay-feature-item">Hand-built from local Ladakhi granite and timber</li>
+        <li class="stay-feature-item">Heated stone floors, no synthetic materials</li>
+        <li class="stay-feature-item">Unobstructed Stok Kangri views from every window</li>
+        <li class="stay-feature-item">Private courtyard with outdoor meditation platform</li>
+        <li class="stay-feature-item">Meals sourced from the retreat's high-altitude garden</li>
+        <li class="stay-feature-item">No screens. No schedules. No service calls.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Voices -->
+  <section class="voices" aria-label="Testimonial">
+    <p class="voices-label" id="voices-label">From Those Who Ascended</p>
+    <blockquote class="voices-quote" id="voices-quote">"I came to Ladakh carrying everything. I left carrying only what was real. I have not been the same since, and I do not want to be."</blockquote>
+    <p class="voices-attribution" id="voices-attribution">— A. Sharma, Mumbai &nbsp;·&nbsp; October Session, 2024</p>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta" id="reserve" aria-label="Reservation">
+    <div class="cta-mountains" aria-hidden="true">
+      <div class="cta-mountain-1"></div>
+      <div class="cta-mountain-2"></div>
+    </div>
+    <div class="cta-content">
+      <p class="cta-label" id="cta-label">Begin the Ascent</p>
+      <h2 class="cta-headline" id="cta-headline">Ascend<br>with us.</h2>
+      <div class="cta-actions" id="cta-actions">
+        <a href="#" class="btn-primary-cta" data-cursor="cta" data-magnetic>Reserve Your Ascent</a>
+        <a href="#" class="btn-ghost-cta" data-cursor="default">Enquire First</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer role="contentinfo">
+    <div class="footer-wordmark">
+      Oasis
+      <span>Leh, Ladakh · India</span>
+    </div>
+    <nav aria-label="Footer navigation">
+      <ul class="footer-links">
+        <li><a href="#">The Retreat</a></li>
+        <li><a href="#">Experiences</a></li>
+        <li><a href="#">The Stay</a></li>
+        <li><a href="#">Enquire</a></li>
+        <li><a href="#">Privacy</a></li>
+      </ul>
+    </nav>
+    <div class="footer-coords">
+      <span class="teal">34.1526° N</span><br>
+      77.5771° E<br>
+      <span class="teal">11,562 FT</span><br>
+      Elevation · Ladakh · India
+    </div>
+  </footer>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Oasis at The Peak. All rights reserved.</span>
+    <span class="footer-copy">By Invitation Only.</span>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script>
+    (function() {
+
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const isMobile = window.innerWidth < 768;
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      /* ─── LENIS SMOOTH SCROLL ─── */
+      let lenis;
+      if (!isMobile) {
+        lenis = new Lenis({
+          duration: 1.4,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          smoothWheel: true
+        });
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => lenis.raf(time * 1000));
+        gsap.ticker.lagSmoothing(0);
+        ScrollTrigger.normalizeScroll(true);
+      }
+
+      /* ─── CUSTOM CURSOR ─── */
+      const cursor = document.getElementById('cursor');
+      let mouseX = 0, mouseY = 0;
+      let cursorX = 0, cursorY = 0;
+
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        gsap.to(cursor, {
+          x: e.clientX,
+          y: e.clientY,
+          duration: 0.5,
+          ease: 'power3.out'
+        });
+      });
+
+      document.querySelectorAll('[data-cursor="text"], p, h1, h2, h3, blockquote').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          cursor.classList.add('is-hovering', 'is-hovering-text');
+          gsap.to(cursor, { scale: 2.5, duration: 0.3, ease: 'back.out(1.7)' });
+        });
+        el.addEventListener('mouseleave', () => {
+          cursor.classList.remove('is-hovering', 'is-hovering-text');
+          gsap.to(cursor, { scale: 1, duration: 0.4, ease: 'elastic.out(1, 0.4)' });
+        });
+      });
+
+      document.querySelectorAll('[data-cursor="cta"], .btn-primary-cta, .btn-ghost-cta, .btn-reserve, a').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          cursor.classList.add('is-hovering', 'is-hovering-cta');
+          gsap.to(cursor, { scale: 2, duration: 0.3, ease: 'back.out(1.7)' });
+        });
+        el.addEventListener('mouseleave', () => {
+          cursor.classList.remove('is-hovering', 'is-hovering-cta');
+          gsap.to(cursor, { scale: 1, rotation: 0, duration: 0.4, ease: 'elastic.out(1, 0.4)' });
+        });
+      });
+
+      /* ─── MAGNETIC EFFECT ─── */
+      document.querySelectorAll('[data-magnetic]').forEach(el => {
+        el.addEventListener('mousemove', (e) => {
+          const rect = el.getBoundingClientRect();
+          const relX = e.clientX - rect.left - rect.width / 2;
+          const relY = e.clientY - rect.top - rect.height / 2;
+          gsap.to(el, { x: relX * 0.28, y: relY * 0.28, duration: 0.4, ease: 'power2.out' });
+        });
+        el.addEventListener('mouseleave', () => {
+          gsap.to(el, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1, 0.4)' });
+        });
+      });
+
+      /* ─── NAV SCROLL BEHAVIOR ─── */
+      const nav = document.getElementById('main-nav');
+      ScrollTrigger.create({
+        start: 'top -80',
+        onEnter: () => nav.classList.add('is-scrolled'),
+        onLeaveBack: () => nav.classList.remove('is-scrolled')
+      });
+
+      if (!prefersReducedMotion) {
+
+        /* ─── HERO ENTRANCE ─── */
+        const heroTl = gsap.timeline({ delay: 0.2 });
+
+        heroTl
+          .fromTo('#ml1', { y: '80%' }, { y: '0%', duration: 2.2, ease: 'power4.out' })
+          .fromTo('#ml2', { y: '100%' }, { y: '0%', duration: 2.0, ease: 'power4.out' }, '-=2.0')
+          .fromTo('#ml3', { y: '120%' }, { y: '0%', duration: 1.8, ease: 'power4.out' }, '-=1.9')
+          .fromTo('#ml4', { y: '140%' }, { y: '0%', duration: 1.6, ease: 'power4.out' }, '-=1.8')
+          .fromTo('#hero-title',
+            { opacity: 0, y: 40 },
+            { opacity: 1, y: 0, duration: 1.4, ease: 'power4.out' },
+            '-=1.2'
+          )
+          .fromTo('#hero-subtitle',
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 1.0, ease: 'power4.out' },
+            '-=0.9'
+          )
+          .fromTo('.hero-vertical-text',
+            { opacity: 0, x: -12 },
+            { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out' },
+            '-=0.7'
+          )
+          .fromTo('#hero-scroll',
+            { opacity: 0, y: 16 },
+            { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' },
+            '-=0.4'
+          );
+
+        /* ─── HERO MOUNTAIN PARALLAX ─── */
+        gsap.to('#ml1', {
+          y: '-12%',
+          ease: 'none',
+          scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1.5 }
+        });
+        gsap.to('#ml2', {
+          y: '-22%',
+          ease: 'none',
+          scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1.2 }
+        });
+        gsap.to('#ml3', {
+          y: '-35%',
+          ease: 'none',
+          scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1.0 }
+        });
+        gsap.to('#ml4', {
+          y: '-50%',
+          ease: 'none',
+          scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.8 }
+        });
+
+        /* ─── PHILOSOPHY REVEALS ─── */
+        gsap.from('.philosophy-label', {
+          scrollTrigger: { trigger: '.philosophy', start: 'top 75%', toggleActions: 'play none none reverse' },
+          opacity: 0, y: 20, duration: 0.8, ease: 'power4.out'
+        });
+        gsap.from('.philosophy-quote', {
+          scrollTrigger: { trigger: '.philosophy', start: 'top 70%', toggleActions: 'play none none reverse' },
+          opacity: 0, y: 60, duration: 1.4, ease: 'power4.out',
+          delay: 0.15
+        });
+        gsap.from('.philosophy-detail', {
+          scrollTrigger: { trigger: '.philosophy', start: 'top 65%', toggleActions: 'play none none reverse' },
+          opacity: 0, y: 30, duration: 1.0, ease: 'power4.out',
+          delay: 0.35
+        });
+
+        /* ─── HORIZONTAL SECTION HEADER ─── */
+        gsap.from('.horizontal-section-header .section-label', {
+          scrollTrigger: { trigger: '.horizontal-section-header', start: 'top 80%', toggleActions: 'play none none reverse' },
+          opacity: 0, y: 16, duration: 0.8, ease: 'power4.out'
+        });
+        gsap.from('.horizontal-section-header h2', {
+          scrollTrigger: { trigger: '.horizontal-section-header', start: 'top 78%', toggleActions: 'play none none reverse' },
+          opacity: 0, y: 30, duration: 1.0, ease: 'power4.out', delay: 0.1
+        });
+
+        /* ─── HORIZONTAL SCROLL (DESKTOP ONLY) ─── */
+        if (!isMobile) {
+          const track = document.getElementById('horizontal-track');
+          const container = document.getElementById('horizontal-container');
+
+          gsap.to(track, {
+            x: () => -(track.scrollWidth - window.innerWidth),
+            ease: 'none',
+            scrollTrigger: {
+              trigger: container,
+              pin: true,
+              scrub: 1,
+              invalidateOnRefresh: true,
+              end: () => '+=' + track.scrollWidth
+            }
+          });
+        }
+
+        /* ─── STAY REVEALS ─── */
+        gsap.from('#stay-number', {
+          scrollTrigger: { trigger: '.stay', start: 'top 72%', toggleActions: 'play none none reverse' },
+          opacity: 0, y: 50, duration: 1.4, ease: 'power4.out'
+        });
+        gsap.from('#stay-descriptor', {
+          scrollTrigger: { trigger: '.stay', start: 'top 68%', toggleActions: 'play none none reverse' },
+          opacity: 0, y: 30, duration: 1.0, ease: 'power4.out', delay: 0.2
+        });
+        gsap.from('#stay-label', {
+          scrollTrigger: { trigger: '.stay', start: 'top 72%', toggleActions: 'play none none reverse' },
+          opacity: 0, y: 20, duration: 0.8, ease: 'power4.out'
+        });
+        gsap.from('.stay-feature-item', {
+          scrollTrigger: { trigger: '.stay-right', start: 'top 70%', toggleActions: 'play none none reverse' },
+          opacity: 0, x: 30, duration: 0.8, ease: 'power4.out',
+          stagger: 0.08, delay: 0.15
+        });
+
+        /* ─── VOICES REVEALS ─── */
+        gsap.from('#voices-label', {
+          scrollTrigger: { trigger: '.voices', start: 'top 78%', toggleActions: 'play none none reverse' },
+          opacity: 0, y: 16, duration: 0.8, ease: 'power4.out'
+        });
+        gsap.from('#voices-quote', {
+          scrollTrigger: { trigger: '.voices', start: 'top 72%', toggleActions: 'play none none reverse' },
+          opacity: 0, y: 60, duration: 1.6, ease: 'power4.out', delay: 0.1
+        });
+        gsap.from('#voices-attribution', {
+          scrollTrigger: { trigger: '.voices', start: 'top 65%', toggleActions: 'play none none reverse' },
+          opacity: 0, y: 20, duration: 0.8, ease: 'power4.out', delay: 0.4
+        });
+
+        /* ─── CTA REVEALS ─── */
+        gsap.from('#cta-label', {
+          scrollTrigger: { trigger: '.cta', start: 'top 78%', toggleActions: 'play none none reverse' },
+          opacity: 0, y: 16, duration: 0.8, ease: 'power4.out'
+        });
+        gsap.from('#cta-headline', {
+          scrollTrigger: { trigger: '.cta', start: 'top 72%', toggleActions: 'play none none reverse' },
+          opacity: 0, y: 80, duration: 1.6, ease: 'power4.out', delay: 0.1
+        });
+        gsap.from('#cta-actions', {
+          scrollTrigger: { trigger: '.cta', start: 'top 65%', toggleActions: 'play none none reverse' },
+          opacity: 0, y: 30, duration: 1.0, ease: 'power4.out', delay: 0.35
+        });
+
+        /* ─── SCROLL INDICATOR LOOP ─── */
+        gsap.to('.scroll-line', {
+          scaleY: 0,
+          transformOrigin: 'top center',
+          duration: 1.2,
+          ease: 'power2.inOut',
+          repeat: -1,
+          yoyo: true,
+          delay: 1.5
+        });
+
+      } else {
+        /* REDUCED MOTION: show everything immediately */
+        document.querySelectorAll(
+          '.philosophy-label, .philosophy-quote, .philosophy-detail, ' +
+          '#stay-number, #stay-descriptor, #stay-label, .stay-feature-item, ' +
+          '#voices-label, #voices-quote, #voices-attribution, ' +
+          '#cta-label, #cta-headline, #cta-actions, ' +
+          '.horizontal-section-header .section-label, .horizontal-section-header h2, ' +
+          '#hero-title, #hero-subtitle, .hero-vertical-text, #hero-scroll, ' +
+          '#ml1, #ml2, #ml3, #ml4'
+        ).forEach(el => {
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+        });
+      }
+
+    })();
+  </script>
+</body>
+</html>

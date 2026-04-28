@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis - Luxury Meditation Retreat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            color: #1a1a1a;
+        }
+        
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 0.3em;
+        }
+        
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: drift 20s linear infinite;
+        }
+        
+        @keyframes drift {
+            from { transform: translate(0, 0); }
+            to { transform: translate(50px, 50px); }
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 6rem;
+            font-weight: 100;
+            margin-bottom: 1rem;
+            letter-spacing: 0.2em;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+        
+        .content-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 100vh;
+        }
+        
+        .content-left {
+            background: #f8f9fa;
+            padding: 6rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .content-right {
+            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800"><rect fill="%23c9d6df" width="800" height="800"/></svg>');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .content-left h2 {
+            font-size: 3.5rem;
+            font-weight: 200;
+            margin-bottom: 2rem;
+            line-height: 1.2;
+        }
+        
+        .content-left p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 3rem;
+        }
+        
+        .btn-primary {
+            display: inline-block;
+            padding: 1.5rem 4rem;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+            transition: transform 0.3s;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+        }
+        
+        .amenities {
+            padding: 8rem 4rem;
+            background: white;
+        }
+        
+        .amenities h2 {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 200;
+            margin-bottom: 5rem;
+        }
+        
+        .amenity-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .amenity-item {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .amenity-item h3 {
+            font-size: 1.2rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">OASIS</div>
+        <div>Book Now</div>
+    </nav>
+    
+    <section class="hero">
+        <div class="hero-content">
+            <h1>OASIS</h1>
+            <p>Elevate Your Consciousness</p>
+        </div>
+    </section>
+    
+    <section class="content-section">
+        <div class="content-left">
+            <h2>Transcend the Ordinary</h2>
+            <p>Experience meditation reimagined. Our luxury retreat combines ancient wisdom with modern comfort, creating the perfect environment for transformation.</p>
+            <div>
+                <a href="#" class="btn-primary">EXPLORE PACKAGES</a>
+            </div>
+        </div>
+        <div class="content-right"></div>
+    </section>
+    
+    <section class="amenities">
+        <h2>Curated Experiences</h2>
+        <div class="amenity-grid">
+            <div class="amenity-item">
+                <h3>Sound Healing</h3>
+                <p>Tibetan singing bowls</p>
+            </div>
+            <div class="amenity-item">
+                <h3>Yoga Studios</h3>
+                <p>Mountain view practice</p>
+            </div>
+            <div class="amenity-item">
+                <h3>Spa Treatments</h3>
+                <p>Holistic wellness</p>
+            </div>
+            <div class="amenity-item">
+                <h3>Nature Trails</h3>
+                <p>Guided forest walks</p>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

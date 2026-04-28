@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OASIS | Modern Retreat</title>
+    <style>
+        :root {
+            --brand-color: #ffffff;
+            --overlay: rgba(0, 0, 0, 0.4);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: var(--brand-color);
+            background-color: #111;
+        }
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .video-background::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--overlay);
+        }
+        .video-background img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Placeholder for actual video */
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .nav-items {
+            display: flex;
+            gap: 3rem;
+        }
+        .nav-items a {
+            color: var(--brand-color);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .content {
+            position: relative;
+            z-index: 1;
+            height: calc(100vh - 100px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 2rem;
+        }
+        h1 {
+            font-size: clamp(4rem, 8vw, 8rem);
+            font-weight: 700;
+            letter-spacing: -2px;
+            margin-bottom: 1rem;
+            line-height: 1;
+        }
+        p {
+            font-size: 1.25rem;
+            font-weight: 300;
+            max-width: 600px;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+        .play-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .play-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+        .play-icon {
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 15px solid white;
+            margin-left: 5px;
+        }
+        .bottom-bar {
+            position: absolute;
+            bottom: 2rem;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 4rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="video-background">
+        <!-- Using a static image as a placeholder for a video -->
+        <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" alt="Meditation Video Background">
+    </div>
+    
+    <nav>
+        <div class="logo">OASIS.</div>
+        <div class="nav-items">
+            <a href="#">Locations</a>
+            <a href="#">Philosophy</a>
+            <a href="#">Reserve</a>
+        </div>
+    </nav>
+
+    <div class="content">
+        <h1>Breathe.</h1>
+        <p>The ultimate modern sanctuary for clarity and restoration. Leave the world behind.</p>
+        <div class="play-btn">
+            <div class="play-icon"></div>
+        </div>
+    </div>
+
+    <div class="bottom-bar">
+        <div>Vol. 01 — The Awakening</div>
+        <div>Scroll to explore</div>
+    </div>
+</body>
+</html>

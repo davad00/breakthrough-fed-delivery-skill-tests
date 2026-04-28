@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oasis — Tidal Glass</title>
+  <meta name="description" content="Oasis presented as a glassy, oceanic luxury meditation retreat with fluid light and immersive calm." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #061118;
+      --teal: #79f1ff;
+      --text: #eef8fa;
+      --muted: #91aeb4;
+      --line: rgba(238, 248, 250, 0.16);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 74% 20%, rgba(121, 241, 255, 0.16), transparent 24%),
+        radial-gradient(circle at 20% 0%, rgba(109, 157, 181, 0.18), transparent 22%),
+        linear-gradient(180deg, #041017 0%, #07161f 100%);
+      overflow-x: hidden;
+      cursor: none;
+    }
+    .cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--teal);
+      pointer-events: none;
+      z-index: 100;
+      mix-blend-mode: difference;
+    }
+    .menu-btn {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 30;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 14px 18px;
+      background: rgba(5, 17, 24, 0.62);
+      backdrop-filter: blur(18px);
+      color: var(--text);
+      font: 500 11px/1 "JetBrains Mono", monospace;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 25;
+      background: rgba(4, 12, 18, 0.97);
+      display: grid;
+      place-items: center;
+      transform: translateY(-100%);
+    }
+    .overlay nav {
+      display: grid;
+      gap: 16px;
+      text-align: center;
+    }
+    .overlay a {
+      color: var(--text);
+      text-decoration: none;
+      font: 600 clamp(2.7rem, 8vw, 8rem)/0.92 "Cormorant Garamond", serif;
+      letter-spacing: -0.03em;
+    }
+    .hero {
+      min-height: 100vh;
+      padding: 11vh 7vw 7vh;
+      display: grid;
+      grid-template-columns: 0.95fr 1fr;
+      gap: 4vw;
+      align-items: center;
+      position: relative;
+    }
+    .micro,
+    .eyebrow,
+    .label {
+      color: var(--muted);
+      font: 500 11px/1 "JetBrains Mono", monospace;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 18px 0 0;
+      max-width: 5.2ch;
+      font: 600 clamp(4.5rem, 10.8vw, 13rem)/0.82 "Cormorant Garamond", serif;
+      letter-spacing: -0.04em;
+    }
+    .lead {
+      max-width: 44ch;
+      line-height: 1.8;
+      color: #d6e6e8;
+      margin-top: 24px;
+    }
+    .cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 15px 20px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      text-decoration: none;
+      text-transform: uppercase;
+      color: var(--text);
+      font: 500 11px/1 "JetBrains Mono", monospace;
+      letter-spacing: 0.14em;
+    }
+    .btn-primary {
+      background: var(--teal);
+      color: #041116;
+      border-color: var(--teal);
+    }
+    .glass-stage {
+      min-height: 75vh;
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+    .glass-shell {
+      width: min(42vw, 450px);
+      aspect-ratio: 0.92;
+      position: relative;
+      border-radius: 38% 62% 52% 48% / 44% 38% 62% 56%;
+      background:
+        linear-gradient(140deg, rgba(255,255,255,0.26), rgba(255,255,255,0.04)),
+        radial-gradient(circle at 28% 26%, rgba(255,255,255,0.55), transparent 22%),
+        radial-gradient(circle at 70% 74%, rgba(121, 241, 255, 0.26), transparent 36%),
+        rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06), 0 36px 90px rgba(0, 0, 0, 0.36), 0 0 120px rgba(121, 241, 255, 0.12);
+      backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+    .glass-shell::before,
+    .glass-shell::after {
+      content: "";
+      position: absolute;
+      border-radius: inherit;
+      inset: 12%;
+      border: 1px solid rgba(255,255,255,0.16);
+    }
+    .glass-shell::after {
+      inset: 28%;
+      border-color: rgba(121, 241, 255, 0.3);
+    }
+    .tide {
+      position: absolute;
+      inset: auto -10% 0;
+      height: 42%;
+      background: linear-gradient(180deg, rgba(121, 241, 255, 0.05), rgba(121, 241, 255, 0.34));
+      clip-path: polygon(0 38%, 10% 30%, 20% 34%, 30% 22%, 40% 30%, 50% 18%, 60% 26%, 70% 14%, 80% 24%, 90% 12%, 100% 20%, 100% 100%, 0 100%);
+      filter: blur(1px);
+    }
+    .data-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 40px;
+      max-width: 700px;
+    }
+    .data-card {
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
+    }
+    .data-card strong {
+      display: block;
+      font: 600 clamp(1.9rem, 4vw, 3.6rem)/0.9 "Cormorant Garamond", serif;
+      letter-spacing: -0.03em;
+      margin-top: 12px;
+    }
+    .narrative {
+      padding: 10vw 7vw 16vw;
+      display: grid;
+      gap: 16vh;
+    }
+    .panel {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 4vw;
+      align-items: end;
+    }
+    .panel:nth-child(even) { grid-template-columns: 1.1fr 0.9fr; }
+    .panel:nth-child(even) .copy { order: -1; }
+    .image-box {
+      min-height: 360px;
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.32), transparent 18%),
+        linear-gradient(140deg, rgba(255,255,255,0.14), rgba(255,255,255,0.03)),
+        linear-gradient(180deg, #0e2430 0%, #102f42 48%, #07161f 100%);
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04), 0 26px 70px rgba(0, 0, 0, 0.28);
+      position: relative;
+      overflow: hidden;
+    }
+    .image-box::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 42%;
+      background: linear-gradient(180deg, transparent, rgba(121, 241, 255, 0.28));
+      clip-path: polygon(0 44%, 8% 32%, 16% 36%, 24% 24%, 32% 30%, 40% 20%, 48% 28%, 56% 18%, 64% 22%, 72% 12%, 80% 18%, 88% 8%, 100% 18%, 100% 100%, 0 100%);
+    }
+    .copy h2 {
+      margin: 14px 0 0;
+      max-width: 8ch;
+      font: 600 clamp(2.2rem, 6.3vw, 6.4rem)/0.9 "Cormorant Garamond", serif;
+      letter-spacing: -0.03em;
+    }
+    .copy p {
+      max-width: 42ch;
+      line-height: 1.8;
+      color: #d9e5e7;
+      margin-top: 18px;
+    }
+    .focusable:focus-visible {
+      outline: 2px solid var(--teal);
+      outline-offset: 4px;
+    }
+    @media (max-width: 980px) {
+      body { cursor: auto; }
+      .cursor { display: none; }
+      .hero { grid-template-columns: 1fr; padding-top: 18vh; }
+      .glass-stage { min-height: 42vh; }
+      .data-row { grid-template-columns: 1fr; }
+      .panel,
+      .panel:nth-child(even) { grid-template-columns: 1fr; }
+      .panel:nth-child(even) .copy { order: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor" aria-hidden="true"></div>
+  <button class="menu-btn focusable" id="menuBtn" data-magnetic>Menu</button>
+  <div class="overlay" id="overlay">
+    <nav>
+      <a href="#arrival" class="focusable">Arrival</a>
+      <a href="#ritual" class="focusable">Ritual</a>
+      <a href="#return" class="focusable">Return</a>
+    </nav>
+  </div>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="micro animated">Oasis / Tidal Glass</div>
+        <h1 class="animated">Luxury Quiet In A Fluid, Light-Bent Envelope.</h1>
+        <p class="lead animated">This Oasis concept treats meditation like immersion in clear water and polished air: transparent surfaces, oceanic pacing, and a private retreat program that slows every sensation without losing edge.</p>
+        <div class="cta animated">
+          <a href="#arrival" class="btn btn-primary focusable" data-magnetic>Begin Inquiry</a>
+          <a href="#ritual" class="btn focusable" data-magnetic>View Program</a>
+        </div>
+        <div class="data-row animated">
+          <div class="data-card"><span class="label">Float Suites</span><strong>14 Chambers</strong></div>
+          <div class="data-card"><span class="label">Daily Sound Bath</span><strong>2 Cycles</strong></div>
+          <div class="data-card"><span class="label">Water Temperature</span><strong>34°C</strong></div>
+        </div>
+      </div>
+      <div class="glass-stage animated">
+        <div class="glass-shell" id="glassShell">
+          <div class="tide"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="narrative">
+      <article class="panel animated" id="arrival">
+        <div class="image-box"></div>
+        <div class="copy">
+          <div class="eyebrow">Arrival</div>
+          <h2>Entry Begins With Temperature, Texture, And Breath.</h2>
+          <p>Guests are welcomed into a dim mineral atrium, fitted with tailored robes, and guided through a hydrothermal reset designed to soften the body before the first meditation sits begin.</p>
+        </div>
+      </article>
+      <article class="panel animated" id="ritual">
+        <div class="image-box"></div>
+        <div class="copy">
+          <div class="eyebrow">Ritual</div>
+          <h2>Practice Moves Like A Tide Instead Of A Timetable.</h2>
+          <p>Breathwork, flotation, resonance listening, and private stillness sessions are arranged in slow cycles, creating a luxurious sensation of suspension rather than effort.</p>
+        </div>
+      </article>
+      <article class="panel animated" id="return">
+        <div class="image-box"></div>
+        <div class="copy">
+          <div class="eyebrow">Return</div>
+          <h2>You Leave Carrying A Different Internal Tempo.</h2>
+          <p>Guests depart with a continuation ritual, aromatic anchors for home practice, and direct access to their Oasis guide for a measured reentry into daily life.</p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const overlay = document.getElementById("overlay");
+    const menuBtn = document.getElementById("menuBtn");
+    let menuOpen = false;
+    gsap.set(overlay, { yPercent: -100 });
+
+    menuBtn.addEventListener("click", () => {
+      menuOpen = !menuOpen;
+      gsap.to(overlay, { yPercent: menuOpen ? 0 : -100, duration: 1, ease: "expo.inOut" });
+      menuBtn.textContent = menuOpen ? "Close" : "Menu";
+    });
+
+    if (!reducedMotion && window.Lenis) {
+      const lenis = new Lenis({ duration: 1.18, smoothWheel: true });
+      lenis.on("scroll", ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+    }
+
+    if (!reducedMotion) {
+      gsap.from(".hero .animated", { y: 110, opacity: 0, duration: 1.3, stagger: 0.12, ease: "power4.out" });
+      gsap.to("#glassShell", {
+        borderRadius: "58% 42% 38% 62% / 44% 58% 42% 56%",
+        duration: 3.8,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      });
+      gsap.to(".tide", { yPercent: -12, repeat: -1, yoyo: true, duration: 2.8, ease: "sine.inOut" });
+      gsap.from(".panel", {
+        scrollTrigger: { trigger: ".narrative", start: "top 72%" },
+        y: 120,
+        opacity: 0,
+        duration: 1.25,
+        stagger: 0.18,
+        ease: "power4.out"
+      });
+      gsap.to(".image-box", {
+        scrollTrigger: { trigger: ".narrative", start: "top bottom", end: "bottom top", scrub: 1 },
+        y: -70,
+        stagger: 0.12
+      });
+    } else {
+      document.querySelectorAll(".animated").forEach((el) => {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      });
+    }
+
+    const cursor = document.querySelector(".cursor");
+    const magnets = document.querySelectorAll("[data-magnetic]");
+    if (!reducedMotion && cursor && window.innerWidth > 980) {
+      window.addEventListener("mousemove", (event) => {
+        gsap.to(cursor, { x: event.clientX, y: event.clientY, duration: 0.55, ease: "power3.out" });
+      });
+      magnets.forEach((element) => {
+        element.addEventListener("mousemove", (event) => {
+          const rect = element.getBoundingClientRect();
+          const relX = event.clientX - rect.left - rect.width / 2;
+          const relY = event.clientY - rect.top - rect.height / 2;
+          gsap.to(element, { x: relX * 0.16, y: relY * 0.16, duration: 0.4, ease: "power2.out" });
+          gsap.to(cursor, { scale: 2.5, duration: 0.3 });
+        });
+        element.addEventListener("mouseleave", () => {
+          gsap.to(element, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.4)" });
+          gsap.to(cursor, { scale: 1, duration: 0.3 });
+        });
+      });
+    }
+  </script>
+</body>
+</html>

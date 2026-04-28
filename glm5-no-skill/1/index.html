@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis | Luxury Meditation Retreat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 5rem;
+            font-weight: 300;
+            letter-spacing: 1rem;
+            margin-bottom: 1rem;
+            color: #d4af37;
+            text-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            letter-spacing: 0.5rem;
+            font-weight: 300;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            padding: 1rem 3rem;
+            border: 1px solid #d4af37;
+            background: transparent;
+            color: #d4af37;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.2rem;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .cta-button:hover {
+            background: #d4af37;
+            color: #1a1a2e;
+        }
+
+        .section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #d4af37;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature p {
+            font-weight: 300;
+            line-height: 1.8;
+            opacity: 0.8;
+        }
+
+        .about {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .about-content {
+            display: flex;
+            gap: 4rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .about-text {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .about-text p {
+            font-weight: 300;
+            line-height: 2;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .contact-item {
+            font-weight: 300;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <h1 class="logo">OASIS</h1>
+        <p class="tagline">TRANQUILITY REDEFINED</p>
+        <button class="cta-button">BEGIN YOUR JOURNEY</button>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">The Oasis Experience</h2>
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🧘</div>
+                <h3>Guided Meditation</h3>
+                <p>Expert-led sessions in our purpose-built meditation pavilions, designed to deepen your practice.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🌿</div>
+                <h3>Nature Immersion</h3>
+                <p>120 acres of pristine wilderness, private gardens, and serene water features.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">✨</div>
+                <h3>Holistic Wellness</h3>
+                <p>Ayurvedic treatments, sound healing, and personalized wellness programs.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section about">
+        <h2 class="section-title">Our Philosophy</h2>
+        <div class="about-content">
+            <div class="about-text">
+                <p>Nestled in the foothills of the Himalayas, Oasis represents the pinnacle of luxury meditation retreats. Our sanctuary offers an unparalleled escape from the demands of modern life.</p>
+                <p>Each moment at Oasis is carefully curated to guide you toward inner peace and profound transformation. Our world-class facilitators bring decades of experience in contemplative practices.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact">
+        <h2 class="section-title">Reserve Your Sanctuary</h2>
+        <div class="contact-info">
+            <div class="contact-item">reservations@oasis-retreat.com</div>
+            <div class="contact-item">+1 (888) OASIS-LUX</div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Oasis Luxury Meditation Retreat. All rights reserved.</p>
+    </footer>
+</body>
+</html>

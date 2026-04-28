@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis — 3D Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --void: #0A0A0A;
+            --space: #1A1A2E;
+            --coral: #E94560;
+            --purple: #533483;
+            --white: #FFFFFF;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--void);
+            color: var(--white);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            line-height: 1.8;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .cursor-glow {
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle, rgba(233, 69, 96, 0.6) 0%, transparent 70%);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            transition: transform 0.3s;
+        }
+
+        .cursor-glow.hover {
+            transform: scale(2);
+        }
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--coral);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10001;
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .content > * {
+            pointer-events: auto;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 32px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.3);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 24px;
+            letter-spacing: 0.1em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-link {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--white);
+            text-decoration: none;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+
+        .nav-link:hover {
+            opacity: 1;
+        }
+
+        .section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15vw;
+            position: relative;
+        }
+
+        .glass-panel {
+            background: rgba(26, 26, 46, 0.4);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 8vw;
+            max-width: 700px;
+        }
+
+        .hero-content {
+            text-align: center;
+        }
+
+        .hero-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--coral);
+            margin-bottom: 24px;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 18vw;
+            line-height: 0.85;
+            letter-spacing: 0.02em;
+            margin-bottom: 32px;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 450px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .philosophy-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3vw;
+            font-weight: 300;
+            line-height: 1.3;
+            margin-bottom: 32px;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .philosophy-text {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.6);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .offerings-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3vw;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .offering-card {
+            background: rgba(26, 26, 46, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 69, 96, 0.2);
+            padding: 4vw 3vw;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+
+        .offering-card:hover {
+            border-color: var(--coral);
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(233, 69, 96, 0.2);
+        }
+
+        .offering-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--coral);
+            margin-bottom: 16px;
+        }
+
+        .offering-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8vw;
+            font-weight: 400;
+            margin-bottom: 12px;
+        }
+
+        .offering-desc {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.6;
+        }
+
+        .experience-section {
+            text-align: center;
+        }
+
+        .experience-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 10vw;
+            line-height: 0.9;
+            margin-bottom: 40px;
+            opacity: 0;
+        }
+
+        .experience-title span {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .experience-subtitle {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 500px;
+            margin: 0 auto;
+            opacity: 0;
+        }
+
+        .contact-section {
+            text-align: center;
+        }
+
+        .contact-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 8vw;
+            line-height: 1;
+            margin-bottom: 24px;
+            opacity: 0;
+        }
+
+        .contact-sub {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.6);
+            opacity: 0;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background: var(--coral);
+            color: var(--void);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 20px 56px;
+            border: none;
+            cursor: none;
+            text-decoration: none;
+            margin-top: 40px;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+
+        .btn-primary:hover {
+            background: var(--white);
+            box-shadow: 0 20px 50px rgba(233, 69, 96, 0.4);
+            transform: translateY(-4px);
+        }
+
+        .footer {
+            padding: 80px 48px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 18px;
+            letter-spacing: 0.1em;
+            margin-bottom: 24px;
+            opacity: 0.5;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        .footer-link {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.4);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-link:hover {
+            color: var(--coral);
+        }
+
+        .footer-copy {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 22vw;
+            }
+
+            .philosophy-title {
+                font-size: 6vw;
+            }
+
+            .offerings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .offering-name {
+                font-size: 4vw;
+            }
+
+            .experience-title {
+                font-size: 14vw;
+            }
+
+            .contact-title {
+                font-size: 12vw;
+            }
+
+            .nav {
+                padding: 24px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .cursor-glow,
+            .cursor-dot {
+                display: none;
+            }
+
+            body {
+                cursor: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+
+    <div class="cursor-glow"></div>
+    <div class="cursor-dot"></div>
+
+    <nav class="nav">
+        <div class="nav-logo">Oasis</div>
+        <div class="nav-links">
+            <a href="#philosophy" class="nav-link">Philosophy</a>
+            <a href="#offerings" class="nav-link">Offerings</a>
+            <a href="#experience" class="nav-link">Experience</a>
+            <a href="#contact" class="nav-link">Contact</a>
+        </div>
+    </nav>
+
+    <div class="content">
+        <section class="section" id="hero">
+            <div class="hero-content">
+                <span class="hero-label">Swiss Alps Sanctuary</span>
+                <h1 class="hero-title">OASIS</h1>
+                <p class="hero-subtitle">Step into a realm where luxury meets stillness. Where transformation happens naturally.</p>
+            </div>
+        </section>
+
+        <section class="section" id="philosophy">
+            <div class="glass-panel">
+                <h2 class="philosophy-title">Where luxury meets the liminal space between thoughts.</h2>
+                <p class="philosophy-text">
+                    At Oasis, we've distilled millennia of contemplative wisdom into a singular experience. Our architects designed spaces that breathe. Our chefs craft meals that nourish. Our guides hold space for your deepest work.
+                </p>
+            </div>
+        </section>
+
+        <section class="section" id="offerings">
+            <div class="offerings-grid">
+                <article class="offering-card">
+                    <span class="offering-number">01</span>
+                    <h3 class="offering-name">Mountain Silence</h3>
+                    <p class="offering-desc">Seven days in elevated solitude among the peaks.</p>
+                </article>
+                <article class="offering-card">
+                    <span class="offering-number">02</span>
+                    <h3 class="offering-name">Forest Immersion</h3>
+                    <p class="offering-desc">Ancient Shinrin-yoku practices in primeval woods.</p>
+                </article>
+                <article class="offering-card">
+                    <span class="offering-number">03</span>
+                    <h3 class="offering-name">Water Ceremony</h3>
+                    <p class="offering-desc">Cold plunge, breathwork, and lakeside meditation.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="section experience-section" id="experience">
+            <div>
+                <h2 class="experience-title">
+                    <span>B</span><span>E</span><span>&nbsp;</span><span>T</span><span>R</span><span>A</span><span>N</span><span>S</span><span>F</span><span>O</span><span>R</span><span>M</span>
+                </h2>
+                <p class="experience-subtitle">
+                    The mountains have witnessed a thousand years of seekers. Now they wait for you.
+                </p>
+            </div>
+        </section>
+
+        <section class="section contact-section" id="contact">
+            <div>
+                <h2 class="contact-title">BEGIN</h2>
+                <p class="contact-sub">Your journey starts with a single word.</p>
+                <a href="#" class="btn-primary">Request Invitation</a>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="footer-logo">Oasis</div>
+            <div class="footer-links">
+                <a href="#" class="footer-link">Privacy</a>
+                <a href="#" class="footer-link">Instagram</a>
+                <a href="#" class="footer-link">Contact</a>
+            </div>
+            <p class="footer-copy">© 2026 Oasis Retreat. Swiss Alps.</p>
+        </footer>
+    </div>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        const cursorGlow = document.querySelector('.cursor-glow');
+        const cursorDot = document.querySelector('.cursor-dot');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.1;
+            cursorY += (mouseY - cursorY) * 0.1;
+            cursorDot.style.left = mouseX - 4 + 'px';
+            cursorDot.style.top = mouseY - 4 + 'px';
+            cursorGlow.style.left = cursorX - 15 + 'px';
+            cursorGlow.style.top = cursorY - 15 + 'px';
+            if (window.mouseY) {
+                cursorGlow.style.transform = `translate(${mouseX - cursorX}px, ${mouseY - cursorY}px)`;
+            }
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        const hoverElements = document.querySelectorAll('a, button, .offering-card');
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursorGlow.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursorGlow.classList.remove('hover'));
+        });
+
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        camera.position.z = 30;
+
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 5000;
+        const posArray = new Float32Array(particlesCount * 3);
+
+        for (let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 100;
+        }
+
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.05,
+            color: 0xE94560,
+            transparent: true,
+            opacity: 0.6,
+            blending: THREE.AdditiveBlending
+        });
+
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        const torusGeometry = new THREE.TorusGeometry(8, 0.02, 16, 100);
+        const torusMaterial = new THREE.MeshBasicMaterial({ color: 0x533483, transparent: true, opacity: 0.3 });
+        const torus = new THREE.Mesh(torusGeometry, torusMaterial);
+        torus.rotation.x = Math.PI / 3;
+        scene.add(torus);
+
+        const torus2Geometry = new THREE.TorusGeometry(12, 0.015, 16, 100);
+        const torus2Material = new THREE.MeshBasicMaterial({ color: 0xE94560, transparent: true, opacity: 0.2 });
+        const torus2 = new THREE.Mesh(torus2Geometry, torus2Material);
+        torus2.rotation.x = Math.PI / 2;
+        torus2.rotation.y = Math.PI / 4;
+        scene.add(torus2);
+
+        const torus3Geometry = new THREE.TorusGeometry(6, 0.01, 16, 100);
+        const torus3Material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0.15 });
+        const torus3 = new THREE.Mesh(torus3Geometry, torus3Material);
+        torus3.rotation.z = Math.PI / 6;
+        scene.add(torus3);
+
+        let scrollProgress = 0;
+        let targetCameraZ = 30;
+
+        window.addEventListener('scroll', () => {
+            scrollProgress = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+            targetCameraZ = 30 - scrollProgress * 20;
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            particlesMesh.rotation.y += 0.0003;
+            particlesMesh.rotation.x += 0.0001;
+
+            torus.rotation.y += 0.002;
+            torus2.rotation.y -= 0.001;
+            torus3.rotation.z += 0.001;
+
+            camera.position.z += (targetCameraZ - camera.position.z) * 0.05;
+            camera.position.x = (mouseX / window.innerWidth - 0.5) * 2;
+            camera.position.y = -(mouseY / window.innerHeight - 0.5) * 2;
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        const heroTl = gsap.timeline({ delay: 0.5 });
+        heroTl
+            .to('.hero-label', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' })
+            .to('.hero-title', { opacity: 1, y: 0, duration: 1.5, ease: 'power4.out' }, '-=0.7')
+            .to('.hero-subtitle', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, '-=1');
+
+        gsap.to('.philosophy-title', {
+            scrollTrigger: {
+                trigger: '#philosophy',
+                start: 'top 60%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: 'power3.out'
+        });
+
+        gsap.to('.philosophy-text', {
+            scrollTrigger: {
+                trigger: '#philosophy',
+                start: 'top 50%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 0.3,
+            ease: 'power3.out'
+        });
+
+        gsap.to('.offering-card', {
+            scrollTrigger: {
+                trigger: '#offerings',
+                start: 'top 60%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: 'power3.out'
+        });
+
+        const experienceTitle = document.querySelector('.experience-title');
+        const letters = experienceTitle.querySelectorAll('span');
+        gsap.to(letters, {
+            scrollTrigger: {
+                trigger: '#experience',
+                start: 'top 60%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.05,
+            ease: 'power4.out'
+        });
+
+        gsap.to('.experience-subtitle', {
+            scrollTrigger: {
+                trigger: '#experience',
+                start: 'top 50%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            duration: 1,
+            delay: 0.5,
+            ease: 'power3.out'
+        });
+
+        gsap.to('.contact-title', {
+            scrollTrigger: {
+                trigger: '#contact',
+                start: 'top 60%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            duration: 1.2,
+            ease: 'power3.out'
+        });
+
+        gsap.to('.contact-sub', {
+            scrollTrigger: {
+                trigger: '#contact',
+                start: 'top 50%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            duration: 1,
+            delay: 0.3,
+            ease: 'power3.out'
+        });
+
+        gsap.to('.btn-primary', {
+            scrollTrigger: {
+                trigger: '#contact',
+                start: 'top 40%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            duration: 1,
+            delay: 0.5,
+            ease: 'power3.out'
+        });
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            gsap.globalTimeline.timeScale(0);
+        }
+    </script>
+</body>
+</html>

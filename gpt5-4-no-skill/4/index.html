@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oasis | Architectural Stillness</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: #f2ece4;
+      --ink: #14110e;
+      --sand: #d4c3af;
+      --bronze: #83654b;
+      --line: rgba(20, 17, 14, 0.14);
+      --soft: rgba(20, 17, 14, 0.06);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Inter", sans-serif;
+    }
+    a { color: inherit; text-decoration: none; }
+    .page {
+      width: min(1240px, calc(100vw - 40px));
+      margin: 0 auto;
+    }
+    .masthead {
+      display: grid;
+      grid-template-columns: 160px 1fr 220px;
+      gap: 20px;
+      align-items: start;
+      padding: 30px 0 18px;
+      border-bottom: 1px solid var(--line);
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.12rem;
+    }
+    .brand, h1, h2 {
+      font-family: "DM Serif Display", serif;
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+    .brand {
+      font-size: 1.7rem;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 0.86fr 1.14fr;
+      gap: 28px;
+      align-items: stretch;
+      padding: 24px 0 46px;
+    }
+    .hero-side {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 720px;
+    }
+    .note {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(255,255,255,0.45);
+      color: rgba(20, 17, 14, 0.72);
+      line-height: 1.85;
+    }
+    .hero-main {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 22px;
+    }
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.12rem;
+      font-size: 0.76rem;
+      color: rgba(20, 17, 14, 0.6);
+      margin-top: 10px;
+    }
+    h1 {
+      font-size: clamp(4.2rem, 12vw, 9.2rem);
+      line-height: 0.9;
+      margin: 0;
+      max-width: 7ch;
+    }
+    .hero-copy {
+      font-size: 1rem;
+      line-height: 1.9;
+      color: rgba(20, 17, 14, 0.72);
+      max-width: 52ch;
+      margin-top: 16px;
+    }
+    .hero-image {
+      border-radius: 34px;
+      min-height: 420px;
+      background:
+        linear-gradient(180deg, rgba(242,236,228,0.04), rgba(20,17,14,0.18)),
+        url("https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1200&q=80") center/cover;
+      border: 1px solid rgba(20, 17, 14, 0.08);
+    }
+    .actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 15px 22px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      text-transform: uppercase;
+      letter-spacing: 0.11rem;
+      font-size: 0.78rem;
+    }
+    .btn.primary {
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--ink);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+      padding: 24px 0 72px;
+    }
+    .block {
+      padding: 26px;
+      border-radius: 28px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.52);
+    }
+    .block h2 {
+      font-size: clamp(2.3rem, 4vw, 4.3rem);
+      line-height: 0.98;
+      margin: 0 0 14px;
+    }
+    .block p, .timeline-item p, .contact p {
+      color: rgba(20, 17, 14, 0.72);
+      line-height: 1.85;
+      margin: 0;
+    }
+    .span-5 { grid-column: span 5; }
+    .span-7 { grid-column: span 7; }
+    .span-4 { grid-column: span 4; }
+    .span-8 { grid-column: span 8; }
+    .timeline {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 18px;
+      padding: 16px 0;
+      border-top: 1px solid var(--line);
+    }
+    .timeline-item:first-child { border-top: none; }
+    .time {
+      font-size: 0.82rem;
+      letter-spacing: 0.1rem;
+      text-transform: uppercase;
+      color: var(--bronze);
+      padding-top: 3px;
+    }
+    .contact {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 100%;
+    }
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 24px 0 42px;
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      color: rgba(20, 17, 14, 0.62);
+      font-size: 0.92rem;
+    }
+    @media (max-width: 980px) {
+      .masthead, .hero { grid-template-columns: 1fr; }
+      .hero-side { min-height: auto; }
+      .span-4, .span-5, .span-7, .span-8 { grid-column: 1 / -1; }
+    }
+    @media (max-width: 720px) {
+      .page { width: min(100vw - 28px, 1240px); }
+      .timeline-item { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="masthead">
+      <div class="brand">Oasis</div>
+      <div>Luxury meditation retreat for private recovery and inner quiet.</div>
+      <div><a href="#reserve">Reserve privately</a></div>
+    </header>
+
+    <section class="hero">
+      <aside class="hero-side">
+        <div class="note">At Oasis, stillness is not treated as an austerity. It is framed as a form of luxury: spacious, intentional, and supported by remarkable design.</div>
+        <div class="note">Residences are arranged around sheltered courtyards and reflective water, allowing each guest a slower, more private relationship with time.</div>
+      </aside>
+      <div class="hero-main">
+        <div>
+          <div class="eyebrow">A retreat composed in stone, light, and silence</div>
+          <h1>Architecture for a quieter mind.</h1>
+          <p class="hero-copy">Oasis blends contemplative practice with elevated hospitality. Days move through guided meditation, thermal rituals, attentive dining, and long pauses in beautifully restrained spaces designed to calm the senses rather than impress them.</p>
+        </div>
+        <div class="hero-image"></div>
+        <div class="actions">
+          <a class="btn primary" href="#reserve">Request invitation</a>
+          <a class="btn" href="#program">View retreat flow</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="block span-5">
+        <h2>Designed for people who need less noise, not more wellness theater.</h2>
+        <p>From the layout of each villa to the pacing of each ritual, Oasis strips away friction and creates room for genuine inward attention.</p>
+      </article>
+      <article class="block span-7">
+        <h2>What your stay includes</h2>
+        <div class="timeline">
+          <div class="timeline-item"><div class="time">Arrival</div><div><strong>Private welcome</strong><p>Discreet transfer, grounding tea service, and a guided transition into digital stillness.</p></div></div>
+          <div class="timeline-item"><div class="time">Morning</div><div><strong>Meditation and movement</strong><p>Breath-led practice, quiet walking routes, and individualized guidance from your resident practitioner.</p></div></div>
+          <div class="timeline-item"><div class="time">Evening</div><div><strong>Thermal recovery and supper</strong><p>Slow treatments, contemplative dining, and soft-lit spaces intended for reflection rather than performance.</p></div></div>
+        </div>
+      </article>
+      <article class="block span-8" id="program">
+        <h2>A measured rhythm of restoration.</h2>
+        <p>Oasis offers three-night, seven-night, and ten-night stays. Each begins with a diagnostic conversation and unfolds through a tailored blend of silent practice, restorative bodywork, hydrotherapy, and chef-led nutrition calibrated for clarity and ease.</p>
+      </article>
+      <article class="block span-4 contact" id="reserve">
+        <div>
+          <h2>Reserve</h2>
+          <p>Applications are accepted on a rolling basis to preserve atmosphere and care standards.</p>
+        </div>
+        <p>private@oasis-retreat.com<br />+1 (888) 661-2016</p>
+      </article>
+    </section>
+
+    <footer>
+      <span>Oasis luxury meditation retreat</span>
+      <span>Private villas · tailored rituals · architectural calm</span>
+    </footer>
+  </div>
+</body>
+</html>

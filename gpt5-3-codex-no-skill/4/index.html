@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oasis Retreat | Stone and Silence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;700;900&family=Cardo:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #efede7;
+      --ink: #1a1815;
+      --accent: #9d7a43;
+      --muted: #58534c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Chivo", sans-serif;
+      color: var(--ink);
+      background:
+        repeating-linear-gradient(
+          90deg,
+          rgba(0,0,0,0.02) 0,
+          rgba(0,0,0,0.02) 1px,
+          transparent 1px,
+          transparent 80px
+        ),
+        var(--bg);
+    }
+    .page {
+      width: min(1160px, 93vw);
+      margin: 2rem auto;
+      border: 3px solid var(--ink);
+      background: #f7f4ef;
+    }
+    .top {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      border-bottom: 3px solid var(--ink);
+      padding: 1rem 1.2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.72rem;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      min-height: 78vh;
+    }
+    .main {
+      padding: 2rem 2rem 2.3rem;
+      border-right: 3px solid var(--ink);
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 1.2rem;
+    }
+    .tag {
+      display: inline-block;
+      border: 2px solid var(--ink);
+      padding: 0.28rem 0.6rem;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      width: fit-content;
+      background: #f1ece2;
+    }
+    h1 {
+      margin: 0;
+      font-family: "Cardo", serif;
+      font-size: clamp(2.4rem, 7vw, 6rem);
+      line-height: 0.88;
+      max-width: 8ch;
+    }
+    .desc {
+      max-width: 50ch;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+    .buttons {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+    .btn {
+      text-decoration: none;
+      color: var(--ink);
+      border: 2px solid var(--ink);
+      padding: 0.72rem 0.95rem;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      transition: 150ms ease;
+    }
+    .btn.primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    .btn:hover { transform: translate(-2px, -2px); }
+    .side {
+      display: grid;
+      grid-template-rows: 1fr auto;
+    }
+    .photo {
+      background:
+        linear-gradient(to bottom, rgba(157,122,67,0.06), rgba(26,24,21,0.38)),
+        url("https://images.unsplash.com/photo-1600618528240-fb9fc964b853?auto=format&fit=crop&w=1300&q=80") center/cover;
+    }
+    .list {
+      border-top: 3px solid var(--ink);
+      padding: 1rem;
+      font-size: 0.84rem;
+      display: grid;
+      gap: 0.5rem;
+      background: #ece6db;
+    }
+    .list div {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+    }
+    .list strong { color: var(--ink); }
+    @media (max-width: 920px) {
+      .hero { grid-template-columns: 1fr; }
+      .main { border-right: 0; border-bottom: 3px solid var(--ink); }
+      .photo { min-height: 300px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="top">
+      <span>OASIS / ARCHITECTED QUIET</span>
+      <span>Member Retreat</span>
+    </header>
+    <section class="hero">
+      <article class="main">
+        <span class="tag">High-Altitude Sanctuary</span>
+        <h1>Silence Is The Finest Luxury.</h1>
+        <p class="desc">
+          Built around stone, wind, and intentional slowness, Oasis offers private meditation residences, therapeutic thermal circuits, and master-led contemplative practices in an uncompromising setting.
+        </p>
+        <div class="buttons">
+          <a class="btn primary" href="#">Reserve Suite</a>
+          <a class="btn" href="#">Request Private Tour</a>
+        </div>
+      </article>
+      <aside class="side">
+        <div class="photo" role="img" aria-label="Luxury mountain retreat architecture"></div>
+        <div class="list">
+          <div><span>Residences</span><strong>24</strong></div>
+          <div><span>Dedicated guides</span><strong>18</strong></div>
+          <div><span>Signature ritual</span><strong>Dawn Sound Bath</strong></div>
+        </div>
+      </aside>
+    </section>
+  </main>
+</body>
+</html>

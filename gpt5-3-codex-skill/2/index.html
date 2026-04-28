@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oasis Retreat - Liquid Gate</title>
+  <meta name="description" content="A cinematic landing narrative for Oasis, where meditation unfolds as a private luxury journey." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@500&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg: #0f0d11; --text: #f8f2e8; --muted: #9b9389; --accent: #ff9f43; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, sans-serif;
+      cursor: none;
+      overflow-x: hidden;
+    }
+    .cursor {
+      position: fixed; width: 12px; height: 12px; border-radius: 50%;
+      background: var(--accent); pointer-events: none; z-index: 100; mix-blend-mode: difference;
+    }
+    .menu {
+      position: fixed; top: 24px; right: 24px; z-index: 30;
+      border: 1px solid #3f3843; background: transparent; color: var(--text);
+      border-radius: 999px; padding: 13px 18px;
+      font: 500 11px/1 "JetBrains Mono", monospace; text-transform: uppercase; letter-spacing: 0.14em;
+    }
+    .menu-sheet {
+      position: fixed; inset: 0; z-index: 20;
+      clip-path: circle(0% at 94% 7%);
+      background: radial-gradient(circle at 18% 10%, #332321 0%, #151017 55%, #0f0d11 100%);
+      display: grid; place-items: center;
+    }
+    .menu-sheet nav { display: grid; gap: 14px; text-align: center; }
+    .menu-sheet a {
+      color: var(--text); text-decoration: none;
+      font: 700 clamp(2.5rem, 8vw, 7rem)/0.9 "Playfair Display", serif; letter-spacing: -0.02em;
+    }
+    .hero {
+      min-height: 105vh;
+      padding: 18vh 7vw 8vh;
+      display: grid;
+      align-content: space-between;
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+    }
+    .liquid {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255, 159, 67, 0.32), rgba(255, 159, 67, 0.04) 28%, transparent 55%),
+        radial-gradient(circle at 70% 60%, rgba(255, 206, 148, 0.12), transparent 56%),
+        linear-gradient(120deg, #20161f 0%, #0f0d11 42%, #15111a 100%);
+      clip-path: polygon(0 20%, 100% 0, 100% 76%, 0 100%);
+      z-index: -1;
+    }
+    .kicker {
+      color: var(--muted);
+      font: 500 11px/1 "JetBrains Mono", monospace;
+      text-transform: uppercase; letter-spacing: 0.15em;
+    }
+    h1 {
+      margin: 18px 0 0;
+      max-width: 7ch;
+      font: 700 clamp(4.2rem, 12vw, 12.5rem)/0.84 "Playfair Display", serif;
+      letter-spacing: -0.03em;
+    }
+    .summary {
+      max-width: 50ch;
+      color: #ddd2c3;
+      line-height: 1.75;
+      margin: 30px 0 0;
+    }
+    .actions { display: flex; gap: 12px; margin-top: 32px; flex-wrap: wrap; }
+    .btn {
+      border-radius: 999px; padding: 14px 20px; text-decoration: none;
+      font: 500 11px/1 "JetBrains Mono", monospace; text-transform: uppercase; letter-spacing: 0.14em;
+      border: 1px solid #4a414c;
+    }
+    .btn-main { background: var(--accent); color: #190f03; border-color: var(--accent); }
+    .btn-alt { color: var(--text); }
+    .track {
+      margin: 16vh 0;
+      display: grid; gap: 20vh;
+      padding: 0 7vw 15vh;
+    }
+    .beat {
+      max-width: 780px;
+      margin-inline: auto;
+    }
+    .beat h2 {
+      margin: 0 0 10px;
+      font: 700 clamp(2rem, 7vw, 6.5rem)/0.9 "Playfair Display", serif;
+      letter-spacing: -0.02em;
+      max-width: 8ch;
+    }
+    .beat p { color: #d6ccbe; line-height: 1.78; }
+    .focusable:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
+    @media (max-width: 920px) {
+      body { cursor: auto; }
+      .cursor { display: none; }
+      .hero { min-height: 96vh; padding-top: 20vh; }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor" aria-hidden="true"></div>
+  <button class="menu focusable" id="menu" data-magnetic>Menu</button>
+  <aside class="menu-sheet" id="sheet">
+    <nav>
+      <a href="#arrival" class="focusable">Arrival</a>
+      <a href="#immersion" class="focusable">Immersion</a>
+      <a href="#integration" class="focusable">Integration</a>
+    </nav>
+  </aside>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="kicker animated">Oasis / Desert Reserve</div>
+        <h1 class="animated">Calm, Rendered In Liquid Light.</h1>
+        <p class="summary animated">A deeply private wellness residency combining long-form meditation, sound architecture, and tailored nervous-system reset sessions.</p>
+        <div class="actions animated">
+          <a href="#arrival" class="btn btn-main focusable" data-magnetic>Begin Inquiry</a>
+          <a href="#immersion" class="btn btn-alt focusable" data-magnetic>Program Overview</a>
+        </div>
+      </div>
+      <div class="liquid" id="liquid"></div>
+    </section>
+
+    <section class="track">
+      <article class="beat animated" id="arrival">
+        <div class="kicker">Beginning</div>
+        <h2>Arrival in a Slow, Warm Silence.</h2>
+        <p>Your first day is intentionally unhurried: hydrotherapy, guided breath profiling, and quiet consultation with your resident meditation guide.</p>
+      </article>
+      <article class="beat animated" id="immersion">
+        <div class="kicker">Middle</div>
+        <h2>Immersion Built Around Your Rhythm.</h2>
+        <p>Daily sessions alternate between stillness chambers, sonic immersion, and private movement practices designed around your measurable stress patterns.</p>
+      </article>
+      <article class="beat animated" id="integration">
+        <div class="kicker">End</div>
+        <h2>Integration That Travels Home With You.</h2>
+        <p>Departure includes a custom practice sequence, digital check-ins, and a discreet concierge for continued balance after your return.</p>
+      </article>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const menu = document.getElementById("menu");
+    const sheet = document.getElementById("sheet");
+    const liquid = document.getElementById("liquid");
+    let open = false;
+
+    menu.addEventListener("click", () => {
+      open = !open;
+      gsap.to(sheet, {
+        clipPath: open ? "circle(140% at 94% 7%)" : "circle(0% at 94% 7%)",
+        duration: 1.1,
+        ease: "expo.inOut"
+      });
+      menu.textContent = open ? "Close" : "Menu";
+    });
+
+    if (!reduced && window.Lenis) {
+      const lenis = new Lenis({ duration: 1.2 });
+      lenis.on("scroll", ScrollTrigger.update);
+      gsap.ticker.add((t) => lenis.raf(t * 1000));
+      gsap.ticker.lagSmoothing(0);
+    }
+
+    if (!reduced) {
+      gsap.from(".hero .animated", { y: 120, opacity: 0, duration: 1.25, stagger: 0.11, ease: "power4.out" });
+      gsap.to(liquid, {
+        clipPath: "polygon(0 10%, 100% 4%, 100% 88%, 0 95%)",
+        duration: 3.4,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      });
+      gsap.from(".beat", {
+        scrollTrigger: { trigger: ".track", start: "top 72%" },
+        y: 110,
+        opacity: 0,
+        duration: 1.15,
+        stagger: 0.16,
+        ease: "power4.out"
+      });
+      gsap.to(".hero", {
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 1 },
+        backgroundPosition: "50% 90%"
+      });
+    } else {
+      document.querySelectorAll(".animated").forEach((el) => {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      });
+    }
+
+    const cursor = document.querySelector(".cursor");
+    if (!reduced && cursor) {
+      const magnets = document.querySelectorAll("[data-magnetic]");
+      window.addEventListener("mousemove", (e) => {
+        gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.55, ease: "power3.out" });
+      });
+      magnets.forEach((el) => {
+        el.addEventListener("mousemove", (e) => {
+          const r = el.getBoundingClientRect();
+          const x = e.clientX - r.left - r.width / 2;
+          const y = e.clientY - r.top - r.height / 2;
+          gsap.to(el, { x: x * 0.22, y: y * 0.22, duration: 0.35, ease: "power2.out" });
+          gsap.to(cursor, { scale: 2.5, duration: 0.25 });
+        });
+        el.addEventListener("mouseleave", () => {
+          gsap.to(el, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.4)" });
+          gsap.to(cursor, { scale: 1, duration: 0.25 });
+        });
+      });
+    }
+  </script>
+</body>
+</html>

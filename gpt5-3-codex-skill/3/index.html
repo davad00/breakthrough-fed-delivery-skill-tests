@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oasis Retreat - Celestial Hall</title>
+  <meta name="description" content="Oasis Celestial Hall: a high-end meditation retreat landing page with cinematic scroll and stellar ambience." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@500&family=Manrope:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg: #070b10; --text: #edf5f8; --muted: #7f91a0; --accent: #59e8ff; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+    #stars {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      opacity: 0.9;
+    }
+    .cursor {
+      width: 12px; height: 12px; border-radius: 50%; background: var(--accent);
+      position: fixed; top: 0; left: 0; pointer-events: none; z-index: 100; mix-blend-mode: difference;
+    }
+    .menu {
+      position: fixed; right: 24px; top: 24px; z-index: 20;
+      border: 1px solid #32424f; border-radius: 999px; background: transparent; color: var(--text);
+      padding: 13px 17px; font: 500 11px/1 "JetBrains Mono", monospace; text-transform: uppercase; letter-spacing: 0.14em;
+    }
+    .sheet {
+      position: fixed; inset: 0; z-index: 18;
+      background: rgba(7, 11, 16, 0.95); backdrop-filter: blur(10px);
+      transform: translateX(100%);
+      display: grid; place-items: center;
+    }
+    .sheet nav { display: grid; gap: 16px; text-align: center; }
+    .sheet a {
+      text-decoration: none; color: var(--text);
+      font: 700 clamp(2.3rem, 7vw, 7rem)/0.9 Manrope, sans-serif;
+      letter-spacing: -0.03em;
+    }
+    main { position: relative; z-index: 5; }
+    .hero {
+      min-height: 100vh;
+      padding: 16vh 7vw 10vh;
+      display: grid;
+      align-content: center;
+      max-width: 1300px;
+      margin-inline: auto;
+    }
+    .kicker {
+      color: var(--muted);
+      font: 500 11px/1 "JetBrains Mono", monospace; letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 18px 0 20px;
+      font: 700 clamp(4.2rem, 11vw, 12rem)/0.82 Manrope, sans-serif;
+      letter-spacing: -0.05em;
+      max-width: 9ch;
+      text-wrap: balance;
+    }
+    .intro {
+      max-width: 48ch; color: #ced9df; line-height: 1.75;
+      margin: 0;
+    }
+    .cta { display: flex; gap: 12px; margin-top: 34px; flex-wrap: wrap; }
+    .btn {
+      border-radius: 999px; padding: 14px 20px; text-decoration: none;
+      font: 500 11px/1 "JetBrains Mono", monospace; letter-spacing: 0.14em; text-transform: uppercase;
+      border: 1px solid #344752;
+    }
+    .btn-main { background: var(--accent); color: #021217; border-color: var(--accent); }
+    .btn-alt { color: var(--text); }
+    .line {
+      margin: 14vh auto 16vh;
+      width: min(1200px, 86vw);
+      display: grid;
+      gap: 16vh;
+    }
+    .chapter {
+      min-height: 45vh;
+      border-top: 1px solid rgba(89, 232, 255, 0.22);
+      padding-top: 24px;
+    }
+    .chapter h2 {
+      margin: 8px 0 10px;
+      font: 700 clamp(1.9rem, 6vw, 5.6rem)/0.9 Manrope, sans-serif;
+      letter-spacing: -0.03em;
+      max-width: 9ch;
+    }
+    .chapter p { margin: 0; color: #c9d3da; line-height: 1.76; max-width: 55ch; }
+    .focusable:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
+    @media (max-width: 900px) {
+      body { cursor: auto; }
+      .cursor { display: none; }
+      #stars { opacity: 0.65; }
+      .hero { padding-top: 20vh; }
+      h1 { font-size: clamp(3.1rem, 16vw, 5.2rem); }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="stars" aria-hidden="true"></canvas>
+  <div class="cursor" aria-hidden="true"></div>
+  <button class="menu focusable" id="menu" data-magnetic>Menu</button>
+  <aside class="sheet" id="sheet">
+    <nav>
+      <a class="focusable" href="#beginning">Beginning</a>
+      <a class="focusable" href="#middle">Middle</a>
+      <a class="focusable" href="#end">End</a>
+    </nav>
+  </aside>
+
+  <main>
+    <section class="hero">
+      <div class="kicker animated">Oasis / Celestial Hall</div>
+      <h1 class="animated">Meditation Aligned To The Night Sky.</h1>
+      <p class="intro animated">A private retreat where silence sessions, neuro-acoustic therapy, and stargazing rituals are choreographed into one coherent renewal arc.</p>
+      <div class="cta animated">
+        <a href="#beginning" class="btn btn-main focusable" data-magnetic>Apply For Stay</a>
+        <a href="#middle" class="btn btn-alt focusable" data-magnetic>Explore Journey</a>
+      </div>
+    </section>
+
+    <section class="line">
+      <article class="chapter animated" id="beginning">
+        <div class="kicker">Beginning</div>
+        <h2>Arrival Through Low Light And Quiet Sound.</h2>
+        <p>Guests enter through the twilight court, then settle into private resonance suites for an initial nervous-system calibration and a gently paced orientation.</p>
+      </article>
+      <article class="chapter animated" id="middle">
+        <div class="kicker">Middle</div>
+        <h2>Immersion Across Daylight And Midnight.</h2>
+        <p>Your schedule alternates breathwork, deep stillness, and sensor-guided sessions. Evenings transition to celestial observatory meditation under guided silence.</p>
+      </article>
+      <article class="chapter animated" id="end">
+        <div class="kicker">End</div>
+        <h2>Departure With A Repeatable Personal Protocol.</h2>
+        <p>Before departure, Oasis prepares your post-retreat cadence with direct mentor access, integration prompts, and continued remote support.</p>
+      </article>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const sheet = document.getElementById("sheet");
+    const menu = document.getElementById("menu");
+    let isOpen = false;
+
+    menu.addEventListener("click", () => {
+      isOpen = !isOpen;
+      gsap.to(sheet, { xPercent: isOpen ? -100 : 0, duration: 1, ease: "expo.inOut" });
+      menu.textContent = isOpen ? "Close" : "Menu";
+    });
+
+    if (!reduced && window.Lenis) {
+      const lenis = new Lenis({ duration: 1.15 });
+      lenis.on("scroll", ScrollTrigger.update);
+      gsap.ticker.add((t) => lenis.raf(t * 1000));
+      gsap.ticker.lagSmoothing(0);
+    }
+
+    if (!reduced) {
+      gsap.from(".hero .animated", { y: 120, opacity: 0, duration: 1.3, stagger: 0.12, ease: "power4.out" });
+      gsap.from(".chapter", {
+        scrollTrigger: { trigger: ".line", start: "top 72%" },
+        y: 120, opacity: 0, duration: 1.2, stagger: 0.17, ease: "power4.out"
+      });
+    } else {
+      document.querySelectorAll(".animated").forEach((el) => {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      });
+    }
+
+    const canvas = document.getElementById("stars");
+    const ctx = canvas.getContext("2d");
+    let stars = [];
+    function sizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      stars = Array.from({ length: Math.floor(window.innerWidth / 10) }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        z: Math.random() * 2 + 0.6,
+        r: Math.random() * 1.6 + 0.3
+      }));
+    }
+    function drawStars() {
+      if (reduced) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      stars.forEach((s) => {
+        s.y += 0.06 * s.z;
+        if (s.y > canvas.height) s.y = -2;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r * s.z, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(89,232,255,0.85)";
+        ctx.fill();
+      });
+      requestAnimationFrame(drawStars);
+    }
+    sizeCanvas();
+    drawStars();
+    window.addEventListener("resize", sizeCanvas);
+
+    const cursor = document.querySelector(".cursor");
+    if (!reduced && cursor) {
+      const magnets = document.querySelectorAll("[data-magnetic]");
+      window.addEventListener("mousemove", (e) => {
+        gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.55, ease: "power3.out" });
+      });
+      magnets.forEach((el) => {
+        el.addEventListener("mousemove", (e) => {
+          const r = el.getBoundingClientRect();
+          const x = e.clientX - r.left - r.width / 2;
+          const y = e.clientY - r.top - r.height / 2;
+          gsap.to(el, { x: x * 0.22, y: y * 0.22, duration: 0.36, ease: "power2.out" });
+          gsap.to(cursor, { scale: 2.5, duration: 0.24 });
+        });
+        el.addEventListener("mouseleave", () => {
+          gsap.to(el, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.4)" });
+          gsap.to(cursor, { scale: 1, duration: 0.24 });
+        });
+      });
+    }
+  </script>
+</body>
+</html>

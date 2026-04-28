@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis — Luxury Meditation Retreat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FAFAFA;
+            --secondary: #6B6B6B;
+            --accent: #C9A962;
+            --void: #050505;
+            --text-light: #F5F5F0;
+            --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-atmospheric: cubic-bezier(0.45, 0, 0.55, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--void);
+            color: var(--primary);
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            line-height: 1.8;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        .cursor {
+            width: 12px;
+            height: 12px;
+            background: var(--accent);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            mix-blend-mode: difference;
+            transition: transform 0.15s var(--ease-cinematic), background 0.3s;
+        }
+
+        .cursor.hover {
+            transform: scale(4);
+            background: var(--primary);
+        }
+
+        .cursor-dot {
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10001;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 32px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            mix-blend-mode: difference;
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        .nav-logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--primary);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 48px;
+        }
+
+        .nav-link {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--secondary);
+            text-decoration: none;
+            position: relative;
+            transition: color 0.3s var(--ease-cinematic);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width 0.4s var(--ease-cinematic);
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 20vw;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 14vw;
+            font-weight: 300;
+            letter-spacing: -0.04em;
+            line-height: 0.85;
+            opacity: 0;
+            transform: translateY(80px);
+        }
+
+        .hero-subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--secondary);
+            margin-top: 48px;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .hero-line {
+            width: 1px;
+            height: 0;
+            background: var(--accent);
+            margin-top: 80px;
+            opacity: 0;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 48px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+        }
+
+        .scroll-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--secondary);
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 48px;
+            background: linear-gradient(to bottom, var(--accent), transparent);
+            animation: scrollPulse 2s var(--ease-atmospheric) infinite;
+        }
+
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+            50% { opacity: 1; transform: scaleY(1); }
+        }
+
+        .particles {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--accent);
+            border-radius: 50%;
+            opacity: 0;
+        }
+
+        .philosophy {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 20vw;
+            position: relative;
+        }
+
+        .philosophy-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 48px;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .philosophy-quote {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 5vw;
+            font-weight: 300;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            max-width: 900px;
+            opacity: 0;
+            transform: translateY(60px);
+        }
+
+        .philosophy-quote span {
+            color: var(--accent);
+        }
+
+        .philosophy-body {
+            margin-top: 64px;
+            max-width: 480px;
+            font-size: 16px;
+            color: var(--secondary);
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .retreats {
+            padding: 15vw;
+        }
+
+        .retreats-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 10vw;
+        }
+
+        .retreats-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 5vw;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .retreats-count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            color: var(--secondary);
+            opacity: 0;
+        }
+
+        .retreats-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8vw;
+        }
+
+        .retreat-card {
+            position: relative;
+            padding: 8vw 6vw;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            opacity: 0;
+            transform: translateY(80px);
+            transition: all 0.6s var(--ease-cinematic);
+        }
+
+        .retreat-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(201, 169, 98, 0.3);
+            transform: translateY(-8px);
+        }
+
+        .retreat-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+            margin-bottom: 24px;
+        }
+
+        .retreat-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4vw;
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+
+        .retreat-desc {
+            font-size: 15px;
+            color: var(--secondary);
+            max-width: 400px;
+            margin-bottom: 32px;
+        }
+
+        .retreat-link {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: gap 0.3s var(--ease-cinematic);
+        }
+
+        .retreat-link:hover {
+            gap: 24px;
+        }
+
+        .retreat-link svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .experience {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 15vw;
+            overflow: hidden;
+        }
+
+        .experience-bg {
+            position: absolute;
+            inset: -10%;
+            background: radial-gradient(ellipse at center, rgba(201, 169, 98, 0.08) 0%, transparent 70%);
+            opacity: 0;
+        }
+
+        .experience-content {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+        }
+
+        .experience-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 6vw;
+            font-weight: 300;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            margin-bottom: 48px;
+            opacity: 0;
+            transform: translateY(60px);
+        }
+
+        .experience-text {
+            font-size: 17px;
+            color: var(--secondary);
+            line-height: 1.9;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .experience-visual {
+            position: absolute;
+            right: 10vw;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 400px;
+            height: 500px;
+            opacity: 0;
+        }
+
+        .experience-ring {
+            position: absolute;
+            border: 1px solid rgba(201, 169, 98, 0.2);
+            border-radius: 50%;
+            animation: ringPulse 4s var(--ease-atmospheric) infinite;
+        }
+
+        .experience-ring:nth-child(1) {
+            inset: 0;
+            animation-delay: 0s;
+        }
+
+        .experience-ring:nth-child(2) {
+            inset: 30px;
+            animation-delay: 0.5s;
+        }
+
+        .experience-ring:nth-child(3) {
+            inset: 60px;
+            animation-delay: 1s;
+        }
+
+        .experience-ring:nth-child(4) {
+            inset: 90px;
+            animation-delay: 1.5s;
+        }
+
+        @keyframes ringPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        .contact {
+            padding: 20vw;
+            text-align: center;
+        }
+
+        .contact-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--secondary);
+            margin-bottom: 32px;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .contact-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 6vw;
+            font-weight: 300;
+            letter-spacing: -0.03em;
+            margin-bottom: 64px;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .contact-form {
+            max-width: 400px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .form-group {
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 16px 0;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            color: var(--primary);
+            outline: none;
+            transition: border-color 0.3s var(--ease-cinematic);
+        }
+
+        .form-input:focus {
+            border-color: var(--accent);
+        }
+
+        .form-input::placeholder {
+            color: var(--secondary);
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--void);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 20px 56px;
+            border: none;
+            cursor: none;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s var(--ease-cinematic), box-shadow 0.4s var(--ease-cinematic);
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 60px rgba(201, 169, 98, 0.4);
+        }
+
+        .footer {
+            padding: 64px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--secondary);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .footer-link {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--secondary);
+            text-decoration: none;
+            transition: color 0.3s var(--ease-cinematic);
+        }
+
+        .footer-link:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 18vw;
+            }
+
+            .philosophy-quote {
+                font-size: 8vw;
+            }
+
+            .retreats-title,
+            .experience-title,
+            .contact-title {
+                font-size: 10vw;
+            }
+
+            .retreat-name {
+                font-size: 7vw;
+            }
+
+            .nav {
+                padding: 24px;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .cursor,
+            .cursor-dot {
+                display: none;
+            }
+
+            body {
+                cursor: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+
+    <nav class="nav">
+        <div class="nav-logo">Oasis</div>
+        <div class="nav-menu">
+            <a href="#philosophy" class="nav-link">Philosophy</a>
+            <a href="#retreats" class="nav-link">Retreats</a>
+            <a href="#experience" class="nav-link">Experience</a>
+            <a href="#contact" class="nav-link">Contact</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="particles"></div>
+        <h1 class="hero-title">Oasis</h1>
+        <p class="hero-subtitle">Where stillness speaks</p>
+        <div class="hero-line"></div>
+        <div class="scroll-indicator">
+            <span class="scroll-text">Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <section class="philosophy" id="philosophy">
+        <span class="philosophy-label">Our Philosophy</span>
+        <blockquote class="philosophy-quote">
+            In the silence between thoughts, we discover the <span>infinite space</span> where true healing begins.
+        </blockquote>
+        <p class="philosophy-body">
+            Nestled in untouched wilderness, Oasis offers a sanctuary for those seeking liberation from the noise of modern life. Our approach blends ancient contemplative traditions with contemporary wellness science.
+        </p>
+    </section>
+
+    <section class="retreats" id="retreats">
+        <div class="retreats-header">
+            <h2 class="retreats-title">Sacred Retreats</h2>
+            <span class="retreats-count">03</span>
+        </div>
+        <div class="retreats-grid">
+            <article class="retreat-card">
+                <span class="retreat-number">01</span>
+                <h3 class="retreat-name">Silent Vigil</h3>
+                <p class="retreat-desc">Seven days of noble silence in our mountain sanctuary. For those ready to go deeper.</p>
+                <a href="#" class="retreat-link">
+                    Explore
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </article>
+            <article class="retreat-card">
+                <span class="retreat-number">02</span>
+                <h3 class="retreat-name">Breath Journey</h3>
+                <p class="retreat-desc">A 21-day immersive transformation using pranayama and conscious connected breathing.</p>
+                <a href="#" class="retreat-link">
+                    Explore
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </article>
+            <article class="retreat-card">
+                <span class="retreat-number">03</span>
+                <h3 class="retreat-name">Night Temple</h3>
+                <p class="retreat-desc">Full moon ceremonies under the stars. Dance, chant, and dissolve into the infinite.</p>
+                <a href="#" class="retreat-link">
+                    Explore
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </article>
+        </div>
+    </section>
+
+    <section class="experience" id="experience">
+        <div class="experience-bg"></div>
+        <div class="experience-content">
+            <h2 class="experience-title">Enter the<br>Sanctuary</h2>
+            <p class="experience-text">
+                Our architects designed spaces that dissolve the boundary between interior and nature. Hand-carved stone chambers meet living bamboo structures. Every element serves the practice of presence.
+            </p>
+        </div>
+        <div class="experience-visual">
+            <div class="experience-ring"></div>
+            <div class="experience-ring"></div>
+            <div class="experience-ring"></div>
+            <div class="experience-ring"></div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <span class="contact-label">Begin Your Journey</span>
+        <h2 class="contact-title">Request an Invitation</h2>
+        <form class="contact-form">
+            <div class="form-group">
+                <input type="text" class="form-input" placeholder="Your Name" required>
+            </div>
+            <div class="form-group">
+                <input type="email" class="form-input" placeholder="Email Address" required>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-input" placeholder="Your Intention">
+            </div>
+            <button type="submit" class="btn-primary">Request Access</button>
+        </form>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-logo">Oasis Retreat</div>
+        <div class="footer-links">
+            <a href="#" class="footer-link">Privacy</a>
+            <a href="#" class="footer-link">Terms</a>
+            <a href="#" class="footer-link">Instagram</a>
+        </div>
+    </footer>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        const cursor = document.querySelector('.cursor');
+        const cursorDot = document.querySelector('.cursor-dot');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.15;
+            cursorY += (mouseY - cursorY) * 0.15;
+            cursorDot.style.left = mouseX - 2 + 'px';
+            cursorDot.style.top = mouseY - 2 + 'px';
+            cursor.style.left = cursorX - 6 + 'px';
+            cursor.style.top = cursorY - 6 + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        const hoverElements = document.querySelectorAll('a, button, .retreat-card, .form-input');
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        const particlesContainer = document.querySelector('.particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particlesContainer.appendChild(particle);
+            gsap.to(particle, {
+                opacity: Math.random() * 0.5 + 0.1,
+                duration: Math.random() * 3 + 2,
+                repeat: -1,
+                yoyo: true,
+                ease: 'sine.inOut',
+                delay: Math.random() * 2
+            });
+            gsap.to(particle, {
+                y: Math.random() * 100 - 50,
+                x: Math.random() * 50 - 25,
+                duration: Math.random() * 10 + 10,
+                repeat: -1,
+                yoyo: true,
+                ease: 'sine.inOut'
+            });
+        }
+
+        gsap.to('.nav', {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 0.5,
+            ease: 'power3.out'
+        });
+
+        const heroTimeline = gsap.timeline({ delay: 0.3 });
+        heroTimeline
+            .to('.hero-title', {
+                opacity: 1,
+                y: 0,
+                duration: 1.5,
+                ease: 'power4.out'
+            })
+            .to('.hero-subtitle', {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: 'power4.out'
+            }, '-=1')
+            .to('.hero-line', {
+                opacity: 1,
+                height: 80,
+                duration: 1.2,
+                ease: 'power4.out'
+            }, '-=0.5')
+            .to('.scroll-indicator', {
+                opacity: 1,
+                duration: 1,
+                ease: 'power4.out'
+            }, '-=0.3');
+
+        gsap.to('.philosophy-label', {
+            scrollTrigger: {
+                trigger: '.philosophy',
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power4.out'
+        });
+
+        gsap.to('.philosophy-quote', {
+            scrollTrigger: {
+                trigger: '.philosophy',
+                start: 'top 60%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: 'power4.out'
+        });
+
+        gsap.to('.philosophy-body', {
+            scrollTrigger: {
+                trigger: '.philosophy',
+                start: 'top 40%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: 'power4.out'
+        });
+
+        gsap.to('.retreats-title', {
+            scrollTrigger: {
+                trigger: '.retreats',
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: 'power4.out'
+        });
+
+        gsap.to('.retreats-count', {
+            scrollTrigger: {
+                trigger: '.retreats',
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            duration: 0.8,
+            delay: 0.3,
+            ease: 'power4.out'
+        });
+
+        gsap.to('.retreat-card', {
+            scrollTrigger: {
+                trigger: '.retreats-grid',
+                start: 'top 70%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: 'power4.out'
+        });
+
+        gsap.to('.experience-bg', {
+            scrollTrigger: {
+                trigger: '.experience',
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            duration: 2,
+            ease: 'power4.out'
+        });
+
+        gsap.to('.experience-title', {
+            scrollTrigger: {
+                trigger: '.experience',
+                start: 'top 60%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: 'power4.out'
+        });
+
+        gsap.to('.experience-text', {
+            scrollTrigger: {
+                trigger: '.experience',
+                start: 'top 50%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 0.3,
+            ease: 'power4.out'
+        });
+
+        gsap.to('.experience-visual', {
+            scrollTrigger: {
+                trigger: '.experience',
+                start: 'top 60%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            duration: 1.5,
+            ease: 'power4.out'
+        });
+
+        gsap.to('.contact-label', {
+            scrollTrigger: {
+                trigger: '.contact',
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power4.out'
+        });
+
+        gsap.to('.contact-title', {
+            scrollTrigger: {
+                trigger: '.contact',
+                start: 'top 70%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: 'power4.out'
+        });
+
+        gsap.to('.contact-form', {
+            scrollTrigger: {
+                trigger: '.contact',
+                start: 'top 60%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 0.2,
+            ease: 'power4.out'
+        });
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            gsap.globalTimeline.timeScale(0);
+            document.querySelectorAll('*').forEach(el => {
+                el.style.animation = 'none';
+            });
+        }
+    </script>
+</body>
+</html>

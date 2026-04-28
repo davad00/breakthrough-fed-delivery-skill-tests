@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis - Luxury Meditation Retreat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Garamond', serif;
+            background: #fafaf8;
+            color: #2d2d2d;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        header {
+            padding: 3rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .brand {
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: 0.5em;
+        }
+        
+        .hero-section {
+            padding: 4rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            min-height: 80vh;
+        }
+        
+        .hero-text h1 {
+            font-size: 5rem;
+            font-weight: 300;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+        }
+        
+        .hero-text p {
+            font-size: 1.4rem;
+            line-height: 1.8;
+            color: #666;
+            margin-bottom: 3rem;
+        }
+        
+        .hero-image {
+            height: 600px;
+            background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><rect fill="%23e8ebe4" width="800" height="600"/><path d="M400,150 Q500,300 400,450 Q300,300 400,150" fill="%23c5d3c0" opacity="0.5"/></svg>');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .btn-outline {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            border: 2px solid #2d2d2d;
+            color: #2d2d2d;
+            text-decoration: none;
+            font-size: 1rem;
+            letter-spacing: 0.2em;
+            transition: all 0.3s;
+        }
+        
+        .btn-outline:hover {
+            background: #2d2d2d;
+            color: white;
+        }
+        
+        .philosophy {
+            background: #2d2d2d;
+            color: #fafaf8;
+            padding: 8rem 4rem;
+            text-align: center;
+        }
+        
+        .philosophy h2 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin-bottom: 3rem;
+        }
+        
+        .philosophy p {
+            max-width: 900px;
+            margin: 0 auto;
+            font-size: 1.3rem;
+            line-height: 2;
+            opacity: 0.9;
+        }
+        
+        .offerings {
+            padding: 8rem 4rem;
+        }
+        
+        .offerings h2 {
+            text-align: center;
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin-bottom: 5rem;
+        }
+        
+        .offering-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            border: 1px solid #ddd;
+            padding: 3rem;
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .card h3 {
+            font-size: 2rem;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+        
+        .card-price {
+            font-size: 1.5rem;
+            color: #2d2d2d;
+            font-weight: 300;
+        }
+        
+        footer {
+            background: #fafaf8;
+            padding: 4rem;
+            text-align: center;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="brand">OASIS</div>
+            <nav>Contact</nav>
+        </header>
+        
+        <section class="hero-section">
+            <div class="hero-text">
+                <h1>Discover Stillness in Luxury</h1>
+                <p>A meditation retreat where tranquility meets sophistication. Immerse yourself in an environment designed for profound inner work.</p>
+                <a href="#" class="btn-outline">BEGIN YOUR JOURNEY</a>
+            </div>
+            <div class="hero-image"></div>
+        </section>
+    </div>
+    
+    <section class="philosophy">
+        <h2>Our Philosophy</h2>
+        <p>At Oasis, we believe that true luxury is the freedom to be present. Our retreat offers a sanctuary where you can shed the weight of daily life and rediscover the clarity that lies within.</p>
+    </section>
+    
+    <section class="offerings">
+        <h2>Retreat Packages</h2>
+        <div class="offering-cards">
+            <div class="card">
+                <h3>Weekend Escape</h3>
+                <p>Two nights of guided meditation, yoga, and mindful dining in our serene mountain setting.</p>
+                <div class="card-price">From $2,500</div>
+            </div>
+            <div class="card">
+                <h3>Week of Renewal</h3>
+                <p>Seven days of deep practice with personalized guidance and holistic wellness treatments.</p>
+                <div class="card-price">From $8,500</div>
+            </div>
+            <div class="card">
+                <h3>Month of Transformation</h3>
+                <p>A complete immersion experience with master teachers and comprehensive wellness support.</p>
+                <div class="card-price">From $28,000</div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <p>&copy; 2026 Oasis Meditation Retreat. All rights reserved.</p>
+    </footer>
+</body>
+</html>

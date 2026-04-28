@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis | Luxury Meditation Retreat</title>
+    <style>
+        :root {
+            --primary: #f8f5f2;
+            --secondary: #d5cabd;
+            --text-dark: #3a3a3a;
+            --text-light: #7a7a7a;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Playfair Display', serif;
+            background-color: var(--primary);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 5%;
+            position: absolute;
+            width: 100%;
+            top: 0;
+            z-index: 10;
+        }
+        .logo {
+            font-size: 1.5rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+        h1 {
+            font-size: 5rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+        .subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin-bottom: 3rem;
+        }
+        .cta-btn {
+            padding: 1rem 3rem;
+            background-color: transparent;
+            border: 1px solid var(--text-dark);
+            color: var(--text-dark);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .cta-btn:hover {
+            background-color: var(--text-dark);
+            color: var(--primary);
+        }
+        .image-container {
+            width: 80%;
+            max-width: 1200px;
+            height: 60vh;
+            margin: 0 auto 5rem;
+            background-image: url('https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
+            background-size: cover;
+            background-position: center;
+            filter: grayscale(20%) sepia(10%);
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Playfair+Display:wght@400;500&display=swap');
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">Oasis</div>
+        <div class="nav-links">
+            <a href="#">The Retreat</a>
+            <a href="#">Experience</a>
+            <a href="#">Booking</a>
+        </div>
+    </nav>
+    <section class="hero">
+        <h1>Find Your Center</h1>
+        <p class="subtitle">A sanctuary for the mind, body, and soul. Disconnect from the noise and reconnect with yourself in our high-end luxury meditation retreat.</p>
+        <button class="cta-btn">Begin Journey</button>
+    </section>
+    <div class="image-container"></div>
+</body>
+</html>

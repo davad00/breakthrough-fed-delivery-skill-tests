@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oasis — Luxury Meditation Retreat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --deep-forest: #1C2B1A;
+    --forest-green: #2D4A29;
+    --sage: #7BA05B;
+    --terracotta: #C4632A;
+    --cream: #F7F3EE;
+    --sand: #E8D5B0;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--deep-forest);
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  h1, h2, h3, h4 { font-family: 'DM Serif Display', serif; }
+
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 1.5rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: transparent;
+    transition: background 0.4s ease, backdrop-filter 0.4s ease;
+  }
+
+  nav.scrolled {
+    background: rgba(28, 43, 26, 0.95);
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    color: var(--cream);
+    letter-spacing: 0.08em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--cream);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+  }
+
+  .nav-links a:hover { opacity: 1; }
+
+  .nav-cta {
+    background: var(--terracotta);
+    color: var(--cream) !important;
+    opacity: 1 !important;
+    padding: 0.6rem 1.5rem;
+    border-radius: 100px;
+    transition: background 0.2s !important;
+  }
+
+  .nav-cta:hover { background: #a8531f !important; }
+
+  section { position: relative; }
+
+  .hero {
+    min-height: 100vh;
+    background: var(--deep-forest);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8rem 2rem 6rem;
+    overflow: hidden;
+  }
+
+  .hero-blob {
+    position: absolute;
+    width: 680px;
+    height: 680px;
+    background: radial-gradient(ellipse at 40% 40%, #2D4A29 0%, #1C2B1A 70%);
+    border-radius: 60% 40% 70% 30% / 50% 60% 40% 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: breathe 6s ease-in-out infinite, morphBlob 12s ease-in-out infinite;
+    z-index: 0;
+    opacity: 0.7;
+  }
+
+  @keyframes breathe {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.02); }
+  }
+
+  @keyframes morphBlob {
+    0%, 100% { border-radius: 60% 40% 70% 30% / 50% 60% 40% 50%; }
+    25% { border-radius: 50% 50% 40% 60% / 60% 40% 60% 40%; }
+    50% { border-radius: 40% 60% 50% 50% / 40% 60% 50% 60%; }
+    75% { border-radius: 65% 35% 55% 45% / 55% 45% 65% 35%; }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 1.5rem;
+    font-weight: 400;
+  }
+
+  .hero h1 {
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    color: var(--cream);
+    line-height: 1.08;
+    margin-bottom: 2rem;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--sand);
+  }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--sand);
+    opacity: 0.8;
+    max-width: 480px;
+    margin: 0 auto 3rem;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  .btn-terracotta {
+    display: inline-block;
+    background: var(--terracotta);
+    color: var(--cream);
+    padding: 1rem 2.5rem;
+    border-radius: 100px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    transition: transform 0.25s, background 0.25s;
+  }
+
+  .btn-terracotta:hover {
+    background: #a8531f;
+    transform: translateY(-2px);
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--sand);
+    opacity: 0.5;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: var(--sand);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(1); }
+    50% { opacity: 1; transform: scaleY(0.6); }
+  }
+
+  .wave-divider {
+    position: relative;
+    height: 80px;
+    overflow: hidden;
+    margin-top: -2px;
+  }
+
+  .wave-divider svg {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .intro-strip {
+    background: var(--cream);
+    padding: 7rem 2rem;
+    text-align: center;
+    position: relative;
+  }
+
+  .intro-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+  }
+
+  .intro-quote {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-style: italic;
+    color: var(--forest-green);
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .leaf-deco {
+    flex-shrink: 0;
+    opacity: 0.55;
+  }
+
+  .leaf-deco.flip { transform: scaleX(-1); }
+
+  .pillars {
+    background: var(--sand);
+    padding: 6rem 2rem;
+    position: relative;
+  }
+
+  .section-label {
+    text-align: center;
+    font-size: 0.75rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--deep-forest);
+    margin-bottom: 4rem;
+  }
+
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .pillar-card {
+    position: relative;
+    padding: 3rem 2.5rem;
+    border-radius: 40% 60% 55% 45% / 50% 45% 55% 50%;
+    text-align: center;
+    overflow: hidden;
+    transition: transform 0.4s ease;
+  }
+
+  .pillar-card:hover { transform: translateY(-8px); }
+
+  .pillar-card.earth { background: #3d5c2a; }
+  .pillar-card.water { background: #2a4a5c; }
+  .pillar-card.air { background: #5c4a2a; }
+
+  .pillar-blob {
+    position: absolute;
+    inset: -20px;
+    border-radius: 40% 60% 55% 45% / 50% 45% 55% 50%;
+    opacity: 0.3;
+    animation: morphBlob 10s ease-in-out infinite;
+  }
+
+  .earth .pillar-blob { background: #7BA05B; }
+  .water .pillar-blob { background: #5B8EA0; }
+  .air .pillar-blob { background: #C4632A; }
+
+  .pillar-icon {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .pillar-card h3 {
+    font-size: 1.6rem;
+    color: var(--cream);
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .pillar-card p {
+    color: rgba(247, 243, 238, 0.8);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+  }
+
+  .retreat-section {
+    background: var(--cream);
+    padding: 7rem 2rem;
+    overflow: hidden;
+  }
+
+  .retreat-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .retreat-art svg {
+    width: 100%;
+    max-width: 520px;
+  }
+
+  .retreat-text .section-label { text-align: left; }
+  .retreat-text .section-title { text-align: left; margin-bottom: 1.5rem; }
+
+  .retreat-text p {
+    color: #3a3a3a;
+    line-height: 1.85;
+    font-size: 1.05rem;
+    margin-bottom: 1.5rem;
+    font-weight: 300;
+  }
+
+  .retreat-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .stat {
+    border-left: 2px solid var(--sage);
+    padding-left: 1rem;
+  }
+
+  .stat-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.2rem;
+    color: var(--terracotta);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.82rem;
+    color: #666;
+    letter-spacing: 0.05em;
+    margin-top: 0.3rem;
+  }
+
+  .programs {
+    background: var(--sage);
+    padding: 7rem 2rem;
+    position: relative;
+  }
+
+  .programs .section-label { color: var(--cream); opacity: 0.7; }
+  .programs .section-title { color: var(--cream); }
+
+  .programs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .program-card {
+    background: rgba(247, 243, 238, 0.12);
+    border: 1px solid rgba(247, 243, 238, 0.25);
+    border-radius: 24px;
+    padding: 2.5rem;
+    transition: background 0.3s, transform 0.3s;
+    backdrop-filter: blur(8px);
+  }
+
+  .program-card:hover {
+    background: rgba(247, 243, 238, 0.2);
+    transform: translateY(-6px);
+  }
+
+  .program-tag {
+    display: inline-block;
+    background: var(--terracotta);
+    color: var(--cream);
+    padding: 0.3rem 0.9rem;
+    border-radius: 100px;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .program-card h3 {
+    font-size: 1.5rem;
+    color: var(--cream);
+    margin-bottom: 1rem;
+  }
+
+  .program-card p {
+    color: rgba(247, 243, 238, 0.8);
+    font-size: 0.93rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    font-weight: 300;
+  }
+
+  .program-meta {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.8rem;
+    color: var(--sand);
+    opacity: 0.8;
+  }
+
+  .program-meta span::before {
+    content: attr(data-icon) ' ';
+  }
+
+  .teachers {
+    background: var(--cream);
+    padding: 7rem 2rem;
+  }
+
+  .teachers-grid {
+    display: flex;
+    gap: 3rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .teacher-card {
+    text-align: center;
+    max-width: 280px;
+  }
+
+  .teacher-avatar {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    margin: 0 auto 1.5rem;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .teacher-avatar-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+  }
+
+  .teacher-card:nth-child(1) .teacher-avatar-inner { background: linear-gradient(135deg, #3d5c2a, #7BA05B); }
+  .teacher-card:nth-child(2) .teacher-avatar-inner { background: linear-gradient(135deg, #C4632A, #e8935a); }
+  .teacher-card:nth-child(3) .teacher-avatar-inner { background: linear-gradient(135deg, #2a4a5c, #5B8EA0); }
+
+  .teacher-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    color: var(--deep-forest);
+    margin-bottom: 0.4rem;
+  }
+
+  .teacher-title {
+    font-size: 0.82rem;
+    color: var(--terracotta);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .teacher-bio {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .testimonial {
+    background: var(--forest-green);
+    padding: 8rem 2rem;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .testimonial-blob {
+    position: absolute;
+    width: 600px;
+    height: 500px;
+    background: rgba(28, 43, 26, 0.5);
+    border-radius: 60% 40% 70% 30% / 50% 60% 40% 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: morphBlob 14s ease-in-out infinite;
+  }
+
+  .testimonial-content {
+    position: relative;
+    z-index: 1;
+    max-width: 750px;
+    margin: 0 auto;
+  }
+
+  .quote-mark {
+    font-family: 'DM Serif Display', serif;
+    font-size: 8rem;
+    color: var(--terracotta);
+    line-height: 0.5;
+    margin-bottom: 1rem;
+    opacity: 0.6;
+  }
+
+  .testimonial-text {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    color: var(--cream);
+    line-height: 1.55;
+    font-style: italic;
+    margin-bottom: 2.5rem;
+  }
+
+  .testimonial-author {
+    font-size: 0.85rem;
+    color: var(--sand);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .seasons {
+    background: var(--sand);
+    padding: 7rem 2rem;
+  }
+
+  .seasons-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .season-card {
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    transition: transform 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .season-card:hover { transform: translateY(-8px); }
+
+  .season-card.spring { background: linear-gradient(160deg, #3d6b35, #5a8f4e); }
+  .season-card.summer { background: linear-gradient(160deg, #1C2B1A, #2D4A29); }
+  .season-card.autumn { background: linear-gradient(160deg, #8B3A0F, #C4632A); }
+  .season-card.winter { background: linear-gradient(160deg, #2a3d4f, #3d5c73); }
+
+  .season-period {
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(247, 243, 238, 0.6);
+    margin-bottom: 0.8rem;
+  }
+
+  .season-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.8rem;
+    color: var(--cream);
+    margin-bottom: 1rem;
+  }
+
+  .season-desc {
+    font-size: 0.88rem;
+    color: rgba(247, 243, 238, 0.8);
+    line-height: 1.7;
+    font-weight: 300;
+    margin-bottom: 1.5rem;
+  }
+
+  .season-price {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: var(--cream);
+  }
+
+  .season-price span {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    opacity: 0.6;
+    font-weight: 300;
+  }
+
+  footer {
+    background: var(--deep-forest);
+    padding: 5rem 4rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .footer-botanical {
+    position: absolute;
+    right: -50px;
+    bottom: -30px;
+    opacity: 0.07;
+  }
+
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 4rem;
+    margin-bottom: 4rem;
+  }
+
+  .footer-brand .nav-logo {
+    display: block;
+    margin-bottom: 1.2rem;
+    font-size: 2rem;
+  }
+
+  .footer-brand p {
+    color: rgba(247, 243, 238, 0.5);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    font-weight: 300;
+    max-width: 260px;
+  }
+
+  .footer-col h4 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+
+  .footer-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .footer-col a {
+    color: rgba(247, 243, 238, 0.5);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+  }
+
+  .footer-col a:hover { color: var(--cream); }
+
+  .footer-bottom {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(247, 243, 238, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-bottom p {
+    color: rgba(247, 243, 238, 0.3);
+    font-size: 0.8rem;
+  }
+
+  .footer-socials {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .footer-socials a {
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(247, 243, 238, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(247, 243, 238, 0.4);
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .footer-socials a:hover {
+    border-color: var(--sage);
+    color: var(--sage);
+  }
+
+  .float-in {
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .float-in.from-right {
+    transform: translateX(40px);
+  }
+
+  .float-in.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .float-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .float-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { display: none; }
+    .pillars-grid, .programs-grid { grid-template-columns: 1fr; }
+    .retreat-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .seasons-grid { grid-template-columns: 1fr 1fr; }
+    .footer-inner { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+    .pillar-card { border-radius: 24px; }
+  }
+
+  @media (max-width: 580px) {
+    .seasons-grid { grid-template-columns: 1fr; }
+    .footer-inner { grid-template-columns: 1fr; }
+    .intro-inner { flex-direction: column; gap: 1.5rem; }
+    .teachers-grid { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="mainNav">
+  <span class="nav-logo">Oasis</span>
+  <ul class="nav-links">
+    <li><a href="#pillars">The Practice</a></li>
+    <li><a href="#retreat">The Retreat</a></li>
+    <li><a href="#programs">Programs</a></li>
+    <li><a href="#seasons">Seasons</a></li>
+    <li><a href="#seasons" class="nav-cta">Reserve</a></li>
+  </ul>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-blob"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Luxury Meditation Retreat &mdash; Est. 2019</p>
+    <h1>Reconnect With<br><em>What Is Real.</em></h1>
+    <p class="hero-sub">A sanctuary where ancient wisdom and the living earth conspire to restore your truest self.</p>
+    <a href="#programs" class="btn-terracotta">Explore Programs</a>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill="#F7F3EE"/>
+    <path d="M0,80 L1440,80 L1440,40 C1200,0 960,80 720,40 C480,0 240,80 0,40 Z" fill="#1C2B1A" opacity="0"/>
+  </svg>
+</div>
+
+<section class="intro-strip">
+  <div class="intro-inner">
+    <div class="leaf-deco" style="opacity:0.5;">
+      <svg width="70" height="100" viewBox="0 0 70 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M35,95 C35,95 5,70 8,40 C11,15 25,5 35,5 C45,5 59,15 62,40 C65,70 35,95 35,95 Z" fill="#7BA05B" opacity="0.5"/>
+        <path d="M35,95 C35,95 35,50 35,5" stroke="#2D4A29" stroke-width="1.5" opacity="0.6"/>
+        <path d="M35,60 C35,60 20,48 18,38" stroke="#2D4A29" stroke-width="1" opacity="0.4"/>
+        <path d="M35,45 C35,45 50,33 52,23" stroke="#2D4A29" stroke-width="1" opacity="0.4"/>
+        <path d="M35,72 C35,72 48,60 50,50" stroke="#2D4A29" stroke-width="1" opacity="0.4"/>
+      </svg>
+    </div>
+    <p class="intro-quote float-in">"Stillness is not the absence of life — it is where life remembers itself."</p>
+    <div class="leaf-deco flip" style="opacity:0.5;">
+      <svg width="70" height="100" viewBox="0 0 70 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M35,95 C35,95 5,70 8,40 C11,15 25,5 35,5 C45,5 59,15 62,40 C65,70 35,95 35,95 Z" fill="#C4632A" opacity="0.4"/>
+        <path d="M35,95 C35,95 35,50 35,5" stroke="#8B3A0F" stroke-width="1.5" opacity="0.6"/>
+        <path d="M35,60 C35,60 20,48 18,38" stroke="#8B3A0F" stroke-width="1" opacity="0.4"/>
+        <path d="M35,45 C35,45 50,33 52,23" stroke="#8B3A0F" stroke-width="1" opacity="0.4"/>
+        <path d="M35,72 C35,72 48,60 50,50" stroke="#8B3A0F" stroke-width="1" opacity="0.4"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<div class="wave-divider" style="background: var(--sand); height: 70px;">
+  <svg viewBox="0 0 1440 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,0 C360,60 1080,0 1440,50 L1440,70 L0,70 Z" fill="#E8D5B0"/>
+    <path d="M0,70 L0,0 C360,60 1080,0 1440,50 L1440,70 Z" fill="#F7F3EE" opacity="0.01"/>
+  </svg>
+</div>
+
+<section class="pillars" id="pillars">
+  <p class="section-label float-up">The Three Pillars</p>
+  <h2 class="section-title float-up">Where Transformation Lives</h2>
+  <div class="pillars-grid">
+    <div class="pillar-card earth float-in" style="transition-delay:0.1s">
+      <div class="pillar-blob"></div>
+      <div class="pillar-icon">🌿</div>
+      <h3>Earth</h3>
+      <p>Grounding practices rooted in the forest floor. Walking meditation, Shinrin-yoku, and somatic bodywork that reconnect you to the rhythms beneath your feet.</p>
+    </div>
+    <div class="pillar-card water float-in" style="transition-delay:0.25s">
+      <div class="pillar-blob"></div>
+      <div class="pillar-icon">💧</div>
+      <h3>Water</h3>
+      <p>Flow states and emotional alchemy. Cold-water immersion, breathwork by the river, and gentle yin yoga that teaches you to move with, not against, your own current.</p>
+    </div>
+    <div class="pillar-card air float-in from-right" style="transition-delay:0.4s">
+      <div class="pillar-blob"></div>
+      <div class="pillar-icon">🌬️</div>
+      <h3>Air</h3>
+      <p>Clarity through breath and sky. Pranayama, open-air contemplation at altitude, and morning silence practices that dissolve the noise of ordinary life.</p>
+    </div>
+  </div>
+</section>
+
+<div class="wave-divider" style="background: var(--cream); height: 80px;">
+  <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,80 L0,30 Q360,-10 720,35 Q1080,80 1440,20 L1440,80 Z" fill="#F7F3EE"/>
+  </svg>
+</div>
+
+<section class="retreat-section" id="retreat">
+  <div class="retreat-inner">
+    <div class="retreat-art float-in">
+      <svg viewBox="0 0 520 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="520" height="480" rx="32" fill="#1C2B1A"/>
+        <ellipse cx="260" cy="500" rx="300" ry="120" fill="#0d1a0c"/>
+        <path d="M0,380 Q130,300 260,320 Q390,340 520,280 L520,480 L0,480 Z" fill="#0d1a0c"/>
+        <path d="M0,360 Q130,290 260,310 Q390,330 520,265 L520,480 L0,480 Z" fill="#162312"/>
+        <path d="M80,320 L130,180 L180,320 Z" fill="#2D4A29"/>
+        <path d="M70,320 L130,160 L190,320 Z" fill="#3d5c2a"/>
+        <path d="M50,340 L120,150 L190,340 Z" fill="#2D4A29" opacity="0.7"/>
+        <path d="M200,340 L260,180 L320,340 Z" fill="#2D4A29"/>
+        <path d="M185,340 L260,155 L335,340 Z" fill="#3d5c2a"/>
+        <path d="M170,360 L260,145 L350,360 Z" fill="#2D4A29" opacity="0.6"/>
+        <path d="M330,350 L390,200 L450,350 Z" fill="#2D4A29"/>
+        <path d="M318,350 L390,178 L462,350 Z" fill="#3d5c2a"/>
+        <circle cx="260" cy="90" r="55" fill="#E8D5B0" opacity="0.9"/>
+        <circle cx="260" cy="88" r="52" fill="#f5e8c0"/>
+        <path d="M230,88 Q245,70 260,68 Q275,70 290,88" stroke="#E8C860" stroke-width="2" fill="none" opacity="0.6"/>
+        <ellipse cx="260" cy="480" rx="80" ry="20" fill="#7BA05B" opacity="0.3"/>
+        <path d="M220,390 Q260,360 300,390" stroke="#7BA05B" stroke-width="2" fill="none" opacity="0.5"/>
+        <path d="M0,420 Q65,400 130,420 Q195,440 260,420 Q325,400 390,420 Q455,440 520,420 L520,480 L0,480 Z" fill="#1C2B1A" opacity="0.5"/>
+        <circle cx="80" cy="70" r="4" fill="#E8D5B0" opacity="0.5"/>
+        <circle cx="140" cy="40" r="2.5" fill="#E8D5B0" opacity="0.4"/>
+        <circle cx="380" cy="55" r="3" fill="#E8D5B0" opacity="0.5"/>
+        <circle cx="440" cy="80" r="2" fill="#E8D5B0" opacity="0.35"/>
+        <circle cx="340" cy="30" r="1.5" fill="#E8D5B0" opacity="0.4"/>
+        <rect x="240" y="340" width="40" height="60" rx="4" fill="#1C2B1A"/>
+        <rect x="242" y="342" width="16" height="20" rx="2" fill="#7BA05B" opacity="0.4"/>
+        <rect x="262" y="342" width="16" height="20" rx="2" fill="#7BA05B" opacity="0.4"/>
+        <rect x="248" y="370" width="24" height="30" rx="2" fill="#3d5c2a"/>
+      </svg>
+    </div>
+    <div class="retreat-text float-in from-right">
+      <p class="section-label">The Setting</p>
+      <h2 class="section-title">A Living Sanctuary</h2>
+      <p>Nestled within 40 acres of ancient temperate forest at 1,800 meters elevation, Oasis was conceived as a place where architecture disappears into landscape.</p>
+      <p>Each structure is built from reclaimed timber and local stone, oriented to capture morning light and evening stillness. No roads penetrate the inner sanctuary — guests arrive by a candlelit forest path.</p>
+      <div class="retreat-stats">
+        <div class="stat">
+          <div class="stat-number">40</div>
+          <div class="stat-label">Acres of Private Forest</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">12</div>
+          <div class="stat-label">Private Forest Cabins</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">1,800m</div>
+          <div class="stat-label">Elevation Above Sea Level</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">6</div>
+          <div class="stat-label">Meditation Pavilions</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wave-divider" style="background: var(--sage); height: 90px;">
+  <svg viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,90 L0,45 C240,5 480,80 720,45 C960,10 1200,70 1440,30 L1440,90 Z" fill="#7BA05B"/>
+  </svg>
+</div>
+
+<section class="programs" id="programs">
+  <p class="section-label float-up">Curated Experiences</p>
+  <h2 class="section-title float-up" style="margin-bottom:3.5rem;">Choose Your Path</h2>
+  <div class="programs-grid">
+    <div class="program-card float-in" style="transition-delay:0.1s">
+      <span class="program-tag">Signature</span>
+      <h3>The Deep Root</h3>
+      <p>A seven-day immersive journey through all three pillars. Daily earth practices, evening fire ceremonies, and one-on-one teacher sessions reshape your relationship with time itself.</p>
+      <div class="program-meta">
+        <span data-icon="◷">7 Nights</span>
+        <span data-icon="✦">All Levels</span>
+      </div>
+    </div>
+    <div class="program-card float-in" style="transition-delay:0.25s">
+      <span class="program-tag">Intensive</span>
+      <h3>Breath &amp; Silence</h3>
+      <p>Four days of Vipassana-inspired silence interwoven with daily breathwork sessions. Communications cease. The forest speaks. You begin to hear yourself again.</p>
+      <div class="program-meta">
+        <span data-icon="◷">4 Nights</span>
+        <span data-icon="✦">Experienced</span>
+      </div>
+    </div>
+    <div class="program-card float-in from-right" style="transition-delay:0.4s">
+      <span class="program-tag">Weekend</span>
+      <h3>First Light</h3>
+      <p>An elegant introduction to the Oasis method. Two nights, morning yoga, guided forest walks, and your first taste of genuine stillness — perfect as a beginning or a return.</p>
+      <div class="program-meta">
+        <span data-icon="◷">2 Nights</span>
+        <span data-icon="✦">Beginners</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wave-divider" style="background: var(--cream); height: 80px;">
+  <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,0 L0,50 Q360,90 720,50 Q1080,10 1440,60 L1440,0 Z" fill="#7BA05B"/>
+    <path d="M0,80 L0,50 Q360,90 720,50 Q1080,10 1440,60 L1440,80 Z" fill="#F7F3EE"/>
+  </svg>
+</div>
+
+<section class="teachers" id="teachers">
+  <p class="section-label float-up">The Guides</p>
+  <h2 class="section-title float-up">Those Who Walk Before</h2>
+  <div class="teachers-grid" style="margin-top: 3rem;">
+    <div class="teacher-card float-in" style="transition-delay:0.1s">
+      <div class="teacher-avatar">
+        <div class="teacher-avatar-inner">🌿</div>
+      </div>
+      <p class="teacher-name">Amara Osei</p>
+      <p class="teacher-title">Earth &amp; Somatic Arts</p>
+      <p class="teacher-bio">Trained in Ghana and Nepal, Amara weaves ancestral movement wisdom with contemporary somatic therapy. She has guided over 2,000 individuals back to their bodies.</p>
+    </div>
+    <div class="teacher-card float-up" style="transition-delay:0.25s">
+      <div class="teacher-avatar">
+        <div class="teacher-avatar-inner">🔥</div>
+      </div>
+      <p class="teacher-name">Tomás Reyes</p>
+      <p class="teacher-title">Fire &amp; Breathwork</p>
+      <p class="teacher-bio">A former trauma surgeon turned Wim Hof instructor and Holotropic facilitator, Tomás understands the body's intelligence from both clinical and mystical perspectives.</p>
+    </div>
+    <div class="teacher-card float-in from-right" style="transition-delay:0.4s">
+      <div class="teacher-avatar">
+        <div class="teacher-avatar-inner">🌊</div>
+      </div>
+      <p class="teacher-name">Linh Nguyễn</p>
+      <p class="teacher-title">Water &amp; Yin Yoga</p>
+      <p class="teacher-bio">Vietnamese-born poet and 500-hour yin yoga teacher. Linh's sessions move at the pace of rivers — unhurried, inevitable, and quietly transformative.</p>
+    </div>
+  </div>
+</section>
+
+<div class="wave-divider" style="background: var(--forest-green); height: 80px;">
+  <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,80 L0,20 C200,70 400,0 600,40 C800,80 1000,10 1200,50 C1300,70 1380,30 1440,50 L1440,80 Z" fill="#2D4A29"/>
+  </svg>
+</div>
+
+<section class="testimonial">
+  <div class="testimonial-blob"></div>
+  <div class="testimonial-content">
+    <div class="quote-mark float-up">&ldquo;</div>
+    <p class="testimonial-text float-up">"I arrived carrying twelve years of corporate burnout. I left carrying only what the forest had given back to me — a quiet I thought I'd lost forever."</p>
+    <p class="testimonial-author float-up">— Isabelle M., Architect, Paris</p>
+  </div>
+</section>
+
+<div class="wave-divider" style="background: var(--sand); height: 80px;">
+  <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,80 L0,30 C360,80 720,0 1080,50 C1260,75 1360,20 1440,45 L1440,80 Z" fill="#E8D5B0"/>
+  </svg>
+</div>
+
+<section class="seasons" id="seasons">
+  <p class="section-label float-up">Plan Your Visit</p>
+  <h2 class="section-title float-up">Retreats Through the Seasons</h2>
+  <div class="seasons-grid" style="margin-top: 3rem;">
+    <div class="season-card spring float-in" style="transition-delay:0.05s">
+      <p class="season-period">March &mdash; May</p>
+      <h3 class="season-name">Spring Renewal</h3>
+      <p class="season-desc">The forest wakes. Blossom ceremonies, new growth medicine walks, and emergence rituals for those ready to begin again.</p>
+      <p class="season-price">From $4,200 <span>/ person</span></p>
+    </div>
+    <div class="season-card summer float-in" style="transition-delay:0.15s">
+      <p class="season-period">June &mdash; August</p>
+      <h3 class="season-name">Summer Solstice</h3>
+      <p class="season-desc">Long-light days for deep practice. Dawn meditation at altitude, evening fires under infinite skies, and our most popular Deep Root retreats.</p>
+      <p class="season-price">From $5,400 <span>/ person</span></p>
+    </div>
+    <div class="season-card autumn float-in from-right" style="transition-delay:0.25s">
+      <p class="season-period">September &mdash; November</p>
+      <h3 class="season-name">Autumn Release</h3>
+      <p class="season-desc">Gold and ember. The most beloved season at Oasis — practices of letting go mirror the forest's own great release into stillness.</p>
+      <p class="season-price">From $4,800 <span>/ person</span></p>
+    </div>
+    <div class="season-card winter float-in from-right" style="transition-delay:0.35s">
+      <p class="season-period">December &mdash; February</p>
+      <h3 class="season-name">Winter Silence</h3>
+      <p class="season-desc">Snow-hushed mornings and firelit evenings. Our most intimate season — only 8 guests — for those who seek the deepest quiet.</p>
+      <p class="season-price">From $6,200 <span>/ person</span></p>
+    </div>
+  </div>
+</section>
+
+<div class="wave-divider" style="background: var(--deep-forest); height: 80px;">
+  <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,80 L0,10 C480,70 960,0 1440,50 L1440,80 Z" fill="#1C2B1A"/>
+  </svg>
+</div>
+
+<footer>
+  <div class="footer-botanical">
+    <svg width="500" height="600" viewBox="0 0 500 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M250,580 C250,580 100,450 110,300 C120,160 200,80 250,80 C300,80 380,160 390,300 C400,450 250,580 250,580 Z" fill="#7BA05B"/>
+      <path d="M250,580 C250,580 250,320 250,80" stroke="#2D4A29" stroke-width="8"/>
+      <path d="M250,400 C250,400 170,340 160,270" stroke="#2D4A29" stroke-width="5"/>
+      <path d="M250,300 C250,300 340,240 350,170" stroke="#2D4A29" stroke-width="5"/>
+      <path d="M250,480 C250,480 330,420 340,350" stroke="#2D4A29" stroke-width="4"/>
+      <path d="M250,230 C250,230 175,175 168,110" stroke="#2D4A29" stroke-width="4"/>
+      <path d="M250,350 C250,350 185,300 178,240" stroke="#2D4A29" stroke-width="3"/>
+      <path d="M250,460 C250,460 168,390 162,325" stroke="#2D4A29" stroke-width="3"/>
+    </svg>
+  </div>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="nav-logo">Oasis</span>
+      <p>A sanctuary at elevation for those who seek genuine transformation. Where the ancient forest becomes the greatest teacher.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Experience</h4>
+      <ul>
+        <li><a href="#">The Deep Root</a></li>
+        <li><a href="#">Breath &amp; Silence</a></li>
+        <li><a href="#">First Light</a></li>
+        <li><a href="#">Bespoke Retreats</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Sanctuary</h4>
+      <ul>
+        <li><a href="#">The Forest</a></li>
+        <li><a href="#">Accommodations</a></li>
+        <li><a href="#">The Kitchen</a></li>
+        <li><a href="#">Our Guides</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Plan</h4>
+      <ul>
+        <li><a href="#">Reserve a Place</a></li>
+        <li><a href="#">Gift Certificates</a></li>
+        <li><a href="#">Group Bookings</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Oasis Retreat. All rights reserved.</p>
+    <div class="footer-socials">
+      <a href="#">in</a>
+      <a href="#">ig</a>
+      <a href="#">yt</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+  document.querySelectorAll('.float-in, .float-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

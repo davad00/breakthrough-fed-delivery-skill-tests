@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oasis | Velvet Horizon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Prata&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --night: #160f1b;
+      --night-2: #23142b;
+      --wine: #5d3148;
+      --gold: #d8b98b;
+      --rose: #f2e7da;
+      --muted: #baa89d;
+      --line: rgba(216, 185, 139, 0.18);
+      --panel: rgba(255, 255, 255, 0.05);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      color: var(--rose);
+      background:
+        radial-gradient(circle at top left, rgba(216, 185, 139, 0.12), transparent 22%),
+        radial-gradient(circle at bottom right, rgba(93, 49, 72, 0.3), transparent 28%),
+        linear-gradient(180deg, #120b17 0%, #19101f 48%, #120b17 100%);
+    }
+    a { color: inherit; text-decoration: none; }
+    .layout {
+      width: min(1240px, calc(100vw - 40px));
+      margin: 0 auto;
+      padding-bottom: 80px;
+    }
+    header {
+      padding: 30px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+    .brand, h1, h2, .stat strong {
+      font-family: "Prata", serif;
+      font-weight: 400;
+    }
+    .brand {
+      letter-spacing: 0.32rem;
+      font-size: 1.45rem;
+    }
+    .nav {
+      display: flex;
+      gap: 22px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1rem;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 22px;
+      align-items: stretch;
+      min-height: calc(100vh - 96px);
+      padding-bottom: 42px;
+    }
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 24px 0;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      border: 1px solid var(--line);
+      color: var(--gold);
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12rem;
+      background: rgba(216,185,139,0.05);
+    }
+    h1 {
+      font-size: clamp(4rem, 10vw, 8rem);
+      line-height: 0.92;
+      margin: 20px 0 20px;
+      max-width: 8ch;
+    }
+    .lead {
+      max-width: 54ch;
+      line-height: 1.9;
+      color: var(--muted);
+      margin-bottom: 30px;
+    }
+    .row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 15px 22px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      text-transform: uppercase;
+      letter-spacing: 0.1rem;
+      font-size: 0.8rem;
+    }
+    .btn.primary {
+      background: linear-gradient(135deg, #e2c596, #bd8f66);
+      color: #1b1214;
+      border-color: transparent;
+    }
+    .visual-shell {
+      display: grid;
+      grid-template-rows: 1fr auto;
+      gap: 16px;
+    }
+    .visual, .stats, .feature, .invite {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      backdrop-filter: blur(18px);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+    }
+    .visual {
+      min-height: 560px;
+      background:
+        linear-gradient(180deg, rgba(22,15,27,0.15), rgba(22,15,27,0.82)),
+        url("https://images.unsplash.com/photo-1496417263034-38ec4f0b665a?auto=format&fit=crop&w=1200&q=80") center/cover;
+      display: flex;
+      align-items: end;
+      padding: 24px;
+    }
+    .visual-note {
+      max-width: 22rem;
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(22,15,27,0.5);
+      border: 1px solid rgba(255,255,255,0.12);
+      line-height: 1.8;
+      color: #e9ddd1;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      overflow: hidden;
+    }
+    .stat {
+      padding: 20px;
+      background: rgba(255,255,255,0.03);
+    }
+    .stat strong {
+      display: block;
+      font-size: 1.5rem;
+      margin-bottom: 6px;
+      color: var(--gold);
+    }
+    section {
+      padding-top: 72px;
+    }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .feature {
+      padding: 26px;
+    }
+    h2 {
+      font-size: clamp(2.5rem, 5vw, 4.7rem);
+      line-height: 0.98;
+      margin: 0 0 14px;
+    }
+    p {
+      color: var(--muted);
+      line-height: 1.9;
+      margin: 0;
+    }
+    .invitation {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+    .invite {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    footer {
+      padding: 36px 0 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      color: rgba(242, 231, 218, 0.62);
+      font-size: 0.92rem;
+    }
+    @media (max-width: 980px) {
+      .hero, .features, .invitation { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 720px) {
+      .layout { width: min(100vw - 28px, 1240px); }
+      .nav { display: none; }
+      .stats { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <header>
+      <div class="brand">OASIS</div>
+      <nav class="nav">
+        <a href="#suites">Suites</a>
+        <a href="#rituals">Rituals</a>
+        <a href="#invite">Invite</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="chip">Invitation-led meditation retreat</div>
+        <h1>Velvet evenings. Golden mornings. Total exhale.</h1>
+        <p class="lead">Oasis is a high-touch retreat for guests who want meditation, beauty, and service to feel inseparable. Expect intuitive hosting, low-lit sanctuaries, and a retreat rhythm that restores depth rather than merely offering escape.</p>
+        <div class="row">
+          <a class="btn primary" href="#invite">Request invitation</a>
+          <a class="btn" href="#rituals">View signature rituals</a>
+        </div>
+      </div>
+      <div class="visual-shell">
+        <div class="visual">
+          <div class="visual-note">The property opens with twilight welcome rituals, private suite preparation, and a gradual transition into silence guided by your dedicated retreat host.</div>
+        </div>
+        <div class="stats">
+          <div class="stat"><strong>11</strong> secluded suites</div>
+          <div class="stat"><strong>5</strong> restorative rituals daily</div>
+          <div class="stat"><strong>2</strong> seasonal tasting menus</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="rituals">
+      <div style="max-width: 760px; margin-bottom: 24px;">
+        <h2>Signature rituals for a richer interior life.</h2>
+        <p>Every detail is calibrated to quiet stimulation and elevate presence, from the acoustics of the meditation rooms to the pacing of meal service and the softness of each transition.</p>
+      </div>
+      <div class="features">
+        <article class="feature">
+          <h3>Suite-side dawn practice</h3>
+          <p>Wake to guided breathwork, warm infusions, and a private meditation sequence delivered at your terrace pavilion.</p>
+        </article>
+        <article class="feature" id="suites">
+          <h3>Immersive recovery circuit</h3>
+          <p>Thermal bathing, bodywork, and long intervals in perfumed quiet rooms designed for full-system decompression.</p>
+        </article>
+        <article class="feature">
+          <h3>Twilight salon</h3>
+          <p>Evening sound rituals and intimate suppers hosted in candlelit rooms with a view across the water gardens.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="invite">
+      <div class="invitation">
+        <div>
+          <h2>Reserve the retreat before the season closes.</h2>
+          <p>Oasis hosts only a small number of guests in each cycle. Share your preferred travel period and the retreat team will curate a private proposal aligned to your pace and privacy preferences.</p>
+        </div>
+        <div class="invite">
+          <strong>Private invitation desk</strong>
+          <p>invite@oasis-retreat.com<br />+1 (888) 747-1932<br />Three-night, seven-night, and bespoke stays</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>Oasis luxury meditation retreat</span>
+      <span>High-touch service · quiet glamour · deeply restorative pacing</span>
+    </footer>
+  </div>
+</body>
+</html>

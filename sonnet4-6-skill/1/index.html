@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oasis — Sedona Meditation Retreat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --color-neutral:    #050508;
+      --color-primary:    #F0EBE3;
+      --color-secondary:  #7A7368;
+      --color-tertiary:   #C4A87A;
+      --color-on-tertiary:#050508;
+
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-mono:    'JetBrains Mono', 'Courier New', monospace;
+
+      --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-atmospheric: cubic-bezier(0.45, 0, 0.55, 1);
+    }
+
+    html {
+      background: var(--color-neutral);
+      color: var(--color-primary);
+      font-family: var(--font-display);
+      overflow-x: hidden;
+    }
+
+    body {
+      cursor: none;
+      overflow-x: hidden;
+    }
+
+    /* ── CUSTOM CURSOR ── */
+    .cursor-dot {
+      position: fixed;
+      top: 0; left: 0;
+      width: 12px; height: 12px;
+      background: var(--color-tertiary);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 100;
+      transform: translate(-50%, -50%);
+      will-change: transform;
+    }
+
+    .cursor-ring {
+      position: fixed;
+      top: 0; left: 0;
+      width: 40px; height: 40px;
+      border: 1px solid var(--color-tertiary);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 100;
+      transform: translate(-50%, -50%);
+      will-change: transform;
+      opacity: 0.7;
+    }
+
+    /* ── NAVIGATION ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 30;
+      padding: 32px 8vw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      pointer-events: all;
+    }
+
+    .nav-menu-btn {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      color: var(--color-secondary);
+      text-transform: uppercase;
+      background: none;
+      border: none;
+      cursor: none;
+      pointer-events: all;
+      position: relative;
+    }
+
+    .nav-menu-btn::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: var(--color-tertiary);
+    }
+
+    /* ── MENU OVERLAY ── */
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 5, 8, 0.97);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 8vw;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .menu-overlay.is-open {
+      pointer-events: all;
+      visibility: visible;
+    }
+
+    .menu-item-wrap {
+      overflow: hidden;
+      margin-bottom: 2vw;
+    }
+
+    .menu-item {
+      font-family: var(--font-display);
+      font-size: 7vw;
+      font-weight: 300;
+      color: var(--color-primary);
+      text-decoration: none;
+      line-height: 0.92;
+      letter-spacing: -0.01em;
+      display: block;
+      transform: translateY(110%);
+      cursor: none;
+      position: relative;
+    }
+
+    .menu-item::after {
+      content: '';
+      position: absolute;
+      bottom: 4px; left: 0;
+      width: 0; height: 1px;
+      background: var(--color-tertiary);
+      transition: width 0.5s var(--ease-cinematic);
+    }
+
+    .menu-item:hover::after {
+      width: 100%;
+    }
+
+    .menu-item:hover {
+      color: var(--color-tertiary);
+    }
+
+    .menu-close {
+      position: absolute;
+      top: 32px; right: 8vw;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--color-secondary);
+      background: none;
+      border: none;
+      cursor: none;
+      text-transform: uppercase;
+    }
+
+    .menu-coords {
+      position: absolute;
+      bottom: 40px; left: 8vw;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--color-secondary);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 600px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: 80px;
+      overflow: hidden;
+    }
+
+    #particle-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      padding: 0 8vw;
+    }
+
+    .hero-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      color: var(--color-secondary);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      opacity: 0;
+    }
+
+    .hero-title-wrap {
+      overflow: hidden;
+      line-height: 0.88;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: 13vw;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      line-height: 0.88;
+      color: var(--color-primary);
+      transform: translateY(105%);
+      display: block;
+    }
+
+    .hero-subtitle-wrap {
+      overflow: hidden;
+      margin-top: 24px;
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      color: var(--color-secondary);
+      line-height: 1.75;
+      transform: translateY(110%);
+    }
+
+    .hero-scroll-label {
+      position: absolute;
+      right: 8vw;
+      bottom: 80px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      color: var(--color-secondary);
+      text-transform: uppercase;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      opacity: 0;
+      z-index: 10;
+    }
+
+    .hero-scroll-line {
+      position: absolute;
+      right: calc(8vw + 20px);
+      bottom: 80px;
+      width: 1px;
+      height: 0;
+      background: var(--color-secondary);
+      opacity: 0.4;
+      z-index: 10;
+    }
+
+    /* ── SECTIONS SHARED ── */
+    section {
+      padding: 20vw 8vw;
+      position: relative;
+    }
+
+    .label-micro {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      color: var(--color-secondary);
+      text-transform: uppercase;
+    }
+
+    /* ── PHILOSOPHY ── */
+    .philosophy {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8vw;
+      align-items: start;
+    }
+
+    .philosophy-left .section-index {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--color-secondary);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 40px;
+    }
+
+    .philosophy-left .section-heading {
+      font-family: var(--font-display);
+      font-size: 5vw;
+      font-weight: 400;
+      line-height: 1.0;
+      letter-spacing: -0.01em;
+      color: var(--color-primary);
+    }
+
+    .philosophy-right {
+      padding-top: 4vw;
+    }
+
+    .philosophy-right p {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.75;
+      color: var(--color-secondary);
+      margin-bottom: 28px;
+    }
+
+    .philosophy-right p strong {
+      color: var(--color-primary);
+      font-weight: 400;
+    }
+
+    .philosophy-coords {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--color-secondary);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(122, 115, 104, 0.25);
+    }
+
+    /* ── EXPERIENCES ── */
+    .experiences-header {
+      margin-bottom: 8vw;
+    }
+
+    .experiences-header .section-index {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--color-secondary);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .experiences-header .section-heading {
+      font-family: var(--font-display);
+      font-size: 5vw;
+      font-weight: 400;
+      line-height: 1.0;
+      letter-spacing: -0.01em;
+      color: var(--color-primary);
+    }
+
+    .experiences-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+    }
+
+    .experience-card {
+      padding: 48px 40px;
+      border-top: 1px solid rgba(122, 115, 104, 0.2);
+      position: relative;
+      cursor: none;
+    }
+
+    .experience-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 1px;
+      background: var(--color-tertiary);
+    }
+
+    .experience-card:not(:last-child) {
+      border-right: 1px solid rgba(122, 115, 104, 0.2);
+    }
+
+    .card-number {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--color-secondary);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 40px;
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 2.4vw;
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      color: var(--color-primary);
+      margin-bottom: 20px;
+    }
+
+    .card-desc {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.7;
+      color: var(--color-secondary);
+      margin-bottom: 48px;
+    }
+
+    .card-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: auto;
+    }
+
+    .card-duration {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--color-secondary);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .card-price {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--color-tertiary);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    /* ── QUOTE ── */
+    .quote-section {
+      text-align: center;
+      padding: 20vw 12vw;
+    }
+
+    .quote-mark {
+      font-family: var(--font-display);
+      font-size: 6vw;
+      color: var(--color-tertiary);
+      opacity: 0.4;
+      line-height: 0.5;
+      display: block;
+      margin-bottom: 32px;
+    }
+
+    .quote-text {
+      font-family: var(--font-display);
+      font-size: 4.5vw;
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.15;
+      color: var(--color-primary);
+      letter-spacing: 0em;
+      margin-bottom: 48px;
+    }
+
+    .quote-attribution {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--color-secondary);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      text-align: center;
+      padding: 16vw 8vw;
+    }
+
+    .cta-section .cta-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--color-secondary);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 40px;
+    }
+
+    .cta-heading {
+      font-family: var(--font-display);
+      font-size: 8vw;
+      font-weight: 300;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      color: var(--color-primary);
+      margin-bottom: 64px;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-on-tertiary);
+      background: var(--color-tertiary);
+      border: none;
+      border-radius: 9999px;
+      padding: 14px 36px;
+      cursor: none;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-ghost {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      background: transparent;
+      border: 1px solid rgba(240, 235, 227, 0.35);
+      border-radius: 9999px;
+      padding: 14px 36px;
+      cursor: none;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid rgba(122, 115, 104, 0.2);
+      padding: 64px 8vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 32px;
+    }
+
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      color: var(--color-primary);
+      text-transform: uppercase;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .footer-links a {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--color-secondary);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: none;
+    }
+
+    .footer-links a:hover {
+      color: var(--color-primary);
+    }
+
+    .footer-copy {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: rgba(122, 115, 104, 0.5);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      width: 100%;
+      padding-top: 40px;
+      border-top: 1px solid rgba(122, 115, 104, 0.1);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* ── DIVIDER ── */
+    .section-divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(122, 115, 104, 0.15);
+    }
+
+    /* ── REVEAL UTIL ── */
+    .reveal {
+      opacity: 0;
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      #particle-canvas {
+        display: none;
+      }
+
+      .hero {
+        background: radial-gradient(ellipse at 50% 30%, rgba(196, 168, 122, 0.06) 0%, transparent 70%),
+                    var(--color-neutral);
+      }
+
+      .hero-title {
+        font-size: 18vw;
+      }
+
+      nav {
+        padding: 24px 6vw;
+      }
+
+      .hero-content {
+        padding: 0 6vw;
+      }
+
+      .hero-scroll-label,
+      .hero-scroll-line {
+        display: none;
+      }
+
+      section {
+        padding: 18vw 6vw;
+      }
+
+      .philosophy {
+        grid-template-columns: 1fr;
+        gap: 12vw;
+      }
+
+      .philosophy-left .section-heading {
+        font-size: 10vw;
+      }
+
+      .philosophy-right {
+        padding-top: 0;
+      }
+
+      .experiences-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .experience-card:not(:last-child) {
+        border-right: none;
+        border-bottom: 1px solid rgba(122, 115, 104, 0.2);
+      }
+
+      .card-title {
+        font-size: 7vw;
+      }
+
+      .quote-section {
+        padding: 18vw 6vw;
+      }
+
+      .quote-text {
+        font-size: 8vw;
+      }
+
+      .cta-heading {
+        font-size: 13vw;
+      }
+
+      .cta-section {
+        padding: 14vw 6vw;
+      }
+
+      footer {
+        padding: 48px 6vw;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 24px;
+      }
+
+      .footer-links {
+        gap: 24px;
+      }
+
+      .menu-item {
+        font-size: 12vw;
+      }
+
+      .cursor-dot,
+      .cursor-ring {
+        display: none;
+      }
+
+      body {
+        cursor: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- Navigation -->
+  <nav>
+    <span class="nav-logo">Oasis</span>
+    <button class="nav-menu-btn" id="menuBtn" aria-label="Open menu">Menu</button>
+  </nav>
+
+  <!-- Menu Overlay -->
+  <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+    <button class="menu-close label-micro" id="menuClose">Close</button>
+    <div class="menu-item-wrap">
+      <a href="#philosophy" class="menu-item" data-magnetic>Philosophy</a>
+    </div>
+    <div class="menu-item-wrap">
+      <a href="#experiences" class="menu-item" data-magnetic>Experiences</a>
+    </div>
+    <div class="menu-item-wrap">
+      <a href="#quote" class="menu-item" data-magnetic>Retreat</a>
+    </div>
+    <div class="menu-item-wrap">
+      <a href="#cta" class="menu-item" data-magnetic>Reserve</a>
+    </div>
+    <div class="menu-coords">34°52′N 111°47′W · Sedona, Arizona</div>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero" aria-label="Hero">
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="hero-content">
+      <div class="hero-label">Sedona, Arizona · Est. MMXIX</div>
+      <div class="hero-title-wrap">
+        <span class="hero-title">Oasis</span>
+      </div>
+      <div class="hero-subtitle-wrap">
+        <p class="hero-subtitle">Where the noise ends and the self begins.</p>
+      </div>
+    </div>
+
+    <div class="hero-scroll-line" id="heroScrollLine"></div>
+    <div class="hero-scroll-label">Scroll to Descend</div>
+  </section>
+
+  <!-- Philosophy -->
+  <div class="section-divider"></div>
+  <section id="philosophy" aria-label="Philosophy">
+    <div class="philosophy">
+      <div class="philosophy-left">
+        <div class="section-index reveal">001 / Philosophy</div>
+        <h2 class="section-heading reveal">The art of&nbsp;sacred stillness</h2>
+      </div>
+      <div class="philosophy-right">
+        <p class="reveal">In the ancient red canyons of Sedona, where the earth bleeds ochre and the sky bends low, <strong>Oasis</strong> was conceived not as a place of escape, but of arrival. Of remembering what you already know, beneath the accumulated weight of noise.</p>
+        <p class="reveal">We do not offer programs. We offer conditions — the exact quality of silence, the precise angle of morning light, the curated absence of everything unnecessary — within which transformation becomes possible. You bring the intelligence. The land does the rest.</p>
+        <div class="philosophy-coords reveal">34°52′N 111°47′W · Altitude 4,350 ft · 412 Acres</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experiences -->
+  <div class="section-divider"></div>
+  <section id="experiences" aria-label="Experiences">
+    <div class="experiences-header">
+      <div class="section-index reveal">002 / Experiences</div>
+      <h2 class="section-heading reveal">Offerings for<br>the interior life</h2>
+    </div>
+    <div class="experiences-grid">
+
+      <article class="experience-card reveal" data-magnetic>
+        <div class="card-number">001</div>
+        <h3 class="card-title">Silent Immersion</h3>
+        <p class="card-desc">Seven days of guided noble silence. No devices, no voices. Daily somatic bodywork, fire ceremony at solstice points, and unstructured desert hours designed to dissolve the constructed self.</p>
+        <div class="card-details">
+          <span class="card-duration">7 Days · Residential</span>
+          <span class="card-price">$12,000</span>
+        </div>
+      </article>
+
+      <article class="experience-card reveal" data-magnetic>
+        <div class="card-number">002</div>
+        <h3 class="card-title">Sound Architecture</h3>
+        <p class="card-desc">Three hours inside a hand-tuned crystal bowl chamber carved into the canyon wall. A single session engineered to shift brainwave state from beta to theta, unlocking non-ordinary states of coherence.</p>
+        <div class="card-details">
+          <span class="card-duration">3 Hours · Day Session</span>
+          <span class="card-price">$800</span>
+        </div>
+      </article>
+
+      <article class="experience-card reveal" data-magnetic>
+        <div class="card-number">003</div>
+        <h3 class="card-title">The Unseen Path</h3>
+        <p class="card-desc">A blindfolded half-day journey through the canyon. Guided by touch, sound, and breath. Without sight, the remaining senses open with startling acuity. You will hear the desert breathe.</p>
+        <div class="card-details">
+          <span class="card-duration">Half Day · Guided</span>
+          <span class="card-price">$1,200</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- Quote -->
+  <div class="section-divider"></div>
+  <section id="quote" class="quote-section" aria-label="Quote">
+    <span class="quote-mark reveal">"</span>
+    <blockquote class="quote-text reveal">
+      The quieter you become,<br>the more you are able to hear.
+    </blockquote>
+    <cite class="quote-attribution reveal">Rumi · 13th Century Sufi Mystic</cite>
+  </section>
+
+  <!-- CTA -->
+  <div class="section-divider"></div>
+  <section id="cta" class="cta-section" aria-label="Reserve">
+    <p class="cta-label reveal">003 / Reserve</p>
+    <h2 class="cta-heading reveal">Reserve your<br>stillness</h2>
+    <div class="cta-buttons">
+      <a href="#" class="btn-primary reveal" data-magnetic>Inquire Now</a>
+      <a href="#" class="btn-ghost reveal" data-magnetic>View Availability</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-logo">Oasis</div>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a href="#philosophy">Philosophy</a>
+      <a href="#experiences">Experiences</a>
+      <a href="#">Privacy</a>
+      <a href="#">Press</a>
+      <a href="#">Contact</a>
+    </nav>
+    <div class="footer-copy">
+      <span>© 2024 Oasis Sedona. All rights reserved.</span>
+      <span>34°52′N 111°47′W</span>
+    </div>
+  </footer>
+
+  <script>
+    /* ────────────────────────────────────────────────
+       REDUCED MOTION DETECTION
+    ──────────────────────────────────────────────── */
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.innerWidth < 768;
+
+    /* ────────────────────────────────────────────────
+       GSAP SETUP
+    ──────────────────────────────────────────────── */
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* ────────────────────────────────────────────────
+       LENIS SMOOTH SCROLL
+    ──────────────────────────────────────────────── */
+    let lenis;
+    if (!prefersReducedMotion && !isMobile) {
+      lenis = new Lenis();
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+    }
+
+    /* ────────────────────────────────────────────────
+       PARTICLE CONSTELLATION CANVAS
+    ──────────────────────────────────────────────── */
+    if (!isMobile) {
+      const canvas  = document.getElementById('particle-canvas');
+      const ctx     = canvas.getContext('2d');
+
+      const PARTICLE_COUNT = 280;
+      const ACTIVATION_RADIUS = 120;
+      const CONNECTION_RADIUS = 160;
+      const BASE_GOLD = '196, 168, 122';
+
+      let mouse = { x: -9999, y: -9999 };
+      let particles = [];
+      let animFrameId;
+
+      function resizeCanvas() {
+        canvas.width  = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+      }
+
+      class Particle {
+        constructor() {
+          this.reset(true);
+        }
+
+        reset(init) {
+          this.x   = Math.random() * canvas.width;
+          this.y   = init ? Math.random() * canvas.height : -4;
+          this.size = 0.8 + Math.random() * 1.2;
+          this.baseOpacity = 0.2 + Math.random() * 0.4;
+          this.opacity = this.baseOpacity;
+          this.vx  = (Math.random() - 0.5) * 0.12;
+          this.vy  = 0.04 + Math.random() * 0.10;
+          this.activated = false;
+        }
+
+        update() {
+          this.x += this.vx;
+          this.y += this.vy;
+
+          if (this.x < -2)             this.x = canvas.width + 2;
+          if (this.x > canvas.width+2) this.x = -2;
+          if (this.y > canvas.height + 4) this.reset(false);
+
+          const dx   = this.x - mouse.x;
+          const dy   = this.y - mouse.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          this.activated = dist < ACTIVATION_RADIUS;
+          const targetOpacity = this.activated
+            ? 0.9 + Math.random() * 0.1
+            : this.baseOpacity;
+          this.opacity += (targetOpacity - this.opacity) * 0.08;
+        }
+
+        draw() {
+          const r = this.activated ? this.size * 2 : this.size;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${BASE_GOLD}, ${this.opacity})`;
+          ctx.fill();
+        }
+      }
+
+      function initParticles() {
+        particles = [];
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+          particles.push(new Particle());
+        }
+      }
+
+      function drawConnections() {
+        const activated = particles.filter(p => p.activated);
+        for (let i = 0; i < activated.length; i++) {
+          for (let j = i + 1; j < activated.length; j++) {
+            const dx   = activated[i].x - activated[j].x;
+            const dy   = activated[i].y - activated[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < CONNECTION_RADIUS) {
+              const alpha = (1 - dist / CONNECTION_RADIUS) * 0.45;
+              ctx.beginPath();
+              ctx.moveTo(activated[i].x, activated[i].y);
+              ctx.lineTo(activated[j].x, activated[j].y);
+              ctx.strokeStyle = `rgba(${BASE_GOLD}, ${alpha})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => { p.update(); p.draw(); });
+        drawConnections();
+        animFrameId = requestAnimationFrame(animate);
+      }
+
+      canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+      });
+
+      canvas.addEventListener('mouseleave', () => {
+        mouse.x = -9999;
+        mouse.y = -9999;
+      });
+
+      window.addEventListener('resize', () => {
+        resizeCanvas();
+        initParticles();
+      });
+
+      resizeCanvas();
+      initParticles();
+      animate();
+    }
+
+    /* ────────────────────────────────────────────────
+       CUSTOM CURSOR
+    ──────────────────────────────────────────────── */
+    if (!prefersReducedMotion && !isMobile) {
+      const dot  = document.getElementById('cursorDot');
+      const ring = document.getElementById('cursorRing');
+
+      let mouseX = 0, mouseY = 0;
+
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+
+        gsap.to(dot, {
+          x: mouseX,
+          y: mouseY,
+          duration: 0.1,
+          ease: 'power3.out'
+        });
+
+        gsap.to(ring, {
+          x: mouseX,
+          y: mouseY,
+          duration: 0.6,
+          ease: 'power3.out'
+        });
+      });
+
+      document.querySelectorAll('[data-magnetic], button, a').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          gsap.to(ring, { scale: 1.6, duration: 0.3, ease: 'power2.out' });
+          gsap.to(dot,  { scale: 0,   duration: 0.3, ease: 'power2.out' });
+        });
+        el.addEventListener('mouseleave', () => {
+          gsap.to(ring, { scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.5)' });
+          gsap.to(dot,  { scale: 1, duration: 0.3, ease: 'power2.out' });
+        });
+      });
+
+      document.querySelectorAll('[data-magnetic]').forEach(el => {
+        el.addEventListener('mousemove', (e) => {
+          const rect  = el.getBoundingClientRect();
+          const relX  = e.clientX - rect.left - rect.width  / 2;
+          const relY  = e.clientY - rect.top  - rect.height / 2;
+          gsap.to(el, { x: relX * 0.25, y: relY * 0.25, duration: 0.4, ease: 'power2.out' });
+        });
+        el.addEventListener('mouseleave', () => {
+          gsap.to(el, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1, 0.4)' });
+        });
+      });
+    }
+
+    /* ────────────────────────────────────────────────
+       HERO ENTRANCE ANIMATIONS
+    ──────────────────────────────────────────────── */
+    if (!prefersReducedMotion) {
+      const heroTl = gsap.timeline({ delay: 0.3 });
+
+      heroTl
+        .to('.hero-label', {
+          opacity: 1,
+          y: 0,
+          duration: 1.0,
+          ease: 'power4.out'
+        })
+        .to('.hero-title', {
+          y: '0%',
+          duration: 1.6,
+          ease: 'power4.out'
+        }, '-=0.6')
+        .to('.hero-subtitle', {
+          y: '0%',
+          opacity: 1,
+          duration: 1.2,
+          ease: 'power4.out'
+        }, '-=0.9')
+        .to('.hero-scroll-label', {
+          opacity: 1,
+          duration: 1.0,
+          ease: 'power2.inOut'
+        }, '-=0.4')
+        .to('#heroScrollLine', {
+          height: 80,
+          opacity: 0.4,
+          duration: 1.2,
+          ease: 'power4.out'
+        }, '-=0.8');
+    } else {
+      gsap.set(['.hero-label', '.hero-title', '.hero-subtitle', '.hero-scroll-label'], {
+        opacity: 1, y: 0
+      });
+      gsap.set('#heroScrollLine', { height: 80, opacity: 0.4 });
+    }
+
+    /* ────────────────────────────────────────────────
+       SCROLL REVEAL ANIMATIONS
+    ──────────────────────────────────────────────── */
+    if (!prefersReducedMotion) {
+      gsap.utils.toArray('.reveal').forEach((el, i) => {
+        const delay = el.dataset.delay ? parseFloat(el.dataset.delay) : 0;
+
+        gsap.fromTo(el,
+          { opacity: 0, y: 60 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: 'power4.out',
+            delay: delay,
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 85%',
+              toggleActions: 'play none none none'
+            }
+          }
+        );
+      });
+
+      gsap.utils.toArray('.experience-card').forEach((card, i) => {
+        card.addEventListener('mouseenter', () => {
+          gsap.to(card.querySelector('::after') || card, {
+            duration: 0
+          });
+          gsap.fromTo(card, { '--border-w': '0%' }, { duration: 0 });
+        });
+
+        const afterEl = document.createElement('div');
+        afterEl.style.cssText = `
+          position: absolute; bottom: 0; left: 0;
+          width: 0; height: 1px;
+          background: #C4A87A;
+          transition: none;
+        `;
+        card.appendChild(afterEl);
+
+        card.addEventListener('mouseenter', () => {
+          gsap.to(afterEl, { width: '100%', duration: 0.6, ease: 'power3.out' });
+        });
+        card.addEventListener('mouseleave', () => {
+          gsap.to(afterEl, { width: 0, duration: 0.4, ease: 'power2.in' });
+        });
+      });
+
+    } else {
+      gsap.set('.reveal', { opacity: 1, y: 0 });
+    }
+
+    /* ────────────────────────────────────────────────
+       MENU OVERLAY
+    ──────────────────────────────────────────────── */
+    const menuOverlay = document.getElementById('menuOverlay');
+    const menuBtn     = document.getElementById('menuBtn');
+    const menuClose   = document.getElementById('menuClose');
+    const menuItems   = document.querySelectorAll('.menu-item');
+    let menuOpen      = false;
+    let menuTl        = null;
+
+    function openMenu() {
+      if (menuOpen) return;
+      menuOpen = true;
+      menuOverlay.classList.add('is-open');
+      menuOverlay.setAttribute('aria-hidden', 'false');
+
+      if (menuTl) menuTl.kill();
+
+      menuTl = gsap.timeline();
+      menuTl
+        .to(menuOverlay, {
+          opacity: 1,
+          duration: 0.5,
+          ease: 'power2.inOut'
+        })
+        .to(menuItems, {
+          y: 0,
+          duration: 0.8,
+          ease: 'power4.out',
+          stagger: 0.08
+        }, '-=0.2');
+    }
+
+    function closeMenu() {
+      if (!menuOpen) return;
+
+      if (menuTl) menuTl.kill();
+
+      menuTl = gsap.timeline({
+        onComplete: () => {
+          menuOverlay.classList.remove('is-open');
+          menuOverlay.setAttribute('aria-hidden', 'true');
+          menuOpen = false;
+        }
+      });
+      menuTl
+        .to(menuItems, {
+          y: '110%',
+          duration: 0.5,
+          ease: 'power3.in',
+          stagger: 0.05
+        })
+        .to(menuOverlay, {
+          opacity: 0,
+          duration: 0.4,
+          ease: 'power2.inOut'
+        }, '-=0.2');
+    }
+
+    menuBtn.addEventListener('click', openMenu);
+    menuClose.addEventListener('click', closeMenu);
+
+    document.querySelectorAll('.menu-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        closeMenu();
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && menuOpen) closeMenu();
+    });
+
+    /* ────────────────────────────────────────────────
+       REDUCED MOTION FALLBACK (static state)
+    ──────────────────────────────────────────────── */
+    if (prefersReducedMotion) {
+      document.querySelectorAll('.animated').forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oasis — Desert Monolith</title>
+  <meta name="description" content="Oasis reimagined as a monastic luxury meditation retreat cut into stone, light, and silence." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #120d0a;
+      --sand: #a98b70;
+      --text: #f3ede6;
+      --muted: #baab9b;
+      --accent: #f4b865;
+      --line: rgba(243, 237, 230, 0.14);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 78% 18%, rgba(244, 184, 101, 0.14), transparent 24%),
+        radial-gradient(circle at 18% 0%, rgba(169, 139, 112, 0.18), transparent 22%),
+        linear-gradient(180deg, #070504 0%, var(--bg) 100%);
+      overflow-x: hidden;
+      cursor: none;
+    }
+    .cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      mix-blend-mode: difference;
+      pointer-events: none;
+      z-index: 100;
+    }
+    .menu-btn {
+      position: fixed;
+      top: 26px;
+      right: 24px;
+      z-index: 30;
+      background: rgba(18, 13, 10, 0.65);
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 14px 18px;
+      font: 500 11px/1 "JetBrains Mono", monospace;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      backdrop-filter: blur(16px);
+    }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 25;
+      background: rgba(11, 8, 6, 0.97);
+      display: grid;
+      place-items: center;
+      transform: translateY(-100%);
+    }
+    .overlay nav {
+      display: grid;
+      gap: 16px;
+      text-align: center;
+    }
+    .overlay a {
+      color: var(--text);
+      text-decoration: none;
+      font: 600 clamp(2.8rem, 8vw, 8rem)/0.92 "Cormorant Garamond", serif;
+      letter-spacing: -0.03em;
+    }
+    .hero {
+      min-height: 100vh;
+      padding: 12vh 7vw 8vh;
+      display: grid;
+      grid-template-columns: 1.02fr 0.9fr;
+      gap: 4vw;
+      align-items: center;
+    }
+    .eyebrow,
+    .chip,
+    .micro {
+      color: var(--muted);
+      font: 500 11px/1 "JetBrains Mono", monospace;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 18px 0 0;
+      max-width: 5.4ch;
+      font: 600 clamp(4.5rem, 10.8vw, 13rem)/0.82 "Cormorant Garamond", serif;
+      letter-spacing: -0.04em;
+    }
+    .lead {
+      max-width: 43ch;
+      line-height: 1.8;
+      color: #d9cfc4;
+      margin-top: 24px;
+    }
+    .cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 32px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      text-transform: uppercase;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      padding: 15px 20px;
+      font: 500 11px/1 "JetBrains Mono", monospace;
+      letter-spacing: 0.14em;
+      color: var(--text);
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #2a1407;
+      border-color: var(--accent);
+    }
+    .hero-visual {
+      position: relative;
+      min-height: 74vh;
+      display: grid;
+      place-items: center;
+      perspective: 1200px;
+    }
+    .plinth {
+      width: min(36vw, 340px);
+      aspect-ratio: 0.62;
+      position: relative;
+      transform-style: preserve-3d;
+    }
+    .monolith {
+      position: absolute;
+      inset: 0;
+      border-radius: 32px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.22), rgba(255,255,255,0.03)),
+        linear-gradient(135deg, #22160f 0%, #4e3322 28%, #b57b3e 62%, #24170f 100%);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12), 0 50px 110px rgba(0, 0, 0, 0.5), 0 0 140px rgba(244, 184, 101, 0.12);
+      overflow: hidden;
+    }
+    .monolith::before,
+    .monolith::after {
+      content: "";
+      position: absolute;
+      inset: 10%;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 26px;
+      clip-path: polygon(0 0, 100% 6%, 100% 94%, 0 100%);
+    }
+    .monolith::after {
+      inset: 22%;
+      border-color: rgba(244, 184, 101, 0.34);
+      filter: blur(0.2px);
+    }
+    .beam {
+      position: absolute;
+      width: 180%;
+      height: 18%;
+      left: -40%;
+      top: 18%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.42), transparent);
+      transform: rotate(-18deg);
+      filter: blur(10px);
+      mix-blend-mode: screen;
+    }
+    .ledger {
+      margin-top: 46px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      max-width: 720px;
+    }
+    .ledger-item {
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
+    }
+    .ledger-item strong {
+      display: block;
+      font: 600 clamp(1.9rem, 4vw, 3.6rem)/0.9 "Cormorant Garamond", serif;
+      letter-spacing: -0.03em;
+      margin-top: 12px;
+    }
+    .sequence {
+      padding: 6vw 0 16vw;
+    }
+    .track {
+      display: flex;
+      width: 300vw;
+    }
+    .panel {
+      width: 100vw;
+      min-height: 72vh;
+      padding: 0 7vw;
+      display: grid;
+      align-items: center;
+    }
+    .panel-inner {
+      max-width: 720px;
+      margin-left: auto;
+    }
+    .panel:nth-child(2) .panel-inner { margin-left: 7vw; }
+    .panel h2 {
+      margin: 14px 0 0;
+      max-width: 8ch;
+      font: 600 clamp(2.2rem, 6.5vw, 6.6rem)/0.9 "Cormorant Garamond", serif;
+      letter-spacing: -0.03em;
+    }
+    .panel p {
+      max-width: 42ch;
+      line-height: 1.8;
+      color: #dccfc2;
+      margin-top: 18px;
+    }
+    .focusable:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+    @media (max-width: 980px) {
+      body { cursor: auto; }
+      .cursor { display: none; }
+      .hero { grid-template-columns: 1fr; padding-top: 18vh; }
+      .hero-visual { min-height: 44vh; }
+      .ledger { grid-template-columns: 1fr; }
+      .track { width: auto; display: grid; gap: 14vh; }
+      .panel { width: auto; min-height: auto; }
+      .panel-inner,
+      .panel:nth-child(2) .panel-inner { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor" aria-hidden="true"></div>
+  <button class="menu-btn focusable" id="menuBtn" data-magnetic>Menu</button>
+  <div class="overlay" id="overlay">
+    <nav>
+      <a href="#arrival" class="focusable">Arrival</a>
+      <a href="#sequence" class="focusable">Sequence</a>
+      <a href="#aftercare" class="focusable">Aftercare</a>
+    </nav>
+  </div>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="eyebrow animated">Oasis / Desert Monolith</div>
+        <h1 class="animated">Silence Carved Into Stone, Heat, And Light.</h1>
+        <p class="lead animated">This Oasis direction imagines meditation as rare architecture: mineral chambers, low sun, private thermal ritual, and a program designed with the precision of a collector residence.</p>
+        <div class="cta animated">
+          <a href="#arrival" class="btn btn-primary focusable" data-magnetic>Request Residency</a>
+          <a href="#sequence" class="btn focusable" data-magnetic>View Sequence</a>
+        </div>
+        <div class="ledger animated">
+          <div class="ledger-item"><span class="micro">Private Villas</span><strong>9 Suites</strong></div>
+          <div class="ledger-item"><span class="micro">Sound Level</span><strong>19 dB</strong></div>
+          <div class="ledger-item"><span class="micro">Integration Window</span><strong>40 Days</strong></div>
+        </div>
+      </div>
+      <div class="hero-visual animated">
+        <div class="plinth" id="plinth">
+          <div class="monolith">
+            <div class="beam"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sequence horizontal-container" id="sequence">
+      <div class="track">
+        <article class="panel" id="arrival">
+          <div class="panel-inner animated">
+            <div class="chip">Arrival</div>
+            <h2>A Threshold That Slows The Pulse On Contact.</h2>
+            <p>Guests cross a shaded mineral court, enter a cool basalt vestibule, and begin with breath diagnostics, desert botanicals, and a private settling immersion.</p>
+          </div>
+        </article>
+        <article class="panel">
+          <div class="panel-inner animated">
+            <div class="chip">Ritual</div>
+            <h2>The Day Unfolds In Heat, Stillness, And Measured Recovery.</h2>
+            <p>Infrared chambers, guided stillness, flotation, and sunset walking meditation are sequenced to bring the nervous system from vigilance into spacious regulation.</p>
+          </div>
+        </article>
+        <article class="panel" id="aftercare">
+          <div class="panel-inner animated">
+            <div class="chip">Return</div>
+            <h2>Departure Includes A Longer Arc Than The Stay Itself.</h2>
+            <p>Your Oasis guide translates retreat insights into a forty-day continuation plan, with discreet remote check-ins and a tailored reentry rhythm for city life.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const overlay = document.getElementById("overlay");
+    const menuBtn = document.getElementById("menuBtn");
+    let menuOpen = false;
+    gsap.set(overlay, { yPercent: -100 });
+
+    menuBtn.addEventListener("click", () => {
+      menuOpen = !menuOpen;
+      gsap.to(overlay, { yPercent: menuOpen ? 0 : -100, duration: 1, ease: "expo.inOut" });
+      menuBtn.textContent = menuOpen ? "Close" : "Menu";
+    });
+
+    if (!reducedMotion && window.Lenis) {
+      const lenis = new Lenis({ duration: 1.15, smoothWheel: true });
+      lenis.on("scroll", ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+    }
+
+    if (!reducedMotion) {
+      gsap.from(".hero .animated", { y: 110, opacity: 0, duration: 1.3, stagger: 0.12, ease: "power4.out" });
+      gsap.to("#plinth", { rotateY: 16, rotateX: -8, repeat: -1, yoyo: true, duration: 4.2, ease: "sine.inOut" });
+      if (window.innerWidth > 980) {
+        const sections = gsap.utils.toArray(".panel");
+        gsap.to(sections, {
+          xPercent: -100 * (sections.length - 1),
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".horizontal-container",
+            pin: true,
+            scrub: 1,
+            snap: 1 / (sections.length - 1),
+            end: () => "+=" + document.querySelector(".horizontal-container").offsetWidth
+          }
+        });
+      }
+      gsap.from(".panel-inner", {
+        scrollTrigger: { trigger: ".horizontal-container", start: "top 70%" },
+        y: 100,
+        opacity: 0,
+        duration: 1.2,
+        stagger: 0.16,
+        ease: "power4.out"
+      });
+    } else {
+      document.querySelectorAll(".animated").forEach((el) => {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      });
+    }
+
+    const cursor = document.querySelector(".cursor");
+    const magnets = document.querySelectorAll("[data-magnetic]");
+    if (!reducedMotion && cursor && window.innerWidth > 980) {
+      window.addEventListener("mousemove", (event) => {
+        gsap.to(cursor, { x: event.clientX, y: event.clientY, duration: 0.55, ease: "power3.out" });
+      });
+      magnets.forEach((element) => {
+        element.addEventListener("mousemove", (event) => {
+          const rect = element.getBoundingClientRect();
+          const relX = event.clientX - rect.left - rect.width / 2;
+          const relY = event.clientY - rect.top - rect.height / 2;
+          gsap.to(element, { x: relX * 0.16, y: relY * 0.16, duration: 0.4, ease: "power2.out" });
+          gsap.to(cursor, { scale: 2.5, duration: 0.3 });
+        });
+        element.addEventListener("mouseleave", () => {
+          gsap.to(element, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.4)" });
+          gsap.to(cursor, { scale: 1, duration: 0.3 });
+        });
+      });
+    }
+  </script>
+</body>
+</html>

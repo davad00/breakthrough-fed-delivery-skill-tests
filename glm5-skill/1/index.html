@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis Serenity | Luxury Meditation Retreat</title>
+    <meta name="description" content="Oasis - A transformative luxury meditation retreat. Find inner peace in our sanctuary of stillness.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Lato:wght@300;400&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #FFFFFF;
+            --color-secondary: #7A8B8B;
+            --color-tertiary: #C9A962;
+            --color-neutral: #0A0F14;
+            --color-on-tertiary: #0A0F14;
+            --ease-fluid: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --ease-breath: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--color-neutral);
+            color: var(--color-primary);
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            width: 14px;
+            height: 14px;
+            background: var(--color-tertiary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 100;
+            mix-blend-mode: difference;
+            transition: transform 0.3s var(--ease-fluid), width 0.3s var(--ease-fluid), height 0.3s var(--ease-fluid);
+        }
+
+        .cursor.hover {
+            width: 56px;
+            height: 56px;
+            mix-blend-mode: difference;
+            background: var(--color-primary);
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 32px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 20;
+        }
+
+        .nav-logo {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-secondary);
+        }
+
+        .nav-menu-btn {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-secondary);
+            background: transparent;
+            border: none;
+            cursor: none;
+            padding: 12px 24px;
+            border: 1px solid var(--color-secondary);
+            border-radius: 9999px;
+            transition: all 0.4s var(--ease-fluid);
+        }
+
+        .nav-menu-btn:hover {
+            color: var(--color-primary);
+            border-color: var(--color-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 0 48px;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 13vw;
+            font-weight: 400;
+            line-height: 0.85;
+            letter-spacing: -0.02em;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(80px) scale(0.95);
+            filter: blur(20px);
+        }
+
+        .hero-subtitle {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-secondary);
+            margin-top: 48px;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .hero-cta {
+            margin-top: 80px;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .btn-primary {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            background: var(--color-tertiary);
+            color: var(--color-on-tertiary);
+            border: none;
+            padding: 18px 36px;
+            border-radius: 9999px;
+            cursor: none;
+            transition: all 0.4s var(--ease-fluid);
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(201, 169, 98, 0.3);
+        }
+
+        /* Ambient Background */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .ambient-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+        }
+
+        .blob-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--color-tertiary);
+            top: -200px;
+            right: -200px;
+            animation: float1 20s ease-in-out infinite;
+        }
+
+        .blob-2 {
+            width: 400px;
+            height: 400px;
+            background: #1a3a4a;
+            bottom: -100px;
+            left: -100px;
+            animation: float2 25s ease-in-out infinite;
+        }
+
+        @keyframes float1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-50px, 50px) scale(1.1); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, -30px) scale(0.9); }
+        }
+
+        /* Philosophy Section */
+        .philosophy {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 128px 48px;
+            position: relative;
+        }
+
+        .philosophy-content {
+            max-width: 800px;
+        }
+
+        .philosophy-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-tertiary);
+            margin-bottom: 32px;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .philosophy-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 6vw;
+            font-weight: 400;
+            line-height: 0.95;
+            letter-spacing: -0.01em;
+            margin-bottom: 48px;
+            opacity: 0;
+            transform: translateY(60px);
+        }
+
+        .philosophy-text {
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 1.8;
+            letter-spacing: 0.02em;
+            color: var(--color-secondary);
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        /* Experiences Section */
+        .experiences {
+            min-height: 100vh;
+            padding: 128px 48px;
+        }
+
+        .experiences-header {
+            text-align: center;
+            margin-bottom: 128px;
+        }
+
+        .experiences-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-tertiary);
+            margin-bottom: 32px;
+            opacity: 0;
+        }
+
+        .experiences-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 6vw;
+            font-weight: 400;
+            line-height: 0.95;
+            opacity: 0;
+        }
+
+        .experience-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 48px;
+        }
+
+        .experience-card {
+            padding: 48px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 0.6s var(--ease-fluid);
+        }
+
+        .experience-card:hover {
+            border-color: var(--color-tertiary);
+            transform: translateY(-8px);
+        }
+
+        .experience-number {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            color: var(--color-tertiary);
+            margin-bottom: 24px;
+        }
+
+        .experience-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5vw;
+            font-weight: 400;
+            margin-bottom: 24px;
+        }
+
+        .experience-desc {
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 1.8;
+            color: var(--color-secondary);
+        }
+
+        /* Journey Section */
+        .journey {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 128px 48px;
+            text-align: center;
+        }
+
+        .journey-content {
+            max-width: 900px;
+        }
+
+        .journey-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 13vw;
+            font-weight: 400;
+            line-height: 0.85;
+            margin-bottom: 48px;
+            opacity: 0;
+            transform: translateY(80px);
+        }
+
+        .journey-text {
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 1.8;
+            color: var(--color-secondary);
+            margin-bottom: 64px;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .btn-ghost {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            background: transparent;
+            color: var(--color-primary);
+            border: 1px solid var(--color-primary);
+            padding: 18px 36px;
+            border-radius: 9999px;
+            cursor: none;
+            transition: all 0.4s var(--ease-fluid);
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .btn-ghost:hover {
+            background: var(--color-primary);
+            color: var(--color-neutral);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 64px 48px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-secondary);
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 48px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+        }
+
+        .scroll-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-secondary);
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, var(--color-tertiary), transparent);
+            animation: scrollPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 1; transform: scaleY(1); }
+            50% { opacity: 0.5; transform: scaleY(0.8); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                padding: 24px;
+            }
+
+            .hero {
+                padding: 0 24px;
+            }
+
+            .hero-title {
+                font-size: 18vw;
+            }
+
+            .philosophy, .experiences, .journey {
+                padding: 64px 24px;
+            }
+
+            .experience-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .experience-name {
+                font-size: 8vw;
+            }
+
+            .footer {
+                padding: 32px 24px;
+            }
+
+            .cursor {
+                display: none;
+            }
+
+            body {
+                cursor: auto;
+            }
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            .hero-title, .hero-subtitle, .hero-cta, .philosophy-label, .philosophy-title, .philosophy-text, .experiences-label, .experiences-title, .experience-card, .journey-title, .journey-text, .btn-ghost, .scroll-indicator {
+                opacity: 1 !important;
+                transform: none !important;
+                filter: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Ambient Background -->
+    <div class="ambient-bg">
+        <div class="ambient-blob blob-1"></div>
+        <div class="ambient-blob blob-2"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-logo">Oasis</div>
+        <button class="nav-menu-btn">Menu</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 class="hero-title">OASIS</h1>
+        <p class="hero-subtitle">Luxury Meditation Retreat</p>
+        <div class="hero-cta">
+            <button class="btn-primary">Begin Your Journey</button>
+        </div>
+        <div class="scroll-indicator">
+            <span class="scroll-text">Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- Philosophy Section -->
+    <section class="philosophy">
+        <div class="philosophy-content">
+            <span class="philosophy-label">Our Philosophy</span>
+            <h2 class="philosophy-title">Stillness is the language of the soul</h2>
+            <p class="philosophy-text">In the space between thoughts lies infinite possibility. Oasis is not merely a place—it is a portal to your deepest self. Here, surrounded by ancient mountains and sacred waters, you will discover what modern life has made you forget: the profound wisdom of simply being.</p>
+        </div>
+    </section>
+
+    <!-- Experiences Section -->
+    <section class="experiences">
+        <div class="experiences-header">
+            <span class="experiences-label">Experiences</span>
+            <h2 class="experiences-title">Paths to Presence</h2>
+        </div>
+        <div class="experience-grid">
+            <div class="experience-card">
+                <span class="experience-number">01</span>
+                <h3 class="experience-name">Dawn Meditation</h3>
+                <p class="experience-desc">Greet the first light with guided meditation on our floating pavilion, where water and sky become one.</p>
+            </div>
+            <div class="experience-card">
+                <span class="experience-number">02</span>
+                <h3 class="experience-name">Sound Healing</h3>
+                <p class="experience-desc">Ancient singing bowls and gongs guide you into theta states where deep healing occurs naturally.</p>
+            </div>
+            <div class="experience-card">
+                <span class="experience-number">03</span>
+                <h3 class="experience-name">Silent Walks</h3>
+                <p class="experience-desc">Walk our labyrinth paths in contemplative silence, each step a meditation, each breath a prayer.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Journey Section -->
+    <section class="journey">
+        <div class="journey-content">
+            <h2 class="journey-title">Return to Yourself</h2>
+            <p class="journey-text">Your journey inward begins with a single step. Let us guide you home.</p>
+            <button class="btn-ghost">Reserve Your Sanctuary</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <span class="footer-text">Oasis Retreats 2024</span>
+            <span class="footer-text">Where Stillness Lives</span>
+        </div>
+    </footer>
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script>
+        // Check for reduced motion preference
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (!prefersReducedMotion) {
+            // Register ScrollTrigger
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Custom Cursor
+            const cursor = document.querySelector('.cursor');
+            const interactiveElements = document.querySelectorAll('button, a, .experience-card');
+
+            document.addEventListener('mousemove', (e) => {
+                gsap.to(cursor, {
+                    x: e.clientX - 7,
+                    y: e.clientY - 7,
+                    duration: 0.8,
+                    ease: 'power3.out'
+                });
+            });
+
+            interactiveElements.forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+            });
+
+            // Hero Animations
+            const heroTl = gsap.timeline({ delay: 0.5 });
+            
+            heroTl.to('.hero-title', {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                filter: 'blur(0px)',
+                duration: 2,
+                ease: 'power3.out'
+            })
+            .to('.hero-subtitle', {
+                opacity: 1,
+                y: 0,
+                duration: 1.2,
+                ease: 'power3.out'
+            }, '-=1')
+            .to('.hero-cta', {
+                opacity: 1,
+                y: 0,
+                duration: 1.2,
+                ease: 'power3.out'
+            }, '-=0.8')
+            .to('.scroll-indicator', {
+                opacity: 1,
+                duration: 1,
+                ease: 'power2.out'
+            }, '-=0.5');
+
+            // Philosophy Section
+            gsap.to('.philosophy-label', {
+                scrollTrigger: {
+                    trigger: '.philosophy',
+                    start: 'top 70%',
+                    toggleActions: 'play none none reverse'
+                },
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: 'power3.out'
+            });
+
+            gsap.to('.philosophy-title', {
+                scrollTrigger: {
+                    trigger: '.philosophy',
+                    start: 'top 60%',
+                    toggleActions: 'play none none reverse'
+                },
+                opacity: 1,
+                y: 0,
+                duration: 1.4,
+                ease: 'power3.out'
+            });
+
+            gsap.to('.philosophy-text', {
+                scrollTrigger: {
+                    trigger: '.philosophy',
+                    start: 'top 50%',
+                    toggleActions: 'play none none reverse'
+                },
+                opacity: 1,
+                y: 0,
+                duration: 1.2,
+                ease: 'power3.out'
+            });
+
+            // Experiences Section
+            gsap.to('.experiences-label', {
+                scrollTrigger: {
+                    trigger: '.experiences',
+                    start: 'top 70%',
+                    toggleActions: 'play none none reverse'
+                },
+                opacity: 1,
+                duration: 1,
+                ease: 'power3.out'
+            });
+
+            gsap.to('.experiences-title', {
+                scrollTrigger: {
+                    trigger: '.experiences',
+                    start: 'top 60%',
+                    toggleActions: 'play none none reverse'
+                },
+                opacity: 1,
+                duration: 1.2,
+                ease: 'power3.out'
+            });
+
+            gsap.utils.toArray('.experience-card').forEach((card, i) => {
+                gsap.to(card, {
+                    scrollTrigger: {
+                        trigger: card,
+                        start: 'top 80%',
+                        toggleActions: 'play none none reverse'
+                    },
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    delay: i * 0.15,
+                    ease: 'power3.out'
+                });
+            });
+
+            // Journey Section
+            gsap.to('.journey-title', {
+                scrollTrigger: {
+                    trigger: '.journey',
+                    start: 'top 60%',
+                    toggleActions: 'play none none reverse'
+                },
+                opacity: 1,
+                y: 0,
+                duration: 1.6,
+                ease: 'power3.out'
+            });
+
+            gsap.to('.journey-text', {
+                scrollTrigger: {
+                    trigger: '.journey',
+                    start: 'top 50%',
+                    toggleActions: 'play none none reverse'
+                },
+                opacity: 1,
+                y: 0,
+                duration: 1.2,
+                ease: 'power3.out'
+            });
+
+            gsap.to('.btn-ghost', {
+                scrollTrigger: {
+                    trigger: '.journey',
+                    start: 'top 40%',
+                    toggleActions: 'play none none reverse'
+                },
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: 'power3.out'
+            });
+        } else {
+            // Static fallback
+            document.querySelectorAll('.hero-title, .hero-subtitle, .hero-cta, .philosophy-label, .philosophy-title, .philosophy-text, .experiences-label, .experiences-title, .experience-card, .journey-title, .journey-text, .btn-ghost, .scroll-indicator').forEach(el => {
+                el.style.opacity = '1';
+                el.style.transform = 'none';
+                el.style.filter = 'none';
+            });
+        }
+    </script>
+</body>
+</html>

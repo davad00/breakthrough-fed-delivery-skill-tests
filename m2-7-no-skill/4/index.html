@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis | Editorial Luxury Retreat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-white: #FAFAFA;
+            --color-black: #0A0A0A;
+            --color-gray: #6A6A6A;
+            --color-light-gray: #E5E5E5;
+            --color-accent: #C45C3E;
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Space Grotesk', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-white);
+            color: var(--color-black);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            position: relative;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 4rem 6rem;
+        }
+
+        .hero-label {
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: slideIn 0.8s ease 0.2s forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(4rem, 8vw, 9rem);
+            font-weight: 400;
+            line-height: 0.9;
+            letter-spacing: -0.02em;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: slideIn 0.8s ease 0.4s forwards;
+        }
+
+        .hero-title span {
+            display: block;
+            font-style: italic;
+            color: var(--color-accent);
+        }
+
+        .hero-subtitle {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 300;
+            max-width: 400px;
+            color: var(--color-gray);
+            line-height: 1.8;
+            opacity: 0;
+            animation: slideIn 0.8s ease 0.6s forwards;
+        }
+
+        .hero-visual {
+            background: var(--color-black);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-visual::before {
+            content: 'OASIS';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--font-display);
+            font-size: clamp(8rem, 15vw, 20rem);
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.03);
+            letter-spacing: 0.1em;
+            white-space: nowrap;
+        }
+
+        .hero-image-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 400px;
+            background: linear-gradient(135deg, var(--color-accent) 0%, #8B3A2A 100%);
+            opacity: 0.9;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 4rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            opacity: 0;
+            animation: slideIn 0.8s ease 0.8s forwards;
+        }
+
+        .scroll-indicator span {
+            font-size: 0.7rem;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .scroll-line {
+            width: 60px;
+            height: 1px;
+            background: var(--color-black);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scroll-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--color-accent);
+            animation: scrollSlide 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollSlide {
+            0% { left: -100%; }
+            50% { left: 100%; }
+            100% { left: 100%; }
+        }
+
+        section {
+            padding: 10rem 6rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .editorial-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 8rem;
+            align-items: start;
+        }
+
+        .editorial-large {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 400;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+        }
+
+        .editorial-large span {
+            color: var(--color-accent);
+            font-style: italic;
+        }
+
+        .editorial-small {
+            font-size: 0.85rem;
+            font-weight: 300;
+            line-height: 1.9;
+            color: var(--color-gray);
+        }
+
+        .editorial-small p {
+            margin-bottom: 1.5rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 6rem;
+            padding-top: 4rem;
+            border-top: 1px solid var(--color-light-gray);
+        }
+
+        .stat-item {
+            text-align: left;
+        }
+
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: 3.5rem;
+            font-weight: 400;
+            color: var(--color-accent);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--color-gray);
+            margin-top: 0.5rem;
+        }
+
+        .manifesto {
+            background: var(--color-black);
+            color: var(--color-white);
+        }
+
+        .manifesto .editorial-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+        }
+
+        .manifesto-text {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 3vw, 2.8rem);
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        .manifesto-text em {
+            color: var(--color-accent);
+            font-style: italic;
+        }
+
+        .manifesto-details {
+            padding-top: 2rem;
+        }
+
+        .manifesto-details p {
+            font-size: 0.9rem;
+            font-weight: 300;
+            line-height: 2;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+        }
+
+        .manifesto-details p:last-child {
+            margin-bottom: 0;
+        }
+
+        .programs {
+            background: var(--color-white);
+        }
+
+        .programs-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 5rem;
+        }
+
+        .programs-header h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 4vw, 4rem);
+            font-weight: 400;
+            letter-spacing: -0.02em;
+        }
+
+        .programs-header p {
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: var(--color-gray);
+            max-width: 300px;
+            text-align: right;
+        }
+
+        .programs-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+        }
+
+        .program-card {
+            border-top: 2px solid var(--color-black);
+            padding-top: 2rem;
+            transition: all 0.4s ease;
+        }
+
+        .program-card:hover {
+            border-color: var(--color-accent);
+        }
+
+        .program-number {
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            font-style: italic;
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+        }
+
+        .program-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .program-card p {
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: var(--color-gray);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .program-duration {
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .quote-section {
+            padding: 8rem 6rem;
+            background: var(--color-light-gray);
+            text-align: center;
+        }
+
+        .quote-section blockquote {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 3.5vw, 3rem);
+            font-weight: 400;
+            font-style: italic;
+            max-width: 1000px;
+            margin: 0 auto 2rem;
+            line-height: 1.5;
+        }
+
+        .quote-section cite {
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            font-style: normal;
+        }
+
+        .cta-editorial {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 80vh;
+        }
+
+        .cta-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 6rem;
+        }
+
+        .cta-content h2 {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 5vw, 5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+        }
+
+        .cta-content p {
+            font-size: 0.95rem;
+            font-weight: 300;
+            color: var(--color-gray);
+            max-width: 400px;
+            margin-bottom: 3rem;
+        }
+
+        .btn-editorial {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: var(--color-black);
+            border: none;
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--color-white);
+            transition: all 0.4s ease;
+            width: fit-content;
+        }
+
+        .btn-editorial:hover {
+            background: var(--color-accent);
+        }
+
+        .cta-visual {
+            background: var(--color-accent);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-visual::before {
+            content: 'JOIN';
+            position: absolute;
+            font-family: var(--font-display);
+            font-size: clamp(10rem, 20vw, 25rem);
+            font-weight: 400;
+            color: rgba(0, 0, 0, 0.1);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            letter-spacing: 0.1em;
+        }
+
+        footer {
+            padding: 4rem 6rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--color-light-gray);
+        }
+
+        footer p {
+            font-size: 0.75rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            color: var(--color-gray);
+        }
+
+        @media (max-width: 1024px) {
+            .hero {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-visual {
+                min-height: 50vh;
+            }
+
+            .hero-content {
+                padding: 4rem 2rem;
+            }
+
+            section {
+                padding: 6rem 2rem;
+            }
+
+            .editorial-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .programs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .programs-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .programs-header p {
+                text-align: left;
+            }
+
+            .cta-editorial {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-visual {
+                min-height: 40vh;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-label">Luxury Meditation Retreat</span>
+            <h1 class="hero-title">Oasis</h1>
+            <p class="hero-subtitle">A private sanctuary where the world's noise dissolves into stillness. Twelve guests. Twelve days. One lifetime of transformation.</p>
+            <div class="scroll-indicator">
+                <span>Discover</span>
+                <div class="scroll-line"></div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="hero-image-placeholder"></div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <div class="editorial-grid">
+                <div class="editorial-large">
+                    The art of <span>presence</span> cannot be taught. It must be remembered.
+                </div>
+                <div class="editorial-small">
+                    <p>Oasis sits at 1,800 meters in the Japanese Alps, where snow-capped peaks meet ancient cedar forests. For fifteen years, we have hosted a single cohort per season—no exceptions, no exceptions, no exceptions.</p>
+                    <p>Our method is simple: remove everything unnecessary. What remains is essential.</p>
+                </div>
+            </div>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Guests Per Season</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">15</div>
+                    <div class="stat-label">Years of Practice</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">1800</div>
+                    <div class="stat-label">Meters Altitude</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="manifesto">
+        <div class="container">
+            <div class="editorial-grid">
+                <div class="manifesto-text">
+                    We believe the most <em>radical</em> act in modern life is choosing to do nothing at all.
+                </div>
+                <div class="manifesto-details">
+                    <p>In a world optimized for productivity, Oasis offers something countercultural: spaciousness. No itinerary. No goals. No self-improvement metrics.</p>
+                    <p>Just the profound medicine of silence, served daily at dawn.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="programs">
+        <div class="container">
+            <div class="programs-header">
+                <h2>Curated Programs</h2>
+                <p>Each journey designed for a specific depth of transformation</p>
+            </div>
+            <div class="programs-grid">
+                <div class="program-card">
+                    <div class="program-number">01</div>
+                    <h3>The Art of Stillness</h3>
+                    <p>An introduction to meditation through the lens of Japanese zazen. Mornings begin with collective practice; afternoons are unstructured.</p>
+                    <span class="program-duration">5 Days</span>
+                </div>
+                <div class="program-card">
+                    <div class="program-number">02</div>
+                    <h3>Digital Detox Retreat</h3>
+                    <p>A comprehensive separation from technology, supported by forest bathing, hot spring soaking, and nightly sound healing ceremonies.</p>
+                    <span class="program-duration">7 Days</span>
+                </div>
+                <div class="program-card">
+                    <div class="program-number">03</div>
+                    <h3>The Deep Dive</h3>
+                    <p>Our most intensive program—ten days of noble silence, vipassana instruction, and one-on-one guidance with senior teachers.</p>
+                    <span class="program-duration">10 Days</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="quote-section">
+        <div class="container">
+            <blockquote>"After thirty years of seeking, I finally found what I wasn't looking for: nothing. And it changed everything."</blockquote>
+            <cite>— Dr. Elena Vasquez, Neuroscientist</cite>
+        </div>
+    </section>
+
+    <section class="cta-editorial">
+        <div class="cta-content">
+            <h2>Begin the Practice of Nothing</h2>
+            <p>Applications are reviewed monthly. We accept twelve guests per season—April through October.</p>
+            <a href="#" class="btn-editorial">Request Invitation</a>
+        </div>
+        <div class="cta-visual"></div>
+    </section>
+
+    <footer>
+        <p>Oasis Meditation Sanctuary · Hakuba, Japan</p>
+        <p>+81 261 555 0123</p>
+    </footer>
+</body>
+</html>

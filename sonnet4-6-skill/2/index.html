@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oasis — The Temple · Bali</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --color-primary: #EDE0CF;
+      --color-secondary: #7A6A58;
+      --color-tertiary: #C25B35;
+      --color-neutral: #0E0806;
+      --color-on-tertiary: #FFFFFF;
+      --color-on-neutral: #EDE0CF;
+      --color-surface: #16100D;
+
+      --font-display: 'Playfair Display', serif;
+      --font-mono: 'Space Mono', monospace;
+
+      --ease-ceremonial: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-ember: cubic-bezier(0.45, 0, 0.55, 1);
+    }
+
+    html {
+      scroll-behavior: auto;
+    }
+
+    body {
+      background-color: var(--color-neutral);
+      color: var(--color-primary);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.8;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    ::selection {
+      background: var(--color-tertiary);
+      color: var(--color-on-tertiary);
+    }
+
+    /* ───────── CUSTOM CURSOR ───────── */
+    .cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 10px;
+      height: 10px;
+      background: var(--color-tertiary);
+      border-radius: 9999px;
+      pointer-events: none;
+      z-index: 100;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: normal;
+      transition: width 0.3s var(--ease-ceremonial), height 0.3s var(--ease-ceremonial);
+    }
+
+    .cursor.cursor--hover {
+      width: 44px;
+      height: 44px;
+      mix-blend-mode: difference;
+      background: var(--color-primary);
+    }
+
+    /* ───────── LEFT VERTICAL NAV ───────── */
+    .nav-strip {
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100vh;
+      width: 64px;
+      z-index: 30;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      padding: 0 8px;
+    }
+
+    .nav-strip__logo {
+      position: absolute;
+      top: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-mono);
+      font-size: 8px;
+      letter-spacing: 0.18em;
+      color: var(--color-tertiary);
+      text-transform: uppercase;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+    }
+
+    .nav-strip__item {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--color-secondary);
+      text-transform: uppercase;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      transform: rotate(180deg);
+      cursor: none;
+      text-decoration: none;
+      position: relative;
+      padding: 4px 0;
+      white-space: nowrap;
+    }
+
+    .nav-strip__item::before {
+      content: '';
+      position: absolute;
+      left: -12px;
+      top: 50%;
+      transform: translateY(-50%) scale(0);
+      width: 4px;
+      height: 4px;
+      background: var(--color-tertiary);
+      border-radius: 9999px;
+      transition: transform 0.3s var(--ease-ceremonial);
+    }
+
+    .nav-strip__item:hover {
+      color: var(--color-primary);
+    }
+
+    .nav-strip__item:hover::before {
+      transform: translateY(-50%) scale(1);
+    }
+
+    .nav-strip__line {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1px;
+      height: 80px;
+      background: var(--color-secondary);
+      opacity: 0.3;
+    }
+
+    /* ───────── FULL-SCREEN NAV OVERLAY ───────── */
+    .nav-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: flex;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .nav-overlay.is-open {
+      pointer-events: all;
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .nav-overlay__left {
+      width: 40%;
+      background: var(--color-surface);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 80px 64px;
+      transform: translateX(-100%);
+    }
+
+    .nav-overlay__right {
+      width: 60%;
+      background: var(--color-neutral);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 80px;
+      transform: translateX(100%);
+    }
+
+    .nav-overlay__heading {
+      font-family: var(--font-display);
+      font-size: 4vw;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--color-primary);
+      margin-bottom: 64px;
+      line-height: 1;
+    }
+
+    .nav-overlay__links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .nav-overlay__link {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4.5vw, 72px);
+      font-weight: 700;
+      color: var(--color-secondary);
+      text-decoration: none;
+      display: block;
+      cursor: none;
+      line-height: 1.15;
+    }
+
+    .nav-overlay__link:hover {
+      color: var(--color-primary);
+    }
+
+    .nav-overlay__meta {
+      margin-top: 64px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--color-secondary);
+      text-transform: uppercase;
+      line-height: 2.2;
+    }
+
+    .nav-overlay__close {
+      position: absolute;
+      top: 40px;
+      right: 40px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--color-secondary);
+      text-transform: uppercase;
+      cursor: none;
+      background: none;
+      border: none;
+      color: var(--color-secondary);
+      padding: 8px 16px;
+    }
+
+    .nav-overlay__close:hover {
+      color: var(--color-primary);
+    }
+
+    /* ───────── HAMBURGER TRIGGER ───────── */
+    .nav-trigger {
+      position: fixed;
+      top: 36px;
+      left: 18px;
+      z-index: 35;
+      width: 28px;
+      height: 16px;
+      cursor: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .nav-trigger span {
+      display: block;
+      width: 100%;
+      height: 1px;
+      background: var(--color-secondary);
+      transform-origin: left center;
+    }
+
+    .nav-trigger:hover span {
+      background: var(--color-primary);
+    }
+
+    /* ───────── MAIN CONTENT OFFSET FOR NAV ───────── */
+    .site-wrapper {
+      padding-left: 64px;
+    }
+
+    /* ───────── CLIP-PATH REVEAL BASE ───────── */
+    .reveal-portal {
+      clip-path: circle(0% at 50% 50%);
+    }
+
+    /* ───────── SECTION BASE ───────── */
+    section {
+      position: relative;
+    }
+
+    /* ───────── HERO ───────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 0 5vw;
+    }
+
+    .hero__sun {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60vw;
+      height: 60vw;
+      border-radius: 9999px;
+      background: radial-gradient(circle at center, #C25B35 0%, #7A1A00 55%, transparent 75%);
+      opacity: 0.18;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .hero__eyebrow {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--color-secondary);
+      text-transform: uppercase;
+      margin-bottom: 40px;
+    }
+
+    .hero__title {
+      font-family: var(--font-display);
+      font-size: 11vw;
+      font-weight: 700;
+      font-style: italic;
+      line-height: 0.88;
+      letter-spacing: -0.03em;
+      color: var(--color-primary);
+      margin-bottom: 32px;
+    }
+
+    .hero__tagline {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--color-secondary);
+      text-transform: uppercase;
+      margin-bottom: 72px;
+    }
+
+    .hero__counter {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--color-secondary);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hero__counter-dot {
+      width: 4px;
+      height: 4px;
+      background: var(--color-tertiary);
+      border-radius: 9999px;
+    }
+
+    .hero__scroll-hint {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--color-secondary);
+      text-transform: uppercase;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero__scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, var(--color-secondary), transparent);
+    }
+
+    /* ───────── DIVIDER ───────── */
+    .section-divider {
+      width: calc(100% - 64px);
+      margin: 0 auto;
+      height: 1px;
+      background: rgba(122, 106, 88, 0.2);
+    }
+
+    /* ───────── PHILOSOPHY ───────── */
+    .philosophy {
+      padding: 18vw 5vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .philosophy__label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--color-tertiary);
+      text-transform: uppercase;
+      margin-bottom: 80px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .philosophy__label::before,
+    .philosophy__label::after {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: var(--color-tertiary);
+      opacity: 0.5;
+    }
+
+    .philosophy__headline {
+      font-family: var(--font-display);
+      font-size: 6vw;
+      font-weight: 400;
+      font-style: italic;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: var(--color-primary);
+      max-width: 900px;
+      margin-bottom: 80px;
+    }
+
+    .philosophy__body {
+      max-width: 620px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--color-secondary);
+      margin-bottom: 48px;
+    }
+
+    .philosophy__body + .philosophy__body {
+      margin-top: 0;
+    }
+
+    .philosophy__accent {
+      color: var(--color-primary);
+    }
+
+    .philosophy__number {
+      font-family: var(--font-display);
+      font-size: 18vw;
+      font-weight: 700;
+      line-height: 0.8;
+      color: var(--color-surface);
+      position: absolute;
+      left: 5vw;
+      bottom: -4vw;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* ───────── EXPERIENCES ───────── */
+    .experiences {
+      padding: 12vw 5vw;
+    }
+
+    .experiences__header {
+      margin-bottom: 10vw;
+    }
+
+    .experiences__section-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--color-tertiary);
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+
+    .experience-item {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 40px;
+      padding: 64px 0;
+      border-top: 1px solid rgba(122, 106, 88, 0.2);
+      align-items: start;
+      position: relative;
+    }
+
+    .experience-item:last-child {
+      border-bottom: 1px solid rgba(122, 106, 88, 0.2);
+    }
+
+    .experience-item__number {
+      font-family: var(--font-display);
+      font-size: 5vw;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--color-tertiary);
+      letter-spacing: -0.02em;
+    }
+
+    .experience-item__content {
+      padding-top: 8px;
+    }
+
+    .experience-item__title {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 3vw, 52px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--color-primary);
+      margin-bottom: 24px;
+    }
+
+    .experience-item__description {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--color-secondary);
+      max-width: 520px;
+      margin-bottom: 32px;
+    }
+
+    .experience-item__meta {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--color-secondary);
+      text-transform: uppercase;
+    }
+
+    /* ───────── SANCTUARY ───────── */
+    .sanctuary {
+      padding: 14vw 5vw;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8vw;
+      align-items: start;
+    }
+
+    .sanctuary__left {}
+
+    .sanctuary__label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--color-tertiary);
+      text-transform: uppercase;
+      margin-bottom: 48px;
+    }
+
+    .sanctuary__headline {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 4.5vw, 72px);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--color-primary);
+      margin-bottom: 40px;
+    }
+
+    .sanctuary__body {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--color-secondary);
+      max-width: 480px;
+    }
+
+    .sanctuary__right {
+      padding-top: 96px;
+    }
+
+    .sanctuary__feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sanctuary__feature-item {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--color-secondary);
+      text-transform: uppercase;
+      padding: 24px 0;
+      border-bottom: 1px solid rgba(122, 106, 88, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .sanctuary__feature-item:first-child {
+      border-top: 1px solid rgba(122, 106, 88, 0.2);
+    }
+
+    .sanctuary__feature-dot {
+      width: 4px;
+      height: 4px;
+      background: var(--color-tertiary);
+      border-radius: 9999px;
+      flex-shrink: 0;
+    }
+
+    /* ───────── TESTIMONIAL ───────── */
+    .testimonial {
+      padding: 0 5vw 14vw;
+    }
+
+    .testimonial__card {
+      background: var(--color-surface);
+      border-left: 2px solid var(--color-tertiary);
+      padding: 80px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .testimonial__card::before {
+      content: '\201C';
+      position: absolute;
+      top: -20px;
+      left: 60px;
+      font-family: var(--font-display);
+      font-size: 20vw;
+      color: rgba(194, 91, 53, 0.06);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .testimonial__quote {
+      font-family: var(--font-display);
+      font-size: clamp(22px, 2.8vw, 44px);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+      color: var(--color-primary);
+      max-width: 820px;
+      margin-bottom: 48px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .testimonial__attribution {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .testimonial__name {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--color-primary);
+      text-transform: uppercase;
+    }
+
+    .testimonial__detail {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--color-secondary);
+      text-transform: uppercase;
+    }
+
+    /* ───────── CTA ───────── */
+    .cta {
+      padding: 12vw 5vw 16vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta__sun {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80vw;
+      height: 80vw;
+      border-radius: 9999px;
+      background: radial-gradient(circle at center, #C25B35 0%, transparent 65%);
+      opacity: 0.05;
+      pointer-events: none;
+    }
+
+    .cta__label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--color-tertiary);
+      text-transform: uppercase;
+      margin-bottom: 56px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta__headline {
+      font-family: var(--font-display);
+      font-size: 8vw;
+      font-weight: 700;
+      font-style: italic;
+      line-height: 0.9;
+      letter-spacing: -0.025em;
+      color: var(--color-primary);
+      margin-bottom: 64px;
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-tertiary);
+      color: var(--color-on-tertiary);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 18px 48px;
+      border-radius: 9999px;
+      border: none;
+      cursor: none;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-primary:hover {
+      background: #D96A40;
+    }
+
+    .cta__contact {
+      margin-top: 40px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--color-secondary);
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta__contact a {
+      color: var(--color-primary);
+      text-decoration: none;
+    }
+
+    /* ───────── FOOTER ───────── */
+    .footer {
+      border-top: 1px solid rgba(122, 106, 88, 0.2);
+      padding: 64px 5vw 48px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .footer__brand {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .footer__brand-name {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      font-style: italic;
+      color: var(--color-primary);
+      letter-spacing: -0.02em;
+    }
+
+    .footer__brand-sub {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--color-secondary);
+      text-transform: uppercase;
+    }
+
+    .footer__center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .footer__sun-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 9999px;
+      background: var(--color-tertiary);
+      opacity: 0.7;
+    }
+
+    .footer__right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .footer__links {
+      display: flex;
+      gap: 32px;
+    }
+
+    .footer__link {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--color-secondary);
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: none;
+    }
+
+    .footer__link:hover {
+      color: var(--color-primary);
+    }
+
+    .footer__copy {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--color-secondary);
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+
+    .footer__bottom {
+      grid-column: 1 / -1;
+      border-top: 1px solid rgba(122, 106, 88, 0.1);
+      padding-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer__bottom-text {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--color-secondary);
+      text-transform: uppercase;
+      opacity: 0.4;
+    }
+
+    /* ───────── MOBILE ───────── */
+    @media (max-width: 768px) {
+      body {
+        cursor: auto;
+      }
+
+      .cursor {
+        display: none;
+      }
+
+      .nav-strip {
+        display: none;
+      }
+
+      .nav-trigger {
+        left: 20px;
+      }
+
+      .site-wrapper {
+        padding-left: 0;
+      }
+
+      .hero__title {
+        font-size: 17vw;
+      }
+
+      .philosophy__headline {
+        font-size: 9vw;
+      }
+
+      .sanctuary {
+        grid-template-columns: 1fr;
+        gap: 64px;
+      }
+
+      .sanctuary__right {
+        padding-top: 0;
+      }
+
+      .experience-item {
+        grid-template-columns: 72px 1fr;
+        gap: 24px;
+      }
+
+      .experience-item__number {
+        font-size: 9vw;
+      }
+
+      .testimonial__card {
+        padding: 48px 32px;
+      }
+
+      .cta__headline {
+        font-size: 12vw;
+      }
+
+      .footer {
+        grid-template-columns: 1fr;
+      }
+
+      .footer__right {
+        align-items: flex-start;
+      }
+
+      .footer__bottom {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+      }
+
+      .nav-overlay__left,
+      .nav-overlay__right {
+        width: 50%;
+        padding: 48px 32px;
+      }
+
+      .nav-overlay__link {
+        font-size: 7vw;
+      }
+
+      .nav-overlay__heading {
+        font-size: 6vw;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .sanctuary {
+        padding: 14vw 6vw;
+      }
+
+      .testimonial__card {
+        padding: 40px 24px;
+      }
+
+      .experience-item {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-overlay {
+        flex-direction: column;
+      }
+
+      .nav-overlay__left,
+      .nav-overlay__right {
+        width: 100%;
+        transform: translateY(-100%);
+      }
+
+      .nav-overlay__right {
+        transform: translateY(100%);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+
+  <button class="nav-trigger" id="navTrigger" aria-label="Open navigation">
+    <span></span>
+    <span></span>
+  </button>
+
+  <nav class="nav-strip" aria-label="Section navigation">
+    <span class="nav-strip__logo">Oasis</span>
+    <a href="#philosophy" class="nav-strip__item" data-magnetic>Philosophy</a>
+    <a href="#experiences" class="nav-strip__item" data-magnetic>Experiences</a>
+    <a href="#sanctuary" class="nav-strip__item" data-magnetic>Sanctuary</a>
+    <a href="#reserve" class="nav-strip__item" data-magnetic>Reserve</a>
+    <div class="nav-strip__line"></div>
+  </nav>
+
+  <div class="nav-overlay" id="navOverlay" role="dialog" aria-modal="true" aria-label="Full navigation">
+    <div class="nav-overlay__left" id="navOverlayLeft">
+      <p class="nav-overlay__heading">Find your<br><em>temple</em></p>
+      <div class="nav-overlay__meta">
+        Oasis · The Temple<br>
+        Ubud, Bali, Indonesia<br>
+        8°30′S 115°15′E<br>
+        +62 361 000 0000<br>
+        stay@oasisbali.com
+      </div>
+    </div>
+    <div class="nav-overlay__right" id="navOverlayRight">
+      <ul class="nav-overlay__links">
+        <li><a href="#philosophy" class="nav-overlay__link" data-nav-link>Philosophy</a></li>
+        <li><a href="#experiences" class="nav-overlay__link" data-nav-link>Experiences</a></li>
+        <li><a href="#sanctuary" class="nav-overlay__link" data-nav-link>Sanctuary</a></li>
+        <li><a href="#reserve" class="nav-overlay__link" data-nav-link>Reserve</a></li>
+      </ul>
+    </div>
+    <button class="nav-overlay__close" id="navClose">Close ✕</button>
+  </div>
+
+  <main class="site-wrapper">
+
+    <!-- ── HERO ── -->
+    <section class="hero" id="hero">
+      <div class="hero__sun"></div>
+      <div class="hero__content reveal-portal" id="heroPortal">
+        <p class="hero__eyebrow">Oasis · Bali, Indonesia · Est. 2019</p>
+        <h1 class="hero__title">Oasis</h1>
+        <p class="hero__tagline">Where fire meets silence</p>
+        <div class="hero__counter">
+          <span>Since 2019</span>
+          <span class="hero__counter-dot"></span>
+          <span>Bali</span>
+          <span class="hero__counter-dot"></span>
+          <span>12 Private Suites</span>
+        </div>
+      </div>
+      <div class="hero__scroll-hint">
+        <span>Scroll</span>
+        <div class="hero__scroll-line"></div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ── PHILOSOPHY ── -->
+    <section class="philosophy reveal-portal" id="philosophy">
+      <p class="philosophy__label">Philosophy</p>
+      <h2 class="philosophy__headline">"The temple<br>is within"</h2>
+      <p class="philosophy__body">
+        The Balinese do not separate the sacred from the everyday. Every meal is an offering. Every sunrise, a ceremony. Every breath, a return. 
+        <span class="philosophy__accent">Oasis was built on this truth</span> — that retreat is not escape, but reunion.
+      </p>
+      <p class="philosophy__body">
+        Rooted in the ancient Usada healing traditions of Bali, our philosophy weaves together the <span class="philosophy__accent">four pillars of Balinese medicine</span>: herbs and earth, breath and sound, sacred ritual, and the grace of stillness. You do not come here to fix yourself. You come to remember what was never broken.
+      </p>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ── EXPERIENCES ── -->
+    <section class="experiences" id="experiences">
+      <div class="experiences__header">
+        <p class="experiences__section-label">Experiences</p>
+      </div>
+
+      <article class="experience-item reveal-portal">
+        <div class="experience-item__number">01</div>
+        <div class="experience-item__content">
+          <h3 class="experience-item__title">Fire Ceremony at Dawn</h3>
+          <p class="experience-item__description">
+            Before the island wakes, gather at the open-air pavilion. A Balinese high priest leads the Agni Hotra — the ancient fire ceremony — as the sky shifts from ink to ember. Offerings of coconut husk, camphor, and flowers dissolve into flame. Silence holds everything.
+          </p>
+          <p class="experience-item__meta">Daily · 05:30 · Ceremonial Pavilion</p>
+        </div>
+      </article>
+
+      <article class="experience-item reveal-portal">
+        <div class="experience-item__number">02</div>
+        <div class="experience-item__content">
+          <h3 class="experience-item__title">Stone Bath Immersion</h3>
+          <p class="experience-item__description">
+            Our signature bathing ritual draws from the Balinese tradition of tirta — holy water as medicine. Soak in hand-carved volcanic stone pools fed by a mountain spring, surrounded by night-blooming jasmine and the sound of water on ancient rock. Oil of white ginger and sandalwood is pressed into the skin.
+          </p>
+          <p class="experience-item__meta">By Appointment · 90 Minutes · The Stone Garden</p>
+        </div>
+      </article>
+
+      <article class="experience-item reveal-portal">
+        <div class="experience-item__number">03</div>
+        <div class="experience-item__content">
+          <h3 class="experience-item__title">Sound & Silence — Gamelan Meditation</h3>
+          <p class="experience-item__description">
+            Lie on a bed of woven palm and let the sound find you. Live gamelan — the ancient bronze orchestra of Bali — is played not for performance but for vibration. Each tone resonates through the body, dissolving the boundary between self and sound. This is not music. This is frequency.
+          </p>
+          <p class="experience-item__meta">Three Times Weekly · 19:00 · The Inner Temple</p>
+        </div>
+      </article>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ── SANCTUARY ── -->
+    <section class="sanctuary reveal-portal" id="sanctuary">
+      <div class="sanctuary__left">
+        <p class="sanctuary__label">Sanctuary Spaces</p>
+        <h2 class="sanctuary__headline">Twelve suites. No two alike. Each built around a single material truth.</h2>
+        <p class="sanctuary__body">
+          Every suite at Oasis was designed by Balinese master craftsmen using a single dominant material — volcanic stone, aged teak, river reed, fired terracotta. Your room is not a room. It is a meditation on one element of the earth. Beds face east, toward the sunrise. Baths are always outdoors.
+        </p>
+      </div>
+      <div class="sanctuary__right">
+        <ul class="sanctuary__feature-list">
+          <li class="sanctuary__feature-item"><span class="sanctuary__feature-dot"></span>12 Private Suites, each unique</li>
+          <li class="sanctuary__feature-item"><span class="sanctuary__feature-dot"></span>Outdoor stone soaking tubs, all suites</li>
+          <li class="sanctuary__feature-item"><span class="sanctuary__feature-dot"></span>Open-air sleeping pavilions available</li>
+          <li class="sanctuary__feature-item"><span class="sanctuary__feature-dot"></span>No screens, no clocks, no minibar</li>
+          <li class="sanctuary__feature-item"><span class="sanctuary__feature-dot"></span>Private garden with fire altar</li>
+          <li class="sanctuary__feature-item"><span class="sanctuary__feature-dot"></span>Daily in-room offerings by our pemangku</li>
+          <li class="sanctuary__feature-item"><span class="sanctuary__feature-dot"></span>Minimum 3-night stay required</li>
+          <li class="sanctuary__feature-item"><span class="sanctuary__feature-dot"></span>All meals included, Balinese cuisine</li>
+          <li class="sanctuary__feature-item"><span class="sanctuary__feature-dot"></span>Children under 18 not accommodated</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ── TESTIMONIAL ── -->
+    <section class="testimonial">
+      <div class="testimonial__card reveal-portal">
+        <blockquote class="testimonial__quote">
+          "I have stayed in every significant retreat on this island over twenty years. Nothing has undone me the way Oasis did. On the third morning I wept in the fire ceremony and did not know why. That is the only review I am able to give."
+        </blockquote>
+        <div class="testimonial__attribution">
+          <p class="testimonial__name">Isabella Fontaine-Renard</p>
+          <p class="testimonial__detail">Paris, France · October 2024 · 7-night stay</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CTA ── -->
+    <section class="cta reveal-portal" id="reserve">
+      <div class="cta__sun"></div>
+      <p class="cta__label">Begin the ceremony</p>
+      <h2 class="cta__headline">The fire is already burning.</h2>
+      <a href="mailto:stay@oasisbali.com" class="btn-primary" data-magnetic>Reserve your sanctuary</a>
+      <p class="cta__contact">
+        Or write to us at <a href="mailto:stay@oasisbali.com">stay@oasisbali.com</a>
+      </p>
+    </section>
+
+    <!-- ── FOOTER ── -->
+    <footer class="footer">
+      <div class="footer__brand">
+        <span class="footer__brand-name">Oasis</span>
+        <span class="footer__brand-sub">The Temple · Ubud, Bali · 8°30′S 115°15′E</span>
+      </div>
+      <div class="footer__center">
+        <div class="footer__sun-mark"></div>
+      </div>
+      <div class="footer__right">
+        <div class="footer__links">
+          <a href="#philosophy" class="footer__link">Philosophy</a>
+          <a href="#experiences" class="footer__link">Experiences</a>
+          <a href="#sanctuary" class="footer__link">Sanctuary</a>
+        </div>
+        <p class="footer__copy">+62 361 000 0000 · stay@oasisbali.com</p>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__bottom-text">© 2025 Oasis The Temple. All rights reserved.</p>
+        <p class="footer__bottom-text">Designed with intention. Built with reverence.</p>
+      </div>
+    </footer>
+
+  </main>
+
+  <script>
+    (function () {
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      /* ── Lenis smooth scroll ── */
+      if (!prefersReducedMotion) {
+        const lenis = new Lenis();
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => lenis.raf(time * 1000));
+        gsap.ticker.lagSmoothing(0);
+      }
+
+      /* ── Custom Cursor ── */
+      if (!prefersReducedMotion && window.innerWidth > 768) {
+        const cursor = document.getElementById('cursor');
+        let cursorX = 0, cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+          gsap.to(cursor, {
+            x: e.clientX,
+            y: e.clientY,
+            duration: 0.6,
+            ease: 'power3.out'
+          });
+        });
+
+        const interactives = document.querySelectorAll('a, button, [data-magnetic], .nav-strip__item, .nav-overlay__link');
+        interactives.forEach((el) => {
+          el.addEventListener('mouseenter', () => cursor.classList.add('cursor--hover'));
+          el.addEventListener('mouseleave', () => cursor.classList.remove('cursor--hover'));
+        });
+
+        /* Magnetic effect */
+        document.querySelectorAll('[data-magnetic]').forEach((el) => {
+          el.addEventListener('mousemove', (e) => {
+            const rect = el.getBoundingClientRect();
+            const relX = e.clientX - rect.left - rect.width / 2;
+            const relY = e.clientY - rect.top - rect.height / 2;
+            gsap.to(el, { x: relX * 0.25, y: relY * 0.25, duration: 0.4, ease: 'power2.out' });
+          });
+          el.addEventListener('mouseleave', () => {
+            gsap.to(el, { x: 0, y: 0, duration: 0.8, ease: 'elastic.out(1, 0.4)' });
+          });
+        });
+      }
+
+      /* ── Hero portal reveal on load ── */
+      const heroPortal = document.getElementById('heroPortal');
+      if (!prefersReducedMotion) {
+        gsap.fromTo(heroPortal,
+          { clipPath: 'circle(0% at 50% 50%)' },
+          { clipPath: 'circle(150% at 50% 50%)', duration: 2.4, ease: 'power4.out', delay: 0.2 }
+        );
+
+        gsap.from('.hero__eyebrow', { opacity: 0, y: 20, duration: 1, ease: 'power4.out', delay: 0.8 });
+        gsap.from('.hero__title', { opacity: 0, y: 40, duration: 1.2, ease: 'power4.out', delay: 1.0 });
+        gsap.from('.hero__tagline', { opacity: 0, y: 20, duration: 1, ease: 'power4.out', delay: 1.2 });
+        gsap.from('.hero__counter', { opacity: 0, y: 20, duration: 1, ease: 'power4.out', delay: 1.4 });
+        gsap.from('.hero__scroll-hint', { opacity: 0, duration: 1, ease: 'power2.out', delay: 2.0 });
+
+        gsap.to('.hero__sun', {
+          scale: 1.12,
+          scrollTrigger: {
+            trigger: '.hero',
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 2
+          }
+        });
+      } else {
+        heroPortal.style.clipPath = 'circle(150% at 50% 50%)';
+        document.querySelectorAll('.animated').forEach(el => {
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+        });
+      }
+
+      /* ── ScrollTrigger clip-path portal reveals for all sections ── */
+      if (!prefersReducedMotion) {
+        const portals = document.querySelectorAll('.reveal-portal:not(#heroPortal)');
+        portals.forEach((el) => {
+          gsap.fromTo(el,
+            { clipPath: 'circle(0% at 50% 50%)' },
+            {
+              clipPath: 'circle(150% at 50% 50%)',
+              duration: 1.8,
+              ease: 'power4.out',
+              scrollTrigger: {
+                trigger: el,
+                start: 'top 78%',
+                toggleActions: 'play none none none'
+              }
+            }
+          );
+        });
+
+        /* ── Philosophy text stagger ── */
+        gsap.from('.philosophy__label', {
+          opacity: 0, y: 30, duration: 1, ease: 'power4.out',
+          scrollTrigger: { trigger: '.philosophy', start: 'top 70%' }
+        });
+        gsap.from('.philosophy__headline', {
+          opacity: 0, y: 60, duration: 1.4, ease: 'power4.out', delay: 0.2,
+          scrollTrigger: { trigger: '.philosophy', start: 'top 70%' }
+        });
+        gsap.from('.philosophy__body', {
+          opacity: 0, y: 30, duration: 1, ease: 'power4.out', stagger: 0.2, delay: 0.5,
+          scrollTrigger: { trigger: '.philosophy', start: 'top 60%' }
+        });
+
+        /* ── Experience items stagger ── */
+        gsap.from('.experience-item__number', {
+          opacity: 0, x: -40, duration: 1, ease: 'power4.out', stagger: 0.15,
+          scrollTrigger: { trigger: '.experiences', start: 'top 70%' }
+        });
+        gsap.from('.experience-item__title', {
+          opacity: 0, y: 30, duration: 1, ease: 'power4.out', stagger: 0.15, delay: 0.1,
+          scrollTrigger: { trigger: '.experiences', start: 'top 70%' }
+        });
+
+        /* ── Sanctuary ── */
+        gsap.from('.sanctuary__headline', {
+          opacity: 0, y: 50, duration: 1.2, ease: 'power4.out',
+          scrollTrigger: { trigger: '.sanctuary', start: 'top 72%' }
+        });
+        gsap.from('.sanctuary__feature-item', {
+          opacity: 0, x: 30, duration: 0.8, ease: 'power4.out', stagger: 0.06, delay: 0.3,
+          scrollTrigger: { trigger: '.sanctuary__right', start: 'top 72%' }
+        });
+
+        /* ── Testimonial ── */
+        gsap.from('.testimonial__quote', {
+          opacity: 0, y: 40, duration: 1.4, ease: 'power4.out',
+          scrollTrigger: { trigger: '.testimonial', start: 'top 72%' }
+        });
+
+        /* ── CTA ── */
+        gsap.from('.cta__headline', {
+          opacity: 0, y: 60, duration: 1.4, ease: 'power4.out',
+          scrollTrigger: { trigger: '.cta', start: 'top 72%' }
+        });
+        gsap.from('.btn-primary', {
+          opacity: 0, y: 30, duration: 1, ease: 'power4.out', delay: 0.3,
+          scrollTrigger: { trigger: '.cta', start: 'top 65%' }
+        });
+
+        /* ── Nav strip fade in ── */
+        gsap.from('.nav-strip', {
+          opacity: 0, x: -20, duration: 1.2, ease: 'power4.out', delay: 1.8
+        });
+        gsap.from('.nav-trigger', {
+          opacity: 0, duration: 1, ease: 'power4.out', delay: 2.0
+        });
+      } else {
+        document.querySelectorAll('.reveal-portal').forEach(el => {
+          el.style.clipPath = 'circle(150% at 50% 50%)';
+        });
+      }
+
+      /* ── Navigation overlay ── */
+      const navTrigger = document.getElementById('navTrigger');
+      const navOverlay = document.getElementById('navOverlay');
+      const navClose = document.getElementById('navClose');
+      const navLeft = document.getElementById('navOverlayLeft');
+      const navRight = document.getElementById('navOverlayRight');
+      let navOpen = false;
+
+      function openNav() {
+        navOpen = true;
+        navOverlay.classList.add('is-open');
+        if (!prefersReducedMotion) {
+          gsap.to(navLeft, { x: '0%', duration: 0.8, ease: 'expo.inOut' });
+          gsap.to(navRight, { x: '0%', duration: 0.8, ease: 'expo.inOut', delay: 0.06 });
+          gsap.from('.nav-overlay__link', {
+            opacity: 0, y: 40, duration: 0.7, ease: 'power4.out', stagger: 0.08, delay: 0.4
+          });
+        } else {
+          navLeft.style.transform = 'translateX(0%)';
+          navRight.style.transform = 'translateX(0%)';
+        }
+      }
+
+      function closeNav() {
+        navOpen = false;
+        if (!prefersReducedMotion) {
+          gsap.to(navLeft, { x: '-100%', duration: 0.6, ease: 'expo.inOut' });
+          gsap.to(navRight, {
+            x: '100%', duration: 0.6, ease: 'expo.inOut', delay: 0.04,
+            onComplete: () => navOverlay.classList.remove('is-open')
+          });
+        } else {
+          navLeft.style.transform = 'translateX(-100%)';
+          navRight.style.transform = 'translateX(100%)';
+          navOverlay.classList.remove('is-open');
+        }
+      }
+
+      navTrigger.addEventListener('click', () => navOpen ? closeNav() : openNav());
+      navClose.addEventListener('click', closeNav);
+
+      document.querySelectorAll('[data-nav-link]').forEach((link) => {
+        link.addEventListener('click', closeNav);
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && navOpen) closeNav();
+      });
+
+      /* ── Smooth scroll for anchor links ── */
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener('click', (e) => {
+          const target = document.querySelector(anchor.getAttribute('href'));
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      });
+
+    })();
+  </script>
+</body>
+</html>

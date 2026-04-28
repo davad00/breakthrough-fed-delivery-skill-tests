@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oasis — Nocturne Eclipse</title>
+  <meta name="description" content="Oasis in a darker, nocturnal art direction with eclipse motion and private luxury meditation rituals." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #08080b;
+      --text: #f2ede6;
+      --muted: #9f978c;
+      --accent: #ffcc8c;
+      --line: rgba(242, 237, 230, 0.14);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 70% 18%, rgba(255, 204, 140, 0.12), transparent 22%),
+        radial-gradient(circle at 20% 6%, rgba(101, 90, 146, 0.18), transparent 20%),
+        linear-gradient(180deg, #030305 0%, var(--bg) 100%);
+      overflow-x: hidden;
+      cursor: none;
+    }
+    .cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      pointer-events: none;
+      z-index: 100;
+      mix-blend-mode: difference;
+    }
+    .menu-btn {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 30;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(8, 8, 11, 0.6);
+      backdrop-filter: blur(18px);
+      color: var(--text);
+      padding: 14px 18px;
+      font: 500 11px/1 "JetBrains Mono", monospace;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 25;
+      background: rgba(5, 5, 8, 0.97);
+      display: grid;
+      place-items: center;
+      transform: translateY(-100%);
+    }
+    .overlay nav {
+      display: grid;
+      gap: 16px;
+      text-align: center;
+    }
+    .overlay a {
+      color: var(--text);
+      text-decoration: none;
+      font: 600 clamp(2.7rem, 8vw, 8rem)/0.92 "Cormorant Garamond", serif;
+      letter-spacing: -0.03em;
+    }
+    .hero {
+      min-height: 100vh;
+      padding: 12vh 7vw 8vh;
+      display: grid;
+      grid-template-columns: 0.94fr 1fr;
+      gap: 4vw;
+      align-items: center;
+    }
+    .eyebrow,
+    .micro,
+    .label {
+      color: var(--muted);
+      font: 500 11px/1 "JetBrains Mono", monospace;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 18px 0 0;
+      max-width: 5.2ch;
+      font: 600 clamp(4.5rem, 10.8vw, 13rem)/0.82 "Cormorant Garamond", serif;
+      letter-spacing: -0.04em;
+    }
+    .lead {
+      max-width: 43ch;
+      line-height: 1.82;
+      color: #d7d0c5;
+      margin-top: 24px;
+    }
+    .cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 15px 20px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      text-decoration: none;
+      text-transform: uppercase;
+      color: var(--text);
+      font: 500 11px/1 "JetBrains Mono", monospace;
+      letter-spacing: 0.14em;
+    }
+    .btn-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #1f1205;
+    }
+    .hero-visual {
+      min-height: 75vh;
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+    .eclipse {
+      position: relative;
+      width: min(42vw, 480px);
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+    }
+    .sun-core {
+      width: 54%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle, #ffe7c0 0%, #ffc67e 34%, #8e5b20 72%, #211309 100%);
+      box-shadow: 0 0 130px rgba(255, 204, 140, 0.2);
+    }
+    .occluder {
+      position: absolute;
+      width: 58%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle at 50% 40%, #101014 0%, #050508 70%, #000 100%);
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.56);
+    }
+    .ring {
+      position: absolute;
+      inset: 2%;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 204, 140, 0.22);
+    }
+    .ring:nth-child(4) { inset: 12%; border-color: rgba(255,255,255,0.12); }
+    .ring:nth-child(5) { inset: 24%; border-color: rgba(255, 204, 140, 0.32); }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 40px;
+      max-width: 710px;
+    }
+    .metric {
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
+    }
+    .metric strong {
+      display: block;
+      margin-top: 12px;
+      font: 600 clamp(1.9rem, 4vw, 3.6rem)/0.9 "Cormorant Garamond", serif;
+      letter-spacing: -0.03em;
+    }
+    .chapters {
+      padding: 10vw 7vw 16vw;
+      display: grid;
+      gap: 14vh;
+    }
+    .chapter {
+      display: grid;
+      grid-template-columns: 0.86fr 1.14fr;
+      gap: 5vw;
+      align-items: center;
+    }
+    .chapter:nth-child(even) { grid-template-columns: 1.14fr 0.86fr; }
+    .chapter:nth-child(even) .copy { order: -1; }
+    .chapter-index {
+      font: 600 clamp(5rem, 10vw, 10rem)/0.8 "Cormorant Garamond", serif;
+      color: rgba(255, 255, 255, 0.08);
+      letter-spacing: -0.04em;
+    }
+    .copy h2 {
+      margin: 10px 0 0;
+      max-width: 8ch;
+      font: 600 clamp(2.1rem, 6vw, 6rem)/0.9 "Cormorant Garamond", serif;
+      letter-spacing: -0.03em;
+    }
+    .copy p {
+      max-width: 42ch;
+      line-height: 1.8;
+      color: #d7d0c5;
+      margin-top: 18px;
+    }
+    .focusable:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+    @media (max-width: 980px) {
+      body { cursor: auto; }
+      .cursor { display: none; }
+      .hero { grid-template-columns: 1fr; padding-top: 18vh; }
+      .hero-visual { min-height: 42vh; }
+      .metrics { grid-template-columns: 1fr; }
+      .chapter,
+      .chapter:nth-child(even) { grid-template-columns: 1fr; }
+      .chapter:nth-child(even) .copy { order: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor" aria-hidden="true"></div>
+  <button class="menu-btn focusable" id="menuBtn" data-magnetic>Menu</button>
+  <div class="overlay" id="overlay">
+    <nav>
+      <a href="#arrival" class="focusable">Arrival</a>
+      <a href="#immersion" class="focusable">Immersion</a>
+      <a href="#return" class="focusable">Return</a>
+    </nav>
+  </div>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="micro animated">Oasis / Nocturne Eclipse</div>
+        <h1 class="animated">A Darker Form Of Luxury Quiet.</h1>
+        <p class="lead animated">This version gives Oasis a nocturnal, almost celestial presence: muted gold, shadow depth, and an experience designed for guests who want meditation to feel rare, private, and nearly sacred.</p>
+        <div class="cta animated">
+          <a href="#arrival" class="btn btn-primary focusable" data-magnetic>Arrange Visit</a>
+          <a href="#immersion" class="btn focusable" data-magnetic>See The Program</a>
+        </div>
+        <div class="metrics animated">
+          <div class="metric"><span class="label">Night Meditation</span><strong>3 Hours</strong></div>
+          <div class="metric"><span class="label">Light Exposure</span><strong>Low Lux</strong></div>
+          <div class="metric"><span class="label">Guide Access</span><strong>24/7</strong></div>
+        </div>
+      </div>
+      <div class="hero-visual animated">
+        <div class="eclipse" id="eclipse">
+          <div class="sun-core"></div>
+          <div class="occluder"></div>
+          <div class="ring"></div>
+          <div class="ring"></div>
+          <div class="ring"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapters">
+      <article class="chapter animated" id="arrival">
+        <div class="chapter-index">01</div>
+        <div class="copy">
+          <div class="eyebrow">Arrival</div>
+          <h2>You Enter Through Shadow Before Any Instruction Begins.</h2>
+          <p>Guests cross a low-lit threshold, attune to slower lighting cues, and begin with sound-muted decompression so the first meditation feels inevitable rather than scheduled.</p>
+        </div>
+      </article>
+      <article class="chapter animated" id="immersion">
+        <div class="chapter-index">02</div>
+        <div class="copy">
+          <div class="eyebrow">Immersion</div>
+          <h2>The Program Trades Stimulation For Precision.</h2>
+          <p>Moonlit breath sessions, thermal contrast, silent tea service, and one-to-one integration meetings create an uncommon luxury: fewer inputs and deeper presence.</p>
+        </div>
+      </article>
+      <article class="chapter animated" id="return">
+        <div class="chapter-index">03</div>
+        <div class="copy">
+          <div class="eyebrow">Return</div>
+          <h2>You Leave With A Night-Quiet Mind In Daylight Life.</h2>
+          <p>Oasis packages the experience into a discreet post-retreat protocol that protects sleep, focus, and clarity long after departure.</p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const overlay = document.getElementById("overlay");
+    const menuBtn = document.getElementById("menuBtn");
+    let menuOpen = false;
+    gsap.set(overlay, { yPercent: -100 });
+
+    menuBtn.addEventListener("click", () => {
+      menuOpen = !menuOpen;
+      gsap.to(overlay, { yPercent: menuOpen ? 0 : -100, duration: 1, ease: "expo.inOut" });
+      menuBtn.textContent = menuOpen ? "Close" : "Menu";
+    });
+
+    if (!reducedMotion && window.Lenis) {
+      const lenis = new Lenis({ duration: 1.12, smoothWheel: true });
+      lenis.on("scroll", ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+    }
+
+    if (!reducedMotion) {
+      gsap.from(".hero .animated", { y: 110, opacity: 0, duration: 1.3, stagger: 0.12, ease: "power4.out" });
+      gsap.to(".occluder", {
+        xPercent: 10,
+        duration: 3.8,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      });
+      gsap.to("#eclipse .ring", {
+        scale: 1.08,
+        opacity: 0.45,
+        stagger: 0.18,
+        repeat: -1,
+        yoyo: true,
+        duration: 2.6,
+        ease: "sine.inOut"
+      });
+      gsap.from(".chapter", {
+        scrollTrigger: { trigger: ".chapters", start: "top 72%" },
+        y: 120,
+        opacity: 0,
+        duration: 1.2,
+        stagger: 0.16,
+        ease: "power4.out"
+      });
+    } else {
+      document.querySelectorAll(".animated").forEach((el) => {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      });
+    }
+
+    const cursor = document.querySelector(".cursor");
+    const magnets = document.querySelectorAll("[data-magnetic]");
+    if (!reducedMotion && cursor && window.innerWidth > 980) {
+      window.addEventListener("mousemove", (event) => {
+        gsap.to(cursor, { x: event.clientX, y: event.clientY, duration: 0.55, ease: "power3.out" });
+      });
+      magnets.forEach((element) => {
+        element.addEventListener("mousemove", (event) => {
+          const rect = element.getBoundingClientRect();
+          const relX = event.clientX - rect.left - rect.width / 2;
+          const relY = event.clientY - rect.top - rect.height / 2;
+          gsap.to(element, { x: relX * 0.18, y: relY * 0.18, duration: 0.4, ease: "power2.out" });
+          gsap.to(cursor, { scale: 2.5, duration: 0.3 });
+        });
+        element.addEventListener("mouseleave", () => {
+          gsap.to(element, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.4)" });
+          gsap.to(cursor, { scale: 1, duration: 0.3 });
+        });
+      });
+    }
+  </script>
+</body>
+</html>

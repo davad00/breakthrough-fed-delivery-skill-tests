@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oasis Retreat - Aurora Chamber</title>
+  <meta name="description" content="Oasis is an ultra-luxury meditation retreat where silence, architecture, and guided ritual restore clarity." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0e12;
+      --text: #f3f1ea;
+      --muted: #8e8a84;
+      --accent: #c6ff4d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, sans-serif;
+      background: radial-gradient(circle at 65% 10%, #1a2630 0%, var(--bg) 42%);
+      color: var(--text);
+      overflow-x: hidden;
+      cursor: none;
+    }
+    .cursor {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      pointer-events: none;
+      mix-blend-mode: difference;
+    }
+    .menu-btn {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 30;
+      border: 1px solid #3f4953;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--text);
+      font: 500 11px/1 "JetBrains Mono", monospace;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 14px 18px;
+    }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(11, 14, 18, 0.96);
+      display: grid;
+      place-items: center;
+      transform: translateY(-100%);
+      z-index: 20;
+    }
+    .overlay nav { display: grid; gap: 18px; text-align: center; }
+    .overlay a {
+      color: var(--text);
+      text-decoration: none;
+      font: 600 clamp(2.5rem, 7vw, 7rem)/0.95 "Cormorant Garamond", serif;
+      letter-spacing: -0.02em;
+    }
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 0.8fr 1fr;
+      align-items: center;
+      padding: 11vh 7vw 7vh;
+      gap: 5vw;
+      position: relative;
+    }
+    .kicker {
+      color: var(--muted);
+      font: 500 11px/1 "JetBrains Mono", monospace;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    h1 {
+      margin: 0;
+      font: 600 clamp(4.5rem, 11vw, 13rem)/0.85 "Cormorant Garamond", serif;
+      letter-spacing: -0.03em;
+      max-width: 5ch;
+    }
+    .hero p {
+      max-width: 42ch;
+      color: #d2cec6;
+      line-height: 1.75;
+      margin-top: 26px;
+    }
+    .cta {
+      margin-top: 30px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      text-decoration: none;
+      border-radius: 999px;
+      padding: 14px 20px;
+      font: 500 11px/1 "JetBrains Mono", monospace;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      border: 1px solid #47515d;
+    }
+    .btn-primary { background: var(--accent); color: #091108; border-color: var(--accent); }
+    .btn-ghost { color: var(--text); }
+    .orb-wrap { position: relative; height: min(72vh, 620px); }
+    .orb {
+      width: min(66vh, 520px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      background:
+        radial-gradient(circle at 30% 30%, #f0ffce 0%, #b8f355 18%, #6d8243 34%, rgba(13, 16, 20, 0.25) 64%, rgba(13, 16, 20, 0.92) 100%);
+      box-shadow: 0 0 130px rgba(198, 255, 77, 0.22), inset 0 -30px 80px rgba(0, 0, 0, 0.4);
+      isolation: isolate;
+      overflow: hidden;
+    }
+    .ring {
+      position: absolute;
+      inset: 8%;
+      border-radius: 50%;
+      border: 1px solid rgba(243, 241, 234, 0.17);
+    }
+    .ring:nth-child(2) { inset: 20%; border-color: rgba(198, 255, 77, 0.3); }
+    .ring:nth-child(3) { inset: 33%; border-color: rgba(243, 241, 234, 0.28); }
+    .sections {
+      padding: 10vw 7vw 16vw;
+      display: grid;
+      gap: 18vh;
+    }
+    .panel {
+      max-width: 760px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .panel h2 {
+      margin: 0 0 10px;
+      font: 600 clamp(2rem, 6.5vw, 6.5rem)/0.9 "Cormorant Garamond", serif;
+      letter-spacing: -0.02em;
+      max-width: 8ch;
+    }
+    .panel p { color: #cecac2; line-height: 1.75; }
+    .focusable:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 5px;
+    }
+    @media (max-width: 980px) {
+      body { cursor: auto; }
+      .cursor { display: none; }
+      .hero { grid-template-columns: 1fr; padding-top: 20vh; }
+      .orb-wrap { height: 45vh; }
+      .orb { left: 50%; right: auto; transform: translate(-50%, -50%); }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor" aria-hidden="true"></div>
+  <button class="menu-btn focusable" id="menuBtn" data-magnetic>Menu</button>
+  <div class="overlay" id="overlay">
+    <nav>
+      <a href="#arrival" class="focusable">Arrival</a>
+      <a href="#ritual" class="focusable">Ritual</a>
+      <a href="#resonance" class="focusable">Resonance</a>
+    </nav>
+  </div>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="kicker animated">Oasis / Mountain Reserve</div>
+        <h1 class="animated">Enter Stillness As A Luxury.</h1>
+        <p class="animated">Oasis curates private meditative residencies with architect-led suites, breath masters, and quiet rituals tuned to your circadian rhythm.</p>
+        <div class="cta animated">
+          <a class="btn btn-primary focusable" href="#arrival" data-magnetic>Reserve Inquiry</a>
+          <a class="btn btn-ghost focusable" href="#ritual" data-magnetic>View Program</a>
+        </div>
+      </div>
+      <div class="orb-wrap">
+        <div class="orb" id="orb">
+          <span class="ring"></span>
+          <span class="ring"></span>
+          <span class="ring"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="sections">
+      <article class="panel animated" id="arrival">
+        <div class="kicker">Beginning</div>
+        <h2>Arrival Through Quiet Architecture.</h2>
+        <p>Guests cross an illuminated basalt corridor where every material absorbs noise. The first hour includes biometric settling, mineral tea, and guided decompression.</p>
+      </article>
+      <article class="panel animated" id="ritual">
+        <div class="kicker">Middle</div>
+        <h2>Rituals Tuned To Your Internal Clock.</h2>
+        <p>From dawn resonance sessions to moonlight float meditation, each sequence is adjusted to your nervous-system state and personal intention.</p>
+      </article>
+      <article class="panel animated" id="resonance">
+        <div class="kicker">End</div>
+        <h2>Return Carrying A Cleaner Signal.</h2>
+        <p>Your departure includes a private integration protocol, aftercare sessions, and a discreet line to your Oasis guide for forty days.</p>
+      </article>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const overlay = document.getElementById("overlay");
+    const menuBtn = document.getElementById("menuBtn");
+    let open = false;
+
+    menuBtn.addEventListener("click", () => {
+      open = !open;
+      gsap.to(overlay, { yPercent: open ? 100 : 0, duration: 1, ease: "expo.inOut" });
+      menuBtn.textContent = open ? "Close" : "Menu";
+    });
+
+    if (!reduced && window.Lenis) {
+      const lenis = new Lenis({ duration: 1.2, smoothWheel: true });
+      lenis.on("scroll", ScrollTrigger.update);
+      gsap.ticker.add((t) => lenis.raf(t * 1000));
+      gsap.ticker.lagSmoothing(0);
+    }
+
+    if (!reduced) {
+      gsap.from(".hero .animated", { y: 110, opacity: 0, duration: 1.3, stagger: 0.12, ease: "power4.out" });
+      gsap.to("#orb", { rotate: 360, duration: 16, repeat: -1, ease: "none" });
+      gsap.from(".panel", {
+        scrollTrigger: { trigger: ".sections", start: "top 70%" },
+        y: 120,
+        opacity: 0,
+        duration: 1.2,
+        stagger: 0.16,
+        ease: "power4.out"
+      });
+      gsap.to(".orb-wrap", {
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 1 },
+        y: 160
+      });
+    } else {
+      document.querySelectorAll(".animated").forEach((el) => {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      });
+    }
+
+    const cursor = document.querySelector(".cursor");
+    const magnets = document.querySelectorAll("[data-magnetic]");
+    if (!reduced && cursor) {
+      window.addEventListener("mousemove", (e) => {
+        gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.55, ease: "power3.out" });
+      });
+      magnets.forEach((el) => {
+        el.addEventListener("mousemove", (e) => {
+          const r = el.getBoundingClientRect();
+          const rx = e.clientX - r.left - r.width / 2;
+          const ry = e.clientY - r.top - r.height / 2;
+          gsap.to(el, { x: rx * 0.2, y: ry * 0.2, duration: 0.4, ease: "power2.out" });
+          gsap.to(cursor, { scale: 2.6, duration: 0.3 });
+        });
+        el.addEventListener("mouseleave", () => {
+          gsap.to(el, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.4)" });
+          gsap.to(cursor, { scale: 1, duration: 0.3 });
+        });
+      });
+    }
+  </script>
+</body>
+</html>

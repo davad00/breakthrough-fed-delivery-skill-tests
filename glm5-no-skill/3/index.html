@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis | Luxury Meditation Retreat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .hero-left {
+            background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 4rem;
+        }
+
+        .hero-right {
+            background: linear-gradient(135deg, #2a1810 0%, #1a0f0a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-right::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 50%;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.6; }
+        }
+
+        .brand {
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            letter-spacing: 0.5rem;
+            color: #d4af37;
+            margin-bottom: 2rem;
+        }
+
+        .hero-title {
+            font-family: 'Cinzel', serif;
+            font-size: 4rem;
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 2rem;
+        }
+
+        .hero-title span {
+            display: block;
+            color: #d4af37;
+        }
+
+        .hero-text {
+            font-weight: 300;
+            line-height: 1.8;
+            margin-bottom: 3rem;
+            max-width: 400px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: transparent;
+            border: 1px solid #d4af37;
+            color: #d4af37;
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            letter-spacing: 0.2rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #d4af37;
+            color: #0a0a0a;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            border-top: 1px solid #2a2a2a;
+        }
+
+        .feature {
+            padding: 4rem 3rem;
+            border-right: 1px solid #2a2a2a;
+            text-align: center;
+        }
+
+        .feature:last-child {
+            border-right: none;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border: 1px solid #d4af37;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .feature h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #d4af37;
+        }
+
+        .feature p {
+            font-weight: 300;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        .philosophy {
+            padding: 8rem 4rem;
+            text-align: center;
+            background: linear-gradient(180deg, #0d0d0d 0%, #0a0a0a 100%);
+        }
+
+        .philosophy h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .philosophy p {
+            max-width: 700px;
+            margin: 0 auto;
+            font-weight: 300;
+            line-height: 2;
+        }
+
+        .quote {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            font-style: italic;
+            color: #d4af37;
+            max-width: 800px;
+            margin: 0 auto 1rem;
+        }
+
+        .quote-author {
+            font-size: 0.9rem;
+            letter-spacing: 0.2rem;
+        }
+
+        .contact-section {
+            padding: 6rem 4rem;
+            background: #111;
+            text-align: center;
+        }
+
+        .contact-section h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-details {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 2rem;
+        }
+
+        .contact-item {
+            font-weight: 300;
+        }
+
+        .contact-item span {
+            display: block;
+            font-size: 0.75rem;
+            letter-spacing: 0.2rem;
+            color: #d4af37;
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            padding: 2rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #666;
+            border-top: 1px solid #1a1a1a;
+        }
+
+        @media (max-width: 900px) {
+            .hero {
+                grid-template-columns: 1fr;
+            }
+            .features {
+                grid-template-columns: 1fr;
+            }
+            .feature {
+                border-right: none;
+                border-bottom: 1px solid #2a2a2a;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="hero-left">
+            <p class="brand">LUXURY MEDITATION RETREAT</p>
+            <h1 class="hero-title">Find Your <span>Oasis</span></h1>
+            <p class="hero-text">An exclusive sanctuary where the art of meditation meets the pinnacle of luxury. Transform your practice, transform your life.</p>
+            <a href="#reserve" class="btn">RESERVE NOW</a>
+        </div>
+        <div class="hero-right">
+            <div style="text-align: center;">
+                <p style="font-family: 'Cinzel', serif; font-size: 1.2rem; letter-spacing: 0.3rem; color: #d4af37;">BREATHE</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="feature">
+            <div class="feature-icon">◐</div>
+            <h3>Silent Retreats</h3>
+            <p>Immersive experiences in complete stillness, guided by master teachers from contemplative traditions worldwide.</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">◯</div>
+            <h3>Luxury Suites</h3>
+            <p>Private villas with meditation rooms, organic linens, and panoramic views of untouched nature.</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">◉</div>
+            <h3>Healing Cuisine</h3>
+            <p>Plant-based gourmet meals designed to nourish body and support deep meditative states.</p>
+        </div>
+    </section>
+
+    <section class="philosophy">
+        <p class="quote">"In the silence of Oasis, discover the voice of your true self."</p>
+        <p class="quote-author">— FOUNDING PHILOSOPHY</p>
+    </section>
+
+    <section class="contact-section" id="reserve">
+        <h2>Begin Your Transformation</h2>
+        <p style="font-weight: 300; max-width: 500px; margin: 0 auto;">Limited to 12 guests per retreat to ensure an intimate, transformative experience.</p>
+        <div class="contact-details">
+            <div class="contact-item">
+                <span>EMAIL</span>
+                reservations@oasis-retreat.com
+            </div>
+            <div class="contact-item">
+                <span>PHONE</span>
+                +1 (888) OASIS-LUX
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Oasis. A sanctuary for the awakened.</p>
+    </footer>
+</body>
+</html>

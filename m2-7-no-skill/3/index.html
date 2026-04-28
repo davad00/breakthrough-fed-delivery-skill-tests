@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis | Earth Sanctuary Retreat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-cream: #F5F0E8;
+            --color-clay: #B87E5F;
+            --color-moss: #5C6B4A;
+            --color-bark: #3D2E24;
+            --color-stone: #8A8477;
+            --color-sand: #D4C8B2;
+            --font-display: 'Bodoni Moda', serif;
+            --font-body: 'DM Sans', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-cream);
+            color: var(--color-bark);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            background: 
+                linear-gradient(180deg, var(--color-cream) 0%, rgba(212, 200, 178, 0.3) 100%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40%;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23B87E5F' fill-opacity='0.08' d='M0,192L48,176C96,160,192,128,288,138.7C384,149,480,203,576,208C672,213,768,171,864,149.3C960,128,1056,128,1152,149.3C1248,171,1344,213,1392,234.7L1440,256L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") no-repeat bottom;
+            background-size: cover;
+            pointer-events: none;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: clamp(3.5rem, 10vw, 8rem);
+            font-weight: 400;
+            font-style: italic;
+            letter-spacing: 0.05em;
+            color: var(--color-bark);
+            position: relative;
+            opacity: 0;
+            animation: earthRise 1.5s ease forwards;
+        }
+
+        @keyframes earthRise {
+            0% {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tagline {
+            font-family: var(--font-body);
+            font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+            font-weight: 300;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--color-stone);
+            margin-top: 1.5rem;
+            opacity: 0;
+            animation: earthRise 1.5s ease 0.4s forwards;
+        }
+
+        .hero-divider {
+            width: 60px;
+            height: 2px;
+            background: var(--color-clay);
+            margin: 2.5rem auto 0;
+            opacity: 0;
+            animation: earthRise 1.5s ease 0.6s forwards;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 3rem;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-stone);
+            opacity: 0;
+            animation: earthRise 1.5s ease 0.8s forwards;
+        }
+
+        section {
+            padding: 8rem 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .intro {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .intro p {
+            font-family: var(--font-display);
+            font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+            font-weight: 400;
+            font-style: italic;
+            line-height: 1.9;
+            color: var(--color-bark);
+        }
+
+        .manifesto {
+            background: var(--color-bark);
+            color: var(--color-cream);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .manifesto::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 2px,
+                rgba(184, 126, 95, 0.03) 2px,
+                rgba(184, 126, 95, 0.03) 4px
+            );
+        }
+
+        .manifesto-content {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+        }
+
+        .manifesto-text {
+            font-size: 1rem;
+            font-weight: 300;
+            line-height: 2.2;
+            color: rgba(245, 240, 232, 0.85);
+        }
+
+        .manifesto-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        .manifesto-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        .manifesto-accent {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .manifesto-symbol {
+            font-family: var(--font-display);
+            font-size: 8rem;
+            color: var(--color-clay);
+            opacity: 0.4;
+            line-height: 1;
+        }
+
+        .manifesto-symbol span {
+            display: block;
+            font-size: 2rem;
+            letter-spacing: 0.3em;
+            margin-top: 1rem;
+            color: var(--color-sand);
+            opacity: 0.6;
+        }
+
+        .retreats {
+            background: var(--color-cream);
+        }
+
+        .retreats-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .retreats-header h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+
+        .retreats-header p {
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: var(--color-stone);
+            letter-spacing: 0.1em;
+        }
+
+        .retreat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .retreat-item {
+            background: var(--color-sand);
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: all 0.5s ease;
+            position: relative;
+        }
+
+        .retreat-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--color-clay);
+            transform: scaleX(0);
+            transition: transform 0.5s ease;
+        }
+
+        .retreat-item:hover::after {
+            transform: scaleX(1);
+        }
+
+        .retreat-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .retreat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--color-moss);
+        }
+
+        .retreat-item h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            font-style: italic;
+            margin-bottom: 1rem;
+            color: var(--color-bark);
+        }
+
+        .retreat-item p {
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: var(--color-bark);
+            opacity: 0.8;
+            line-height: 1.7;
+        }
+
+        .retreat-duration {
+            display: block;
+            margin-top: 1.5rem;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-clay);
+        }
+
+        .nature {
+            background: linear-gradient(135deg, var(--color-moss) 0%, #3D4A33 100%);
+            color: var(--color-cream);
+        }
+
+        .nature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+
+        .nature-text h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 3.5vw, 2.8rem);
+            font-weight: 400;
+            font-style: italic;
+            margin-bottom: 2rem;
+            line-height: 1.3;
+        }
+
+        .nature-text p {
+            font-size: 0.95rem;
+            font-weight: 300;
+            line-height: 2;
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+
+        .nature-image {
+            height: 450px;
+            background: linear-gradient(180deg, var(--color-cream) 0%, var(--color-sand) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            opacity: 0.6;
+        }
+
+        .cta-earth {
+            text-align: center;
+            padding: 10rem 2rem;
+            background: var(--color-sand);
+        }
+
+        .cta-earth h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 400;
+            font-style: italic;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-earth p {
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: var(--color-stone);
+            margin-bottom: 3rem;
+            letter-spacing: 0.05em;
+        }
+
+        .btn-earth {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: var(--color-bark);
+            border: none;
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--color-cream);
+            transition: all 0.4s ease;
+        }
+
+        .btn-earth:hover {
+            background: var(--color-clay);
+        }
+
+        footer {
+            padding: 4rem 2rem;
+            text-align: center;
+            background: var(--color-bark);
+            color: var(--color-cream);
+        }
+
+        footer p {
+            font-size: 0.75rem;
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 1024px) {
+            .manifesto-content,
+            .nature-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .manifesto-accent {
+                order: -1;
+            }
+
+            .nature-image {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .retreat-grid {
+                grid-template-columns: 1fr;
+            }
+
+            section {
+                padding: 5rem 1.5rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <h1 class="logo">Oasis</h1>
+        <p class="tagline">Earth Sanctuary</p>
+        <div class="hero-divider"></div>
+        <p class="scroll-hint">Scroll to explore</p>
+    </section>
+
+    <section class="intro">
+        <div class="container">
+            <p>"We do not inherit the earth from our ancestors; we borrow it from our children. At Oasis, we remember what it means to belong to the land."</p>
+        </div>
+    </section>
+
+    <section class="manifesto">
+        <div class="container">
+            <div class="manifesto-content">
+                <div class="manifesto-text">
+                    <p>Oasis was born from a simple conviction: modern humanity has become disconnected from the very ground beneath our feet. We have forgotten that we are <em>of</em> the earth, not merely visitors upon it.</p>
+                    <p>Our sanctuary exists at the intersection of ancient wisdom and sustainable living. Every structure is built from locally sourced stone and reclaimed timber. Every garden follows permaculture principles established thousands of years before industrial agriculture.</p>
+                    <p>Here, guests are not treated as customers but as participants in a living ecosystem—one that asks as much of us as it gives.</p>
+                </div>
+                <div class="manifesto-accent">
+                    <div class="manifesto-symbol">Territory<span>of being</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="retreats">
+        <div class="container">
+            <div class="retreats-header">
+                <h2>Rooted Journeys</h2>
+                <p>Seasonal programs for deep transformation</p>
+            </div>
+            <div class="retreat-grid">
+                <div class="retreat-item">
+                    <div class="retreat-icon">◈</div>
+                    <h3>The Clay Path</h3>
+                    <p>Working with our hands in the earth. Ceramics, building, and cultivation as meditation practice.</p>
+                    <span class="retreat-duration">7 Days</span>
+                </div>
+                <div class="retreat-item">
+                    <div class="retreat-icon">❋</div>
+                    <h3>Forest Vigil</h3>
+                    <p>Three days of solo practice in the old-growth forest, guided only by dawn and dusk bells.</p>
+                    <span class="retreat-duration">5 Days</span>
+                </div>
+                <div class="retreat-item">
+                    <div class="retreat-icon">△</div>
+                    <h3>The Mountain Heart</h3>
+                    <p>Alpine pilgrimage to sacred sites, combined with teachings from Tibetan Earth Wisdom traditions.</p>
+                    <span class="retreat-duration">10 Days</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="nature">
+        <div class="container">
+            <div class="nature-grid">
+                <div class="nature-text">
+                    <h2>Where the River Meets the Mountain</h2>
+                    <p>Our 180-acre sanctuary sits where the Dolomite cliffs descend into ancient forest. Glacial streams feed terraced gardens that have provided sustenance for over 800 years.</p>
+                    <p>No WiFi. No schedules. The only alarm is the one you choose—the bell that calls the community to morning practice.</p>
+                </div>
+                <div class="nature-image">⛰</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-earth">
+        <div class="container">
+            <h2>Begin Your Return</h2>
+            <p>Limited to 16 earth keepers per season</p>
+            <a href="#" class="btn-earth">Apply for Membership</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>Oasis Earth Sanctuary · Dolomites, Italy · +39 0471 555 014</p>
+    </footer>
+</body>
+</html>

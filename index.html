@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Comparison Browser</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --fg: #ededed;
+            --accent: #3b82f6;
+            --card-bg: #171717;
+            --border: #262626;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--fg);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            margin: 0;
+        }
+
+        #app {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .header {
+            height: 60px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 50;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .content-area {
+            flex: 1;
+            position: relative;
+            background: #000;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #000;
+        }
+
+        .switcher-widget {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(23, 23, 23, 0.92);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 6px;
+            display: flex;
+            gap: 6px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            align-items: center;
+            flex-wrap: wrap;
+            max-width: min(96vw, 1000px);
+            justify-content: center;
+        }
+
+        .switcher-widget:hover {
+            border-color: #404040;
+            transform: translateX(-50%) translateY(-2px);
+        }
+
+        .widget-btn {
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .widget-btn.active {
+            background: var(--fg);
+            color: var(--bg);
+        }
+
+        .widget-btn:not(.active):hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .widget-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .group-label {
+            font-size: 11px;
+            color: #737373;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding-left: 10px;
+        }
+
+        .model-select {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--fg);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 8px 14px;
+            font: inherit;
+            font-size: 13px;
+            outline: none;
+            min-width: 170px;
+            cursor: pointer;
+        }
+
+        .model-select:hover,
+        .model-select:focus {
+            border-color: #404040;
+        }
+
+        .version-pill {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 999px;
+            padding: 2px;
+            border: 1px solid var(--border);
+        }
+
+        .v-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #737373;
+        }
+
+        .v-btn.active {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .v-btn:not(.active):hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--fg);
+        }
+
+        #grid-view {
+            position: absolute;
+            inset: 0;
+            background: var(--bg);
+            padding: 80px 40px 120px;
+            overflow-y: auto;
+            z-index: 40;
+        }
+
+        .grid-shell {
+            width: min(1400px, 100%);
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .grid-intro {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+            align-items: end;
+        }
+
+        .grid-title {
+            font-size: clamp(28px, 4vw, 42px);
+            font-weight: 600;
+            letter-spacing: -0.04em;
+            margin: 0;
+        }
+
+        .grid-copy {
+            margin: 10px 0 0;
+            color: #a3a3a3;
+            max-width: 58ch;
+            line-height: 1.6;
+        }
+
+        .grid-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: #737373;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .model-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .model-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 24px;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .model-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: start;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            margin: 0;
+        }
+
+        .card-subtitle {
+            color: #a3a3a3;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 8px 0 0;
+        }
+
+        .card-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            background: rgba(59, 130, 246, 0.14);
+            color: #93c5fd;
+            white-space: nowrap;
+        }
+
+        .mode-block {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .mode-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mode-name {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #d4d4d4;
+        }
+
+        .mode-hint {
+            font-size: 12px;
+            color: #737373;
+        }
+
+        .version-links {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .version-link {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .version-link:hover {
+            border-color: #3b82f6;
+            color: #bfdbfe;
+            background: rgba(59, 130, 246, 0.08);
+        }
+
+        .version-link.skill-link {
+            background: rgba(49, 46, 129, 0.3);
+            color: #c7d2fe;
+            border-color: rgba(99, 102, 241, 0.35);
+        }
+
+        .version-link.skill-link:hover {
+            background: rgba(67, 56, 202, 0.3);
+            border-color: #6366f1;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .animate-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .header {
+                padding: 0 16px;
+            }
+
+            #grid-view {
+                padding: 32px 16px 130px;
+            }
+
+            .switcher-widget {
+                border-radius: 24px;
+                padding: 10px;
+                bottom: 16px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .header {
+                height: auto;
+                min-height: 60px;
+                padding-top: 12px;
+                padding-bottom: 12px;
+                align-items: flex-start;
+            }
+
+            .grid-intro {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .version-links {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <header class="header">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-lg">S</div>
+                <h1 class="text-lg font-semibold tracking-tight cursor-pointer" onclick="goHome()">Model Comparison</h1>
+            </div>
+
+            <div id="nav-info" class="hidden flex items-center gap-4 text-sm text-neutral-400">
+                <span id="current-model-label">M2-7</span>
+                <span class="w-1 h-1 bg-neutral-700 rounded-full"></span>
+                <span id="current-v-label">Version 1</span>
+                <span class="w-1 h-1 bg-neutral-700 rounded-full"></span>
+                <span id="current-mode-label" class="text-blue-400">With Skill</span>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <a href="https://www.whichai.dev/" target="_blank" class="text-xs text-neutral-500 hover:text-neutral-300 transition-colors">Inspired by whichai.dev</a>
+            </div>
+        </header>
+
+        <main class="content-area">
+            <div id="grid-view"></div>
+            <iframe id="content-frame" class="hidden"></iframe>
+        </main>
+
+        <div id="widget" class="switcher-widget hidden">
+            <div class="widget-group">
+                <span class="group-label">Model</span>
+                <select id="model-select" class="model-select" onchange="setModel(this.value)"></select>
+            </div>
+            <div class="widget-group">
+                <span class="group-label">Version</span>
+                <div class="version-pill">
+                    <div class="v-btn" onclick="setVersion(1)">1</div>
+                    <div class="v-btn" onclick="setVersion(2)">2</div>
+                    <div class="v-btn" onclick="setVersion(3)">3</div>
+                    <div class="v-btn" onclick="setVersion(4)">4</div>
+                    <div class="v-btn" onclick="setVersion(5)">5</div>
+                </div>
+            </div>
+            <div class="widget-group">
+                <span class="group-label">Mode</span>
+                <div id="mode-noskill" class="widget-btn" onclick="setMode('noskill')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg>
+                    No Skill
+                </div>
+                <div id="mode-skill" class="widget-btn" onclick="setMode('skill')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                    With Skill
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const models = [
+            { id: 'gemini3-1', label: 'Gemini 3.1' },
+            { id: 'glm5', label: 'GLM 5' },
+            { id: 'gpt5-3-codex', label: 'GPT-5.3 Codex' },
+            { id: 'gpt5-4', label: 'GPT-5.4' },
+            { id: 'm2-7', label: 'M2.7' },
+            { id: 'sonnet4-5', label: 'Sonnet 4.5' },
+            { id: 'sonnet4-6', label: 'Sonnet 4.6' }
+        ];
+
+        const versions = [1, 2, 3, 4, 5];
+        const defaultModel = 'm2-7';
+
+        const state = {
+            model: null,
+            version: null,
+            mode: null
+        };
+
+        function init() {
+            renderGrid();
+            renderModelOptions();
+            handleRoute();
+            window.addEventListener('hashchange', handleRoute);
+        }
+
+        function renderModelOptions() {
+            const select = document.getElementById('model-select');
+            select.innerHTML = models
+                .map((model) => `<option value="${model.id}">${model.label}</option>`)
+                .join('');
+        }
+
+        function renderGrid() {
+            const grid = document.getElementById('grid-view');
+            const cards = models.map((model, index) => `
+                <article class="model-card animate-in" style="animation-delay: ${index * 0.04}s">
+                    <div class="card-header">
+                        <div>
+                            <h2 class="card-title">${model.label}</h2>
+                            <p class="card-subtitle">Browse all 5 generations for both the skill and no-skill outputs from the main router.</p>
+                        </div>
+                        <span class="card-badge">10 pages</span>
+                    </div>
+                    ${renderModeBlock(model, 'noskill', 'No Skill')}
+                    ${renderModeBlock(model, 'skill', 'With Skill')}
+                </article>
+            `).join('');
+
+            grid.innerHTML = `
+                <div class="grid-shell">
+                    <section class="grid-intro animate-in">
+                        <div>
+                            <h2 class="grid-title">All model pages, one router</h2>
+                            <p class="grid-copy">Open any model, generation, and mode from the root page. Each selection loads the matching index.html inside the main iframe.</p>
+                        </div>
+                        <div class="grid-meta">7 models · 5 versions · skill and no-skill</div>
+                    </section>
+                    <section class="model-grid">${cards}</section>
+                </div>
+            `;
+        }
+
+        function renderModeBlock(model, mode, label) {
+            const modeClass = mode === 'skill' ? 'version-link skill-link' : 'version-link';
+            const links = versions.map((version) => `
+                <div class="${modeClass}" onclick="navigateTo('${model.id}', ${version}, '${mode}')">V${version}</div>
+            `).join('');
+
+            return `
+                <div class="mode-block">
+                    <div class="mode-header">
+                        <span class="mode-name">${label}</span>
+                        <span class="mode-hint">Versions 1–5</span>
+                    </div>
+                    <div class="version-links">${links}</div>
+                </div>
+            `;
+        }
+
+        function handleRoute() {
+            const hash = window.location.hash;
+            if (!hash || hash === '#') {
+                showGrid();
+                return;
+            }
+
+            const canonicalMatch = hash.match(/^#\/model\/([^/]+)\/v\/(\d+)\/(skill|noskill)$/);
+            if (canonicalMatch) {
+                const model = canonicalMatch[1];
+                const version = Number.parseInt(canonicalMatch[2], 10);
+                const mode = canonicalMatch[3];
+                if (isValidSelection(model, version, mode)) {
+                    loadPage(model, version, mode);
+                    return;
+                }
+            }
+
+            const legacyMatch = hash.match(/^#\/v\/(\d+)\/(skill|noskill)$/);
+            if (legacyMatch) {
+                const version = Number.parseInt(legacyMatch[1], 10);
+                const mode = legacyMatch[2];
+                if (isValidSelection(defaultModel, version, mode)) {
+                    replaceRoute(defaultModel, version, mode);
+                    return;
+                }
+            }
+
+            showGrid();
+        }
+
+        function isValidSelection(model, version, mode) {
+            const modelExists = models.some((entry) => entry.id === model);
+            return modelExists && versions.includes(version) && (mode === 'skill' || mode === 'noskill');
+        }
+
+        function buildRoute(model, version, mode) {
+            return `#/model/${model}/v/${version}/${mode}`;
+        }
+
+        function buildPath(model, version, mode) {
+            return mode === 'skill'
+                ? `./${model}-skill/${version}/index.html`
+                : `./${model}-no-skill/${version}/index.html`;
+        }
+
+        function navigateTo(model, version, mode) {
+            window.location.hash = buildRoute(model, version, mode);
+        }
+
+        function replaceRoute(model, version, mode) {
+            window.location.replace(buildRoute(model, version, mode));
+        }
+
+        function goHome() {
+            window.location.hash = '';
+        }
+
+        function showGrid() {
+            document.getElementById('grid-view').classList.remove('hidden');
+            document.getElementById('content-frame').classList.add('hidden');
+            document.getElementById('widget').classList.add('hidden');
+            document.getElementById('nav-info').classList.add('hidden');
+            state.model = null;
+            state.version = null;
+            state.mode = null;
+        }
+
+        function loadPage(model, version, mode) {
+            state.model = model;
+            state.version = version;
+            state.mode = mode;
+
+            const grid = document.getElementById('grid-view');
+            const frame = document.getElementById('content-frame');
+            const widget = document.getElementById('widget');
+            const navInfo = document.getElementById('nav-info');
+            const currentModel = models.find((entry) => entry.id === model);
+
+            grid.classList.add('hidden');
+            frame.classList.remove('hidden');
+            widget.classList.remove('hidden');
+            navInfo.classList.remove('hidden');
+
+            frame.src = buildPath(model, version, mode);
+
+            document.getElementById('current-model-label').textContent = currentModel ? currentModel.label : model;
+            document.getElementById('current-v-label').textContent = `Version ${version}`;
+
+            const modeLabel = document.getElementById('current-mode-label');
+            modeLabel.textContent = mode === 'skill' ? 'With Skill' : 'No Skill';
+            modeLabel.className = mode === 'skill' ? 'text-blue-400' : 'text-neutral-500';
+
+            document.getElementById('mode-skill').classList.toggle('active', mode === 'skill');
+            document.getElementById('mode-noskill').classList.toggle('active', mode === 'noskill');
+            document.getElementById('model-select').value = model;
+
+            document.querySelectorAll('.v-btn').forEach((button, index) => {
+                button.classList.toggle('active', index + 1 === version);
+            });
+        }
+
+        function setVersion(version) {
+            if (version === state.version || !state.model || !state.mode) {
+                return;
+            }
+            navigateTo(state.model, version, state.mode);
+        }
+
+        function setMode(mode) {
+            if (mode === state.mode || !state.model || !state.version) {
+                return;
+            }
+            navigateTo(state.model, state.version, mode);
+        }
+
+        function setModel(model) {
+            if (model === state.model || !state.version || !state.mode) {
+                return;
+            }
+            navigateTo(model, state.version, state.mode);
+        }
+
+        init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OASIS — Luxury Meditation Retreat</title>
+    <meta name="description" content="The pinnacle of refined luxury meditation experiences.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@500;600;700&family=Inter:wght@300&family=Courier+Prime:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0A0D1F;
+            color: #FFFFFF;
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        #diamond-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 0;
+        }
+
+        .shimmer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 30%, rgba(232, 180, 160, 0.05) 50%, transparent 70%);
+            background-size: 200% 200%;
+            animation: shimmer 8s ease-in-out infinite;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .cursor {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: #E8B4A0;
+            pointer-events: none;
+            z-index: 10000;
+            box-shadow: 0 0 20px rgba(232, 180, 160, 0.6);
+        }
+
+        .cursor.hover {
+            width: 100px;
+            height: 100px;
+            mix-blend-mode: screen;
+            box-shadow: 0 0 60px rgba(232, 180, 160, 0.8);
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+        }
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5vw;
+            position: relative;
+        }
+
+        .hero {
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .display-huge {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 15vw;
+            font-weight: 700;
+            line-height: 0.82;
+            letter-spacing: -0.06em;
+            opacity: 0;
+            transform: translateY(150px);
+        }
+
+        .display-large {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 8.5vw;
+            font-weight: 600;
+            line-height: 0.88;
+            letter-spacing: -0.04em;
+            opacity: 0;
+            transform: translateY(100px);
+        }
+
+        .body-md {
+            font-size: 16px;
+            line-height: 1.8;
+            letter-spacing: 0.01em;
+            max-width: 600px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .label-micro {
+            font-family: 'Courier Prime', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #A8A8A8;
+        }
+
+        .btn-primary {
+            background: #E8B4A0;
+            color: #0A0D1F;
+            padding: 22px 60px;
+            border: none;
+            font-family: 'Courier Prime', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: none;
+            opacity: 0;
+            transform: translateY(40px);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: rotate(45deg);
+            animation: shimmerBtn 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmerBtn {
+            0%, 100% { transform: translateX(-100%) rotate(45deg); }
+            50% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+        }
+
+        .section-label {
+            position: absolute;
+            top: 5vh;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .opulence {
+            margin-top: 28vw;
+            flex-direction: column;
+        }
+
+        .refined {
+            margin-top: 28vw;
+            flex-direction: column;
+        }
+
+        .exclusive {
+            margin-top: 28vw;
+            flex-direction: column;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .display-huge {
+                font-size: 22vw;
+            }
+            .display-large {
+                font-size: 15vw;
+            }
+            body {
+                cursor: auto;
+            }
+            .cursor {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="diamond-container"></div>
+    <div class="shimmer"></div>
+    <div class="cursor"></div>
+    
+    <div class="content">
+        <section class="hero">
+            <h1 class="display-huge">OASIS</h1>
+            <p class="body-md" style="margin-top: 3rem;">The pinnacle of luxury meditation. Where every detail has been perfected and exclusivity is the foundation of experience.</p>
+            <button class="btn-primary" data-magnetic style="margin-top: 4rem;">RESERVE YOUR SANCTUARY</button>
+        </section>
+
+        <section class="opulence">
+            <div class="section-label label-micro">I — OPULENCE</div>
+            <h2 class="display-large">Refined<br>Luxury</h2>
+            <p class="body-md" style="margin-top: 3rem;">Our retreat embodies the codes of haute luxury. Private suites designed by award-winning architects. Meditation chambers with panoramic views. Service that anticipates every need.</p>
+        </section>
+
+        <section class="refined">
+            <div class="section-label label-micro">II — PRECISION</div>
+            <h2 class="display-large">Perfection</h2>
+            <p class="body-md" style="margin-top: 2.5rem;">Seven days of curated meditation experiences. Personal guides. Michelin-level cuisine. Every moment choreographed to perfection.</p>
+        </section>
+
+        <section class="exclusive">
+            <div class="section-label label-micro">III — EXCLUSIVITY</div>
+            <h2 class="display-large">Ascend</h2>
+            <button class="btn-primary" data-magnetic style="margin-top: 3rem;">ENTER THE SANCTUARY</button>
+        </section>
+    </div>
+
+    <script>
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (!prefersReducedMotion) {
+            // Three.js Diamond
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById('diamond-container').appendChild(renderer.domElement);
+
+            const geometry = new THREE.OctahedronGeometry(2.5, 0);
+            const material = new THREE.MeshPhysicalMaterial({
+                color: 0xE8B4A0,
+                metalness: 0.9,
+                roughness: 0.1,
+                transparent: true,
+                opacity: 0.8,
+                envMapIntensity: 1,
+                clearcoat: 1,
+                clearcoatRoughness: 0.1
+            });
+            const diamond = new THREE.Mesh(geometry, material);
+            scene.add(diamond);
+
+            const light1 = new THREE.PointLight(0xE8B4A0, 2, 100);
+            light1.position.set(5, 5, 5);
+            scene.add(light1);
+
+            const light2 = new THREE.PointLight(0xFFFFFF, 1, 100);
+            light2.position.set(-5, -5, 5);
+            scene.add(light2);
+
+            const ambientLight = new THREE.AmbientLight(0x404040);
+            scene.add(ambientLight);
+
+            camera.position.z = 7;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                diamond.rotation.x += 0.001;
+                diamond.rotation.y += 0.002;
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Lenis smooth scroll
+            const lenis = new Lenis({
+                duration: 1.3,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+            });
+
+            function raf(time) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+            requestAnimationFrame(raf);
+
+            gsap.registerPlugin(ScrollTrigger);
+
+            lenis.on('scroll', ScrollTrigger.update);
+            gsap.ticker.add((time) => lenis.raf(time * 1000));
+            gsap.ticker.lagSmoothing(0);
+
+            // Scroll-driven diamond
+            ScrollTrigger.create({
+                trigger: 'body',
+                start: 'top top',
+                end: 'bottom bottom',
+                scrub: 2,
+                onUpdate: (self) => {
+                    diamond.rotation.z = self.progress * Math.PI * 4;
+                    camera.position.z = gsap.utils.interpolate(7, 10, self.progress);
+                }
+            });
+
+            // Text reveals
+            gsap.to('.display-huge', {
+                scrollTrigger: {
+                    trigger: '.display-huge',
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                },
+                y: 0,
+                opacity: 1,
+                duration: 1.8,
+                ease: 'cubic-bezier(0.19, 1, 0.22, 1)'
+            });
+
+            document.querySelectorAll('.display-large').forEach((el) => {
+                gsap.to(el, {
+                    scrollTrigger: {
+                        trigger: el,
+                        start: 'top 80%',
+                        toggleActions: 'play none none reverse'
+                    },
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.6,
+                    ease: 'cubic-bezier(0.19, 1, 0.22, 1)'
+                });
+            });
+
+            document.querySelectorAll('.body-md, .btn-primary').forEach((el) => {
+                gsap.to(el, {
+                    scrollTrigger: {
+                        trigger: el,
+                        start: 'top 85%',
+                        toggleActions: 'play none none reverse'
+                    },
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.4,
+                    ease: 'cubic-bezier(0.19, 1, 0.22, 1)'
+                });
+            });
+
+            // Custom cursor
+            const cursor = document.querySelector('.cursor');
+            const magneticElements = document.querySelectorAll('[data-magnetic]');
+
+            document.addEventListener('mousemove', (e) => {
+                gsap.to(cursor, {
+                    x: e.clientX - 3,
+                    y: e.clientY - 3,
+                    duration: 0.5,
+                    ease: 'power3.out'
+                });
+            });
+
+            magneticElements.forEach((el) => {
+                el.addEventListener('mouseenter', () => {
+                    cursor.classList.add('hover');
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursor.classList.remove('hover');
+                });
+            });
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        } else {
+            document.querySelectorAll('.display-huge, .display-large, .body-md, .btn-primary').forEach(el => {
+                el.style.opacity = '1';
+                el.style.transform = 'none';
+            });
+        }
+    </script>
+</body>
+</html>
