@@ -31,9 +31,14 @@ These models show superior understanding of frontend delivery requirements and c
 ## Getting Started
 
 1. Clone the repository
-2. Open the test files in your browser
-3. Run through the assessment scenarios
+2. run `npx http-server . -p 8123` in the root folder
+3. open 127.0.0.1:8123 in the browser
 4. Compare results with different AI models
+
+## Using the skill
+
+1. go to https://github.com/davad00/breakthrough-fed-delivery
+2. follow installation instructions
 
 ## Usage
 
@@ -50,7 +55,3 @@ Contributions are welcome! If you have additional test cases or improvements, pl
 ## License
 
 MIT
-
----
-
-**Last Updated:** 2026-04-28
