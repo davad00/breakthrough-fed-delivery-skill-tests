@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Oasis — A luxury meditation retreat beyond thought. Where the infinite void holds your stillness.">
+<title>OASIS — Luxury Meditation Retreat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;250;300;400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { background: #020308; }
+body { background: #020308; color: #E8E0F0; font-family: 'Inter', sans-serif; font-weight: 300; overflow-x: hidden; cursor: none; }
+canvas#bg { position: fixed; top: 0; left: 0; z-index: 0; }
+
+.cursor { position: fixed; width: 10px; height: 10px; border-radius: 50%; background: #7B5FFF; z-index: 100; pointer-events: none; box-shadow: 0 0 16px rgba(123,95,255,0.6), 0 0 40px rgba(123,95,255,0.2); transition: width 0.4s cubic-bezier(0.33,1,0.68,1), height 0.4s, background 0.4s, box-shadow 0.4s; }
+.cursor.hover { width: 56px; height: 56px; background: #E8E0F0; box-shadow: 0 0 30px rgba(123,95,255,0.8), 0 0 80px rgba(123,95,255,0.3); }
+
+.nav-dots-nav { position: fixed; top: 50%; right: 24px; z-index: 50; transform: translateY(-50%); display: flex; flex-direction: column; gap: 24px; }
+.nav-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(107,91,149,0.4); cursor: none; border: none; transition: all 0.5s cubic-bezier(0.33,1,0.68,1); position: relative; }
+.nav-dot::after { content: attr(data-label); position: absolute; right: 16px; top:50%; transform: translateY(-50%); font-family: 'JetBrains Mono',monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; white-space: nowrap; color: #6B5B95; opacity: 0; transition: all 0.5s; pointer-events: none; }
+.nav-dot:hover { background: #7B5FFF; box-shadow: 0 0 10px rgba(123,95,255,0.6); }
+.nav-dot:hover::after { opacity: 1; right: 14px; color: #7B5FFF; }
+.nav-dot.active { background: #7B5FFF; box-shadow: 0 0 14px rgba(123,95,255,0.8); width: 8px; height: 8px; }
+
+.nav-overlay { position: fixed; inset: 0; z-index: 40; background: rgba(2,3,8,0.98); backdrop-filter: blur(30px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.7s cubic-bezier(0.33,1,0.68,1); }
+.nav-overlay.open { opacity: 1; pointer-events: auto; }
+.nav-cosmic { display: flex; flex-direction: column; gap: 56px; align-items: center; }
+.nav-cosmic a { font-family: 'Inter', sans-serif; font-size: 5vw; font-weight: 200; line-height: 1; color: #6B5B95; text-decoration: none; transition: color 0.6s, letter-spacing 0.6s, transform 0.6s cubic-bezier(0.33,1,0.68,1); }
+.nav-cosmic a:hover { color: #7B5FFF; letter-spacing: 0.05em; transform: scale(1.06); }
+
+.nav-menu-btn { position: fixed; top: 32px; right: 32px; z-index: 51; background: none; border: 1px solid rgba(107,91,149,0.3); border-radius: 50%; width: 40px; height: 40px; cursor: none; display: flex; align-items: center; justify-content: center; transition: border-color 0.5s; }
+.nav-menu-btn:hover { border-color: #7B5FFF; }
+.nav-menu-btn-inner { width: 16px; height: 1.5px; background: #6B5B95; position: relative; transition: all 0.4s; }
+.nav-menu-btn-inner::before, .nav-menu-btn-inner::after { content: ''; position: absolute; width: 16px; height: 1.5px; background: #6B5B95; transition: all 0.4s cubic-bezier(0.33,1,0.68,1); }
+.nav-menu-btn-inner::before { top: -5px; }
+.nav-menu-btn-inner::after { top: 5px; }
+.nav-menu-btn.open .nav-menu-btn-inner { background: transparent; }
+.nav-menu-btn.open .nav-menu-btn-inner::before { top: 0; transform: rotate(45deg); }
+.nav-menu-btn.open .nav-menu-btn-inner::after { top: 0; transform: rotate(-45deg); }
+
+main { position: relative; z-index: 10; }
+
+.hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 5vw; }
+.hero-title { font-family: 'Inter', sans-serif; font-size: 12vw; font-weight: 200; line-height: 0.9; letter-spacing: -0.03em; color: #E8E0F0; opacity: 0.85; }
+.hero-sub { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase; color: #7B5FFF; margin-top: 20px; }
+.hero-divider { width: 2px; height: 40px; background: rgba(123,95,255,0.3); margin-top: 40px; }
+
+.section { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 64px; }
+.card { max-width: 500px; display: flex; flex-direction: column; gap: 18px; text-align: center; }
+.card-num { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight:40 400; letter-spacing: 0.18em; text-transform: uppercase; color: #7B5FFF; opacity: 0.6; }
+.card-heading { font-family: 'Inter', sans-serif; font-size: 3.5vw; font-weight: 250; line-height: 1.1; letter-spacing: -0.02em; color: #E8E0F0; }
+.card-body { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 300; line-height: 1.8; letter-spacing: 0.02em; color: #6B5B95; }
+.card-line { width: 40px; height: 1px; background: rgba(123,95,255,0.3); margin: 0 auto; }
+
+.btn { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase; text-decoration: none; padding: 16px 44px; border-radius: 9999px; display: inline-block; cursor: none; transition: all 0.5s cubic-bezier(0.33,1,0.68,1); position: relative; }
+.btn::after { content: ''; position: absolute; inset: -2px; border-radius: 9999px; background: #7B5FFF; opacity: 0; transition: opacity 0.5s; z-index: -1; filter: blur(12px); }
+.btn:hover::after { opacity: 0.4; }
+.btn-primary { background: #7B5FFF; color: #E8E0F0; }
+.btn-primary:hover { transform: scale(1.04); }
+.btn-ghost { background: transparent; color: #E8E0F0; border: 1px solid #6B5B95; }
+.btn-ghost:hover { border-color: #7B5FFF; color: #7B5FFF; }
+
+.footer { padding: 80px; text-align: center; border-top: 1px solid rgba(107,91,149,0.1); }
+.footer-text { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase; color: #6B5B95; line-height: 1.8; }
+
+@media (max-width: 768px) {
+  body { cursor: auto; }
+  .cursor { display: none; }
+  .nav-dots-nav { right: 12px; gap: 16px; }
+  .nav-dot { width: 5px; height: 5px; }
+  .hero-title { font-size: 15vw; }
+  .section { padding: 48px 24px; }
+  .card-heading { font-size: 7vw; }
+  .card-body { font-size: 14px; }
+  canvas#bg { opacity: 0.6; }
+  .nav-cosmic a { font-size: 9vw; }
+}
+</style>
+</head>
+<body>
+<div class="cursor" aria-hidden="true"></div>
+
+<div class="nav-dots-nav" role="navigation" aria-label="Section navigation">
+  <button class="nav-dot active" data-label="Home" data-target="0"></button>
+  <button class="nav-dot" data-label="Void" data-target="1"></button>
+  <button class="nav-dot" data-label="Sanctuary" data-target="2"></button>
+  <button class="nav-dot" data-label="Practice" data-target="3"></button>
+  <button class="nav-dot" data-label="Beyond" data-target="4"></button>
+</div>
+
+<button class="nav-menu-btn" aria-label="Toggle navigation menu" data-magnetic>
+  <div class="nav-menu-btn-inner"></div>
+</button>
+
+<nav class="nav-overlay" role="navigation" aria-label="Main navigation">
+  <div class="nav-cosmic">
+    <a href="#void">The Void</a>
+    <a href="#sanctuary">Sanctuary</a>
+    <a href="#practice">Practice</a>
+    <a href="#beyond">Beyond</a>
+  </div>
+</nav>
+
+<canvas id="bg"></canvas>
+
+<main role="main">
+  <section class="hero" data-section="0">
+    <h1 class="hero-title">Oasis</h1>
+    <p class="hero-sub">Beyond thought</p>
+    <div class="hero-divider"></div>
+  </section>
+
+  <section class="section" id="void" data-section="1">
+    <div class="card">
+      <span class="card-num">I · The Void</span>
+      <h2 class="card-heading">Before the word,<br>there was silence.</h2>
+      <p class="card-body">We built Oasis at the edge of the Atacama — the driest, darkest place on Earth. At 14,000 feet, above the clouds, beyond the reach of any broadcast signal. Here, under skies so dark the Milky Way casts a shadow, you learn that silence is not an absence. It is the most full experience you can have. Each breath becomes a meditation. Each heartbeat becomes a prayer.</p>
+    </div>
+  </section>
+
+  <section class="section" id="sanctuary" data-section="2">
+    <div class="card">
+      <span class="card-num">II · Sanctuary</span>
+      <h2 class="card-heading">Where4 weight<br>dissolves.</h2>
+      <p class="card-body">Twelve observatory suites with retractable roofs — your bed directly beneath the galactic core. Walls of obsidian glass that vanish into transparency at dusk. Zero-gravity flotation pods filled with water from Andean springs. An architecture of absence — deliberately spare, deliberately dark, deliberately infinite.</p>
+      <a href="#beyond" class="btn btn-primary" data-magnetic>Explore the Void</a>
+    </div>
+  </section>
+
+  <section class="section" id="practice" data-section="3">
+    <div class="card">
+      <span class="card-num">III · Practice</span>
+      <h2 class="card-heading">Five disciplines.<br>One infinite.</h2>
+      <p class="card-body" style="text-align:left;max-width:420px;margin:0 auto">Zero-G Breathwork — breath practice in flotation pods. Cosmic Gazing — guided visual meditation under the darkest skies on Earth. Altitude Silence — the body's natural meditation at 14,000 feet. Celestial Sound — resonance therapy calibrated to planetary frequencies. Void Immersion — three days of utter sensory deprivation in private chambers.</p>
+    </div>
+  </section>
+
+  <section class="section" id="beyond" data-section="4">
+    <div class="card">
+      <span class="card-num">IV · Beyond</span>
+      <h2 class="card-heading">You were never<br>separate.</h2>
+      <p class="card-body">Oasis hosts twelve guests at a time. Transportation from the private airstrip at San Pedro de Atacama is by helicopter. Your stay includes a personal guide trained in astrophysics and contemplative practice, custom-designed meals calibrated to high-altitude physiology, and24 a private observatory session each night.</p>
+      <a href="#" class="btn btn-ghost" data-magnetic>Enter the Void</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p class="footer-text">Oasis Retreat · Est. 2025 · Atacama Desert · Chile</p>
+    <p class="footer-text" style="margin-top:8px;font-size:8px">At 14,000 feet,  the only signal is stillness.</p>
+  </footer>
+</main>
+
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+<script type="module">
+import * as THREE from 'three';
+
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (!prefersReducedMotion) {
+  gsap.registerPlugin(ScrollTrigger);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera.position.set(0, 0, 20);
+
+  const canvas = document.getElementById('bg');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x020308);
+
+  const starCount =18 1200;
+  const starGeom = new THREE.BufferGeometry();
+  const starPos = new Float32Array(starCount * 3);
+  const starCol = new Float32Array(starCount * 3);
+  const starSz = new Float32Array(starCount);
+
+  for (let i = 0; i < starCount; i++) {
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    const radius = 12 + Math.random() * 30;
+    starPos[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+    starPos[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+    starPos[i * 3 + 2] = radius * Math.cos(phi);
+
+    const temp = 0.6 + Math.random() * 0.4;
+    starCol[i * 3] = 0.4 + Math.random() * 0.6;
+    starCol[i * 3 + 1] = 0.2 + Math.random() * 0.3;
+    starCol[i * 3 + 2] = 0.6 + Math.random() * 0.4;
+    starSz[i] = Math.random() * 2.5 + 0.3;
+  }
+  starGeom.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+  starGeom.setAttribute('color', new THREE.BufferAttribute(starCol, 3));
+  starGeom.setAttribute('size', new THREE.BufferAttribute(starSz, 1));
+
+  const starSprite = (() => {
+    const c = document.createElement('canvas');
+    c.width = 32; c.height = 32;
+    const ctx = c.getContext('2d');
+    const g = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
+    g.addColorStop(0, 'rgba(255,255,255,0.95)');
+    g.addColorStop(0.15, 'rgba(200,180,255,0.7)');
+    g.addColorStop(0.5, 'rgba(100,80,180,0.15)');
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 32, 32);
+    return new THREE.CanvasTexture(c);
+  })();
+
+  const stars = new THREE.Points(starGeom, new THREE.PointsMaterial({
+    size: 0.15,
+    map: starSprite,
+    vertexColors: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    transparent: true,
+    opacity: 0.9
+  }));
+  scene.add(stars);
+
+  const nebulaGroup = new THREE.Group();
+  for (let n = 0; n < 5; n++) {
+    const nc = 120;
+    const nGeom = new THREE.BufferGeometry();
+    const nPos = new Float32Array(nc * 3);
+    const cx7 = (Math.random() - 0.5) * 30;
+    const cy7 = (Math.random() - 0.5) * 20;
+    const cz7 = (Math.random() - 0.5) * 15;
+    for (let j = 0; j < nc; j++) {
+      nPos[j * 3] = cx7 + (Math.random() - 0.5) * 8;
+      nPos[j * 3 + 1] = cy7 + (Math.random() - 0.5) * 5;
+      nPos[j * 3 + 2] = cz7 + (Math.random() - 0.5) * 6;
+    }
+    nGeom.setAttribute('position', new THREE.BufferAttribute(nPos, 3));
+    const nMat = new THREE.PointsMaterial({
+      size: 0.35 + Math.random() * 0.3,
+      map: starSprite,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      transparent: true,
+      opacity: 0.08 + Math.random() *27 0.06,
+      color: new THREE.Color().setHSL(0.7 + Math.random() * 0.15, 0.8, 0.3 + Math.random() * 0.2)
+    });
+    nebulaGroup.add(new THREE.Points(nGeom, nMat));
+  }
+  scene.add(nebulaGroup);
+
+  let mouseX = 0, mouseY = 0;
+  document.addEventListener('mousemove', (e) => {
+    mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+    mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+  });
+
+  function animate(time) {
+    requestAnimationFrame(animate);
+    const t = time * 0.001;
+    stars.rotation.y += 0.0002 + mouseX * 0.00015;
+    stars.rotation.x += 0.0001 + mouseY * 0.0001;
+    nebulaGroup.rotation.y = stars.rotation.y * 0.4;
+    nebulaGroup.rotation.x = Math.sin(t * 0.1) * 0.03;
+    renderer.render(scene, camera);
+  }
+  requestAnimationFrame(animate);
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  const lenis = new Lenis({ lerp: 0.06, smoothWheel: true });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+
+  gsap.from('.hero-title', {
+    scrollTrigger: { trigger: '.hero', start: 'top top', toggleActions: 'play none none reverse' },
+    y: 60, opacity: 0, duration: 2, ease: 'expo.out'
+  });
+  gsap.from(['.hero-sub', '.hero-divider'], {
+    scrollTrigger: { trigger: '.hero', start: 'top top', toggleActions: 'play none none reverse' },
+    y: 20, opacity: 0, duration: 1.5, stagger: 0.2, delay: 0.5, ease: 'expo.out'
+  });
+
+  document.querySelectorAll('.card').forEach((el, i) => {
+    gsap.from(el.children, {
+      scrollTrigger: { trigger: el.closest('.section'), start: 'top 75%', toggleActions: 'play none none reverse' },
+      y: 40, opacity: 0, duration: 1.6, ease: 'expo.out', stagger: 0.12
+    });
+  });
+  gsap.from('.footer', {
+    scrollTrigger: { trigger: '.footer', start: 'top 95%', toggleActions: 'play none none reverse' },
+    opacity: 0, y: 20, duration: 1.5, ease: 'expo.out'
+  });
+
+  const cursor = document.querySelector('.cursor');
+  let cx = 0, cy = 0, tx = 0, ty = 0;
+  document.addEventListener('mousemove', (e) => { tx = e.clientX; ty = e.clientY; });
+  document.querySelectorAll('[data-magnetic], a, .btn, .nav-menu-btn, .nav-dot').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+  function animCursor() {
+    cx += (tx - cx) * 0.08;
+    cy += (ty - cy) * 0.08;
+    cursor.style.left = (cx - cursor.offsetWidth / 2) + 'px';
+    cursor.style.top = (cy - cursor.offsetHeight / 2) + 'px';
+    requestAnimationFrame(animCursor);
+  }
+  requestAnimationFrame(animCursor);
+
+  const menuBtn = document.querySelector('.nav-menu-btn');
+  const nav = document.querySelector('.nav-overlay');
+  menuBtn.addEventListener('click', () => { menuBtn.classList.toggle('open'); nav.classList.toggle('open'); });
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { menuBtn.classList.remove('open'); nav.classList.remove('open'); }));
+
+  const dots = document.querySelectorAll('.nav-dot');
+  dots.forEach(d => d.addEventListener('click', () => {
+    const tgt = parseInt(d.dataset.target);
+    const section = document.querySelector(`[data-section="${tgt}"]`);
+    if (section) { lenis.scrollTo(section, { duration: 1.5 }); }
+  }));
+
+  const sections = document.querySelectorAll('[data-section]');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const idx = parseInt(e.target.dataset.section);
+        dots.forEach(d => d.classList.remove('active'));
+        dots[idx]?.classList.add('active');
+      }
+    });
+  }, { threshold: 0.5 });
+  sections.forEach(s => { if (s.dataset.section) observer.observe(s); });
+
+  document.querySelectorAll('[data-magnetic]').forEach(el => {
+    el.addEventListener('mousemove', (e) => {
+      const rect = el.getBoundingClientRect();
+      gsap.to(el, { x: (e.clientX - rect.left - rect.width / 2) * 0.25, y: (e.clientY - rect.top - rect.height / 2) * 0.25, duration: 0.5, ease: 'power2.out' });
+    });
+    el.addEventListener('mouseleave', () => gsap.to(el, { x: 0, y: 0, duration: 0.75, ease: 'power3.out' }));
+  });
+} else {
+  document.querySelectorAll('.cursor, .nav-dots-nav').forEach(e => e.remove());
+  document.body.style.cursor = 'auto';
+  document.querySelector('.hero-title').style.opacity = '1';
+}
+</script>
+</body>
+</html>

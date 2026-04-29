@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oasis — The Prism</title>
+<meta name="description" content="A crystalline meditation retreat. Refract your awareness through the prism of stillness.">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@300;400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { background: #0B0911; overflow-x: hidden; }
+body { background: #0B0911; color: #EEF0F8; font-family: 'Inter', sans-serif; cursor: none; overflow-x: hidden; }
+
+.cursor { position: fixed; pointer-events: none; z-index: 1000; width: 8px; height: 8px; border-radius: 50%; background: #9B6BED; transform: translate(-50%, -50%); mix-blend-mode: difference; }
+
+.nav { position: fixed; top: 0; left: 0; width: 100%; padding: 32px 48px; display: flex; justify-content: space-between; align-items: center; z-index: 100; mix-blend-mode: difference; }
+.nav-logo { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #EEF0F8; }
+.nav-radial-btn { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #EEF0F8; background: none; border: none; cursor: pointer; position: relative; z-index: 110; }
+
+.radial-menu { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 90; pointer-events: none; opacity: 0; }
+.radial-menu.open { pointer-events: all; opacity: 1; }
+.radial-menu-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 9, 17, 0.9); backdrop-filter: blur(20px); }
+.radial-items { position: relative; width: 300px; height: 300px; }
+.radial-item { position: absolute; top: 50%; left: 50%; font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 500; color: #EEF0F8; text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.3s; }
+.radial-item:hover { color: #9B6BED; }
+
+.canvas-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; }
+#crystal-canvas { width: 100%; height: 100%; display: block; }
+
+.hero { position: relative; z-index: 10; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 0 48px; }
+.hero-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #8B84A8; margin-bottom: 24px; }
+.hero-title { font-family: 'Space Grotesk', sans-serif; font-size: 12vw; font-weight: 700; line-height: 0.85; letter-spacing: -0.05em; color: #EEF0F8; margin-bottom: 24px; }
+.hero-title .accent { color: #9B6BED; }
+.hero-sub { font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.65; color: #8B84A8; max-width: 420px; margin-bottom: 40px; }
+.hero-cta { display: flex; gap: 16px; }
+.hero-cta a { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; padding: 16px 32px; border-radius: 9999px; transition: all 0.4s; }
+.btn-primary { background: #9B6BED; color: #0B0911; }
+.btn-primary:hover { background: #B08AF0; }
+.btn-ghost { border: 1px solid #EEF0F8; color: #EEF0F8; }
+.btn-ghost:hover { background: #EEF0F8; color: #0B0911; }
+
+.section { position: relative; z-index: 10; min-height: 100vh; display: flex; align-items: center; padding: 0 48px; }
+.section-inner { max-width: 1400px; width: 100%; margin: 0 auto; }
+
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+.about-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #8B84A8; margin-bottom: 16px; }
+.about-heading { font-family: 'Space Grotesk', sans-serif; font-size: 4vw; font-weight: 500; line-height: 1; letter-spacing: -0.02em; margin-bottom: 24px; }
+.about-text { font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.65; color: #8B84A8; max-width: 480px; }
+
+.facets-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
+.facet-card { padding: 32px; background: rgba(238, 240, 248, 0.02); border: 1px solid rgba(238, 240, 248, 0.06); transition: all 0.6s; }
+.facet-card:hover { border-color: rgba(155, 107, 237, 0.3); }
+.facet-card-icon { font-size: 28px; color: #9B6BED; margin-bottom: 16px; }
+.facet-card-title { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 500; color: #EEF0F8; margin-bottom: 8px; }
+.facet-card-text { font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; color: #8B84A8; }
+
+.cta-final { min-height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+.cta-final-title { font-family: 'Space Grotesk', sans-serif; font-size: 7vw; font-weight: 600; line-height: 0.95; color: #EEF0F8; margin-bottom: 32px; }
+.cta-final-title .accent { color: #9B6BED; }
+
+.footer { padding: 32px 48px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(238, 240, 248, 0.06); background: #0B0911; position: relative; z-index: 10; }
+.footer-text { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #8B84A8; }
+
+@media (max-width: 768px) {
+  .nav { padding: 24px; }
+  .hero { padding: 0 24px; }
+  .hero-title { font-size: 20vw; max-width: 100%; }
+  .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  .about-heading { font-size: 10vw; }
+  .facets-grid { grid-template-columns: 1fr; }
+  .cta-final-title { font-size: 12vw; }
+  .section { padding: 0 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+
+<nav class="nav">
+  <div class="nav-logo">Oasis</div>
+  <button class="nav-radial-btn" id="radialBtn">Facets</button>
+</nav>
+
+<div class="radial-menu" id="radialMenu">
+  <div class="radial-menu-bg"></div>
+  <div class="radial-items" id="radialItems">
+    <a href="#" class="radial-item" style="transform:translate(0, -140px);">Home</a>
+    <a href="#" class="radial-item" style="transform:translate(132px, -43px);">About</a>
+    <a href="#" class="radial-item" style="transform:translate(82px, 113px);">Practices</a>
+    <a href="#" class="radial-item" style="transform:translate(-82px, 113px);">Retreats</a>
+    <a href="#" class="radial-item" style="transform:translate(-132px, -43px);">Contact</a>
+  </div>
+</div>
+
+<div class="canvas-container">
+  <canvas id="crystal-canvas"></canvas>
+</div>
+
+<section class="hero">
+  <div class="hero-label">/// Crystalline Stillness</div>
+  <h1 class="hero-title">The<br><span class="accent">Prism</span></h1>
+  <p class="hero-sub">A meditation retreat built on the geometry of awareness. Every practice is a facet. Every facet refracts the same light.</p>
+  <div class="hero-cta">
+    <a href="#" class="btn-primary" data-magnetic>Enter the Prism</a>
+    <a href="#" class="btn-ghost" data-magnetic>Explore Facets</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div>
+        <div class="about-label">/// One Light, Infinite Angles</div>
+        <h2 class="about-heading" style="color:#EEF0F8;">A retreat is not an escape.</h2>
+        <p class="about-text">It is a reorientation. Like light through a crystal, the same awareness enters from one side and emerges transformed. Our retreats are designed to refract your perception through practices refined over millennia.</p>
+      </div>
+      <div>
+        <div style="text-align:center;">
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:6vw;font-weight:600;color:#9B6BED;line-height:0.9;">7</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#8B84A8;margin-top:8px;">Facets of Practice</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-inner">
+    <div class="about-label">/// The Facets</div>
+    <div class="facets-grid">
+      <div class="facet-card">
+        <div class="facet-card-icon">&#9670;</div>
+        <div class="facet-card-title">Attention</div>
+        <div class="facet-card-text">The first facet. Learning where to place your awareness is the foundation of all other practices.</div>
+      </div>
+      <div class="facet-card">
+        <div class="facet-card-icon">&#9671;</div>
+        <div class="facet-card-title">Breath</div>
+        <div class="facet-card-text">The only bridge between body and mind. We sequence ancient pranayama with real-time biofeedback.</div>
+      </div>
+      <div class="facet-card">
+        <div class="facet-card-icon">&#9672;</div>
+        <div class="facet-card-title">Body</div>
+        <div class="facet-card-text">The temple that houses awareness. Movement, posture, and the gradual release of stored tension.</div>
+      </div>
+      <div class="facet-card">
+        <div class="facet-card-icon">&#9673;</div>
+        <div class="facet-card-title">Silence</div>
+        <div class="facet-card-text">Forty-eight hours of communal silence. The mind recalibrates. Perception sharpens.</div>
+      </div>
+      <div class="facet-card">
+        <div class="facet-card-icon">&#9674;</div>
+        <div class="facet-card-title">Nature</div>
+        <div class="facet-card-text">The retreat sits in a high-desert valley where the only sound is wind through juniper.</div>
+      </div>
+      <div class="facet-card">
+        <div class="facet-card-icon">&#9675;</div>
+        <div class="facet-card-title">Community</div>
+        <div class="facet-card-text">Twelve strangers becoming a temporary sangha. No phones. No names from before.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section cta-final">
+  <div class="section-inner" style="text-align:center;">
+    <h2 class="cta-final-title">Refract your<br><span class="accent">awareness</span></h2>
+    <a href="#" class="btn-primary" data-magnetic style="display:inline-block;">Book a Facet</a>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-text">Oasis Retreats &mdash; Est. 2012</div>
+  <div class="footer-text">One light, infinite angles</div>
+</footer>
+
+<script>
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+if (!prefersReducedMotion && !isTouch) {
+  gsap.registerPlugin(ScrollTrigger);
+
+  // --- Cursor ---
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', (e) => {
+    gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.6, ease: 'power3.out' });
+  });
+  document.querySelectorAll('[data-magnetic], .facet-card, .hero-title, .radial-item').forEach(el => {
+    el.addEventListener('mouseenter', () => gsap.to(cursor, { width: 48, height: 48, background: '#EEF0F8', duration: 0.3 }));
+    el.addEventListener('mouseleave', () => gsap.to(cursor, { width: 8, height: 8, background: '#9B6BED', duration: 0.3 }));
+  });
+
+  // --- Hero Reveal ---
+  const heroTl = gsap.timeline({ defaults: { ease: 'power4.out', duration: 1.2 } });
+  heroTl.from('.hero-label', { y: 40, opacity: 0, duration: 0.8 })
+        .from('.hero-title', { y: 120, opacity: 0 }, '-=0.4')
+        .from('.hero-sub', { y: 80, opacity: 0 }, '-=0.6')
+        .from('.hero-cta a', { y: 40, opacity: 0, stagger: 0.15 }, '-=0.4');
+
+  // --- Section reveals ---
+  gsap.from('.about-grid', { scrollTrigger: { trigger: '.about-grid', start: 'top 80%' }, y: 100, opacity: 0, duration: 1.2, ease: 'power4.out' });
+  gsap.from('.facet-card', { scrollTrigger: { trigger: '.facets-grid', start: 'top 75%' }, y: 80, opacity: 0, stagger: 0.15, duration: 1, ease: 'power4.out' });
+  gsap.from('.cta-final', { scrollTrigger: { trigger: '.cta-final', start: 'top 80%' }, y: 80, opacity: 0, duration: 1.2, ease: 'power4.out' });
+
+  // --- Radial Menu ---
+  const radialBtn = document.getElementById('radialBtn');
+  const radialMenu = document.getElementById('radialMenu');
+  const radialItems = document.querySelectorAll('.radial-item');
+  let radialOpen = false;
+
+  radialBtn.addEventListener('click', () => {
+    radialOpen = !radialOpen;
+    gsap.to(radialMenu, { opacity: radialOpen ? 1 : 0, duration: 0.6, ease: 'power4.out', pointerEvents: radialOpen ? 'all' : 'none' });
+    if (radialOpen) {
+      radialItems.forEach((item, i) => {
+        gsap.fromTo(item, { opacity: 0, scale: 0.5 },
+          { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.7)', delay: 0.1 * i });
+      });
+    }
+  });
+  radialMenu.querySelector('.radial-menu-bg').addEventListener('click', () => {
+    radialOpen = false;
+    gsap.to(radialMenu, { opacity: 0, duration: 0.4, ease: 'power4.out', pointerEvents: 'none' });
+  });
+}
+
+// --- Three.js Rotating Crystal ---
+const canvas = document.getElementById('crystal-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setClearColor(0x0B0911, 0);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.z = 8;
+
+// Icosahedron crystal geometry with wireframe
+const crystalGeo = new THREE.IcosahedronGeometry(2.5, 1);
+const crystalMat = new THREE.MeshPhysicalMaterial({
+  color: 0x9B6BED,
+  metalness: 0.1,
+  roughness: 0.2,
+  transparent: true,
+  opacity: 0.6,
+  wireframe: false,
+  emissive: 0x9B6BED,
+  emissiveIntensity: 0.05,
+  clearcoat: 0.8,
+  clearcoatRoughness: 0.2,
+  envMapIntensity: 1.0,
+  side: THREE.DoubleSide
+});
+const crystal = new THREE.Mesh(crystalGeo, crystalMat);
+scene.add(crystal);
+
+// Wireframe overlay
+const wireMat = new THREE.MeshBasicMaterial({
+  color: 0x9B6BED,
+  wireframe: true,
+  transparent: true,
+  opacity: 0.3
+});
+const wireCrystal = new THREE.Mesh(crystalGeo.clone(), wireMat);
+wireCrystal.scale.set(1.01, 1.01, 1.01);
+scene.add(wireCrystal);
+
+// Floating inner crystal
+const innerGeo = new THREE.IcosahedronGeometry(1.2, 0);
+const innerMat = new THREE.MeshPhysicalMaterial({
+  color: 0xEEF0F8,
+  metalness: 0.3,
+  roughness: 0.1,
+  transparent: true,
+  opacity: 0.2,
+  emissive: 0x9B6BED,
+  emissiveIntensity: 0.1
+});
+const innerCrystal = new THREE.Mesh(innerGeo, innerMat);
+scene.add(innerCrystal);
+
+// Ambient particles
+const particlesGeo = new THREE.BufferGeometry();
+const particleCount = 500;
+const pos = new Float32Array(particleCount * 3);
+for (let i = 0; i < particleCount * 3; i++) {
+  pos[i] = (Math.random() - 0.5) * 30;
+}
+particlesGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+const particlesMat = new THREE.PointsMaterial({
+  color: 0x9B6BED,
+  size: 0.03,
+  transparent: true,
+  opacity: 0.4,
+  blending: THREE.AdditiveBlending
+});
+const particles = new THREE.Points(particlesGeo, particlesMat);
+scene.add(particles);
+
+let mouseX = 0, mouseY = 0;
+document.addEventListener('mousemove', (e) => {
+  mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+  mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+});
+
+function animateCrystal() {
+  requestAnimationFrame(animateCrystal);
+
+  crystal.rotation.x += 0.003;
+  crystal.rotation.y += 0.005;
+  wireCrystal.rotation.x = crystal.rotation.x;
+  wireCrystal.rotation.y = crystal.rotation.y;
+  innerCrystal.rotation.x = -crystal.rotation.x * 0.5;
+  innerCrystal.rotation.y = -crystal.rotation.y * 0.5;
+
+  crystal.position.x += (mouseX * 1.5 - crystal.position.x) * 0.02;
+  crystal.position.y += (mouseY * 1.5 - crystal.position.y) * 0.02;
+  wireCrystal.position.copy(crystal.position);
+  innerCrystal.position.x = crystal.position.x * 0.5;
+  innerCrystal.position.y = crystal.position.y * 0.5;
+
+  particles.rotation.y += 0.0005;
+  particles.rotation.x += 0.0003;
+
+  camera.lookAt(0, 0, 0);
+  renderer.render(scene, camera);
+}
+animateCrystal();
+
+window.addEventListener('resize', () => {
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+});
+
+// --- Fallback ---
+if (prefersReducedMotion || isTouch) {
+  document.querySelector('.cursor').style.display = 'none';
+  document.body.style.cursor = 'auto';
+}
+</script>
+</body>
+</html>

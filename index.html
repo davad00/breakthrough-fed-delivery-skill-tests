@@ -455,8 +455,11 @@
         const models = [
             { id: 'gemini3-1', label: 'Gemini 3.1' },
             { id: 'glm5', label: 'GLM 5' },
+            { id: 'glm5-1', label: 'GLM 5.1' },
             { id: 'gpt5-3-codex', label: 'GPT-5.3 Codex' },
             { id: 'gpt5-4', label: 'GPT-5.4' },
+            { id: 'deepseek4-pro', label: 'DeepSeek 4 Pro' },
+            { id: 'deepseek4-flash', label: 'DeepSeek 4 Flash' },
             { id: 'm2-7', label: 'M2.7' },
             { id: 'sonnet4-5', label: 'Sonnet 4.5' },
             { id: 'sonnet4-6', label: 'Sonnet 4.6' }
@@ -508,7 +511,22 @@
                             <h2 class="grid-title">All model pages, one router</h2>
                             <p class="grid-copy">Open any model, generation, and mode from the root page. Each selection loads the matching index.html inside the main iframe.</p>
                         </div>
-                        <div class="grid-meta">7 models · 5 versions · skill and no-skill</div>
+                        <div class="grid-meta">10 models · 5 versions · skill and no-skill</div>
+                    </section>
+                    <section class="prompts-section animate-in" style="margin-top: 8px;">
+                        <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 16px;">
+                            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #737373; text-transform: uppercase; letter-spacing: 0.08em;">Prompts used</div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                <div>
+                                    <div style="font-size: 12px; font-weight: 600; color: #d4d4d4; margin-bottom: 8px;">Without Skill</div>
+                                    <div style="font-size: 13px; color: #a3a3a3; line-height: 1.6;">Build a landing page for 'Oasis,' a high-end luxury meditation retreat.<br><br>make 5 versions of it.<br>each in its own folder. (/MODEL-NAME-no-skill/1, /MODEL-NAME-no-skill/2, /MODEL-NAME-no-skill/3, etc..)</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 12px; font-weight: 600; color: #d4d4d4; margin-bottom: 8px;">With Skill</div>
+                                    <div style="font-size: 13px; color: #a3a3a3; line-height: 1.6;">Build a landing page for 'Oasis,' a high-end luxury meditation retreat.<br><br>make 5 versions of it.<br>each in its own folder. (/MODEL-NAME-skill/1, /MODEL-NAME-skill/2, /MODEL-NAME-skill/3, etc..)<br><br>use the breakthrough-fed-delivery skill from the .agents/skills folder.</div>
+                                </div>
+                            </div>
+                        </div>
                     </section>
                     <section class="model-grid">${cards}</section>
                 </div>

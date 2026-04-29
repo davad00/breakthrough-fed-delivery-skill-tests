@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OASIS — Luxury Meditation Retreat</title>
+<meta name="description" content="Oasis: a luxury meditation retreat in Kyoto, Japan. Dissolve into stillness. 7, 14, and 21-day immersive experiences beginning Solstice 2027.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+--c-primary:#FFFFFF;
+--c-secondary:#6B6B6B;
+--c-tertiary:#D2FF00;
+--c-neutral:#0A0A0A;
+--c-on-tertiary:#000000;
+--ff-display:'Space Grotesk',sans-serif;
+--ff-body:'Inter',sans-serif;
+--ff-mono:'JetBrains Mono',monospace
+}
+html{
+background:var(--c-neutral);
+color:var(--c-primary);
+overflow-x:hidden;
+cursor:none
+}
+body{
+background:var(--c-neutral);
+color:var(--c-primary);
+font-family:var(--ff-body);
+font-size:16px;
+font-weight:400;
+line-height:1.65;
+letter-spacing:0em;
+overflow-x:hidden;
+-webkit-font-smoothing:antialiased;
+-moz-osx-font-smoothing:grayscale
+}
+a{color:inherit;text-decoration:none;cursor:none}
+button{font-family:var(--ff-mono);cursor:none;border:none;background:none}
+
+.grain-overlay{
+position:fixed;
+inset:0;
+z-index:999;
+pointer-events:none;
+opacity:0.04
+}
+.grain-overlay::before{
+content:"";
+position:absolute;
+inset:-200%;
+width:400%;
+height:400%;
+background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+animation:grainShift 0.5s steps(2) infinite
+}
+@keyframes grainShift{
+0%{transform:translate(0,0)}
+25%{transform:translate(-5%,-5%)}
+50%{transform:translate(5%,5%)}
+75%{transform:translate(-2%,3%)}
+100%{transform:translate(0,0)}
+}
+
+.cursor{
+position:fixed;
+top:0;left:0;
+width:12px;height:12px;
+background:var(--c-tertiary);
+border-radius:50%;
+pointer-events:none;
+z-index:100;
+transform:translate(-50%,-50%);
+mix-blend-mode:normal;
+will-change:transform
+}
+.cursor.hovering{
+width:48px;height:48px;
+background:var(--c-primary);
+mix-blend-mode:difference
+}
+.cursor.text-mode{
+mix-blend-mode:difference
+}
+
+.orb-wrapper{
+position:fixed;
+inset:0;
+z-index:0;
+pointer-events:none;
+display:flex;
+align-items:center;
+justify-content:center;
+will-change:transform
+}
+.orb-inner{
+position:relative;
+width:35vmin;
+height:35vmin;
+will-change:transform
+}
+canvas#orb-canvas{
+position:absolute;
+inset:-50%;
+width:200%;
+height:200%;
+pointer-events:none
+}
+.css-orb-fallback{
+position:absolute;
+inset:0;
+border-radius:50%;
+background:radial-gradient(circle at 40% 40%,rgba(210,255,0,0.18),rgba(210,255,0,0.06) 40%,transparent 70%);
+filter:blur(40px);
+pointer-events:none;
+display:none;
+animation:orbPulse 4s ease-in-out infinite
+}
+@keyframes orbPulse{
+0%,100%{transform:scale(1);opacity:0.8}
+50%{transform:scale(1.1);opacity:1}
+}
+
+.content-layer{position:relative;z-index:10}
+
+.hero{
+position:relative;
+width:100%;
+height:100vh;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center
+}
+.hero-title{
+font-family:var(--ff-display);
+font-size:12vw;
+font-weight:700;
+line-height:0.9;
+letter-spacing:-0.04em;
+color:var(--c-primary);
+text-align:center;
+position:relative;
+z-index:2;
+pointer-events:none
+}
+.hero-title .word{display:inline-block;overflow:hidden}
+.hero-title .word .char{
+display:inline-block;
+will-change:transform;
+opacity:0
+}
+.hero-sub{
+font-family:var(--ff-mono);
+font-size:10px;
+font-weight:500;
+line-height:1;
+letter-spacing:0.12em;
+text-transform:uppercase;
+color:var(--c-secondary);
+margin-top:2vw;
+text-align:center;
+overflow:hidden
+}
+.hero-sub span{
+display:inline-block;
+will-change:transform;
+opacity:0
+}
+.hero-coords{
+position:absolute;
+bottom:4vw;
+left:4vw;
+font-family:var(--ff-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.12em;
+text-transform:uppercase;
+color:var(--c-secondary);
+opacity:0;
+will-change:transform
+}
+.scroll-indicator{
+position:absolute;
+bottom:4vw;
+left:50%;
+transform:translateX(-50%);
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:8px;
+opacity:0
+}
+.scroll-indicator span{
+font-family:var(--ff-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.12em;
+text-transform:uppercase;
+color:var(--c-secondary)
+}
+.scroll-line{
+width:1px;
+height:40px;
+background:rgba(255,255,255,0.08);
+position:relative;
+overflow:hidden
+}
+.scroll-line::after{
+content:"";
+position:absolute;
+top:-100%;left:0;
+width:100%;height:100%;
+background:var(--c-tertiary);
+animation:scrollLine 2s ease-in-out infinite
+}
+@keyframes scrollLine{
+0%{top:-100%}
+50%{top:100%}
+100%{top:100%}
+}
+
+.hamburger{
+position:fixed;
+top:2vw;right:2vw;
+z-index:25;
+width:40px;height:40px;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:6px;
+background:transparent;
+border:none;
+cursor:none;
+padding:0
+}
+.hamburger .line{
+width:24px;height:1px;
+background:var(--c-primary);
+transform-origin:center;
+will-change:transform
+}
+.hamburger.active .line:nth-child(1){
+transform:translateY(3.5px) rotate(45deg)
+}
+.hamburger.active .line:nth-child(2){
+opacity:0
+}
+.hamburger.active .line:nth-child(3){
+transform:translateY(-3.5px) rotate(-45deg)
+}
+
+.nav-overlay{
+position:fixed;
+inset:0;
+z-index:20;
+background:var(--c-neutral);
+display:flex;
+align-items:center;
+justify-content:center;
+opacity:0;
+visibility:hidden;
+will-change:opacity
+}
+.nav-overlay.open{
+opacity:1;
+visibility:visible
+}
+.nav-overlay nav{
+display:flex;
+flex-direction:column;
+gap:3vw;
+align-items:center
+}
+.nav-overlay nav a{
+font-family:var(--ff-display);
+font-size:7vw;
+font-weight:600;
+line-height:0.95;
+letter-spacing:-0.03em;
+color:var(--c-secondary);
+transform:translateY(80px);
+opacity:0;
+will-change:transform,opacity;
+display:block;
+text-align:center
+}
+.nav-overlay nav a:hover{
+color:var(--c-primary)
+}
+.nav-overlay nav a .nav-index{
+font-family:var(--ff-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.12em;
+text-transform:uppercase;
+display:block;
+margin-bottom:0.5vw;
+color:var(--c-secondary)
+}
+
+.philosophy{
+padding:20vw 8vw;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+min-height:100vh
+}
+.philosophy-text{
+font-family:var(--ff-display);
+font-size:7vw;
+font-weight:600;
+line-height:0.95;
+letter-spacing:-0.03em;
+color:var(--c-primary);
+text-align:left;
+max-width:85vw
+}
+.philosophy-text .word{
+display:inline-block;
+overflow:hidden;
+vertical-align:bottom;
+margin-right:0.3em
+}
+.philosophy-text .word .inner{
+display:inline-block;
+transform:translateY(120%);
+will-change:transform
+}
+.philosophy-attr{
+font-family:var(--ff-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.12em;
+text-transform:uppercase;
+color:var(--c-secondary);
+margin-top:4vw;
+text-align:center;
+overflow:hidden
+}
+.philosophy-attr span{
+display:inline-block;
+transform:translateY(120%);
+will-change:transform
+}
+
+.experience{
+padding:20vw 8vw;
+min-height:100vh;
+position:relative
+}
+.experience-label{
+font-family:var(--ff-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.12em;
+text-transform:uppercase;
+color:var(--c-secondary);
+margin-bottom:6vw;
+overflow:hidden
+}
+.experience-label span{
+display:inline-block;
+transform:translateY(120%);
+will-change:transform
+}
+.experience-cards{
+display:grid;
+grid-template-columns:1fr 1fr 1fr;
+grid-template-rows:auto;
+gap:2vw;
+position:relative
+}
+.experience-card{
+background:rgba(255,255,255,0.03);
+border:1px solid rgba(255,255,255,0.06);
+padding:3vw 2.5vw;
+position:relative;
+will-change:transform;
+opacity:0
+}
+.experience-card:nth-child(1){
+grid-column:1;
+margin-top:2vw
+}
+.experience-card:nth-child(2){
+grid-column:2;
+margin-top:-1vw
+}
+.experience-card:nth-child(3){
+grid-column:3;
+margin-top:4vw
+}
+.experience-card .card-index{
+font-family:var(--ff-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.12em;
+text-transform:uppercase;
+color:var(--c-tertiary);
+margin-bottom:1.5vw;
+display:block
+}
+.experience-card h3{
+font-family:var(--ff-display);
+font-size:4vw;
+font-weight:600;
+line-height:1;
+letter-spacing:-0.02em;
+color:var(--c-primary);
+margin-bottom:1.2vw
+}
+.experience-card p{
+font-family:var(--ff-body);
+font-size:16px;
+font-weight:400;
+line-height:1.65;
+letter-spacing:0em;
+color:var(--c-secondary)
+}
+.experience-card .card-line{
+width:0;
+height:1px;
+background:var(--c-tertiary);
+margin-top:1.5vw;
+will-change:width
+}
+
+.signature-moment{
+position:relative;
+height:300vh
+}
+.signature-moment-pin{
+position:absolute;
+top:0;left:0;
+width:100%;
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden
+}
+.signature-text{
+font-family:var(--ff-display);
+font-size:7vw;
+font-weight:600;
+line-height:0.95;
+letter-spacing:-0.03em;
+color:var(--c-primary);
+text-align:center;
+opacity:0;
+z-index:2;
+will-change:transform,opacity
+}
+.signature-sub{
+font-family:var(--ff-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.12em;
+text-transform:uppercase;
+color:var(--c-secondary);
+text-align:center;
+margin-top:2vw;
+opacity:0;
+will-change:transform,opacity
+}
+
+.details{
+padding:20vw 8vw;
+min-height:60vh;
+position:relative
+}
+.details-label{
+font-family:var(--ff-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.12em;
+text-transform:uppercase;
+color:var(--c-secondary);
+margin-bottom:6vw;
+overflow:hidden
+}
+.details-label span{
+display:inline-block;
+transform:translateY(120%);
+will-change:transform
+}
+.details-grid{
+display:grid;
+grid-template-columns:1fr 1fr 1fr 1fr;
+gap:4vw;
+border-top:1px solid rgba(255,255,255,0.06);
+padding-top:3vw
+}
+.detail-item{overflow:hidden}
+.detail-item .detail-label{
+font-family:var(--ff-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.12em;
+text-transform:uppercase;
+color:var(--c-secondary);
+margin-bottom:1vw;
+display:block
+}
+.detail-item .detail-value{
+font-family:var(--ff-display);
+font-size:4vw;
+font-weight:600;
+line-height:1;
+letter-spacing:-0.02em;
+color:var(--c-primary);
+display:block;
+overflow:hidden
+}
+.detail-item .detail-value span{
+display:inline-block;
+transform:translateY(120%);
+will-change:transform
+}
+.detail-item .detail-note{
+font-family:var(--ff-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.12em;
+text-transform:uppercase;
+color:rgba(107,107,107,0.5);
+margin-top:0.5vw;
+display:block
+}
+
+.cta{
+padding:20vw 8vw;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+min-height:80vh;
+text-align:center
+}
+.cta-title{
+font-family:var(--ff-display);
+font-size:7vw;
+font-weight:600;
+line-height:0.95;
+letter-spacing:-0.03em;
+color:var(--c-primary);
+margin-bottom:4vw
+}
+.cta-title .word{
+display:inline-block;
+overflow:hidden;
+vertical-align:bottom;
+margin-right:0.3em
+}
+.cta-title .word .inner{
+display:inline-block;
+transform:translateY(120%);
+will-change:transform
+}
+.cta-buttons{
+display:flex;
+gap:2vw;
+align-items:center;
+flex-wrap:wrap;
+justify-content:center
+}
+.cta-buttons .btn-reveal{overflow:hidden}
+.cta-buttons .btn-reveal span{
+display:inline-block;
+transform:translateY(120%);
+will-change:transform
+}
+.btn-primary{
+font-family:var(--ff-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.12em;
+text-transform:uppercase;
+background:var(--c-tertiary);
+color:var(--c-on-tertiary);
+border:none;
+border-radius:9999px;
+padding:16px 32px;
+cursor:none;
+will-change:transform;
+display:inline-block
+}
+.btn-ghost{
+font-family:var(--ff-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.12em;
+text-transform:uppercase;
+background:transparent;
+color:var(--c-primary);
+border:1px solid rgba(255,255,255,0.25);
+border-radius:9999px;
+padding:16px 32px;
+cursor:none;
+will-change:transform;
+display:inline-block
+}
+.btn-ghost:hover{border-color:var(--c-primary)}
+
+footer{
+padding:4vw 8vw;
+display:flex;
+align-items:center;
+justify-content:space-between;
+border-top:1px solid rgba(255,255,255,0.06)
+}
+footer .footer-left{
+font-family:var(--ff-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.12em;
+text-transform:uppercase;
+color:var(--c-secondary)
+}
+footer .footer-right{display:flex;gap:2vw}
+footer .footer-right a{
+font-family:var(--ff-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.12em;
+text-transform:uppercase;
+color:var(--c-secondary)
+}
+footer .footer-right a:hover{color:var(--c-primary)}
+
+@media(max-width:768px){
+.hero-title{font-size:18vw}
+.hero-coords{display:none}
+.philosophy-text{font-size:12vw;max-width:95vw}
+.experience-cards{grid-template-columns:1fr;gap:6vw}
+.experience-card:nth-child(1),
+.experience-card:nth-child(2),
+.experience-card:nth-child(3){margin-top:0}
+.experience-card h3{font-size:8vw}
+.signature-text{font-size:12vw}
+.signature-sub{font-size:8px}
+.details-grid{grid-template-columns:1fr 1fr;gap:6vw}
+.detail-item .detail-value{font-size:6vw}
+.cta-title{font-size:12vw}
+.cursor{display:none!important}
+html{cursor:auto}
+body{cursor:auto}
+a,button{cursor:pointer}
+.hamburger{top:4vw;right:4vw}
+.nav-overlay nav a{font-size:12vw}
+footer{flex-direction:column;gap:3vw;text-align:center}
+footer .footer-right{justify-content:center}
+}
+
+@media(prefers-reduced-motion:reduce){
+.grain-overlay{display:none}
+.scroll-line::after{animation:none}
+.css-orb-fallback{animation:none}
+.hero-title .word .char{transform:none!important;opacity:1!important}
+.hero-sub span{transform:none!important;opacity:1!important}
+.scroll-indicator{opacity:1!important}
+.hero-coords{opacity:1!important;transform:none!important}
+.philosophy-text .word .inner{transform:none!important}
+.philosophy-attr span{transform:none!important}
+.experience-card{opacity:1!important}
+.experience-card .card-line{width:100%!important}
+.signature-text{opacity:1!important;transform:none!important}
+.signature-sub{opacity:1!important;transform:none!important}
+.detail-item .detail-value span{transform:none!important}
+.cta-title .word .inner{transform:none!important}
+.cta-buttons .btn-reveal span{transform:none!important}
+}
+</style>
+</head>
+<body>
+<div class="grain-overlay" aria-hidden="true"></div>
+<div class="cursor" id="cursor" aria-hidden="true"></div>
+<div class="orb-wrapper" id="orb-wrapper">
+<div class="orb-inner" id="orb-inner">
+<canvas id="orb-canvas"></canvas>
+<div class="css-orb-fallback" id="css-orb" aria-hidden="true"></div>
+</div>
+</div>
+<div class="content-layer">
+<header class="hero" id="hero">
+<button class="hamburger" id="hamburger" aria-label="Open navigation" data-magnetic>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"></span>
+</button>
+<h1 class="hero-title" id="hero-title">
+<span class="word"><span class="char">O</span></span><span class="word"><span class="char">A</span></span><span class="word"><span class="char">S</span></span><span class="word"><span class="char">I</span></span><span class="word"><span class="char">S</span></span>
+</h1>
+<p class="hero-sub"><span>LUXURY MEDITATION RETREAT</span></p>
+<span class="hero-coords" id="hero-coords">35.0116&deg;N &nbsp; 135.7681&deg;E</span>
+<div class="scroll-indicator" id="scroll-indicator">
+<span>Scroll</span>
+<div class="scroll-line"></div>
+</div>
+</header>
+<div class="nav-overlay" id="nav-overlay" role="dialog" aria-label="Navigation">
+<nav>
+<a href="#philosophy" data-nav-link><span class="nav-index">01</span>Philosophy</a>
+<a href="#experience" data-nav-link><span class="nav-index">02</span>Experience</a>
+<a href="#details" data-nav-link><span class="nav-index">03</span>Details</a>
+<a href="#cta" data-nav-link><span class="nav-index">04</span>Contact</a>
+</nav>
+</div>
+<section class="philosophy" id="philosophy">
+<div class="philosophy-text" id="philosophy-text">
+<span class="word"><span class="inner">Stillness</span></span><span class="word"><span class="inner">is</span></span><span class="word"><span class="inner">not</span></span><span class="word"><span class="inner">the</span></span><span class="word"><span class="inner">absence</span></span><span class="word"><span class="inner">of</span></span><span class="word"><span class="inner">motion.</span></span><span class="word"><span class="inner">It</span></span><span class="word"><span class="inner">is</span></span><span class="word"><span class="inner">the</span></span><span class="word"><span class="inner">presence</span></span><span class="word"><span class="inner">of</span></span><span class="word"><span class="inner">peace.</span></span>
+</div>
+<p class="philosophy-attr"><span>THE FOUNDATION OF OASIS</span></p>
+</section>
+<section class="experience" id="experience">
+<p class="experience-label"><span>THREE PATHS INTO SILENCE</span></p>
+<div class="experience-cards">
+<article class="experience-card" data-magnetic>
+<span class="card-index">01</span>
+<h3>Silent Vipassana</h3>
+<p>Ten days of complete silence. No reading, no writing, no eye contact. The mind, stripped of every external stimulus, turns inward and discovers the landscape beneath thought. This is the original technology of transformation.</p>
+<div class="card-line"></div>
+</article>
+<article class="experience-card" data-magnetic>
+<span class="card-index">02</span>
+<h3>Sound Immersion</h3>
+<p>Binaural frequencies, singing bowls, and the resonance of a 400-year-old temple bell. Sound becomes architecture, building interior spaces the mind can inhabit. Each session is composed for the specific acoustics of our Kyoto chamber.</p>
+<div class="card-line"></div>
+</article>
+<article class="experience-card" data-magnetic>
+<span class="card-index">03</span>
+<h3>Movement Meditation</h3>
+<p>Slow-motion walking through the bamboo grove at dawn. Qigong under open sky. The body as meditation instrument, each movement a syllable in a language older than words. Guided by masters trained in lineages spanning twelve centuries.</p>
+<div class="card-line"></div>
+</article>
+</div>
+</section>
+<section class="signature-moment" id="signature-moment">
+<div class="signature-moment-pin" id="signature-pin">
+<p class="signature-text" id="signature-text">Dissolve into the infinite.</p>
+<p class="signature-sub" id="signature-sub">Where the self ends, everything begins</p>
+</div>
+</section>
+<section class="details" id="details">
+<p class="details-label"><span>RETREAT SPECIFICATIONS</span></p>
+<div class="details-grid">
+<div class="detail-item">
+<span class="detail-label">Location</span>
+<span class="detail-value"><span>Kyoto, Japan</span></span>
+<span class="detail-note">Sagano Bamboo Forest District</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">Duration</span>
+<span class="detail-value"><span>7 / 14 / 21 Days</span></span>
+<span class="detail-note">Immersive residential programs</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">Capacity</span>
+<span class="detail-value"><span>12 Souls</span></span>
+<span class="detail-note">Intimate by design</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">Commencement</span>
+<span class="detail-value"><span>Solstice 2027</span></span>
+<span class="detail-note">Applications open autumn 2026</span>
+</div>
+</div>
+</section>
+<section class="cta" id="cta">
+<h2 class="cta-title">
+<span class="word"><span class="inner">Begin</span></span><span class="word"><span class="inner">Your</span></span><span class="word"><span class="inner">Dissolution</span></span>
+</h2>
+<div class="cta-buttons">
+<div class="btn-reveal"><span><button class="btn-primary" data-magnetic>Reserve Your Place</button></span></div>
+<div class="btn-reveal"><span><button class="btn-ghost" data-magnetic>Request Guidance</button></span></div>
+</div>
+</section>
+<footer>
+<span class="footer-left">OASIS &copy; 2027</span>
+<div class="footer-right">
+<a href="#" data-magnetic>Instagram</a>
+<a href="#" data-magnetic>Enquiries</a>
+</div>
+</footer>
+</div>
+<script>
+(function(){
+var isMobile=("ontouchstart" in window)||(navigator.maxTouchPoints>0)||(window.innerWidth<768);
+var prefersReducedMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var mouseX=window.innerWidth/2;
+var mouseY=window.innerHeight/2;
+var targetMouseX=mouseX;
+var targetMouseY=mouseY;
+var orbState={dissolveProgress:0,scrollY:0,opacity:1};
+var cursorEl=document.getElementById("cursor");
+var canvasEl=document.getElementById("orb-canvas");
+var cssOrbEl=document.getElementById("css-orb");
+var orbWrapper=document.getElementById("orb-wrapper");
+var orbInner=document.getElementById("orb-inner");
+var hamburgerEl=document.getElementById("hamburger");
+var navOverlayEl=document.getElementById("nav-overlay");
+var navLinks=document.querySelectorAll("[data-nav-link]");
+
+var gl=null;
+var particleProgram=null;
+var particleBuffer=null;
+var PARTICLE_COUNT=2000;
+var particleData=new Float32Array(PARTICLE_COUNT*7);
+var baseParticleData=new Float32Array(PARTICLE_COUNT*7);
+var ORB_RADIUS=1.8;
+var time=0;
+var scrollProgress=0;
+
+function initParticleData(){
+var idx=0;
+for(var i=0;i<PARTICLE_COUNT;i++){
+var phi=Math.acos(2*Math.random()-1);
+var theta=Math.random()*Math.PI*2;
+var r=ORB_RADIUS*Math.cbrt(Math.random());
+var x=r*Math.sin(phi)*Math.cos(theta);
+var y=r*Math.sin(phi)*Math.sin(theta);
+var z=r*Math.cos(phi);
+var sizeSeed=Math.random();
+var greenVar=0.82+Math.random()*0.18;
+var phase=Math.random()*Math.PI*2;
+particleData[idx++]=x;
+particleData[idx++]=y;
+particleData[idx++]=z;
+particleData[idx++]=sizeSeed;
+particleData[idx++]=greenVar;
+particleData[idx++]=phase;
+particleData[idx++]=0;
+}
+baseParticleData.set(particleData);
+}
+
+function updateParticlePositions(){
+var idx=0;
+var d=orbState.dissolveProgress;
+for(var i=0;i<PARTICLE_COUNT;i++){
+var bx=baseParticleData[idx];
+var by=baseParticleData[idx+1];
+var bz=baseParticleData[idx+2];
+var phase=baseParticleData[idx+5];
+var breathe=Math.sin(time*0.5+phase)*0.03;
+var scale=1.0+breathe;
+var px=bx*scale;
+var py=by*scale;
+var pz=bz*scale;
+if(d>0){
+var len=Math.sqrt(px*px+py*py+pz*pz)||0.001;
+var nx=px/len;
+var ny=py/len;
+var nz=pz/len;
+var expand=d*4.0*(0.5+baseParticleData[idx+3]*0.5);
+px+=nx*expand;
+py+=ny*expand;
+pz+=nz*expand;
+}
+var mxN=(mouseX/window.innerWidth*2-1);
+var myN=-(mouseY/window.innerHeight*2-1);
+var aspect=window.innerWidth/window.innerHeight;
+var mxW=mxN*aspect;
+var myW=myN;
+var dx=px-mxW;
+var dy=py-myW;
+var dist=Math.sqrt(dx*dx+dy*dy)||0.001;
+var influence=Math.max(0,1.0-dist/1.8)*0.2;
+px-=dx*influence;
+py-=dy*influence;
+particleData[idx]=px;
+particleData[idx+1]=py;
+particleData[idx+2]=pz;
+idx+=7;
+}
+}
+
+var vsSrc=[
+"attribute vec3 aPos;",
+"attribute float aSizeSeed;",
+"attribute float aGVar;",
+"attribute float aPhase;",
+"uniform float uTime;",
+"uniform float uDissolve;",
+"uniform float uAspect;",
+"varying float vAlpha;",
+"varying float vSizeSeed;",
+"varying float vGVar;",
+"void main(){",
+"  float d=uDissolve;",
+"  float len=length(aPos);",
+"  float alpha=1.0-d*0.6;",
+"  alpha*=smoothstep(3.5,0.0,len);",
+"  float twinkle=0.7+0.3*sin(uTime*1.5+aPhase*6.28);",
+"  alpha*=twinkle;",
+"  float sz=(2.5+aSizeSeed*6.0)*(1.0+d*0.8);",
+"  gl_Position=vec4(aPos.x/uAspect,aPos.y,aPos.z*0.25,1.0);",
+"  gl_PointSize=max(1.0,sz);",
+"  vAlpha=alpha;",
+"  vSizeSeed=aSizeSeed;",
+"  vGVar=aGVar;",
+"}"
+].join("\n");
+
+var fsSrc=[
+"precision mediump float;",
+"varying float vAlpha;",
+"varying float vSizeSeed;",
+"varying float vGVar;",
+"void main(){",
+"  float dist=length(gl_PointCoord-vec2(0.5));",
+"  if(dist>0.5)discard;",
+"  float glow=1.0-smoothstep(0.0,0.5,dist);",
+"  glow=pow(glow,1.8);",
+"  float core=smoothstep(0.3,0.0,dist);",
+"  float r=0.82+vSizeSeed*0.18;",
+"  float g=vGVar;",
+"  float b=vSizeSeed*0.12+core*0.1;",
+"  float finalAlpha=(glow*0.5+core*0.5)*vAlpha;",
+"  gl_FragColor=vec4(r,g,b,finalAlpha*0.7);",
+"}"
+].join("\n");
+
+function compileShader(src,type){
+var s=gl.createShader(type);
+gl.shaderSource(s,src);
+gl.compileShader(s);
+if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){
+console.error("Shader error:",gl.getShaderInfoLog(s));
+gl.deleteShader(s);
+return null;
+}
+return s;
+}
+
+function initWebGL(){
+gl=canvasEl.getContext("webgl",{alpha:true,premultipliedAlpha:false,antialias:true});
+if(!gl)return false;
+var vs=compileShader(vsSrc,gl.VERTEX_SHADER);
+var fs=compileShader(fsSrc,gl.FRAGMENT_SHADER);
+if(!vs||!fs)return false;
+particleProgram=gl.createProgram();
+gl.attachShader(particleProgram,vs);
+gl.attachShader(particleProgram,fs);
+gl.bindAttribLocation(particleProgram,0,"aPos");
+gl.bindAttribLocation(particleProgram,1,"aSizeSeed");
+gl.bindAttribLocation(particleProgram,2,"aGVar");
+gl.bindAttribLocation(particleProgram,3,"aPhase");
+gl.linkProgram(particleProgram);
+if(!gl.getProgramParameter(particleProgram,gl.LINK_STATUS)){
+console.error("Link error:",gl.getProgramInfoLog(particleProgram));
+return false;
+}
+gl.useProgram(particleProgram);
+particleBuffer=gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER,particleBuffer);
+gl.bufferData(gl.ARRAY_BUFFER,particleData,gl.DYNAMIC_DRAW);
+var stride=7*4;
+gl.enableVertexAttribArray(0);
+gl.vertexAttribPointer(0,3,gl.FLOAT,false,stride,0);
+gl.enableVertexAttribArray(1);
+gl.vertexAttribPointer(1,1,gl.FLOAT,false,stride,12);
+gl.enableVertexAttribArray(2);
+gl.vertexAttribPointer(2,1,gl.FLOAT,false,stride,16);
+gl.enableVertexAttribArray(3);
+gl.vertexAttribPointer(3,1,gl.FLOAT,false,stride,20);
+gl.enable(gl.BLEND);
+gl.blendFunc(gl.SRC_ALPHA,gl.ONE);
+gl.clearColor(0,0,0,0);
+return true;
+}
+
+function renderOrb(){
+if(!gl)return;
+var w=canvasEl.clientWidth;
+var h=canvasEl.clientHeight;
+if(canvasEl.width!==w||canvasEl.height!==h){
+canvasEl.width=w;
+canvasEl.height=h;
+}
+gl.viewport(0,0,w,h);
+gl.clear(gl.COLOR_BUFFER_BIT);
+gl.useProgram(particleProgram);
+var aspect=w/h;
+var uTimeLoc=gl.getUniformLocation(particleProgram,"uTime");
+var uDissolveLoc=gl.getUniformLocation(particleProgram,"uDissolve");
+var uAspectLoc=gl.getUniformLocation(particleProgram,"uAspect");
+gl.uniform1f(uTimeLoc,time);
+gl.uniform1f(uDissolveLoc,orbState.dissolveProgress);
+gl.uniform1f(uAspectLoc,aspect);
+updateParticlePositions();
+gl.bindBuffer(gl.ARRAY_BUFFER,particleBuffer);
+gl.bufferData(gl.ARRAY_BUFFER,particleData,gl.DYNAMIC_DRAW);
+var stride=7*4;
+gl.vertexAttribPointer(0,3,gl.FLOAT,false,stride,0);
+gl.vertexAttribPointer(1,1,gl.FLOAT,false,stride,12);
+gl.vertexAttribPointer(2,1,gl.FLOAT,false,stride,16);
+gl.vertexAttribPointer(3,1,gl.FLOAT,false,stride,20);
+gl.drawArrays(gl.POINTS,0,PARTICLE_COUNT);
+}
+
+function orbLoop(){
+time+=0.016;
+renderOrb();
+requestAnimationFrame(orbLoop);
+}
+
+function initCursor(){
+if(isMobile)return;
+document.addEventListener("mousemove",function(e){
+targetMouseX=e.clientX;
+targetMouseY=e.clientY;
+if(!prefersReducedMotion){
+gsap.to(cursorEl,{x:e.clientX,y:e.clientY,duration:0.6,ease:"power3.out",overwrite:true});
+}else{
+cursorEl.style.left=e.clientX+"px";
+cursorEl.style.top=e.clientY+"px";
+}
+});
+var interactives=document.querySelectorAll("a,button,[data-magnetic]");
+interactives.forEach(function(el){
+el.addEventListener("mouseenter",function(){
+cursorEl.classList.add("hovering");
+});
+el.addEventListener("mouseleave",function(){
+cursorEl.classList.remove("hovering");
+});
+});
+var textEls=document.querySelectorAll("h1,h2,h3,p,.philosophy-text,.signature-text,footer");
+textEls.forEach(function(el){
+el.addEventListener("mouseenter",function(){
+if(!cursorEl.classList.contains("hovering")){
+cursorEl.classList.add("text-mode");
+}
+});
+el.addEventListener("mouseleave",function(){
+cursorEl.classList.remove("text-mode");
+});
+});
+var magnetics=document.querySelectorAll("[data-magnetic]");
+magnetics.forEach(function(el){
+el.addEventListener("mousemove",function(e){
+if(prefersReducedMotion)return;
+var rect=el.getBoundingClientRect();
+var relX=e.clientX-rect.left-rect.width/2;
+var relY=e.clientY-rect.top-rect.height/2;
+gsap.to(el,{x:relX*0.3,y:relY*0.3,duration:0.4,ease:"power2.out",overwrite:true});
+gsap.to(cursorEl,{scale:2.5,duration:0.3,overwrite:true});
+});
+el.addEventListener("mouseleave",function(){
+if(prefersReducedMotion)return;
+gsap.to(el,{x:0,y:0,duration:0.6,ease:"elastic.out(1, 0.4)",overwrite:true});
+gsap.to(cursorEl,{scale:1,duration:0.3,overwrite:true});
+});
+});
+}
+
+function initHamburger(){
+var isOpen=false;
+hamburgerEl.addEventListener("click",function(){
+if(isOpen){
+closeNav();
+}else{
+openNav();
+}
+});
+navLinks.forEach(function(link){
+link.addEventListener("click",function(e){
+e.preventDefault();
+closeNav();
+var target=document.querySelector(link.getAttribute("href"));
+if(target&&window.lenisInstance){
+setTimeout(function(){
+window.lenisInstance.scrollTo(target,{offset:0,duration:1.5});
+},600);
+}
+});
+});
+function openNav(){
+isOpen=true;
+hamburgerEl.classList.add("active");
+navOverlayEl.classList.add("open");
+if(!prefersReducedMotion){
+gsap.fromTo(navOverlayEl,{opacity:0},{opacity:1,duration:0.5,ease:"power2.inOut"});
+gsap.fromTo(navLinks,{y:80,opacity:0},{y:0,opacity:1,duration:0.8,ease:"power4.out",stagger:0.1,delay:0.15});
+}else{
+navOverlayEl.style.opacity="1";
+navLinks.forEach(function(l){l.style.opacity="1";l.style.transform="none";});
+}
+}
+function closeNav(){
+if(!prefersReducedMotion){
+gsap.to(navLinks,{y:80,opacity:0,duration:0.3,ease:"power2.in",stagger:0.05});
+gsap.to(navOverlayEl,{opacity:0,duration:0.4,delay:0.15,ease:"power2.inOut",onComplete:function(){
+navOverlayEl.classList.remove("open");
+hamburgerEl.classList.remove("active");
+isOpen=false;
+}});
+}else{
+navOverlayEl.classList.remove("open");
+hamburgerEl.classList.remove("active");
+isOpen=false;
+}
+}
+document.addEventListener("keydown",function(e){
+if(e.key==="Escape"&&isOpen)closeNav();
+});
+}
+
+function initScrollAnimations(){
+gsap.registerPlugin(ScrollTrigger);
+
+var heroChars=document.querySelectorAll(".hero-title .char");
+gsap.fromTo(heroChars,{y:120,opacity:0},{y:0,opacity:1,duration:1.4,ease:"power4.out",stagger:0.08,delay:0.3});
+gsap.fromTo(".hero-sub span",{y:40,opacity:0},{y:0,opacity:1,duration:1,ease:"power4.out",delay:1});
+gsap.fromTo("#scroll-indicator",{opacity:0},{opacity:1,duration:1,delay:1.8});
+gsap.fromTo("#hero-coords",{opacity:0,y:20},{opacity:1,y:0,duration:1,ease:"power4.out",delay:1.2});
+
+gsap.to(orbInner,{
+scale:1.3,
+scrollTrigger:{
+trigger:"#hero",
+start:"top top",
+end:"bottom top",
+scrub:1
+}
+});
+
+gsap.to("#scroll-indicator",{
+opacity:0,
+scrollTrigger:{
+trigger:"#hero",
+start:"top top",
+end:"20% top",
+scrub:true
+}
+});
+
+var philWords=document.querySelectorAll("#philosophy-text .word .inner");
+gsap.to(philWords,{
+y:0,duration:1.2,ease:"power4.out",stagger:0.08,
+scrollTrigger:{trigger:"#philosophy",start:"top 70%",toggleActions:"play none none reverse"}
+});
+gsap.to(".philosophy-attr span",{
+y:0,duration:1,ease:"power4.out",
+scrollTrigger:{trigger:"#philosophy",start:"top 50%",toggleActions:"play none none reverse"}
+});
+
+gsap.to(".experience-label span",{
+y:0,duration:1,ease:"power4.out",
+scrollTrigger:{trigger:"#experience",start:"top 70%",toggleActions:"play none none reverse"}
+});
+
+var cards=document.querySelectorAll(".experience-card");
+cards.forEach(function(card,i){
+var yOff=[2,-1,4][i]||0;
+gsap.fromTo(card,
+{opacity:0,y:yOff+40},
+{opacity:1,y:yOff,duration:1.2,ease:"power4.out",delay:i*0.15,
+scrollTrigger:{trigger:"#experience",start:"top 60%",toggleActions:"play none none reverse"}
+});
+
+gsap.to(card.querySelector(".card-line"),{
+width:"100%",duration:1.2,ease:"power4.out",delay:i*0.15+0.5,
+scrollTrigger:{trigger:"#experience",start:"top 60%",toggleActions:"play none none reverse"}
+});
+});
+
+gsap.to(".details-label span",{
+y:0,duration:1,ease:"power4.out",
+scrollTrigger:{trigger:"#details",start:"top 80%",toggleActions:"play none none reverse"}
+});
+var detailVals=document.querySelectorAll(".detail-item .detail-value span");
+gsap.to(detailVals,{
+y:0,duration:1,ease:"power4.out",stagger:0.1,
+scrollTrigger:{trigger:"#details",start:"top 70%",toggleActions:"play none none reverse"}
+});
+
+var ctaWords=document.querySelectorAll(".cta-title .word .inner");
+gsap.to(ctaWords,{
+y:0,duration:1.2,ease:"power4.out",stagger:0.08,
+scrollTrigger:{trigger:"#cta",start:"top 70%",toggleActions:"play none none reverse"}
+});
+var btnReveals=document.querySelectorAll(".cta-buttons .btn-reveal span");
+gsap.to(btnReveals,{
+y:0,duration:1,ease:"power4.out",stagger:0.1,delay:0.3,
+scrollTrigger:{trigger:"#cta",start:"top 70%",toggleActions:"play none none reverse"}
+});
+
+ScrollTrigger.create({
+trigger:"#signature-moment",
+start:"top top",
+end:"bottom bottom",
+scrub:1,
+pin:"#signature-pin",
+onUpdate:function(self){
+orbState.dissolveProgress=self.progress;
+var textOpacity=self.progress>0.15?Math.min((self.progress-0.15)/0.3,1):0;
+var textY=self.progress>0.15?(1-Math.min((self.progress-0.15)/0.4,1))*60:60;
+gsap.set("#signature-text",{opacity:textOpacity,y:textY});
+var subOpacity=self.progress>0.35?Math.min((self.progress-0.35)/0.3,1):0;
+var subY=self.progress>0.35?(1-Math.min((self.progress-0.35)/0.4,1))*30:30;
+gsap.set("#signature-sub",{opacity:subOpacity,y:subY});
+gsap.set(orbWrapper,{opacity:1-self.progress*0.6});
+}
+});
+
+gsap.to(orbWrapper,{
+y:0,
+scrollTrigger:{
+trigger:".philosophy",
+start:"top bottom",
+end:"bottom top",
+scrub:true,
+onUpdate:function(self){
+gsap.set(orbWrapper,{y:-self.progress*200});
+}
+}
+});
+}
+
+function initLenis(){
+var lenis=new Lenis({
+duration:1.4,
+easing:function(t){return t===1?1:1-Math.pow(2,-10*t);},
+orientation:"vertical",
+smoothWheel:true
+});
+window.lenisInstance=lenis;
+lenis.on("scroll",ScrollTrigger.update);
+gsap.ticker.add(function(tickTime){
+lenis.raf(tickTime*1000);
+});
+gsap.ticker.lagSmoothing(0);
+}
+
+function init(){
+if(isMobile){
+canvasEl.style.display="none";
+cssOrbEl.style.display="block";
+}else{
+initParticleData();
+var webglOk=initWebGL();
+if(!webglOk){
+canvasEl.style.display="none";
+cssOrbEl.style.display="block";
+}else{
+orbLoop();
+}
+}
+if(!isMobile){
+initCursor();
+}
+initHamburger();
+if(!prefersReducedMotion){
+initLenis();
+initScrollAnimations();
+}else{
+var allChars=document.querySelectorAll(".hero-title .char");
+allChars.forEach(function(c){c.style.opacity="1";c.style.transform="none";});
+var subSpan=document.querySelector(".hero-sub span");
+if(subSpan){subSpan.style.opacity="1";subSpan.style.transform="none";}
+var scrollInd=document.getElementById("scroll-indicator");
+if(scrollInd)scrollInd.style.opacity="1";
+var heroCoords=document.getElementById("hero-coords");
+if(heroCoords){heroCoords.style.opacity="1";heroCoords.style.transform="none";}
+var allCards=document.querySelectorAll(".experience-card");
+allCards.forEach(function(c){c.style.opacity="1";c.style.transform="none";});
+var allLines=document.querySelectorAll(".card-line");
+allLines.forEach(function(l){l.style.width="100%";});
+var sigText=document.getElementById("signature-text");
+if(sigText){sigText.style.opacity="1";sigText.style.transform="none";}
+var sigSub=document.getElementById("signature-sub");
+if(sigSub){sigSub.style.opacity="1";sigSub.style.transform="none";}
+}
+}
+
+if(document.readyState==="loading"){
+document.addEventListener("DOMContentLoaded",init);
+}else{
+init();
+}
+})();
+</script>
+</body>
+</html>

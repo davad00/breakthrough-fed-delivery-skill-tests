@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Oasis — Celestial Meditation Retreat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#0A0A1A;--primary:#F0E6DC;--secondary:#6B5D8A;--accent:#D4A088;
+--on-accent:#0A0A1A;--on-bg:#F0E6DC;
+--font-display:'Space Grotesk',sans-serif;--font-body:'Inter',sans-serif;--font-mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:auto}
+body{
+background:var(--bg);color:var(--primary);
+font-family:var(--font-body);font-size:16px;line-height:1.65;
+overflow-x:hidden;cursor:none;
+}
+@media(max-width:768px){body{cursor:auto}}
+.no-motion *{animation:none!important;transition:none!important}
+.star{
+position:absolute;border-radius:50%;background:var(--primary);
+pointer-events:none;will-change:opacity;
+}
+@keyframes twinkle{
+0%,100%{opacity:.15}
+50%{opacity:.9}
+}
+@keyframes orbit-dot{
+0%{transform:rotate(0deg) translateX(32px) rotate(0deg)}
+100%{transform:rotate(360deg) translateX(32px) rotate(-360deg)}
+}
+@keyframes orbit-dot-sm{
+0%{transform:rotate(0deg) translateX(24px) rotate(0deg)}
+100%{transform:rotate(360deg) translateX(24px) rotate(-360deg)}
+}
+.grain{
+position:fixed;inset:0;pointer-events:none;z-index:9998;opacity:.035;
+background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+background-size:128px 128px;
+}
+.cursor-default,.cursor-hover{
+position:fixed;top:0;left:0;border-radius:50%;pointer-events:none;
+z-index:9999;transform:translate(-50%,-50%);transition:width .3s,height .3s,background .3s;
+mix-blend-mode:difference;
+}
+.cursor-default{width:12px;height:12px;background:var(--accent)}
+.cursor-hover{width:48px;height:48px;background:var(--primary);opacity:0}
+@media(max-width:768px){.cursor-default,.cursor-hover{display:none}}
+@media(pointer:coarse){.cursor-default,.cursor-hover{display:none}}
+.star-field{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.webgl-hero{
+position:relative;width:100vw;height:100vh;display:flex;
+align-items:center;justify-content:center;z-index:1;overflow:hidden;
+}
+.webgl-canvas{position:absolute;inset:0;z-index:1}
+.css-sphere-fallback{
+width:min(50vw,320px);height:min(50vw,320px);border-radius:50%;
+background:radial-gradient(circle at 38% 35%,#e8c4a8,#D4A088 40%,#8a5a42 80%,#4a2a18 100%);
+box-shadow:0 0 80px 20px rgba(212,160,136,.35),0 0 160px 60px rgba(212,160,136,.15),inset 0 0 60px rgba(255,220,190,.2);
+position:absolute;z-index:1;
+}
+.css-ring-fallback{
+position:absolute;width:min(70vw,440px);height:min(70vw,440px);
+border:1.5px solid rgba(212,160,136,.25);border-radius:50%;
+transform:rotateX(70deg);z-index:1;
+animation:css-ring-rotate 20s linear infinite;
+}
+@keyframes css-ring-rotate{
+0%{transform:rotateX(70deg) rotateZ(0deg)}
+100%{transform:rotateX(70deg) rotateZ(360deg)}
+}
+.hero-content{
+position:relative;z-index:2;text-align:center;display:flex;
+flex-direction:column;align-items:center;pointer-events:none;
+}
+.hero-title{
+font-family:var(--font-display);font-weight:700;font-size:12vw;
+line-height:.88;letter-spacing:-.04em;color:var(--primary);
+mix-blend-mode:difference;
+}
+.hero-sub{
+font-family:var(--font-mono);font-weight:500;font-size:10px;
+line-height:1;letter-spacing:.12em;color:var(--secondary);
+margin-top:24px;text-transform:uppercase;
+}
+.scroll-indicator{
+position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+.scroll-indicator span{
+font-family:var(--font-mono);font-size:9px;letter-spacing:.14em;
+color:var(--secondary);text-transform:uppercase;
+}
+.scroll-line{
+width:1px;height:40px;background:linear-gradient(to bottom,var(--accent),transparent);
+animation:scroll-pulse 2s ease-in-out infinite;
+}
+@keyframes scroll-pulse{
+0%,100%{opacity:.3;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1)}
+}
+.radial-nav-trigger{
+position:fixed;top:32px;right:32px;z-index:100;width:48px;height:48px;
+border-radius:50%;border:1px solid rgba(212,160,136,.3);
+background:rgba(10,10,26,.6);backdrop-filter:blur(12px);
+display:flex;align-items:center;justify-content:center;cursor:none;
+transition:border-color .3s,background .3s;
+}
+.radial-nav-trigger:hover{border-color:var(--accent);background:rgba(212,160,136,.1)}
+.radial-nav-trigger svg{width:18px;height:18px;stroke:var(--accent);fill:none;stroke-width:1.5}
+.radial-nav-trigger .close-icon{display:none}
+.radial-nav-trigger.active .open-icon{display:none}
+.radial-nav-trigger.active .close-icon{display:block}
+.radial-nav-overlay{
+position:fixed;inset:0;z-index:99;pointer-events:none;
+opacity:0;transition:opacity .4s;
+}
+.radial-nav-overlay.active{pointer-events:auto;opacity:1}
+.radial-nav-overlay .nav-bg{
+position:absolute;inset:0;background:rgba(10,10,26,.85);backdrop-filter:blur(20px);
+}
+.radial-nav-item{
+position:absolute;width:140px;display:flex;flex-direction:column;
+align-items:center;gap:8px;pointer-events:auto;cursor:none;
+text-decoration:none;opacity:0;transform:translate(-50%,-50%) scale(0);
+}
+.radial-nav-item .nav-dot{
+width:6px;height:6px;border-radius:50%;background:var(--accent);
+transition:transform .3s,box-shadow .3s;
+}
+.radial-nav-item:hover .nav-dot{
+transform:scale(2);box-shadow:0 0 12px var(--accent);
+}
+.radial-nav-item .nav-label{
+font-family:var(--font-mono);font-size:10px;font-weight:500;
+letter-spacing:.12em;text-transform:uppercase;color:var(--secondary);
+transition:color .3s;white-space:nowrap;
+}
+.radial-nav-item:hover .nav-label{color:var(--primary)}
+.section{position:relative;z-index:1;padding:20vw 0}
+.section-inner{
+max-width:1200px;margin:0 auto;padding:0 32px;
+}
+.philosophy-section{min-height:100vh;display:flex;align-items:center;justify-content:center}
+.philosophy-text{
+font-family:var(--font-display);font-weight:600;font-size:7vw;
+line-height:.93;letter-spacing:-.03em;color:var(--primary);text-align:center;
+max-width:900px;margin:0 auto;
+}
+.philosophy-text .word{display:inline-block;opacity:0;transform:translateY(40px)}
+.orbits-section{padding:20vw 0 10vw}
+.orbits-section .section-label{
+font-family:var(--font-mono);font-size:10px;font-weight:500;
+letter-spacing:.14em;text-transform:uppercase;color:var(--secondary);
+text-align:center;margin-bottom:80px;
+}
+.orbits-grid{
+display:flex;align-items:flex-start;justify-content:center;gap:64px;
+flex-wrap:wrap;max-width:1000px;margin:0 auto;
+}
+.orbit-card{
+flex:1;min-width:240px;max-width:300px;text-align:center;
+position:relative;padding:48px 24px;
+}
+.orbit-icon{
+width:64px;height:64px;border-radius:50%;margin:0 auto 24px;
+border:1px solid rgba(212,160,136,.2);display:flex;align-items:center;
+justify-content:center;position:relative;
+}
+.orbit-icon svg{width:24px;height:24px;stroke:var(--accent);fill:none;stroke-width:1.5}
+.orbit-icon .orbiting-dot{
+position:absolute;width:4px;height:4px;border-radius:50%;background:var(--accent);
+top:50%;left:50%;animation:orbit-dot 8s linear infinite;
+}
+.orbit-card:nth-child(2) .orbiting-dot{animation-duration:12s;animation-direction:reverse}
+.orbit-card:nth-child(3) .orbiting-dot{animation-duration:16s}
+.orbit-card-title{
+font-family:var(--font-display);font-weight:600;font-size:4vw;
+line-height:1;letter-spacing:-.02em;color:var(--primary);margin-bottom:16px;
+}
+@media(max-width:768px){.orbit-card-title{font-size:24px}}
+.orbit-card-level{
+font-family:var(--font-mono);font-size:9px;font-weight:500;
+letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;
+}
+.orbit-card-desc{
+font-family:var(--font-body);font-size:15px;line-height:1.65;
+color:rgba(240,230,220,.6);
+}
+.pinned-section{
+position:relative;height:200vh;z-index:1;
+}
+.pinned-sticky{
+position:sticky;top:0;height:100vh;display:flex;
+align-items:center;justify-content:center;overflow:hidden;
+}
+.pinned-text{
+font-family:var(--font-display);font-weight:700;font-size:7vw;
+line-height:.88;letter-spacing:-.04em;color:var(--primary);
+text-align:center;opacity:0;transform:scale(.8);z-index:2;
+position:relative;
+}
+.pinned-webgl{
+position:absolute;inset:0;z-index:1;
+}
+.details-section{padding:20vw 0 10vw}
+.details-grid{
+display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:48px;max-width:900px;margin:0 auto;
+}
+.detail-item{padding:32px;border:1px solid rgba(107,93,138,.2);border-radius:4px}
+.detail-label{
+font-family:var(--font-mono);font-size:9px;font-weight:500;
+letter-spacing:.14em;text-transform:uppercase;color:var(--secondary);margin-bottom:12px;
+}
+.detail-value{
+font-family:var(--font-display);font-weight:600;font-size:24px;
+line-height:1;letter-spacing:-.02em;color:var(--primary);
+}
+.detail-sub{
+font-family:var(--font-body);font-size:14px;line-height:1.5;
+color:rgba(240,230,220,.5);margin-top:8px;
+}
+.cta-section{
+padding:20vw 0;display:flex;flex-direction:column;
+align-items:center;gap:32px;text-align:center;
+}
+.cta-title{
+font-family:var(--font-display);font-weight:600;font-size:4vw;
+line-height:1;letter-spacing:-.02em;color:var(--primary);margin-bottom:16px;
+}
+@media(max-width:768px){.cta-title{font-size:28px}}
+.cta-sub{
+font-family:var(--font-body);font-size:16px;line-height:1.65;
+color:rgba(240,230,220,.5);max-width:480px;margin-bottom:32px;
+}
+.btn{
+display:inline-flex;align-items:center;justify-content:center;
+font-family:var(--font-mono);font-size:10px;font-weight:500;
+letter-spacing:.12em;text-transform:uppercase;text-decoration:none;
+border:none;cursor:none;transition:transform .3s,box-shadow .3s,background .3s;
+padding:16px 32px;border-radius:9999px;
+}
+@media(max-width:768px){.btn{cursor:pointer}}
+.btn-primary{
+background:var(--accent);color:var(--on-accent);
+}
+.btn-primary:hover{
+transform:scale(1.05);box-shadow:0 0 40px rgba(212,160,136,.3);
+}
+.btn-ghost{
+background:transparent;color:var(--primary);
+border:1px solid rgba(240,230,220,.2);
+}
+.btn-ghost:hover{
+border-color:var(--primary);transform:scale(1.05);
+}
+.cta-buttons{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+footer{
+padding:64px 32px;text-align:center;position:relative;z-index:1;
+border-top:1px solid rgba(107,93,138,.15);
+}
+.footer-label{
+font-family:var(--font-mono);font-size:9px;font-weight:500;
+letter-spacing:.14em;text-transform:uppercase;color:var(--secondary);
+}
+.footer-year{
+font-family:var(--font-display);font-weight:700;font-size:24px;
+color:var(--primary);margin:8px 0 24px;
+}
+.footer-coords{
+font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;
+color:rgba(240,230,220,.3);
+}
+.mobile-nav{
+display:none;position:fixed;inset:0;z-index:99;
+background:rgba(10,10,26,.95);backdrop-filter:blur(20px);
+flex-direction:column;align-items:center;justify-content:center;gap:32px;
+opacity:0;pointer-events:none;transition:opacity .4s;
+}
+.mobile-nav.active{opacity:1;pointer-events:auto;display:flex}
+.mobile-nav a{
+font-family:var(--font-display);font-weight:600;font-size:24px;
+color:var(--primary);text-decoration:none;letter-spacing:-.01em;
+opacity:0;transform:translateY(20px);
+transition:color .3s;
+}
+.mobile-nav a:hover{color:var(--accent)}
+@media(max-width:768px){
+.radial-nav-trigger{display:none}
+.mobile-trigger{
+position:fixed;top:32px;right:32px;z-index:100;width:48px;height:48px;
+border-radius:50%;border:1px solid rgba(212,160,136,.3);
+background:rgba(10,10,26,.6);backdrop-filter:blur(12px);
+display:flex;align-items:center;justify-content:center;cursor:pointer;
+}
+.mobile-trigger svg{width:18px;height:18px;stroke:var(--accent);fill:none;stroke-width:1.5}
+.mobile-trigger .close-icon{display:none}
+.mobile-trigger.active .open-icon{display:none}
+.mobile-trigger.active .close-icon{display:block}
+}
+@media(min-width:769px){.mobile-trigger{display:none}}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="star-field" id="starField"></div>
+<div class="cursor-default" id="cursorDefault"></div>
+<div class="cursor-hover" id="cursorHover"></div>
+
+<button class="radial-nav-trigger" id="radialTrigger" data-magnetic aria-label="Open navigation">
+<svg class="open-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/><circle cx="5" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>
+<svg class="close-icon" viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+</button>
+<button class="mobile-trigger" id="mobileTrigger" aria-label="Open menu">
+<svg class="open-icon" viewBox="0 0 24 24"><line x1="4" y1="8" x2="20" y2="8"/><line x1="4" y1="16" x2="20" y2="16"/></svg>
+<svg class="close-icon" viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+</button>
+
+<nav class="radial-nav-overlay" id="radialNav">
+<div class="nav-bg"></div>
+<a class="radial-nav-item" href="#philosophy" data-nav-index="0"><span class="nav-dot"></span><span class="nav-label">Philosophy</span></a>
+<a class="radial-nav-item" href="#orbits" data-nav-index="1"><span class="nav-dot"></span><span class="nav-label">Paths</span></a>
+<a class="radial-nav-item" href="#descent" data-nav-index="2"><span class="nav-dot"></span><span class="nav-label">Descent</span></a>
+<a class="radial-nav-item" href="#details" data-nav-index="3"><span class="nav-dot"></span><span class="nav-label">Details</span></a>
+<a class="radial-nav-item" href="#ascent" data-nav-index="4"><span class="nav-dot"></span><span class="nav-label">Ascent</span></a>
+</nav>
+
+<nav class="mobile-nav" id="mobileNav">
+<a href="#philosophy">Philosophy</a>
+<a href="#orbits">Paths</a>
+<a href="#descent">Descent</a>
+<a href="#details">Details</a>
+<a href="#ascent">Ascent</a>
+</nav>
+
+<section class="webgl-hero" id="hero">
+<canvas class="webgl-canvas" id="heroCanvas"></canvas>
+<div class="hero-content">
+<h1 class="hero-title">OASIS</h1>
+<p class="hero-sub">Between the stars, stillness</p>
+</div>
+<div class="scroll-indicator">
+<span>Descend</span>
+<div class="scroll-line"></div>
+</div>
+</section>
+
+<section class="section philosophy-section" id="philosophy">
+<div class="section-inner">
+<p class="philosophy-text" id="philosophyText">
+You are not seeking the cosmos. The cosmos is seeking you.
+</p>
+</div>
+</section>
+
+<section class="section orbits-section" id="orbits">
+<div class="section-inner">
+<p class="section-label">Three Orbits of Practice</p>
+<div class="orbits-grid">
+<div class="orbit-card" data-reveal>
+<div class="orbit-icon">
+<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+<span class="orbiting-dot"></span>
+</div>
+<h2 class="orbit-card-title">Stellar Meditation</h2>
+<p class="orbit-card-level">First Orbit — Beginner</p>
+<p class="orbit-card-desc">Breath and body as your first constellation. Learn to trace the outline of sensation, finding fixed points in the vastness of internal space. Each breath is a star — distant, steady, guiding.</p>
+</div>
+<div class="orbit-card" data-reveal>
+<div class="orbit-icon">
+<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>
+<span class="orbiting-dot"></span>
+</div>
+<h2 class="orbit-card-title">Planetary Immersion</h2>
+<p class="orbit-card-level">Second Orbit — Intermediate</p>
+<p class="orbit-card-desc">Withdraw the senses inward, past the atmosphere of habit. Sound, sight, touch — all dissolve into the dark matter of deeper awareness. The body becomes a planet, self-contained, orbiting its own center.</p>
+</div>
+<div class="orbit-card" data-reveal>
+<div class="orbit-icon">
+<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-dasharray="2 4"/><circle cx="12" cy="12" r="3"/></svg>
+<span class="orbiting-dot"></span>
+</div>
+<h2 class="orbit-card-title">Cosmic Absorption</h2>
+<p class="orbit-card-level">Third Orbit — Advanced</p>
+<p class="orbit-card-desc">Formless unity where observer and observed collapse into a single point of light. No boundary between self and space. The meditator becomes the void — infinite, luminous, still.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="pinned-section" id="descent">
+<div class="pinned-sticky">
+<canvas class="pinned-webgl" id="pinnedCanvas"></canvas>
+<p class="pinned-text" id="pinnedText">Fall into the infinite.</p>
+</div>
+</section>
+
+<section class="section details-section" id="details">
+<div class="section-inner">
+<div class="details-grid">
+<div class="detail-item" data-reveal>
+<p class="detail-label">Location</p>
+<p class="detail-value">Atacama Desert, Chile</p>
+<p class="detail-sub">Darkest skies on Earth — 0.01 mag/arcsec² light pollution</p>
+</div>
+<div class="detail-item" data-reveal>
+<p class="detail-label">Duration</p>
+<p class="detail-value">11 / 18 / 25 Days</p>
+<p class="detail-sub">Choose your orbit — each cycle deepens the practice</p>
+</div>
+<div class="detail-item" data-reveal>
+<p class="detail-label">Capacity</p>
+<p class="detail-value">10 Stargazers</p>
+<p class="detail-sub">Intimate groups ensure maximum atmospheric depth</p>
+</div>
+<div class="detail-item" data-reveal>
+<p class="detail-label">Alignment</p>
+<p class="detail-value">Perseid Meteor Shower 2027</p>
+<p class="detail-sub">Peak activity August 12–13 — up to 100 meteors per hour</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section cta-section" id="ascent">
+<h2 class="cta-title" data-reveal>The next silence is calling.</h2>
+<p class="cta-sub" data-reveal>Begin your journey from the surface of the ordinary into the cosmic depth of sustained stillness.</p>
+<div class="cta-buttons" data-reveal>
+<a href="#" class="btn btn-primary" data-magnetic>Begin the Ascent</a>
+<a href="#" class="btn btn-ghost" data-magnetic>Request Transmission</a>
+</div>
+</section>
+
+<footer>
+<p class="footer-label">Oasis Celestial Retreat</p>
+<p class="footer-year">2027</p>
+<p class="footer-coords">24°30′S 69°15′W — Atacama, Chile</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+const prefersReduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isMobile=window.innerWidth<=768;
+const isTouchDevice='ontouchstart' in window||navigator.maxTouchPoints>0;
+
+if(prefersReduced)document.documentElement.classList.add('no-motion');
+
+const starField=document.getElementById('starField');
+const starCount=isMobile?80:200;
+for(let i=0;i<starCount;i++){
+const star=document.createElement('div');
+star.className='star';
+const size=Math.random()*2+1;
+star.style.cssText=`width:${size}px;height:${size}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation:twinkle ${3+Math.random()*5}s ease-in-out ${Math.random()*5}s infinite;opacity:${.1+Math.random()*.5}`;
+starField.appendChild(star);
+}
+
+const cursorDefault=document.getElementById('cursorDefault');
+const cursorHover=document.getElementById('cursorHover');
+if(!isMobile&&!isTouchDevice){
+let mx=0,my=0,cx=0,cy=0,chx=0,chy=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+const lerp=(a,b,t)=>a+(b-a)*t;
+function updateCursor(){
+cx=lerp(cx,mx,.15);cy=lerp(cy,my,.15);
+chx=lerp(chx,mx,.08);chy=lerp(chy,my,.08);
+cursorDefault.style.left=cx+'px';cursorDefault.style.top=cy+'px';
+cursorHover.style.left=chx+'px';cursorHover.style.top=chy+'px';
+requestAnimationFrame(updateCursor);
+}
+updateCursor();
+const interactives=document.querySelectorAll('a,button,[data-magnetic]');
+interactives.forEach(el=>{
+el.addEventListener('mouseenter',()=>{
+cursorDefault.style.opacity='0';cursorHover.style.opacity='1';
+});
+el.addEventListener('mouseleave',()=>{
+cursorDefault.style.opacity='1';cursorHover.style.opacity='0';
+});
+});
+document.querySelectorAll('[data-magnetic]').forEach(el=>{
+el.addEventListener('mousemove',e=>{
+const r=el.getBoundingClientRect();
+const ex=r.left+r.width/2;const ey=r.top+r.height/2;
+mx=ex+((e.clientX-ex)*.3);my=ey+((e.clientY-ey)*.3);
+});
+el.addEventListener('mouseleave',e=>{mx=e.clientX;my=e.clientY});
+});
+}
+
+const lenis=new Lenis({duration:1.4,easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)),smoothWheel:true});
+lenis.on('scroll',ScrollTrigger.update);
+gsap.ticker.add(time=>lenis.raf(time*1000));
+gsap.ticker.lagSmoothing(0);
+
+gsap.registerPlugin(ScrollTrigger);
+
+const navItems=document.querySelectorAll('.radial-nav-item');
+const radialTrigger=document.getElementById('radialTrigger');
+const radialNav=document.getElementById('radialNav');
+let navOpen=false;
+const navCenter={x:window.innerWidth-56,y:56};
+const navRadius=Math.min(window.innerWidth,window.innerHeight)*.22;
+
+function getNavPositions(){
+const cx=window.innerWidth-56;const cy=56;
+const r=Math.min(window.innerWidth,window.innerHeight)*.22;
+const positions=[];
+for(let i=0;i<5;i++){
+const angle=-90+(i*72);
+const rad=angle*Math.PI/180;
+positions.push({x:cx+Math.cos(rad)*r,y:cy+Math.sin(rad)*r});
+}
+return positions;
+}
+
+radialTrigger.addEventListener('click',()=>{
+navOpen=!navOpen;
+radialTrigger.classList.toggle('active',navOpen);
+radialNav.classList.toggle('active',navOpen);
+const positions=getNavPositions();
+if(navOpen){
+navItems.forEach((item,i)=>{
+gsap.to(item,{
+duration:.6,delay:i*.08,
+opacity:1,
+left:positions[i].x+'px',
+top:positions[i].y+'px',
+scale:1,
+ease:'back.out(1.7)'
+});
+});
+}else{
+navItems.forEach((item,i)=>{
+gsap.to(item,{
+duration:.3,delay:i*.04,
+opacity:0,
+left:positions[0].x+'px',
+top:positions[0].y+'px',
+scale:0,
+ease:'power2.in'
+});
+});
+}
+});
+navItems.forEach(item=>{
+item.addEventListener('click',e=>{
+e.preventDefault();
+const href=item.getAttribute('href');
+navOpen=false;
+radialTrigger.classList.remove('active');
+radialNav.classList.remove('active');
+navItems.forEach(n=>gsap.set(n,{opacity:0,scale:0}));
+setTimeout(()=>{
+const target=document.querySelector(href);
+if(target)target.scrollIntoView({behavior:'smooth'});
+},300);
+});
+});
+
+const mobileTrigger=document.getElementById('mobileTrigger');
+const mobileNav=document.getElementById('mobileNav');
+let mobileOpen=false;
+if(mobileTrigger){
+mobileTrigger.addEventListener('click',()=>{
+mobileOpen=!mobileOpen;
+mobileTrigger.classList.toggle('active',mobileOpen);
+mobileNav.classList.toggle('active',mobileOpen);
+const links=mobileNav.querySelectorAll('a');
+if(mobileOpen){
+gsap.fromTo(links,{opacity:0,y:20},{opacity:1,y:0,duration:.4,stagger:.08,delay:.2});
+}else{
+gsap.set(links,{opacity:0,y:20});
+}
+});
+mobileNav.querySelectorAll('a').forEach(link=>{
+link.addEventListener('click',e=>{
+e.preventDefault();
+mobileOpen=false;
+mobileTrigger.classList.remove('active');
+mobileNav.classList.remove('active');
+gsap.set(mobileNav.querySelectorAll('a'),{opacity:0,y:20});
+setTimeout(()=>{
+document.querySelector(link.getAttribute('href')).scrollIntoView({behavior:'smooth'});
+},300);
+});
+});
+}
+
+const philText=document.getElementById('philosophyText');
+const words=philText.textContent.trim().split(/\s+/);
+philText.innerHTML='';
+words.forEach(w=>{
+const span=document.createElement('span');
+span.className='word';
+span.textContent=w+'\u00A0';
+philText.appendChild(span);
+});
+if(!prefersReduced){
+gsap.to('.word',{
+scrollTrigger:{trigger:'.philosophy-section',start:'top 70%',end:'bottom 30%',toggleActions:'play none none reverse'},
+opacity:1,y:0,duration:.8,stagger:.06,ease:'power3.out'
+});
+}else{
+document.querySelectorAll('.word').forEach(w=>{w.style.opacity='1';w.style.transform='none'});
+}
+
+if(!prefersReduced){
+gsap.utils.toArray('[data-reveal]').forEach(el=>{
+gsap.from(el,{
+scrollTrigger:{trigger:el,start:'top 85%',toggleActions:'play none none reverse'},
+opacity:0,y:40,duration:.9,ease:'power3.out'
+});
+});
+}else{
+document.querySelectorAll('[data-reveal]').forEach(el=>{el.style.opacity='1'});
+}
+
+if(!prefersReduced){
+gsap.to('#pinnedText',{
+scrollTrigger:{trigger:'.pinned-section',start:'top top',end:'bottom bottom',scrub:1},
+opacity:1,scale:1,ease:'none'
+});
+}else{
+document.getElementById('pinnedText').style.opacity='1';
+document.getElementById('pinnedText').style.transform='none';
+}
+
+if(!isMobile&&!prefersReduced){
+const heroCanvas=document.getElementById('heroCanvas');
+const gl=heroCanvas.getContext('webgl',{alpha:true,antialias:true});
+const pinnedCanvas=document.getElementById('pinnedCanvas');
+const gl2=pinnedCanvas.getContext('webgl',{alpha:true,antialias:true});
+
+function resizeCanvas(canvas,glContext){
+const dpr=window.devicePixelRatio||1;
+canvas.width=canvas.clientWidth*dpr;
+canvas.height=canvas.clientHeight*dpr;
+glContext.viewport(0,0,canvas.width,canvas.height);
+}
+
+const vsSource=`
+attribute vec4 aPosition;
+attribute vec3 aNormal;
+uniform mat4 uModelView;
+uniform mat4 uProjection;
+uniform mat4 uNormalMatrix;
+varying vec3 vNormal;
+varying vec3 vPosition;
+void main(){
+vNormal=(uNormalMatrix*vec4(aNormal,0.0)).xyz;
+vPosition=(uModelView*aPosition).xyz;
+gl_Position=uProjection*uModelView*aPosition;
+}`;
+
+const fsSource=`
+precision mediump float;
+varying vec3 vNormal;
+varying vec3 vPosition;
+uniform vec3 uLightDir;
+uniform vec3 uColor;
+uniform vec3 uGlowColor;
+void main(){
+vec3 normal=normalize(vNormal);
+vec3 light=normalize(uLightDir);
+float diff=max(dot(normal,light),0.0);
+float rim=1.0-max(dot(normal,normalize(-vPosition)),0.0);
+rim=pow(rim,2.5);
+vec3 color=uColor*diff*.6+uGlowColor*rim*.8+uColor*.15;
+float glow=rim*.6;
+gl_FragColor=vec4(color+uGlowColor*glow,1.0);
+}`;
+
+const ringVsSource=`
+attribute vec4 aPosition;
+uniform mat4 uModelView;
+uniform mat4 uProjection;
+void main(){
+gl_Position=uProjection*uModelView*aPosition;
+}`;
+
+const ringFsSource=`
+precision mediump float;
+uniform vec4 uRingColor;
+void main(){
+gl_FragColor=uRingColor;
+}`;
+
+function compileShader(gl,type,source){
+const shader=gl.createShader(type);
+gl.shaderSource(shader,source);
+gl.compileShader(shader);
+if(!gl.getShaderParameter(shader,gl.COMPILE_STATUS)){
+console.error(gl.getShaderInfoLog(shader));
+gl.deleteShader(shader);
+return null;
+}
+return shader;
+}
+
+function createProgram(gl,vs,fs){
+const program=gl.createProgram();
+gl.attachShader(program,vs);
+gl.attachShader(program,fs);
+gl.linkProgram(program);
+if(!gl.getProgramParameter(program,gl.LINK_STATUS)){
+console.error(gl.getProgramInfoLog(program));
+return null;
+}
+return program;
+}
+
+function initSphere(glContext,canvasEl,useScrollProgress){
+const vs=compileShader(glContext,glContext.VERTEX_SHADER,vsSource);
+const fs=compileShader(glContext,glContext.FRAGMENT_SHADER,fsSource);
+const program=createProgram(glContext,vs,fs);
+
+const ringVs=compileShader(glContext,glContext.VERTEX_SHADER,ringVsSource);
+const ringFs=compileShader(glContext,glContext.FRAGMENT_SHADER,ringFsSource);
+const ringProgram=createProgram(glContext,ringVs,ringFs);
+
+const slices=48;const stacks=32;const radius=1;
+const positions=[];const normals=[];const indices=[];
+for(let lat=0;lat<=stacks;lat++){
+const theta=lat*Math.PI/stacks;
+const sinTheta=Math.sin(theta);
+const cosTheta=Math.cos(theta);
+for(let lon=0;lon<=slices;lon++){
+const phi=lon*2*Math.PI/slices;
+const sinPhi=Math.sin(phi);
+const cosPhi=Math.cos(phi);
+const x=cosPhi*sinTheta;
+const y=cosTheta;
+const z=sinPhi*sinTheta;
+positions.push(radius*x,radius*y,radius*z);
+normals.push(x,y,z);
+}
+}
+for(let lat=0;lat<stacks;lat++){
+for(let lon=0;lon<slices;lon++){
+const first=lat*(slices+1)+lon;
+const second=first+slices+1;
+indices.push(first,second,first+1);
+indices.push(second,second+1,first+1);
+}
+}
+
+const posBuf=glContext.createBuffer();
+glContext.bindBuffer(glContext.ARRAY_BUFFER,posBuf);
+glContext.bufferData(glContext.ARRAY_BUFFER,new Float32Array(positions),glContext.STATIC_DRAW);
+
+const normBuf=glContext.createBuffer();
+glContext.bindBuffer(glContext.ARRAY_BUFFER,normBuf);
+glContext.bufferData(glContext.ARRAY_BUFFER,new Float32Array(normals),glContext.STATIC_DRAW);
+
+const idxBuf=glContext.createBuffer();
+glContext.bindBuffer(glContext.ELEMENT_ARRAY_BUFFER,idxBuf);
+glContext.bufferData(glContext.ELEMENT_ARRAY_BUFFER,new Uint16Array(indices),glContext.STATIC_DRAW);
+
+const ringSegs=128;const ringRadius=1.8;const ringPositions=[];
+for(let i=0;i<=ringSegs;i++){
+const angle=i*2*Math.PI/ringSegs;
+ringPositions.push(Math.cos(angle)*ringRadius,0,Math.sin(angle)*ringRadius);
+}
+const ringPosBuf=glContext.createBuffer();
+glContext.bindBuffer(glContext.ARRAY_BUFFER,ringPosBuf);
+glContext.bufferData(glContext.ARRAY_BUFFER,new Float32Array(ringPositions),glContext.STATIC_DRAW);
+
+const aPos=glContext.getAttribLocation(program,'aPosition');
+const aNorm=glContext.getAttribLocation(program,'aNormal');
+const uModelView=glContext.getUniformLocation(program,'uModelView');
+const uProjection=glContext.getUniformLocation(program,'uProjection');
+const uNormalMatrix=glContext.getUniformLocation(program,'uNormalMatrix');
+const uLightDir=glContext.getUniformLocation(program,'uLightDir');
+const uColor=glContext.getUniformLocation(program,'uColor');
+const uGlowColor=glContext.getUniformLocation(program,'uGlowColor');
+
+const ringAPos=glContext.getAttribLocation(ringProgram,'aPosition');
+const ringUModelView=glContext.getUniformLocation(ringProgram,'uModelView');
+const ringUProjection=glContext.getUniformLocation(ringProgram,'uProjection');
+const ringUColor=glContext.getUniformLocation(ringProgram,'uRingColor');
+
+glContext.enable(glContext.DEPTH_TEST);
+glContext.enable(glContext.BLEND);
+glContext.blendFunc(glContext.SRC_ALPHA,glContext.ONE_MINUS_SRC_ALPHA);
+
+const projMat=new Float32Array(16);
+const fov=45*Math.PI/180;
+
+function perspective(out,fov,aspect,near,far){
+const f=1.0/Math.tan(fov/2);
+out[0]=f/aspect;out[1]=0;out[2]=0;out[3]=0;
+out[4]=0;out[5]=f;out[6]=0;out[7]=0;
+out[8]=0;out[9]=0;out[10]=(far+near)/(near-far);out[11]=-1;
+out[12]=0;out[13]=0;out[14]=(2*far*near)/(near-far);out[15]=0;
+return out;
+}
+
+function multiply(a,b){
+const out=new Float32Array(16);
+for(let i=0;i<4;i++){
+for(let j=0;j<4;j++){
+out[j*4+i]=0;
+for(let k=0;k<4;k++){
+out[j*4+i]+=a[k*4+i]*b[j*4+k];
+}
+}
+}
+return out;
+}
+
+function identity(){
+const m=new Float32Array(16);
+m[0]=1;m[5]=1;m[10]=1;m[15]=1;return m;
+}
+
+function rotateX(m,angle){
+const c=Math.cos(angle);const s=Math.sin(angle);
+const r=identity();r[5]=c;r[6]=s;r[9]=-s;r[10]=c;
+return multiply(m,r);
+}
+function rotateY(m,angle){
+const c=Math.cos(angle);const s=Math.sin(angle);
+const r=identity();r[0]=c;r[2]=-s;r[8]=s;r[10]=c;
+return multiply(m,r);
+}
+function rotateZ(m,angle){
+const c=Math.cos(angle);const s=Math.sin(angle);
+const r=identity();r[0]=c;r[1]=s;r[4]=-s;r[5]=c;
+return multiply(m,r);
+}
+function translate(m,x,y,z){
+const t=identity();t[12]=x;t[13]=y;t[14]=z;
+return multiply(m,t);
+}
+
+function invertMat4(m){
+const inv=new Float32Array(16);
+inv[0]=m[5]*m[10]*m[15]-m[5]*m[11]*m[14]-m[9]*m[6]*m[15]+m[9]*m[7]*m[14]+m[13]*m[6]*m[11]-m[13]*m[7]*m[10];
+inv[4]=-m[4]*m[10]*m[15]+m[4]*m[11]*m[14]+m[8]*m[6]*m[15]-m[8]*m[7]*m[14]-m[12]*m[6]*m[11]+m[12]*m[7]*m[10];
+inv[8]=m[4]*m[9]*m[15]-m[4]*m[11]*m[13]-m[8]*m[5]*m[15]+m[8]*m[7]*m[13]+m[12]*m[5]*m[11]-m[12]*m[7]*m[9];
+inv[12]=-m[4]*m[9]*m[14]+m[4]*m[10]*m[13]+m[8]*m[5]*m[14]-m[8]*m[6]*m[13]-m[12]*m[5]*m[10]+m[12]*m[6]*m[9];
+inv[1]=-m[1]*m[10]*m[15]+m[1]*m[11]*m[14]+m[9]*m[2]*m[15]-m[9]*m[3]*m[14]-m[13]*m[2]*m[11]+m[13]*m[3]*m[10];
+inv[5]=m[0]*m[10]*m[15]-m[0]*m[11]*m[14]-m[8]*m[2]*m[15]+m[8]*m[3]*m[14]+m[12]*m[2]*m[11]-m[12]*m[3]*m[10];
+inv[9]=-m[0]*m[9]*m[15]+m[0]*m[11]*m[13]+m[8]*m[1]*m[15]-m[8]*m[3]*m[13]-m[12]*m[1]*m[11]+m[12]*m[3]*m[9];
+inv[13]=m[0]*m[9]*m[14]-m[0]*m[10]*m[13]-m[8]*m[1]*m[14]+m[8]*m[2]*m[13]+m[12]*m[1]*m[10]-m[12]*m[2]*m[9];
+inv[2]=m[1]*m[6]*m[15]-m[1]*m[7]*m[14]-m[5]*m[2]*m[15]+m[5]*m[3]*m[14]+m[13]*m[2]*m[7]-m[13]*m[3]*m[6];
+inv[6]=-m[0]*m[6]*m[15]+m[0]*m[7]*m[14]+m[4]*m[2]*m[15]-m[4]*m[3]*m[14]-m[12]*m[2]*m[7]+m[12]*m[3]*m[6];
+inv[10]=m[0]*m[5]*m[15]-m[0]*m[7]*m[13]-m[4]*m[1]*m[15]+m[4]*m[3]*m[13]+m[12]*m[1]*m[7]-m[12]*m[3]*m[5];
+inv[14]=-m[0]*m[5]*m[14]+m[0]*m[6]*m[13]+m[4]*m[1]*m[14]-m[4]*m[2]*m[13]-m[12]*m[1]*m[6]+m[12]*m[2]*m[5];
+inv[3]=-m[1]*m[6]*m[11]+m[1]*m[7]*m[10]+m[5]*m[2]*m[11]-m[5]*m[3]*m[10]-m[9]*m[2]*m[7]+m[9]*m[3]*m[6];
+inv[7]=m[0]*m[6]*m[11]-m[0]*m[7]*m[10]-m[4]*m[2]*m[11]+m[4]*m[3]*m[10]+m[8]*m[2]*m[7]-m[8]*m[3]*m[6];
+inv[11]=-m[0]*m[5]*m[11]+m[0]*m[7]*m[9]+m[4]*m[1]*m[11]-m[4]*m[3]*m[9]-m[8]*m[1]*m[7]+m[8]*m[3]*m[5];
+inv[15]=m[0]*m[5]*m[10]-m[0]*m[6]*m[9]-m[4]*m[1]*m[10]+m[4]*m[2]*m[9]+m[8]*m[1]*m[6]-m[8]*m[2]*m[5];
+let det=m[0]*inv[0]+m[1]*inv[4]+m[2]*inv[8]+m[3]*inv[12];
+if(!det)return identity();
+det=1.0/det;
+const result=new Float32Array(16);
+for(let i=0;i<16;i++)result[i]=inv[i]*det;
+return result;
+}
+
+function transpose(m){
+const t=new Float32Array(16);
+for(let i=0;i<4;i++)for(let j=0;j<4;j++)t[j*4+i]=m[i*4+j];
+return t;
+}
+
+let mouseInfluenceX=0;let mouseInfluenceY=0;
+document.addEventListener('mousemove',e=>{
+mouseInfluenceX=(e.clientX/window.innerWidth-.5)*.4;
+mouseInfluenceY=(e.clientY/window.innerHeight-.5)*.4;
+});
+
+let scrollProgress=0;
+if(useScrollProgress){
+ScrollTrigger.create({
+trigger:'.pinned-section',
+start:'top top',
+end:'bottom bottom',
+onUpdate:self=>{scrollProgress=self.progress}
+});
+}
+
+let camZ=5;
+return function render(time){
+const dpr=window.devicePixelRatio||1;
+if(canvasEl.width!==canvasEl.clientWidth*dpr||canvasEl.height!==canvasEl.clientHeight*dpr){
+resizeCanvas(canvasEl,glContext);
+}
+const aspect=canvasEl.clientWidth/canvasEl.clientHeight;
+perspective(projMat,fov,aspect,.1,100);
+glContext.clearColor(0,0,0,0);
+glContext.clear(glContext.COLOR_BUFFER_BIT|glContext.DEPTH_BUFFER_BIT);
+
+if(useScrollProgress){
+camZ=5-scrollProgress*3.5;
+}else{
+camZ=5;
+}
+
+let mv=identity();
+mv=translate(mv,0,0,-camZ);
+mv=rotateX(mv,mouseInfluenceY*.5);
+mv=rotateY(mv,time*.0002+mouseInfluenceX*.8);
+
+const normalMat=transpose(invertMat4(mv));
+
+glContext.useProgram(program);
+glContext.uniformMatrix4fv(uProjection,false,projMat);
+glContext.uniformMatrix4fv(uModelView,false,mv);
+glContext.uniformMatrix4fv(uNormalMatrix,false,normalMat);
+glContext.uniform3f(uLightDir,1,.8,.6);
+glContext.uniform3f(uColor,0.83,0.63,0.53);
+glContext.uniform3f(uGlowColor,0.94,0.76,0.66);
+
+glContext.bindBuffer(glContext.ARRAY_BUFFER,posBuf);
+glContext.enableVertexAttribArray(aPos);
+glContext.vertexAttribPointer(aPos,3,glContext.FLOAT,false,0,0);
+
+glContext.bindBuffer(glContext.ARRAY_BUFFER,normBuf);
+glContext.enableVertexAttribArray(aNorm);
+glContext.vertexAttribPointer(aNorm,3,glContext.FLOAT,false,0,0);
+
+glContext.bindBuffer(glContext.ELEMENT_ARRAY_BUFFER,idxBuf);
+glContext.drawElements(glContext.TRIANGLES,indices.length,glContext.UNSIGNED_SHORT,0);
+
+let ringMv=identity();
+ringMv=translate(ringMv,0,0,-camZ);
+ringMv=rotateX(ringMv,1.2+mouseInfluenceY*.3);
+ringMv=rotateZ(ringMv,time*.00015);
+ringMv=rotateY(ringMv,mouseInfluenceX*.5);
+
+glContext.useProgram(ringProgram);
+glContext.uniformMatrix4fv(ringUProjection,false,projMat);
+glContext.uniformMatrix4fv(ringUModelView,false,ringMv);
+glContext.uniform4f(ringUColor,0.83,0.63,0.53,0.3);
+
+glContext.bindBuffer(glContext.ARRAY_BUFFER,ringPosBuf);
+glContext.enableVertexAttribArray(ringAPos);
+glContext.vertexAttribPointer(ringAPos,3,glContext.FLOAT,false,0,0);
+
+glContext.drawArrays(glContext.LINE_STRIP,0,ringSegs+1);
+};
+}
+
+if(gl){
+resizeCanvas(heroCanvas,gl);
+const renderHero=initSphere(gl,heroCanvas,false);
+const renderPinned=gl2?initSphere(gl2,pinnedCanvas,true):null;
+
+function animate(time){
+renderHero(time);
+if(renderPinned)renderPinned(time);
+requestAnimationFrame(animate);
+}
+requestAnimationFrame(animate);
+}
+}else{
+const heroCanvas=document.getElementById('heroCanvas');
+heroCanvas.style.display='none';
+const hero=document.getElementById('hero');
+const sphere=document.createElement('div');
+sphere.className='css-sphere-fallback';
+hero.appendChild(sphere);
+const ring=document.createElement('div');
+ring.className='css-ring-fallback';
+hero.appendChild(ring);
+
+const pinnedCanvas=document.getElementById('pinnedCanvas');
+pinnedCanvas.style.display='none';
+const pinnedSticky=document.querySelector('.pinned-sticky');
+const sphere2=document.createElement('div');
+sphere2.className='css-sphere-fallback';
+sphere2.style.width='160px';sphere2.style.height='160px';
+pinnedSticky.insertBefore(sphere2,pinnedSticky.firstChild);
+const ring2=document.createElement('div');
+ring2.className='css-ring-fallback';
+ring2.style.width='240px';ring2.style.height='240px';
+pinnedSticky.insertBefore(ring2,pinnedSticky.firstChild);
+}
+
+window.addEventListener('resize',()=>{
+if(navOpen){
+const positions=getNavPositions();
+navItems.forEach((item,i)=>{
+gsap.to(item,{left:positions[i].x+'px',top:positions[i].y+'px',duration:.3});
+});
+}
+});
+
+const heroTitle=document.querySelector('.hero-title');
+if(!prefersReduced){
+gsap.from(heroTitle,{duration:1.4,y:60,opacity:0,ease:'power4.out',delay:.3});
+gsap.from('.hero-sub',{duration:1,y:20,opacity:0,ease:'power3.out',delay:.8});
+gsap.from('.scroll-indicator',{duration:.8,opacity:0,delay:1.5});
+}
+
+})();
+</script>
+</body>
+</html>

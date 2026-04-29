@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oasis &mdash; Luxury Meditation Retreat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;font-weight:300;color:#2c2c2c;background:#fafaf8;line-height:1.6}
+
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:2rem 4rem;display:flex;justify-content:space-between;align-items:center;mix-blend-mode:difference}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:#fff;letter-spacing:4px;text-transform:uppercase}
+.nav-links{display:flex;gap:3rem;list-style:none}
+.nav-links a{color:#fff;text-decoration:none;font-size:0.75rem;letter-spacing:3px;text-transform:uppercase;font-weight:400;transition:opacity .3s}
+.nav-links a:hover{opacity:.5}
+
+.hero{height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 40%,#0f3460 100%)}
+.hero::before{content:'';position:absolute;inset:0;background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><radialGradient id="g"><stop offset="0%" stop-color="%23ffffff10"/><stop offset="100%" stop-color="%23ffffff00"/></radialGradient></defs><circle cx="300" cy="200" r="400" fill="url(%23g)"/><circle cx="900" cy="500" r="350" fill="url(%23g)"/><circle cx="600" cy="700" r="300" fill="url(%23g)"/></svg>') center/cover;opacity:.6;animation:drift 20s ease-in-out infinite alternate}
+@keyframes drift{0%{transform:scale(1) translate(0,0)}100%{transform:scale(1.08) translate(-2%,-1%)}}
+.hero-content{position:relative;z-index:1;text-align:center;max-width:800px;padding:2rem}
+.hero-eyebrow{font-size:0.65rem;letter-spacing:8px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:2rem;font-weight:400}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(3.5rem,8vw,7rem);font-weight:300;color:#fff;line-height:1;letter-spacing:2px;margin-bottom:1.5rem}
+.hero h1 em{font-style:italic;font-weight:300}
+.hero p{color:rgba(255,255,255,.6);font-size:1.05rem;max-width:500px;margin:0 auto 3rem;font-weight:300;line-height:1.8}
+.hero-cta{display:inline-block;padding:1rem 3rem;border:1px solid rgba(255,255,255,.25);color:#fff;text-decoration:none;font-size:0.7rem;letter-spacing:5px;text-transform:uppercase;transition:all .4s;font-weight:400}
+.hero-cta:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.5)}
+.scroll-indicator{position:absolute;bottom:3rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;color:rgba(255,255,255,.3);font-size:0.6rem;letter-spacing:3px;text-transform:uppercase}
+.scroll-line{width:1px;height:3rem;background:rgba(255,255,255,.2);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.2}50%{opacity:1}}
+
+section{padding:8rem 4rem}
+.intro{text-align:center;max-width:700px;margin:0 auto}
+.intro-tag{font-size:0.65rem;letter-spacing:6px;text-transform:uppercase;color:#999;margin-bottom:2rem}
+.intro h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,5vw,3.5rem);font-weight:400;color:#1a1a2e;line-height:1.2;margin-bottom:2rem}
+.intro p{color:#666;font-size:1rem;line-height:1.9;font-weight:300}
+
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:6rem}
+.card{position:relative;overflow:hidden}
+.card-image{height:380px;background:#e8e6e1;position:relative;overflow:hidden}
+.card-image .img{width:100%;height:100%;object-fit:cover;transition:transform .8s}
+.card:hover .img{transform:scale(1.05)}
+.card-image.img1{background:linear-gradient(135deg,#d4c5b2 0%,#c3ae95 50%,#b8a088 100%)}
+.card-image.img2{background:linear-gradient(135deg,#a8c0b8 0%,#8fada2 50%,#7a9d90 100%)}
+.card-image.img3{background:linear-gradient(135deg,#b8c4d8 0%,#a0aec8 50%,#8a9bb5 100%)}
+.card-content{padding:2rem 0}
+.card-content h3{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:500;color:#1a1a2e;margin-bottom:.5rem}
+.card-content p{color:#999;font-size:0.85rem;line-height:1.7;font-weight:300}
+.card-content .link{display:inline-block;margin-top:1rem;font-size:0.65rem;letter-spacing:4px;text-transform:uppercase;color:#1a1a2e;text-decoration:none;border-bottom:1px solid #1a1a2e;padding-bottom:3px;transition:all .3s}
+.card-content .link:hover{opacity:.5}
+
+.quote-section{background:#1a1a2e;color:#fff;text-align:center;padding:10rem 4rem;position:relative;overflow:hidden}
+.quote-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(255,255,255,.03) 0%,transparent 70%)}
+.quote-section blockquote{position:relative;z-index:1;font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-style:italic;font-weight:300;max-width:800px;margin:0 auto;line-height:1.4;color:rgba(255,255,255,.85)}
+.quote-section cite{display:block;margin-top:2rem;font-family:'Inter',sans-serif;font-style:normal;font-size:0.7rem;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.4)}
+
+.pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:6rem}
+.price-card{border:1px solid #e5e5e0;padding:3rem 2rem;text-align:center;transition:all .4s;background:#fff}
+.price-card:hover{transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.06)}
+.price-card.featured{border-color:#1a1a2e;background:#1a1a2e;color:#fff}
+.price-card h4{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:500;margin-bottom:.5rem}
+.price-card .duration{font-size:0.65rem;letter-spacing:4px;text-transform:uppercase;color:#999;margin-bottom:1.5rem}
+.price-card.featured .duration{color:rgba(255,255,255,.5)}
+.price-card .price{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;margin-bottom:2rem}
+.price-card .price span{font-size:1rem;vertical-align:super}
+.price-card .features{list-style:none;margin-bottom:2.5rem}
+.price-card .features li{padding:.5rem 0;font-size:0.85rem;color:#999;font-weight:300}
+.price-card.featured .features li{color:rgba(255,255,255,.6)}
+.price-card .btn{display:inline-block;padding:.85rem 2.5rem;text-decoration:none;font-size:0.65rem;letter-spacing:4px;text-transform:uppercase;transition:all .3s}
+.price-card:not(.featured) .btn{border:1px solid #1a1a2e;color:#1a1a2e}
+.price-card:not(.featured) .btn:hover{background:#1a1a2e;color:#fff}
+.price-card.featured .btn{border:1px solid rgba(255,255,255,.3);color:#fff}
+.price-card.featured .btn:hover{background:rgba(255,255,255,.1)}
+
+.footer{text-align:center;padding:4rem;border-top:1px solid #eee}
+.footer p{font-size:0.65rem;letter-spacing:3px;text-transform:uppercase;color:#bbb}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-logo">Oasis</div>
+  <ul class="nav-links">
+    <li><a href="#retreats">Retreats</a></li>
+    <li><a href="#philosophy">Philosophy</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">Sedona, Arizona</div>
+    <h1>Find your <em>stillness</em></h1>
+    <p>A private sanctuary where ancient meditation traditions meet uncompromising luxury. Disconnect from the noise. Reconnect with yourself.</p>
+    <a href="#pricing" class="hero-cta">Begin Your Journey</a>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</header>
+
+<section id="retreats" class="intro">
+  <div class="intro-tag">Transformative Experiences</div>
+  <h2>Curated retreats designed for profound stillness</h2>
+  <p>Each program is meticulously crafted by world-renowned meditation masters, held in our bespoke desert sanctuary where every detail serves your inner journey.</p>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-image img1"></div>
+      <div class="card-content">
+        <h3>Silent Dawn</h3>
+        <p>A 5-day immersive silence retreat. Early morning meditation, private yoga sessions, and guided introspection amidst the red rocks.</p>
+        <a href="#" class="link">Discover More &rarr;</a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-image img2"></div>
+      <div class="card-content">
+        <h3>Earthen Flow</h3>
+        <p>Ground yourself through mindful movement, sound healing, and nature immersion. A 7-day journey back to the body.</p>
+        <a href="#" class="link">Discover More &rarr;</a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-image img3"></div>
+      <div class="card-content">
+        <h3>The Infinite</h3>
+        <p>Our most advanced program. 10 days of deep meditative practice, one-on-one guidance, and total digital detox.</p>
+        <a href="#" class="link">Discover More &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="philosophy" class="quote-section">
+  <blockquote>
+    &ldquo;The quieter you become, the more you can hear. At Oasis, we don&rsquo;t teach meditation &mdash; we create the space for it to find you.&rdquo;
+  </blockquote>
+  <cite>&mdash; Elena Voss, Founder</cite>
+</section>
+
+<section id="pricing" class="intro">
+  <div class="intro-tag">Investment</div>
+  <h2>Choose your path to stillness</h2>
+  <div class="pricing">
+    <div class="price-card">
+      <h4>Essential</h4>
+      <div class="duration">3 DAYS</div>
+      <div class="price"><span>$</span>2,400</div>
+      <ul class="features">
+        <li>Private suite</li>
+        <li>Daily meditation</li>
+        <li>Organic meals</li>
+        <li>1 wellness treatment</li>
+      </ul>
+      <a href="#" class="btn">Reserve</a>
+    </div>
+    <div class="price-card featured">
+      <h4>Signature</h4>
+      <div class="duration">5 DAYS</div>
+      <div class="price"><span>$</span>4,800</div>
+      <ul class="features">
+        <li>Panoramic suite</li>
+        <li>Private guidance</li>
+        <li>All meals &amp; treatments</li>
+        <li>Sunrise sound bath</li>
+      </ul>
+      <a href="#" class="btn">Reserve</a>
+    </div>
+    <div class="price-card">
+      <h4>Transcendence</h4>
+      <div class="duration">7 DAYS</div>
+      <div class="price"><span>$</span>7,200</div>
+      <ul class="features">
+        <li>Villa accommodation</li>
+        <li>1:1 master sessions</li>
+        <li>Full spa access</li>
+        <li>Private chef</li>
+      </ul>
+      <a href="#" class="btn">Reserve</a>
+    </div>
+  </div>
+</section>
+
+<footer id="contact" class="footer">
+  <p>&copy; 2026 Oasis Retreat. All rights reserved.</p>
+</footer>
+</body>
+</html>

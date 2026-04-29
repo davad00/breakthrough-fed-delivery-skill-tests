@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oasis — The Cinematic</title>
+<meta name="description" content="A cinematic meditation retreat. Scroll through the ember-lit journey inward.">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@300;400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { background: #0F0D0B; overflow-x: hidden; }
+body { background: #0F0D0B; color: #FDF6EC; font-family: 'Inter', sans-serif; cursor: none; overflow-x: hidden; }
+
+.cursor { position: fixed; pointer-events: none; z-index: 1000; width: 8px; height: 8px; border-radius: 50%; background: #E67A3A; transform: translate(-50%, -50%); mix-blend-mode: difference; }
+
+.nav { position: fixed; top: 0; left: 0; width: 100%; padding: 32px 48px; display: flex; justify-content: space-between; align-items: center; z-index: 100; mix-blend-mode: difference; }
+.nav-logo { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #FDF6EC; }
+.nav-index { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #8A7D6B; }
+.nav-menu-btn { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #FDF6EC; background: none; border: none; cursor: pointer; }
+
+.clip-hero { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+.clip-hero-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at 30% 50%, #2A1810, #0F0D0B); }
+.clip-hero-morph { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at 70% 40%, rgba(230, 122, 58, 0.15), transparent 60%); clip-path: circle(40% at 50% 50%); }
+.clip-hero-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0 48px; z-index: 10; }
+.clip-hero-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #8A7D6B; margin-bottom: 24px; }
+.clip-hero-title { font-family: 'Space Grotesk', sans-serif; font-size: 15vw; font-weight: 700; line-height: 0.8; letter-spacing: -0.06em; color: #FDF6EC; margin-bottom: 24px; }
+.clip-hero-title .accent { color: #E67A3A; }
+.clip-hero-sub { font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.65; color: #8A7D6B; max-width: 400px; margin-bottom: 32px; }
+.clip-hero-cta { display: flex; gap: 16px; }
+.clip-hero-cta a { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; padding: 16px 32px; border-radius: 9999px; transition: all 0.4s; }
+.btn-primary { background: #E67A3A; color: #0F0D0B; }
+.btn-primary:hover { background: #F08A4A; }
+.btn-ghost { border: 1px solid #FDF6EC; color: #FDF6EC; }
+.btn-ghost:hover { background: #FDF6EC; color: #0F0D0B; }
+
+.scroll-sections { position: relative; z-index: 10; }
+.scene { min-height: 100vh; display: flex; align-items: center; padding: 0 48px; }
+.scene-inner { max-width: 1400px; width: 100%; margin: 0 auto; }
+
+.scene-cinematic { min-height: 120vh; display: flex; align-items: center; justify-content: center; position: relative; }
+.scene-cinematic-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; }
+.scene-cinematic-bg img { width: 100%; height: 100%; object-fit: cover; opacity: 0.3; filter: grayscale(1); }
+.scene-cinematic-content { position: relative; z-index: 2; text-align: center; max-width: 700px; padding: 0 48px; }
+.scene-cinematic-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #8A7D6B; margin-bottom: 16px; }
+.scene-cinematic-title { font-family: 'Space Grotesk', sans-serif; font-size: 6vw; font-weight: 600; line-height: 0.95; letter-spacing: -0.03em; color: #FDF6EC; margin-bottom: 24px; }
+.scene-cinematic-text { font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.65; color: #8A7D6B; }
+
+.practice-strip { display: flex; gap: 24px; overflow-x: auto; padding: 48px 0; scroll-snap-type: x mandatory; }
+.practice-card { flex: 0 0 300px; padding: 32px; background: rgba(253, 246, 236, 0.03); border: 1px solid rgba(253, 246, 236, 0.06); scroll-snap-align: start; }
+.practice-card-num { font-family: 'Space Grotesk', sans-serif; font-size: 3vw; font-weight: 600; color: #E67A3A; margin-bottom: 16px; }
+.practice-card-title { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 500; color: #FDF6EC; margin-bottom: 8px; }
+.practice-card-text { font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; color: #8A7D6B; }
+
+.final-frame { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 48px; position: relative; }
+.final-frame-title { font-family: 'Space Grotesk', sans-serif; font-size: 8vw; font-weight: 600; line-height: 0.9; color: #FDF6EC; margin-bottom: 24px; }
+.final-frame-title .accent { color: #E67A3A; }
+
+.pin-spacer {
+  background: #0F0D0B;
+}
+
+.footer { padding: 32px 48px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(253, 246, 236, 0.06); background: #0F0D0B; position: relative; z-index: 10; }
+.footer-text { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #8A7D6B; }
+
+@media (max-width: 768px) {
+  .nav { padding: 24px; }
+  .clip-hero-content { padding: 0 24px; }
+  .clip-hero-title { font-size: 22vw; }
+  .clip-hero-sub { max-width: 100%; }
+  .scene { padding: 0 24px; }
+  .scene-cinematic-title { font-size: 12vw; }
+  .practice-card { flex: 0 0 250px; }
+  .final-frame-title { font-size: 14vw; }
+  .final-frame { padding: 0 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+
+<nav class="nav">
+  <div class="nav-logo">Oasis</div>
+  <div class="nav-index" id="sceneIndex">00 / 04</div>
+  <button class="nav-menu-btn" id="menuBtn">Frames</button>
+</nav>
+
+<div class="clip-hero" id="clipHero">
+  <div class="clip-hero-bg"></div>
+  <div class="clip-hero-morph" id="clipMorph"></div>
+  <div class="clip-hero-content">
+    <div class="clip-hero-label">/// A Cinematic Retreat</div>
+    <h1 class="clip-hero-title">The<br><span class="accent">Ember</span></h1>
+    <p class="clip-hero-sub">Not a retreat from the world. A retreat into the parts of yourself you have been avoiding. The fire is already burning. You only need to sit with it.</p>
+    <div class="clip-hero-cta">
+      <a href="#" class="btn-primary" data-magnetic>Step Into the Fire</a>
+      <a href="#" class="btn-ghost" data-magnetic>Watch the Trailer</a>
+    </div>
+  </div>
+</div>
+
+<div class="scroll-sections" id="scrollSections">
+
+  <div class="scene" id="scene01">
+    <div class="scene-inner" style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;">
+      <div>
+        <div class="clip-hero-label" style="margin-bottom:16px;">/// The Concept</div>
+        <h2 class="scene-cinematic-title" style="font-size:4vw;text-align:left;">Stillness as<br>spectacle</h2>
+      </div>
+      <div>
+        <p class="scene-cinematic-text">We have built a retreat where the interior landscape is as cinematic as the exterior. Three days in a remote valley. No phones. No schedules. Just you, the fire, and the gradual return to your own frequency.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene" id="scene02" style="flex-direction:column;justify-content:center;align-items:flex-start;">
+    <div class="clip-hero-label" style="margin-bottom:32px;">/// The Practices</div>
+    <div class="practice-strip" id="practiceStrip">
+      <div class="practice-card">
+        <div class="practice-card-num">01</div>
+        <div class="practice-card-title">Fire Gazing</div>
+        <div class="practice-card-text">Nightly ceremony around a single flame. No words. No instruction. Just watching the ember rearrange itself until your thoughts do the same.</div>
+      </div>
+      <div class="practice-card">
+        <div class="practice-card-num">02</div>
+        <div class="practice-card-title">The Dark Room</div>
+        <div class="practice-card-text">Twenty-four hours of absolute sensory deprivation. No light. No sound. No reference. The self stripped of all its crutches.</div>
+      </div>
+      <div class="practice-card">
+        <div class="practice-card-num">03</div>
+        <div class="practice-card-title">Body Scan</div>
+        <div class="practice-card-text">A guided two-hour journey through every cell of the body. Not relaxation. Excavation.</div>
+      </div>
+      <div class="practice-card">
+        <div class="practice-card-num">04</div>
+        <div class="practice-card-title">Silent Walk</div>
+        <div class="practice-card-text">A barefoot dawn walk through the valley. No destination. No pace. The body finds its own rhythm.</div>
+      </div>
+      <div class="practice-card">
+        <div class="practice-card-num">05</div>
+        <div class="practice-card-title">Integration</div>
+        <div class="practice-card-text">The final morning. A one-on-one session to translate the experience back into the language of daily life.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-frame" id="finalFrame">
+    <div class="clip-hero-label">/// The Invitation</div>
+    <h2 class="final-frame-title">Sit with the<br><span class="accent">fire</span></h2>
+    <p class="scene-cinematic-text" style="max-width:500px;margin-bottom:32px;">The retreat runs monthly. Twelve guests maximum. No exceptions.</p>
+    <a href="#" class="btn-primary" data-magnetic>Reserve Your Frame</a>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-text">Oasis Retreats &mdash; Est. 2012</div>
+  <div class="footer-text">The fire is waiting</div>
+</footer>
+
+<script>
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+if (!prefersReducedMotion && !isTouch) {
+  gsap.registerPlugin(ScrollTrigger);
+
+  // --- Cursor ---
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', (e) => {
+    gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.6, ease: 'power3.out' });
+  });
+  document.querySelectorAll('[data-magnetic], .practice-card, .clip-hero-title, .btn-primary, .btn-ghost').forEach(el => {
+    el.addEventListener('mouseenter', () => gsap.to(cursor, { width: 64, height: 64, background: '#FDF6EC', duration: 0.3 }));
+    el.addEventListener('mouseleave', () => gsap.to(cursor, { width: 8, height: 8, background: '#E67A3A', duration: 0.3 }));
+  });
+
+  // --- Clip-path morph on scroll ---
+  const clipMorph = document.getElementById('clipMorph');
+  const morphTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: '#clipHero',
+      start: 'top top',
+      end: 'bottom top',
+      scrub: 1.5
+    }
+  });
+  morphTl.to(clipMorph, {
+    clipPath: 'circle(100% at 50% 50%)',
+    ease: 'power2.inOut',
+    duration: 1
+  });
+
+  // --- Hero content reveals ---
+  const heroTl = gsap.timeline({ defaults: { ease: 'power4.out', duration: 1.2 } });
+  heroTl.from('.clip-hero-label', { y: 40, opacity: 0, duration: 0.8 })
+        .from('.clip-hero-title', { y: 120, opacity: 0 }, '-=0.4')
+        .from('.clip-hero-sub', { y: 80, opacity: 0 }, '-=0.6')
+        .from('.clip-hero-cta a', { y: 40, opacity: 0, stagger: 0.15 }, '-=0.4');
+
+  // --- Scene reveals ---
+  gsap.from('#scene01', { scrollTrigger: { trigger: '#scene01', start: 'top 80%' }, y: 100, opacity: 0, duration: 1.2, ease: 'power4.out' });
+  gsap.from('#scene02', { scrollTrigger: { trigger: '#scene02', start: 'top 80%' }, y: 80, opacity: 0, duration: 1.2, ease: 'power4.out' });
+
+  // --- Practice cards stagger ---
+  gsap.from('.practice-card', {
+    scrollTrigger: { trigger: '#practiceStrip', start: 'top 75%' },
+    x: -60,
+    opacity: 0,
+    stagger: 0.15,
+    duration: 1,
+    ease: 'power4.out'
+  });
+
+  // --- Practice strip horizontal scroll ---
+  gsap.to('.practice-strip', {
+    scrollTrigger: {
+      trigger: '#scene02',
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 1
+    },
+    x: () => -(document.querySelector('.practice-strip').scrollWidth - window.innerWidth + 96),
+    ease: 'none'
+  });
+
+  // --- Final frame reveal ---
+  gsap.from('#finalFrame', { scrollTrigger: { trigger: '#finalFrame', start: 'top 80%' }, y: 100, opacity: 0, duration: 1.5, ease: 'power4.out' });
+
+  // --- Scene index ---
+  const scenes = document.querySelectorAll('.scene, .final-frame');
+  const sceneIndex = document.getElementById('sceneIndex');
+  ScrollTrigger.create({
+    trigger: '#scrollSections',
+    start: 'top top',
+    end: 'bottom bottom',
+    scrub: 1,
+    onUpdate: (self) => {
+      const current = Math.round(self.progress * 3);
+      sceneIndex.textContent = `0${current} / 04`;
+      sceneIndex.style.color = current === 3 ? '#E67A3A' : '#8A7D6B';
+    }
+  });
+}
+
+// --- Fallback ---
+if (prefersReducedMotion || isTouch) {
+  document.querySelector('.cursor').style.display = 'none';
+  document.body.style.cursor = 'auto';
+  document.querySelectorAll('[data-magnetic]').forEach(el => { el.style.cursor = 'pointer'; });
+  document.querySelector('.practice-strip').style.overflowX = 'auto';
+}
+</script>
+</body>
+</html>

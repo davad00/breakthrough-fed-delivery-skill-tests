@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oasis — The Art of Stillness</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Manrope:wght@200;300;400;500&display=swap');
+
+    body {
+      font-family: 'Manrope', sans-serif;
+      background: #f2efe8;
+      color: #1a1a1a;
+      font-weight: 300;
+    }
+
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      background: #f2efe8;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0,0,0,0.08), transparent);
+    }
+
+    .ornament {
+      font-size: 3rem;
+      color: rgba(0,0,0,0.06);
+      letter-spacing: 1rem;
+      margin-bottom: 2rem;
+      font-family: 'Playfair Display', serif;
+      line-height: 0.5;
+    }
+
+    .hero-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.25);
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 10vw, 8rem);
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      line-height: 1;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title .thin {
+      font-weight: 400;
+      color: rgba(0,0,0,0.3);
+      font-style: italic;
+      display: block;
+      font-size: 0.6em;
+      letter-spacing: 0.25em;
+      margin-top: 0.25em;
+    }
+
+    .hero-sub {
+      font-size: 0.85rem;
+      font-weight: 200;
+      color: rgba(0,0,0,0.4);
+      letter-spacing: 0.1em;
+      max-width: 460px;
+      line-height: 1.8;
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 3rem;
+      padding: 1rem 3.5rem;
+      background: #1a1a1a;
+      color: #f2efe8;
+      text-decoration: none;
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #333;
+      transform: translateY(-1px);
+    }
+
+    .marquee {
+      width: 100%;
+      overflow: hidden;
+      padding: 1.5rem 0;
+      border-top: 1px solid rgba(0,0,0,0.04);
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+      margin-top: 4rem;
+    }
+
+    .marquee-inner {
+      display: flex;
+      gap: 4rem;
+      white-space: nowrap;
+      animation: scroll 30s linear infinite;
+    }
+
+    .marquee-inner span {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 0.8rem;
+      color: rgba(0,0,0,0.12);
+      letter-spacing: 0.2em;
+    }
+
+    @keyframes scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .section {
+      padding: 8rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      margin-bottom: 4rem;
+    }
+
+    .section-number {
+      font-size: 4rem;
+      font-family: 'Playfair Display', serif;
+      color: rgba(0,0,0,0.04);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.2);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: 0.02em;
+      max-width: 600px;
+    }
+
+    .section-text {
+      font-size: 0.9rem;
+      line-height: 2;
+      color: rgba(0,0,0,0.5);
+      font-weight: 200;
+      max-width: 580px;
+      margin-top: 1.5rem;
+    }
+
+    .experiences {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      margin-top: 4rem;
+      border-top: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .exp-item {
+      padding: 2.5rem 2rem;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+      border-right: 1px solid rgba(0,0,0,0.04);
+      transition: background 0.3s ease;
+    }
+
+    .exp-item:nth-child(even) {
+      border-right: none;
+    }
+
+    .exp-item:nth-last-child(-n+2) {
+      border-bottom: none;
+    }
+
+    .exp-item:hover {
+      background: rgba(0,0,0,0.02);
+    }
+
+    .exp-item h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 400;
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.02em;
+    }
+
+    .exp-item p {
+      font-size: 0.78rem;
+      line-height: 1.8;
+      color: rgba(0,0,0,0.4);
+      font-weight: 200;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      padding: 5rem 2rem;
+      border-top: 1px solid rgba(0,0,0,0.04);
+      margin-top: 4rem;
+      gap: 2rem;
+    }
+
+    .stat {
+      text-align: center;
+      flex: 1;
+    }
+
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 400;
+      color: rgba(0,0,0,0.7);
+    }
+
+    .stat-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.2);
+      margin-top: 0.5rem;
+    }
+
+    .testimonial {
+      padding: 6rem 2rem;
+      background: #1a1a1a;
+      color: #f2efe8;
+      text-align: center;
+    }
+
+    .testimonial-quote {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      line-height: 1.5;
+      max-width: 700px;
+      margin: 0 auto;
+      font-weight: 400;
+      color: rgba(242, 239, 232, 0.8);
+    }
+
+    .testimonial-attribution {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(242, 239, 232, 0.2);
+      margin-top: 2rem;
+    }
+
+    .footer {
+      padding: 3rem 2rem;
+      text-align: center;
+      border-top: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .footer p {
+      font-size: 0.65rem;
+      color: rgba(0,0,0,0.15);
+      letter-spacing: 0.1em;
+    }
+
+    @media (max-width: 768px) {
+      .experiences {
+        grid-template-columns: 1fr;
+      }
+      .exp-item:nth-child(even) {
+        border-right: 1px solid rgba(0,0,0,0.04);
+      }
+      .exp-item:nth-last-child(-n+2) {
+        border-bottom: 1px solid rgba(0,0,0,0.04);
+      }
+      .exp-item:last-child {
+        border-bottom: none;
+      }
+      .stats {
+        flex-direction: column;
+        gap: 2rem;
+      }
+      .section {
+        padding: 4rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="ornament">&#9670; &#9670; &#9670;</div>
+    <div class="hero-label">Oasis &mdash; Luxury Meditation</div>
+    <h1 class="hero-title">The Art<br>of Stillness<span class="thin">A retreat for the restless mind</span></h1>
+    <p class="hero-sub">Three centuries of contemplative tradition meets contemporary luxury. Hidden valleys, silent mornings, and the slow art of returning home.</p>
+    <a href="#" class="btn">Inquire</a>
+  </section>
+
+  <div class="marquee">
+    <div class="marquee-inner">
+      <span>&#9670; Himalayas &bull; Kyoto &bull; Patagonia &#9670; Himalayas &bull; Kyoto &bull; Patagonia</span>
+      <span>&#9670; Himalayas &bull; Kyoto &bull; Patagonia &#9670; Himalayas &bull; Kyoto &bull; Patagonia</span>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="section-header">
+      <div class="section-number">01</div>
+      <div class="section-label">Approach</div>
+      <h2 class="section-title">We do not teach mindfulness. We create the conditions for it to arise.</h2>
+    </div>
+    <p class="section-text">Our retreats are designed by meditation masters with over forty years of practice and a team of architects, chefs, and somatic therapists. Every detail — from the angle of a window to the temperature of the tea — is calibrated to support your return to presence.</p>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div class="section-number">02</div>
+      <div class="section-label">Experiences</div>
+      <h2 class="section-title">Four paths. One destination.</h2>
+    </div>
+    <div class="experiences">
+      <div class="exp-item">
+        <h3>The Silent Week</h3>
+        <p>Seven days of noble silence. No speaking, reading, or writing. Guided only by the sound of bells and the presence of a teacher who has not spoken in twelve years.</p>
+      </div>
+      <div class="exp-item">
+        <h3>Breath & Body</h3>
+        <p>Pranayama, cold exposure, and movement medicine. A systematic unwinding of stored tension through the body's own intelligence.</p>
+      </div>
+      <div class="exp-item">
+        <h3>The Dream Temple</h3>
+        <p>Yoga nidra, lucid dreaming protocols, and sleep hygiene. Six nights of guided deep rest in a chamber built specifically for the exploration of inner space.</p>
+      </div>
+      <div class="exp-item">
+        <h3>Integration</h3>
+        <p>Extended 21-day program combining plant medicine, depth psychology, and daily one-on-one mentorship. For those ready to meet what lies beneath.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-number">03</div>
+      <div class="stat-label">Retreat Locations</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">14</div>
+      <div class="stat-label">Guests Per Retreat</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">47</div>
+      <div class="stat-label">Countries Represented</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">92%</div>
+      <div class="stat-label">Return Within 2 Years</div>
+    </div>
+  </div>
+
+  <section class="testimonial">
+    <p class="testimonial-quote">"I went to Oasis expecting to learn how to meditate. Instead, I learned that I had never been still a single day in my life. The silence was terrifying. And then it was the only thing that made sense."</p>
+    <p class="testimonial-attribution">— M. Chen, Singapore</p>
+  </section>
+
+  <footer class="footer">
+    <p>Oasis &mdash; Luxury Meditation Retreats &bull; Est. 2024</p>
+  </footer>
+</body>
+</html>

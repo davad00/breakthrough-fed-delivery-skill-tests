@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis — Luxury Meditation Retreat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --forest: #1B3A2D;
+            --forest-light: #2A5A42;
+            --sage: #7A9E7E;
+            --sage-light: #A8C5AB;
+            --moss: #4A6B50;
+            --cream: #F4F1EB;
+            --warm: #E8E0D2;
+            --bark: #5C4A3A;
+            --bark-light: #7D6B5A;
+            --stone: #9B9285;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--cream);
+            color: var(--bark);
+            line-height: 1.75;
+            font-weight: 300;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Lora', serif;
+            font-weight: 400;
+            line-height: 1.2;
+        }
+
+        .leaf-border {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .leaf-border::before,
+        .leaf-border::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.04;
+        }
+
+        .leaf-border::before {
+            width: 800px;
+            height: 800px;
+            background: var(--sage);
+            top: -200px;
+            right: -200px;
+        }
+
+        .leaf-border::after {
+            width: 600px;
+            height: 600px;
+            background: var(--sage);
+            bottom: -100px;
+            left: -150px;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.5s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(244, 241, 235, 0.9);
+            backdrop-filter: blur(20px);
+            padding: 1.2rem 4rem;
+        }
+
+        nav .logo {
+            font-family: 'Lora', serif;
+            font-size: 1.5rem;
+            color: var(--forest);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        nav .logo .leaf {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: var(--sage);
+            border-radius: 0 50% 0 50%;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        nav ul a {
+            text-decoration: none;
+            color: var(--bark-light);
+            font-size: 0.72rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            font-weight: 400;
+            transition: color 0.3s;
+        }
+
+        nav ul a:hover { color: var(--forest); }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 4rem;
+            position: relative;
+            background: linear-gradient(170deg, var(--cream) 0%, var(--warm) 60%, #DDE6D9 100%);
+        }
+
+        .hero-content {
+            max-width: 700px;
+        }
+
+        .hero .organic-shape {
+            position: absolute;
+            top: 15%;
+            right: 10%;
+            width: 450px;
+            height: 550px;
+            background: linear-gradient(135deg, var(--sage-light) 0%, var(--sage) 100%);
+            border-radius: 60% 40% 50% 50% / 50% 60% 40% 50%;
+            opacity: 0.15;
+            animation: morphShape 12s ease-in-out infinite;
+        }
+
+        @keyframes morphShape {
+            0%, 100% { border-radius: 60% 40% 50% 50% / 50% 60% 40% 50%; }
+            33% { border-radius: 50% 60% 40% 50% / 60% 40% 50% 60%; }
+            66% { border-radius: 40% 50% 60% 40% / 50% 50% 60% 40%; }
+        }
+
+        .hero .pre-title {
+            font-size: 0.72rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--sage);
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(4rem, 9vw, 7.5rem);
+            color: var(--forest);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            color: var(--forest-light);
+        }
+
+        .hero .tagline {
+            font-family: 'Lora', serif;
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            font-style: italic;
+            color: var(--bark-light);
+            margin-bottom: 3rem;
+            max-width: 450px;
+            line-height: 1.8;
+        }
+
+        .hero .cta-row {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .btn-solid {
+            padding: 1rem 2.5rem;
+            background: var(--forest);
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 0.72rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            border-radius: 40px;
+            transition: all 0.4s ease;
+        }
+
+        .btn-solid:hover {
+            background: var(--forest-light);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(27, 58, 45, 0.2);
+        }
+
+        .btn-ghost {
+            padding: 1rem 2.5rem;
+            border: 1px solid var(--sage);
+            color: var(--forest);
+            text-decoration: none;
+            font-size: 0.72rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            border-radius: 40px;
+            transition: all 0.4s ease;
+        }
+
+        .btn-ghost:hover {
+            background: var(--sage-light);
+            border-color: var(--sage-light);
+        }
+
+        .about {
+            padding: 8rem 4rem;
+        }
+
+        .about-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 5rem;
+            align-items: start;
+        }
+
+        .about-text .label {
+            font-size: 0.68rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--sage);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .about-text .label::before {
+            content: '';
+            width: 30px;
+            height: 1px;
+            background: var(--sage);
+        }
+
+        .about-text h2 {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            color: var(--forest);
+            margin-bottom: 2rem;
+        }
+
+        .about-text p {
+            color: var(--bark-light);
+            font-size: 0.95rem;
+            line-height: 1.9;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .about-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        }
+
+        .about-card .card-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--sage-light);
+            border-radius: 50%;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .about-card h4 {
+            font-size: 1.1rem;
+            color: var(--forest);
+            margin-bottom: 0.5rem;
+        }
+
+        .about-card p {
+            font-size: 0.8rem;
+            color: var(--stone);
+            line-height: 1.7;
+        }
+
+        .rituals {
+            padding: 8rem 4rem;
+            background: var(--forest);
+            color: var(--cream);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rituals::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(122, 158, 126, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .rituals .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .rituals .section-header .label {
+            font-size: 0.68rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--sage-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .rituals .section-header h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--cream);
+        }
+
+        .ritual-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .ritual-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            transition: all 0.5s ease;
+        }
+
+        .ritual-card:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateY(-4px);
+        }
+
+        .ritual-card .ritual-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--sage);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .ritual-card h3 {
+            font-size: 1.4rem;
+            color: var(--cream);
+            margin-bottom: 1rem;
+        }
+
+        .ritual-card p {
+            font-size: 0.85rem;
+            color: var(--sage-light);
+            line-height: 1.8;
+        }
+
+        .journey {
+            padding: 8rem 4rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .journey .label {
+            font-size: 0.68rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--sage);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .journey h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--forest);
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--sage-light);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 3rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -3rem;
+            top: 0.3rem;
+            width: 12px;
+            height: 12px;
+            background: var(--sage);
+            border-radius: 50%;
+            transform: translateX(-5px);
+        }
+
+        .timeline-item .day {
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--sage);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-item h3 {
+            font-size: 1.3rem;
+            color: var(--forest);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-item p {
+            font-size: 0.9rem;
+            color: var(--bark-light);
+            line-height: 1.8;
+        }
+
+        .closing {
+            padding: 10rem 4rem;
+            text-align: center;
+            background: linear-gradient(180deg, var(--cream), #DDE6D9);
+        }
+
+        .closing h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            color: var(--forest);
+            margin-bottom: 1.5rem;
+        }
+
+        .closing p {
+            color: var(--bark-light);
+            max-width: 500px;
+            margin: 0 auto 3rem;
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .closing .btn-solid {
+            display: inline-block;
+        }
+
+        footer {
+            padding: 3rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--forest);
+            color: var(--sage-light);
+        }
+
+        footer .logo {
+            font-family: 'Lora', serif;
+            font-size: 1.1rem;
+            color: var(--cream);
+        }
+
+        footer .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        footer .footer-links a {
+            font-size: 0.68rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--sage);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        footer .footer-links a:hover { color: var(--cream); }
+
+        @media (max-width: 768px) {
+            nav { padding: 1.5rem 2rem; }
+            nav ul { display: none; }
+            .hero { padding: 0 2rem; }
+            .hero .organic-shape { width: 250px; height: 300px; right: -50px; }
+            .about-inner { grid-template-columns: 1fr; }
+            .about-cards { grid-template-columns: 1fr; }
+            .ritual-grid { grid-template-columns: 1fr; }
+            footer { flex-direction: column; gap: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav id="nav">
+        <a href="#" class="logo"><span class="leaf"></span>Oasis</a>
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#rituals">Rituals</a></li>
+            <li><a href="#journey">Journey</a></li>
+            <li><a href="#closing">Begin</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div class="organic-shape"></div>
+        <div class="hero-content">
+            <p class="pre-title">Luxury Meditation Retreat</p>
+            <h1>Return to <em>the wild</em></h1>
+            <p class="tagline">Two hundred acres of ancient forest. Twelve guests. One profound silence. Oasis is where your nature remembers itself.</p>
+            <div class="cta-row">
+                <a href="#closing" class="btn-solid">Begin Your Journey</a>
+                <a href="#rituals" class="btn-ghost">Explore Rituals</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <div class="about-inner">
+            <div class="about-text">
+                <p class="label">Our Philosophy</p>
+                <h2>What grows in silence sustains the soul</h2>
+                <p>Oasis was born from a simple truth: the modern mind is overstimulated and undernourished. We created a place where silence is not emptiness but abundance — where the whisper of wind through old growth becomes the loudest voice in the room.</p>
+                <p>Our approach weaves together ancient contemplative traditions, nature-based practices, and the finest hospitality. There are no schedules to chase, only rhythms to follow — the sun, the seasons, the breath.</p>
+            </div>
+            <div class="about-cards">
+                <div class="about-card">
+                    <div class="card-icon">🌿</div>
+                    <h4>Wild Setting</h4>
+                    <p>200 acres of protected ancient forest in the Scottish Highlands</p>
+                </div>
+                <div class="about-card">
+                    <div class="card-icon">🧘</div>
+                    <h4>Intimate Groups</h4>
+                    <p>Never more than 12 guests, ensuring deeply personal guidance</p>
+                </div>
+                <div class="about-card">
+                    <div class="card-icon">♨️</div>
+                    <h4>Thermal Springs</h4>
+                    <p>Natural mineral pools heated by the earth beneath your feet</p>
+                </div>
+                <div class="about-card">
+                    <div class="card-icon">🍃</div>
+                    <h4>Living Cuisine</h4>
+                    <p>Plant-forward menus from our organic kitchen gardens</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="rituals" id="rituals">
+        <div class="section-header">
+            <p class="label">Sacred Rituals</p>
+            <h2>Practices for the returning</h2>
+        </div>
+        <div class="ritual-grid">
+            <div class="ritual-card">
+                <div class="ritual-icon">◉</div>
+                <h3>Deep Silence</h3>
+                <p>Extended noble silence in our forest pavilion, with optional guidance from contemplative teachers who have walked this path for decades.</p>
+            </div>
+            <div class="ritual-card">
+                <div class="ritual-icon">◈</div>
+                <h3>Sound Bathing</h3>
+                <p>Immersive resonance with crystal singing bowls, gongs, and handmade instruments in our acoustically tuned stone chamber.</p>
+            </div>
+            <div class="ritual-card">
+                <div class="ritual-icon">◇</div>
+                <h3>Forest Immersion</h3>
+                <p>Shinrin-yoku guided walks through ancient stands of pine and oak, barefoot grounding meditations, and sunrise ceremonies on the ridge.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="journey" id="journey">
+        <p class="label">A Typical Journey</p>
+        <h2>Seven days of unfolding</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <p class="day">Day One</p>
+                <h3>Arrival</h3>
+                <p>Settle into your suite. A gentle welcome circle and introduction to the land. Evening meditation at sunset.</p>
+            </div>
+            <div class="timeline-item">
+                <p class="day">Days Two — Four</p>
+                <h3>Deepening</h3>
+                <p>Morning and evening meditation. Daily forest immersion. Sound healing sessions. Nourishing plant-based meals. Noble silence begins.</p>
+            </div>
+            <div class="timeline-item">
+                <p class="day">Days Five — Six</p>
+                <h3>Integration</h3>
+                <p>Contemplative walking, journaling, and optional one-on-one guidance. The silence becomes a companion, not a discipline.</p>
+            </div>
+            <div class="timeline-item">
+                <p class="day">Day Seven</p>
+                <h3>Return</h3>
+                <p>A closing ceremony. Gentle re-entry into speech and movement. You leave not as you came, but as you truly are.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="closing" id="closing">
+        <h2>The forest is calling</h2>
+        <p>Applications for our 2026 retreats are now open. Each cohort is limited to twelve seekers.</p>
+        <a href="#" class="btn-solid">Apply for Your Place</a>
+    </section>
+
+    <footer>
+        <span class="logo">Oasis</span>
+        <div class="footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Contact</a>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+        });
+    </script>
+</body>
+</html>

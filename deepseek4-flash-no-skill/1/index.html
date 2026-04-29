@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oasis — Silent Mountain</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@200;300;400;500&display=swap');
+
+    body {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      background: #0c0c0c;
+      color: #e8e4df;
+      overflow-x: hidden;
+    }
+
+    .hero {
+      height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(ellipse at 30% 20%, #1a1a1a 0%, #0c0c0c 70%);
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 600px 400px at 20% 30%, rgba(180, 150, 120, 0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 500px 500px at 80% 60%, rgba(140, 170, 200, 0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .mountain-range {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 55vh;
+      overflow: hidden;
+    }
+
+    .mountain {
+      position: absolute;
+      bottom: 0;
+      width: 0;
+      height: 0;
+      border-style: solid;
+    }
+
+    .mountain-1 {
+      left: -5%;
+      border-width: 0 35vw 50vh 25vw;
+      border-color: transparent transparent #1a1816 transparent;
+    }
+
+    .mountain-2 {
+      left: 15%;
+      border-width: 0 20vw 65vh 30vw;
+      border-color: transparent transparent #161412 transparent;
+    }
+
+    .mountain-3 {
+      right: 5%;
+      border-width: 0 30vw 45vh 20vw;
+      border-color: transparent transparent #1c1a18 transparent;
+    }
+
+    .mountain-4 {
+      right: 25%;
+      border-width: 0 25vw 55vh 15vw;
+      border-color: transparent transparent #141210 transparent;
+    }
+
+    .fog {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 20vh;
+      background: linear-gradient(0deg, #0c0c0c 0%, transparent 100%);
+      z-index: 2;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: #fff;
+      border-radius: 50%;
+      opacity: 0.3;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 5;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .label {
+      font-size: 0.7rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: rgba(232, 228, 223, 0.4);
+      margin-bottom: 2rem;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(3.5rem, 10vw, 7rem);
+      line-height: 0.95;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      font-weight: 300;
+      color: rgba(232, 228, 223, 0.6);
+    }
+
+    .hero-sub {
+      font-size: clamp(0.9rem, 1.5vw, 1.15rem);
+      font-weight: 200;
+      color: rgba(232, 228, 223, 0.5);
+      letter-spacing: 0.15em;
+      margin-top: 1.5rem;
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 3rem;
+      padding: 1rem 3rem;
+      border: 1px solid rgba(232, 228, 223, 0.2);
+      color: #e8e4df;
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      transition: all 0.5s ease;
+      background: transparent;
+    }
+
+    .btn:hover {
+      background: rgba(232, 228, 223, 0.08);
+      border-color: rgba(232, 228, 223, 0.5);
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, rgba(232, 228, 223, 0.3), transparent);
+    }
+
+    .scroll-text {
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(232, 228, 223, 0.25);
+    }
+
+    .section {
+      padding: 8rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: rgba(232, 228, 223, 0.25);
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 300;
+      letter-spacing: 0.03em;
+      line-height: 1.1;
+      margin-bottom: 2rem;
+    }
+
+    .section-text {
+      font-size: 0.95rem;
+      line-height: 1.9;
+      color: rgba(232, 228, 223, 0.55);
+      max-width: 600px;
+      font-weight: 200;
+    }
+
+    .retreats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2px;
+      background: rgba(232, 228, 223, 0.06);
+      margin-top: 4rem;
+    }
+
+    .retreat-card {
+      background: #0c0c0c;
+      padding: 3rem 2.5rem;
+      position: relative;
+      transition: background 0.4s ease;
+    }
+
+    .retreat-card:hover {
+      background: #111110;
+    }
+
+    .retreat-card .number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      font-weight: 300;
+      color: rgba(232, 228, 223, 0.08);
+      position: absolute;
+      top: 1.5rem;
+      right: 2rem;
+    }
+
+    .retreat-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 300;
+      margin-bottom: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    .retreat-card p {
+      font-size: 0.82rem;
+      line-height: 1.8;
+      color: rgba(232, 228, 223, 0.45);
+      font-weight: 200;
+    }
+
+    .retreat-card .duration {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(232, 228, 223, 0.2);
+      margin-top: 1.5rem;
+    }
+
+    .quote-section {
+      background: #11100e;
+      padding: 8rem 2rem;
+      text-align: center;
+    }
+
+    .quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      line-height: 1.4;
+      color: rgba(232, 228, 223, 0.7);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .quote-author {
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(232, 228, 223, 0.25);
+      margin-top: 2rem;
+    }
+
+    .footer {
+      padding: 4rem 2rem;
+      border-top: 1px solid rgba(232, 228, 223, 0.06);
+      text-align: center;
+    }
+
+    .footer p {
+      font-size: 0.7rem;
+      color: rgba(232, 228, 223, 0.2);
+      letter-spacing: 0.1em;
+    }
+
+    @media (max-width: 768px) {
+      .retreats-grid {
+        grid-template-columns: 1fr;
+      }
+      .section {
+        padding: 4rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="mountain-range">
+      <div class="mountain mountain-1"></div>
+      <div class="mountain mountain-2"></div>
+      <div class="mountain mountain-3"></div>
+      <div class="mountain mountain-4"></div>
+      <div class="fog"></div>
+    </div>
+    <div class="star" style="top:15%;left:20%;width:1px;height:1px"></div>
+    <div class="star" style="top:25%;left:70%;width:2px;height:2px;opacity:0.5"></div>
+    <div class="star" style="top:10%;left:50%;width:1px;height:1px"></div>
+    <div class="star" style="top:35%;left:85%;width:1.5px;height:1.5px"></div>
+    <div class="star" style="top:18%;left:40%;width:1px;height:1px"></div>
+    <div class="star" style="top:40%;left:10%;width:2px;height:2px;opacity:0.4"></div>
+
+    <div class="hero-content">
+      <div class="label">Luxury Meditation Retreat</div>
+      <h1 class="hero-title">Silence<br><em>is the mountain</em></h1>
+      <p class="hero-sub">Seven days of guided stillness in the Himalayas. No devices. No distractions. Only the self.</p>
+      <a href="#" class="btn">Apply for Residency</a>
+    </div>
+
+    <div class="scroll-indicator">
+      <span class="scroll-text">Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">The Philosophy</div>
+    <h2 class="section-title">Stillness is not the absence of movement.</h2>
+    <p class="section-text">At Oasis, we believe true luxury is silence. Our retreats strip away everything unnecessary — devices, schedules, expectations — leaving only what matters. The himalayan air. The sound of wind through pine. The quiet conversation between your breath and the mountain.</p>
+  </section>
+
+  <section class="section">
+    <div class="section-label">The Retreats</div>
+    <h2 class="section-title">Three journeys inward.</h2>
+    <div class="retreats-grid">
+      <div class="retreat-card">
+        <span class="number">01</span>
+        <h3>The Stillness Pact</h3>
+        <p>Seven days of noble silence. No speaking, no writing, no reading. Just sitting with yourself until the mind grows quiet enough to hear the space between thoughts.</p>
+        <div class="duration">7 Days &bull; Himalayas</div>
+      </div>
+      <div class="retreat-card">
+        <span class="number">02</span>
+        <h3>The Body Temple</h3>
+        <p>Daily yoga, breathwork, and cold exposure led by masters. A return to the body as sanctuary. Includes private sessions with a Tibetan meditation teacher.</p>
+        <div class="duration">10 Days &bull; Kyoto</div>
+      </div>
+      <div class="retreat-card">
+        <span class="number">03</span>
+        <h3>The Deep Return</h3>
+        <p>An extended 21-day immersion for those ready to go further. Psychedelic-assisted sessions, trauma-sensitive somatic work, and daily one-on-one mentorship.</p>
+        <div class="duration">21 Days &bull; Patagonia</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="quote-section">
+    <p class="quote">"The quieter you become, the more you can hear."</p>
+    <p class="quote-author">Rumi &bull; Guest Faculty 2026</p>
+  </section>
+
+  <section class="section">
+    <div class="section-label">The Sanctuary</div>
+    <h2 class="section-title">Where the world falls away.</h2>
+    <p class="section-text">Perched at 3,200 meters, our flagship retreat in the Indian Himalayas offers uninterrupted views of the Kanchenjunga range. Each suite is a study in minimalism — heated stone floors, handwoven wool blankets, floor-to-ceiling windows that bring the mountain inside. No televisions. No Wi-Fi. Only the sound of the wind, and of your own breath finding its natural rhythm.</p>
+  </section>
+
+  <footer class="footer">
+    <p>Oasis &mdash; Luxury Meditation Retreats &bull; Est. 2024</p>
+  </footer>
+</body>
+</html>

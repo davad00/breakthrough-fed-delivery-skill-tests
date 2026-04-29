@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oasis — The Scroll Temple</title>
+<meta name="description" content="A horizontal pilgrimage through the chambers of stillness.">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@300;400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { background: #0C0E12; overflow-x: hidden; }
+body { background: #0C0E12; color: #F0F4F8; font-family: 'Inter', sans-serif; cursor: none; overflow-x: hidden; }
+
+.cursor { position: fixed; pointer-events: none; z-index: 1000; width: 12px; height: 12px; border-radius: 50%; background: #4A90D9; transform: translate(-50%, -50%); mix-blend-mode: difference; }
+
+.nav { position: fixed; top: 0; left: 0; width: 100%; padding: 32px 48px; display: flex; justify-content: space-between; align-items: center; z-index: 100; mix-blend-mode: difference; }
+.nav-logo { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #F0F4F8; }
+.nav-scroll-progress { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #7A8599; }
+.nav-menu-btn { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #F0F4F8; background: none; border: none; cursor: pointer; }
+
+.scroll-container { position: relative; }
+.pin-container { position: relative; height: 100vh; overflow: hidden; }
+.horizontal-track { position: absolute; top: 0; left: 0; height: 100vh; display: flex; will-change: transform; }
+
+.panel { width: 100vw; height: 100vh; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; padding: 0 10vw; position: relative; }
+.panel-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #7A8599; margin-bottom: 24px; }
+.panel-title { font-family: 'Space Grotesk', sans-serif; font-size: 7vw; font-weight: 600; line-height: 0.95; letter-spacing: -0.03em; color: #F0F4F8; margin-bottom: 24px; max-width: 70%; }
+.panel-text { font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.65; color: #7A8599; max-width: 400px; margin-bottom: 32px; }
+.panel-number { font-family: 'Space Grotesk', sans-serif; font-size: 20vw; font-weight: 700; line-height: 0.8; color: rgba(74, 144, 217, 0.04); position: absolute; right: 5vw; top: 50%; transform: translateY(-50%); pointer-events: none; }
+
+.panel-hero { background: #0C0E12; }
+.panel-hero .panel-title { font-size: 13vw; font-weight: 700; line-height: 0.85; letter-spacing: -0.05em; }
+.panel-hero .panel-title .accent { color: #4A90D9; }
+
+.panel-chamber { }
+.panel-chamber:nth-child(odd) { background: #0E1016; }
+
+.panel-gate { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+.panel-gate .panel-title { font-size: 8vw; max-width: 80%; }
+
+.chamber-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; max-width: 900px; }
+.chamber-item { }
+.chamber-item-icon { font-size: 32px; color: #4A90D9; margin-bottom: 16px; }
+.chamber-item-title { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 500; color: #F0F4F8; margin-bottom: 8px; }
+.chamber-item-text { font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; color: #7A8599; }
+
+.ambient-line { position: absolute; left: 0; top: 0; width: 1px; height: 100%; background: linear-gradient(to bottom, transparent, rgba(74, 144, 217, 0.2), transparent); }
+
+.btn-primary { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; padding: 16px 32px; border-radius: 9999px; background: #4A90D9; color: #0C0E12; display: inline-block; transition: all 0.3s; cursor: none; }
+.btn-primary:hover { background: #6AACE0; }
+
+.footer { position: relative; z-index: 10; padding: 32px 48px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(240, 244, 248, 0.06); background: #0C0E12; }
+.footer-text { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #7A8599; }
+
+.panel-marker { position: fixed; bottom: 48px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; z-index: 50; }
+.panel-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(240, 244, 248, 0.15); transition: all 0.3s; }
+.panel-dot.active { background: #4A90D9; width: 24px; border-radius: 3px; }
+
+@media (max-width: 768px) {
+  .nav { padding: 24px; }
+  .panel { padding: 0 24px; }
+  .panel-title { font-size: 12vw; max-width: 100%; }
+  .panel-hero .panel-title { font-size: 18vw; }
+  .panel-number { font-size: 40vw; }
+  .panel-gate .panel-title { font-size: 12vw; }
+  .chamber-grid { grid-template-columns: 1fr; gap: 24px; }
+  .panel-marker { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+
+<nav class="nav">
+  <div class="nav-logo">Oasis</div>
+  <div class="nav-scroll-progress" id="scrollProgress">Chamber 01 / 05</div>
+  <button class="nav-menu-btn" id="menuBtn">Navigate</button>
+</nav>
+
+<div class="panel-marker" id="panelMarker">
+  <div class="panel-dot active"></div>
+  <div class="panel-dot"></div>
+  <div class="panel-dot"></div>
+  <div class="panel-dot"></div>
+  <div class="panel-dot"></div>
+</div>
+
+<div class="pin-container" id="pinContainer">
+  <div class="horizontal-track" id="horizontalTrack">
+    <div class="panel panel-hero">
+      <div class="panel-label">/// Chamber 01 — Threshold</div>
+      <h1 class="panel-title">The Scroll<br><span class="accent">Temple</span></h1>
+      <p class="panel-text">A horizontal pilgrimage through five chambers of stillness. Each room is a practice. Each scroll is a step inward.</p>
+      <a href="#" class="btn-primary" data-magnetic>Begin the Walk</a>
+      <div class="panel-number">01</div>
+      <div class="ambient-line" style="left:15vw;"></div>
+    </div>
+
+    <div class="panel panel-chamber">
+      <div class="panel-label">/// Chamber 02 — Breath</div>
+      <div class="chamber-grid">
+        <div class="chamber-item">
+          <div class="chamber-item-icon">&#8757;</div>
+          <div class="chamber-item-title">Inhale</div>
+          <div class="chamber-item-text">The breath is the first gate. Four seconds in. Four seconds out. The mind follows the rhythm like a tide returning to the ocean.</div>
+        </div>
+        <div class="chamber-item">
+          <div class="chamber-item-icon">&#8760;</div>
+          <div class="chamber-item-title">Suspend</div>
+          <div class="chamber-item-text">Between the in and the out, there is a stillness that contains everything. This is the practice of retention.</div>
+        </div>
+      </div>
+      <div class="panel-number">02</div>
+    </div>
+
+    <div class="panel panel-chamber">
+      <div class="panel-label">/// Chamber 03 — Body</div>
+      <h2 class="panel-title">The physical<br>temple</h2>
+      <p class="panel-text">The body is not separate from the practice. Each posture is a prayer. Each movement is a meditation in motion.</p>
+      <div class="panel-number">03</div>
+      <div class="ambient-line" style="left:40vw;"></div>
+    </div>
+
+    <div class="panel panel-chamber">
+      <div class="panel-label">/// Chamber 04 — Mind</div>
+      <h2 class="panel-title">Watching the<br>watcher</h2>
+      <p class="panel-text">Thoughts are visitors. You are the host. In this chamber, we practice not emptying the mind, but witnessing it without attachment.</p>
+      <div class="panel-number">04</div>
+    </div>
+
+    <div class="panel panel-gate">
+      <div class="panel-label">/// Chamber 05 — Exit</div>
+      <h2 class="panel-title">Carry the stillness<br><span style="color:#4A90D9;">with you</span></h2>
+      <p class="panel-text" style="max-width:500px;text-align:center;">The path does not end here. The retreat is a seed. What grows is yours.</p>
+      <a href="#" class="btn-primary" data-magnetic>Book Your Retreat</a>
+      <div class="panel-number">05</div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-text">Oasis Retreats &mdash; Est. 2012</div>
+  <div class="footer-text">Pilgrimage in progress</div>
+</footer>
+
+<script>
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+if (!prefersReducedMotion && !isTouch) {
+  gsap.registerPlugin(ScrollTrigger);
+
+  // --- Cursor ---
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', (e) => {
+    gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.6, ease: 'power3.out' });
+  });
+  document.querySelectorAll('[data-magnetic], .panel-title, .chamber-item, .nav-menu-btn').forEach(el => {
+    el.addEventListener('mouseenter', () => gsap.to(cursor, { width: 56, height: 56, background: '#F0F4F8', duration: 0.3 }));
+    el.addEventListener('mouseleave', () => gsap.to(cursor, { width: 12, height: 12, background: '#4A90D9', duration: 0.3 }));
+  });
+
+  // --- Horizontal Scroll ---
+  const track = document.getElementById('horizontalTrack');
+  const panels = gsap.utils.toArray('.panel');
+  const totalPanels = panels.length;
+
+  gsap.to(track, {
+    xPercent: -100 * (totalPanels - 1),
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '#pinContainer',
+      pin: true,
+      scrub: 1,
+      snap: 1 / (totalPanels - 1),
+      end: () => '+=' + track.offsetWidth
+    }
+  });
+
+  // --- Panel Reveals ---
+  panels.forEach((panel, i) => {
+    const items = panel.querySelectorAll('.panel-label, .panel-title, .panel-text, .btn-primary, .chamber-item, .chamber-grid');
+    gsap.from(items, {
+      scrollTrigger: {
+        trigger: panel,
+        containerAnimation: gsap.getById(''),
+        start: 'left center',
+        end: 'center center',
+        scrub: 1,
+        toggleActions: 'play none none reverse'
+      },
+      y: 60,
+      opacity: 0,
+      stagger: 0.1,
+      duration: 1.2,
+      ease: 'power4.out'
+    });
+    gsap.from(panel.querySelector('.panel-number'), {
+      scrollTrigger: {
+        trigger: panel,
+        start: 'left center',
+        end: 'center center',
+        scrub: 1
+      },
+      scale: 0.8,
+      opacity: 0,
+      duration: 1.5,
+      ease: 'power2.out'
+    });
+  });
+
+  // --- Ambient line reveal ---
+  panels.forEach(panel => {
+    const line = panel.querySelector('.ambient-line');
+    if (line) {
+      gsap.from(line, {
+        scrollTrigger: { trigger: panel, start: 'left center', end: 'center center', scrub: 1 },
+        scaleY: 0,
+        transformOrigin: 'top center',
+        duration: 1.5,
+        ease: 'power2.out'
+      });
+    }
+  });
+
+  // --- Progress + Dots ---
+  const dots = document.querySelectorAll('.panel-dot');
+  const progressEl = document.getElementById('scrollProgress');
+
+  ScrollTrigger.create({
+    trigger: '#pinContainer',
+    start: 'top top',
+    end: () => '+=' + track.offsetWidth,
+    scrub: 1,
+    onUpdate: (self) => {
+      const progress = self.progress;
+      const currentPanel = Math.round(progress * (totalPanels - 1));
+      dots.forEach((dot, i) => dot.classList.toggle('active', i === currentPanel));
+      progressEl.textContent = `Chamber 0${currentPanel + 1} / 0${totalPanels}`;
+    }
+  });
+}
+
+// --- Fallback ---
+if (prefersReducedMotion || isTouch) {
+  document.querySelector('#pinContainer').style.height = 'auto';
+  document.querySelector('#pinContainer').style.overflow = 'visible';
+  document.querySelector('#horizontalTrack').style.position = 'relative';
+  document.querySelector('#horizontalTrack').style.flexDirection = 'column';
+  document.querySelector('#horizontalTrack').style.height = 'auto';
+  document.querySelectorAll('.panel').forEach(p => { p.style.width = '100%'; p.style.height = 'auto'; p.style.minHeight = '100vh'; });
+  document.querySelector('.cursor').style.display = 'none';
+  document.body.style.cursor = 'auto';
+}
+</script>
+</body>
+</html>

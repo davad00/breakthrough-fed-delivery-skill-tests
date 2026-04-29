@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oasis &mdash; Luxury Meditation Retreat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;color:#e0e8f0;background:#060d14;line-height:1.7;overflow-x:hidden}
+
+:root{--glass:rgba(255,255,255,0.04);--glass-border:rgba(255,255,255,0.08);--glass-hover:rgba(255,255,255,0.07);--accent:#6ee7b7;--accent-dim:rgba(110,231,183,0.15)}
+
+#particles{position:fixed;inset:0;pointer-events:none;z-index:0}
+.particle{position:absolute;width:2px;height:2px;background:var(--accent);border-radius:50%;animation:floatUp linear infinite;opacity:0}
+@keyframes floatUp{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:.8}90%{opacity:.3}100%{transform:translateY(-10vh) scale(1);opacity:0}}
+
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:2rem 4rem;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,rgba(6,13,20,.9),transparent);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.nav-logo{font-family:'Philosopher',sans-serif;font-size:1.6rem;color:var(--accent);letter-spacing:6px;text-transform:uppercase}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{color:rgba(255,255,255,.5);text-decoration:none;font-size:0.68rem;letter-spacing:4px;text-transform:uppercase;font-weight:400;transition:all .4s}
+.nav-links a:hover{color:var(--accent);text-shadow:0 0 20px var(--accent-dim)}
+
+.hero{height:100vh;display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.hero-orb{position:absolute;width:700px;height:700px;background:radial-gradient(circle,rgba(110,231,183,.06),transparent 70%);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);animation:breathe 8s ease-in-out infinite;pointer-events:none}
+@keyframes breathe{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.6}50%{transform:translate(-50%,-50%) scale(1.3);opacity:.3}}
+.hero-ring{position:absolute;width:500px;height:500px;border:1px solid rgba(110,231,183,.08);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);animation:spin 60s linear infinite;pointer-events:none}
+@keyframes spin{0%{transform:translate(-50%,-50%) rotate(0deg)}100%{transform:translate(-50%,-50%) rotate(360deg)}}
+.hero-ring:nth-child(3){width:600px;height:600px;animation-direction:reverse;animation-duration:80s}
+.hero-ring:nth-child(4){width:400px;height:400px;animation-duration:45s}
+
+.hero-content{position:relative;z-index:2;text-align:center;max-width:750px;padding:2rem}
+.hero-symbol{font-size:1.2rem;color:var(--accent);opacity:.6;margin-bottom:2rem}
+.hero h1{font-family:'Philosopher',sans-serif;font-size:clamp(3.5rem,9vw,7.5rem);font-weight:700;line-height:.9;letter-spacing:2px;color:#fff;margin-bottom:1.5rem}
+.hero h1 span{background:linear-gradient(135deg,var(--accent),#34d399,#a7f3d0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{color:rgba(255,255,255,.35);font-size:1rem;max-width:440px;margin:0 auto 3rem;line-height:1.9;font-weight:300}
+.hero-cta{display:inline-block;padding:1rem 3rem;background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#fff;text-decoration:none;font-size:0.68rem;letter-spacing:5px;text-transform:uppercase;font-weight:400;transition:all .5s}
+.hero-cta:hover{background:var(--accent-dim);border-color:rgba(110,231,183,.3);box-shadow:0 0 60px rgba(110,231,183,.1);transform:translateY(-2px)}
+
+.glass-section{position:relative;z-index:1;background:transparent;padding:6rem 4rem}
+.glass-container{max-width:1100px;margin:0 auto}
+.section-header{text-align:center;margin-bottom:4rem}
+.section-tag{font-size:0.55rem;letter-spacing:8px;text-transform:uppercase;color:var(--accent);opacity:.6;margin-bottom:1.5rem;font-weight:400}
+.section-header h2{font-family:'Philosopher',sans-serif;font-size:clamp(2rem,4.5vw,3rem);font-weight:700;color:#fff;margin-bottom:1rem;letter-spacing:1px}
+.section-header p{color:rgba(255,255,255,.3);font-size:.9rem;font-weight:300;max-width:500px;margin:0 auto}
+
+.glass-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.glass-card{background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:16px;padding:2.5rem 2rem;text-align:center;transition:all .5s;position:relative;overflow:hidden}
+.glass-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(110,231,183,.3),transparent);opacity:0;transition:opacity .5s}
+.glass-card:hover{background:var(--glass-hover);border-color:rgba(110,231,183,.15);transform:translateY(-6px);box-shadow:0 30px 80px rgba(0,0,0,.3)}
+.glass-card:hover::before{opacity:1}
+.glass-card .glyph{font-size:2.2rem;margin-bottom:1.5rem;opacity:.7}
+.glass-card h3{font-family:'Philosopher',sans-serif;font-size:1.4rem;color:#fff;margin-bottom:.5rem;font-weight:700}
+.glass-card .duration{font-size:.55rem;letter-spacing:5px;text-transform:uppercase;color:var(--accent);opacity:.6;margin-bottom:1rem}
+.glass-card p{color:rgba(255,255,255,.3);font-size:.82rem;line-height:1.8;font-weight:300}
+
+.timeline{max-width:700px;margin:5rem auto 0;position:relative}
+.timeline::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,rgba(110,231,183,.2),var(--accent-dim),transparent)}
+.timeline-item{padding:1.5rem 0;position:relative;display:flex;align-items:center;gap:2rem}
+.timeline-item::before{content:'';position:absolute;left:50%;top:50%;width:8px;height:8px;background:var(--accent);border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 20px var(--accent)}
+.timeline-item:nth-child(odd){flex-direction:row-reverse;text-align:right}
+.timeline-item .time-slot{flex:1}
+.timeline-item .time-slot h4{font-family:'Philosopher',sans-serif;font-size:1.1rem;color:#fff;margin-bottom:.25rem}
+.timeline-item .time-slot p{color:rgba(255,255,255,.3);font-size:.78rem;font-weight:300}
+.timeline-item .time-label{flex:1}
+
+.pricing-glass{display:flex;gap:1.5rem;justify-content:center;margin-top:4rem;flex-wrap:wrap}
+.pricing-card{flex:1;min-width:280px;max-width:320px;background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:16px;padding:2.5rem;text-align:center;transition:all .5s}
+.pricing-card:hover{transform:translateY(-4px);box-shadow:0 30px 80px rgba(0,0,0,.25)}
+.pricing-card.highlight{border-color:rgba(110,231,183,.2);background:rgba(110,231,183,.04)}
+.pricing-card h4{font-family:'Philosopher',sans-serif;font-size:1.2rem;color:#fff;margin-bottom:1.5rem;font-weight:700}
+.pricing-card .rate{font-family:'Philosopher',sans-serif;font-size:3rem;color:var(--accent);font-weight:700;margin-bottom:1.5rem}
+.pricing-card .rate sub{font-size:.9rem;vertical-align:baseline;color:rgba(110,231,183,.5)}
+.pricing-card .perks{list-style:none;margin-bottom:2rem}
+.pricing-card .perks li{padding:.4rem 0;font-size:.8rem;color:rgba(255,255,255,.35);font-weight:300}
+.pricing-card .btn{display:block;padding:.8rem;text-decoration:none;font-size:.6rem;letter-spacing:5px;text-transform:uppercase;border-radius:8px;transition:all .4s}
+.pricing-card:not(.highlight) .btn{border:1px solid var(--glass-border);color:#fff}
+.pricing-card:not(.highlight) .btn:hover{border-color:var(--accent);background:var(--accent-dim)}
+.pricing-card.highlight .btn{background:linear-gradient(135deg,#34d399,#059669);color:#fff;font-weight:500}
+.pricing-card.highlight .btn:hover{box-shadow:0 10px 40px rgba(52,211,153,.2)}
+
+.footer{padding:3rem;text-align:center;border-top:1px solid var(--glass-border);margin-top:4rem}
+.footer p{font-size:.55rem;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.15)}
+</style>
+</head>
+<body>
+<div id="particles"></div>
+
+<nav class="nav">
+  <div class="nav-logo">Oasis</div>
+  <ul class="nav-links">
+    <li><a href="#journeys">Journeys</a></li>
+    <li><a href="#ritual">Ritual</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="hero-orb"></div>
+  <div class="hero-ring"></div>
+  <div class="hero-ring"></div>
+  <div class="hero-ring"></div>
+  <div class="hero-content">
+    <div class="hero-symbol">&#9672;</div>
+    <h1>Enter <span>clarity</span></h1>
+    <p>A suspended sanctuary floating above Kyoto, where centuries of Zen tradition merge with2048 neural architecture. Breathe the future.</p>
+    <a href="#pricing" class="hero-cta">Initiate Sequence</a>
+  </div>
+</header>
+
+<section id="journeys" class="glass-section">
+  <div class="glass-container">
+    <div class="section-header">
+      <div class="section-tag">Three Gateways</div>
+      <h2>Each path, a different frequency of silence</h2>
+      <p>Choose your resonance. Light, medium, or deep immersion into24-hour stillness cycles.</p>
+    </div>
+    <div class="glass-grid">
+      <div class="glass-card">
+        <div class="glyph">&#9790;</div>
+        <h3>Lunar Drift</h3>
+        <div class="duration">3 Nights</div>
+        <p>Float-assisted meditation pods under a full moon. Bioluminescent algae pools and sensory deprivation chambers.</p>
+      </div>
+      <div class="glass-card">
+        <div class="glyph">&#9734;</div>
+        <h3>Stellar Resonance</h3>
+        <div class="duration">5 Nights</div>
+        <p>Frequency-calibrated meditation chambers at432Hz. Celestial projection mapping and guided astral navigation.</p>
+      </div>
+      <div class="glass-card">
+        <div class="glyph">&#9672;</div>
+        <h3>Quantum Stillness</h3>
+        <div class="duration">7 Nights</div>
+        <p>Zero-interference isolation chambers. EEG-coherence tracking and AI-optimized meditation sequences.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ritual" class="glass-section">
+  <div class="glass-container">
+    <div class="section-header">
+      <div class="section-tag">Daily Ritual</div>
+      <h2>Your day, designed for depth</h2>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="time-slot">
+          <h4>05:30 &mdash; Dawn</h4>
+          <p>Sunrise breathwork on the sky deck</p>
+        </div>
+        <div class="time-label"></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label"></div>
+        <div class="time-slot">
+          <h4>08:00 &mdash; Nourish</h4>
+          <p>Biometric breakfast by AI nutrition</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-slot">
+          <h4>11:00 &mdash; Deep Session</h4>
+          <p>1:1 neural-guided meditation</p>
+        </div>
+        <div class="time-label"></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label"></div>
+        <div class="time-slot">
+          <h4>15:00 &mdash; Float</h4>
+          <p>Weightless sensory deprivation</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-slot">
+          <h4>18:00 &mdash; Dusk</h4>
+          <p>Zen garden walking meditation</p>
+        </div>
+        <div class="time-label"></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label"></div>
+        <div class="time-slot">
+          <h4>21:00 &mdash; Reflect</h4>
+          <p>Tea ceremony &amp; personal journaling</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing" class="glass-section">
+  <div class="glass-container">
+    <div class="section-header">
+      <div class="section-tag">Pricing</div>
+      <h2>Choose your frequency</h2>
+    </div>
+    <div class="pricing-glass">
+      <div class="pricing-card">
+        <h4>Alpha</h4>
+        <div class="rate"><sub>&yen;</sub>280k</div>
+        <ul class="perks">
+          <li>3-night glass suite</li>
+          <li>Daily meditation</li>
+          <li>Biometric meals</li>
+          <li>Float pod access</li>
+        </ul>
+        <a href="#" class="btn">Select</a>
+      </div>
+      <div class="pricing-card highlight">
+        <h4>Theta</h4>
+        <div class="rate"><sub>&yen;</sub>520k</div>
+        <ul class="perks">
+          <li>5-night sky suite</li>
+          <li>1:1 neural guidance</li>
+          <li>Full AI nutrition plan</li>
+          <li>EEG coherence tracking</li>
+        </ul>
+        <a href="#" class="btn">Select</a>
+      </div>
+      <div class="pricing-card">
+        <h4>Delta</h4>
+        <div class="rate"><sub>&yen;</sub>860k</div>
+        <ul class="perks">
+          <li>7-night penthouse suite</li>
+          <li>Unlimited1:1 sessions</li>
+          <li>Personal AI chef</li>
+          <li>Full neural mapping</li>
+        </ul>
+        <a href="#" class="btn">Select</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact" class="footer">
+  <p>Oasis &copy; 2026 &mdash; Kyoto, Japan &mdash; Everything connected. Nothing attached.</p>
+</footer>
+
+<script>
+(function(){
+  const container=document.getElementById('particles');
+  for(let i=0;i<50;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    p.style.left=Math.random()*100+'%';
+    p.style.animationDuration=(8+Math.random()*16)+'s';
+    p.style.animationDelay=Math.random()*12+'s';
+    p.style.width=(1+Math.random()*2)+'px';
+    p.style.height=p.style.width;
+    container.appendChild(p);
+  }
+})();
+</script>
+</body>
+</html>

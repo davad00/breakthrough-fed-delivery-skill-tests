@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oasis &mdash; Luxury Meditation Retreat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;font-weight:300;background:#f5f4f1;color:#1a1a1a;line-height:1.6;font-size:16px}
+
+.nav{display:flex;justify-content:space-between;align-items:center;padding:2.5rem 3rem;position:fixed;top:0;left:0;right:0;z-index:100;mix-blend-mode:difference}
+.nav-logo{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;color:#fff;letter-spacing:-2px}
+.nav-links{display:flex;gap:3rem;list-style:none}
+.nav-links a{color:rgba(255,255,255,.8);text-decoration:none;font-size:0.7rem;font-family:'Space Grotesk',sans-serif;letter-spacing:3px;text-transform:uppercase;font-weight:500;transition:opacity .3s}
+.nav-links a:hover{opacity:.5}
+
+.hero{height:100vh;display:flex;align-items:center;position:relative;background:#c8c4bb;overflow:hidden}
+.hero-bg{position:absolute;inset:0}
+.hero-bg .block{position:absolute}
+.hero-bg .block:nth-child(1){top:0;left:0;right:50%;bottom:0;background:#1a1a1a}
+.hero-bg .block:nth-child(2){top:0;left:50%;right:0;bottom:0;background:#d1ccc0}
+.hero-bg .line{position:absolute;width:1px;background:rgba(0,0,0,.08)}
+.hero-bg .line:nth-child(3){left:25%;top:0;bottom:0}
+.hero-bg .line:nth-child(4){left:75%;top:0;bottom:0}
+.hero-bg .line:nth-child(5){left:0;right:0;top:40%;height:1px;width:auto}
+.hero-bg .line:nth-child(6){left:0;right:0;top:60%;height:1px;width:auto}
+.hero-content{position:relative;z-index:2;padding:0 3rem;max-width:900px}
+.hero-number{font-family:'Space Grotesk',sans-serif;font-size:0.6rem;letter-spacing:8px;color:rgba(255,255,255,.4);margin-bottom:2rem;text-transform:uppercase;font-weight:400}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(4rem,10vw,9rem);font-weight:800;line-height:.85;letter-spacing:-3px;color:#fff;margin-bottom:2rem}
+.hero h1 .accent{color:#c8c4bb}
+.hero p{color:rgba(255,255,255,.35);font-size:1rem;max-width:380px;line-height:1.9;margin-bottom:3rem;font-family:'Inter',sans-serif;font-weight:300}
+.hero-cta{display:inline-flex;align-items:center;gap:1rem;color:#fff;text-decoration:none;font-family:'Space Grotesk',sans-serif;font-size:0.65rem;letter-spacing:5px;text-transform:uppercase;font-weight:500;transition:gap .4s}
+.hero-cta:hover{gap:1.5rem}
+.hero-cta .arrow{font-size:1.2rem;transition:transform .4s}
+.hero-cta:hover .arrow{transform:translateX(4px)}
+
+section{padding:6rem 3rem}
+.section-grid{display:grid;grid-template-columns:300px 1fr;gap:4rem;max-width:1200px;margin:0 auto}
+.section-sidebar .tag{font-family:'Space Grotesk',sans-serif;font-size:0.55rem;letter-spacing:6px;text-transform:uppercase;color:#aaa;margin-bottom:1rem;font-weight:500}
+.section-sidebar h2{font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:700;line-height:1.1;letter-spacing:-1px;color:#1a1a1a;margin-bottom:1.5rem}
+.section-sidebar p{color:#888;font-size:.88rem;line-height:1.8;font-weight:300}
+
+.programs-list{display:flex;flex-direction:column;gap:0}
+.program-item{border-top:1px solid #e0e0d8;padding:2rem 0;display:flex;align-items:center;gap:2rem;cursor:pointer;transition:padding .4s}
+.program-item:hover{padding-left:1rem}
+.program-item:last-child{border-bottom:1px solid #e0e0d8}
+.program-item .num{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:700;color:#ccc;width:3rem;flex-shrink:0}
+.program-item h3{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:600;letter-spacing:-1px;color:#1a1a1a;flex:1}
+.program-item .meta{font-family:'Space Grotesk',sans-serif;font-size:0.55rem;letter-spacing:4px;text-transform:uppercase;color:#aaa}
+.program-item .plus{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;color:#ccc;font-weight:300;transition:transform .3s}
+.program-item:hover .plus{transform:rotate(45deg)}
+
+.marquee-bar{background:#1a1a1a;padding:2rem 0;overflow:hidden;white-space:nowrap;margin:4rem 0}
+.marquee-bar .track{display:flex;gap:3rem;animation:marquee 30s linear infinite}
+.marquee-bar span{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:700;color:#fff;letter-spacing:-1px}
+.marquee-bar span.muted{color:#444}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+.features-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin-top:2rem}
+.feature-block{background:#fff;padding:2.5rem;border:1px solid #eee;transition:all .4s}
+.feature-block:hover{transform:translateY(-2px);box-shadow:0 10px 40px rgba(0,0,0,.04)}
+.feature-block .icon{font-size:1.8rem;margin-bottom:1rem}
+.feature-block h4{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:600;margin-bottom:.5rem;letter-spacing:-.5px}
+.feature-block p{color:#888;font-size:.82rem;line-height:1.7;font-weight:300}
+
+.pricing-section{max-width:1200px;margin:5rem auto 0;text-align:center}
+.pricing-section .tag{font-family:'Space Grotesk',sans-serif;font-size:0.55rem;letter-spacing:6px;text-transform:uppercase;color:#aaa;margin-bottom:1rem;font-weight:500}
+.pricing-section h2{font-family:'Syne',sans-serif;font-size:3rem;font-weight:700;letter-spacing:-2px;margin-bottom:3rem}
+.pricing-row{display:flex;gap:1rem;justify-content:center}
+.price-slab{flex:1;max-width:280px;background:#fff;padding:2.5rem 2rem;border:1px solid #eee;text-align:left;transition:all .4s}
+.price-slab:hover{transform:translateY(-3px);box-shadow:0 15px 50px rgba(0,0,0,.05)}
+.price-slab.dark{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.price-slab h5{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:600;margin-bottom:.5rem;letter-spacing:-.5px}
+.price-slab .nights{font-family:'Space Grotesk',sans-serif;font-size:.55rem;letter-spacing:3px;text-transform:uppercase;color:#aaa;margin-bottom:2rem}
+.price-slab.dark .nights{color:rgba(255,255,255,.3)}
+.price-slab .amount{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:700;margin-bottom:2rem;letter-spacing:-1px}
+.price-slab .amount sup{font-size:1rem;vertical-align:super;font-weight:500}
+.price-slab .amenities{list-style:none;margin-bottom:2rem}
+.price-slab .amenities li{padding:.35rem 0;font-size:.78rem;color:#888;font-weight:300}
+.price-slab.dark .amenities li{color:rgba(255,255,255,.5)}
+.price-slab .btn{display:block;text-align:center;padding:.75rem;text-decoration:none;font-family:'Space Grotesk',sans-serif;font-size:.58rem;letter-spacing:4px;text-transform:uppercase;transition:all .3s}
+.price-slab:not(.dark) .btn{border:2px solid #1a1a1a;color:#1a1a1a;font-weight:500}
+.price-slab:not(.dark) .btn:hover{background:#1a1a1a;color:#fff}
+.price-slab.dark .btn{border:2px solid rgba(255,255,255,.2);color:#fff;font-weight:500}
+.price-slab.dark .btn:hover{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.5)}
+
+.footer{border-top:2px solid #1a1a1a;padding:3rem;text-align:center;margin-top:6rem}
+.footer p{font-family:'Space Grotesk',sans-serif;font-size:.55rem;letter-spacing:5px;text-transform:uppercase;color:#bbb}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-logo">OASIS</div>
+  <ul class="nav-links">
+    <li><a href="#programs">Programs</a></li>
+    <li><a href="#philosophy">Philosophy</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="hero-bg">
+    <div class="block"></div>
+    <div class="block"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-number">01</div>
+    <h1>QUIET <span class="accent">IS</span> POWER</h1>
+    <p>Oasis is not an escape. It is a confrontation with the self. Brutal honesty wrapped in pure luxury. Come face yourself.</p>
+    <a href="#pricing" class="hero-cta">ENTER THE VOID <span class="arrow">&rarr;</span></a>
+  </div>
+</header>
+
+<section id="programs">
+  <div class="section-grid">
+    <div class="section-sidebar">
+      <div class="tag">The Offering</div>
+      <h2>Programs without pretense</h2>
+      <p>No candles. No chanting. No pastel affirmations. Just deep meditative work in15th-century Icelandic architecture.</p>
+    </div>
+    <div class="programs-list">
+      <div class="program-item">
+        <div class="num">01</div>
+        <h3>The Descent</h3>
+        <div class="meta">4 Days</div>
+        <div class="plus">+</div>
+      </div>
+      <div class="program-item">
+        <div class="num">02</div>
+        <h3>The Void</h3>
+        <div class="meta">6 Days</div>
+        <div class="plus">+</div>
+      </div>
+      <div class="program-item">
+        <div class="num">03</div>
+        <h3>The Return</h3>
+        <div class="meta">8 Days</div>
+        <div class="plus">+</div>
+      </div>
+      <div class="program-item">
+        <div class="num">04</div>
+        <h3>The Mastery</h3>
+        <div class="meta">12 Days</div>
+        <div class="plus">+</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee-bar">
+  <div class="track">
+    <span>STILLNESS</span><span>&middot;</span><span class="muted">CLARITY</span><span>&middot;</span><span>DEPTH</span><span>&middot;</span><span class="muted">PRESENCE</span><span>&middot;</span><span>TRUTH</span><span>&middot;</span><span class="muted">LIGHT</span><span>&middot;</span><span>FORM</span><span>&middot;</span><span class="muted">VOID</span><span>&middot;</span>
+    <span>STILLNESS</span><span>&middot;</span><span class="muted">CLARITY</span><span>&middot;</span><span>DEPTH</span><span>&middot;</span><span class="muted">PRESENCE</span><span>&middot;</span><span>TRUTH</span><span>&middot;</span><span class="muted">LIGHT</span><span>&middot;</span><span>FORM</span><span>&middot;</span><span class="muted">VOID</span><span>&middot;</span>
+  </div>
+</div>
+
+<section id="philosophy">
+  <div class="section-grid">
+    <div class="section-sidebar">
+      <div class="tag">Our Ethos</div>
+      <h2>Less noise. More signal.</h2>
+      <p>We stripped away the spirituality-industrial complex and kept only what works. Each element serves a measurable</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-block">
+        <div class="icon">&#9670;</div>
+        <h4>Architecture as Practice</h4>
+        <p>Concrete, glass,780&deg;C basalt floors. Spaces designed to amplify55Hz gamma brainwave coherence.</p>
+      </div>
+      <div class="feature-block">
+        <div class="icon">&#9679;</div>
+        <h4>Cold Exposure Protocol</h4>
+        <p>Controlled cryogenic immersion at -110&deg;C. Measurable dopamine upregulation over 7 consecutive sessions.</p>
+      </div>
+      <div class="feature-block">
+        <div class="icon">&#9674;</div>
+        <h4>Neural Meditation</h4>
+        <p>EEG-guided sessions using real-time neurofeedback. See your brain quiet itself in 4K resolution.</p>
+      </div>
+      <div class="feature-block">
+        <div class="icon">&#9632;</div>
+        <h4>Nutritional Precision</h4>
+        <p>Blood-chemistry calibrated menus by Michelin-trained Chef Anders. Meals designed to optimize your fasted state.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="pricing-section">
+    <div class="tag">INVESTMENT</div>
+    <h2>PAY THE PRICE. REAP THE SILENCE.</h2>
+    <div class="pricing-row">
+      <div class="price-slab">
+        <h5>Foundation</h5>
+        <div class="nights">4 DAYS</div>
+        <div class="amount"><sup>$</sup>2,900</div>
+        <ul class="amenities">
+          <li>Minimalist suite</li>
+          <li>1 guided session / day</li>
+          <li>All precision meals</li>
+          <li>Cold plunge access</li>
+        </ul>
+        <a href="#" class="btn">Reserve</a>
+      </div>
+      <div class="price-slab dark">
+        <h5>Structure</h5>
+        <div class="nights">7 DAYS</div>
+        <div class="amount"><sup>$</sup>5,400</div>
+        <ul class="amenities">
+          <li>Panoramic concrete suite</li>
+          <li>2 private sessions / day</li>
+          <li>Neurofeedback access</li>
+          <li>Full cryo program</li>
+        </ul>
+        <a href="#" class="btn">Reserve</a>
+      </div>
+      <div class="price-slab">
+        <h5>Complete</h5>
+        <div class="nights">10 DAYS</div>
+        <div class="amount"><sup>$</sup>8,200</div>
+        <ul class="amenities">
+          <li>Private residence</li>
+          <li>Unlimited 1:1 sessions</li>
+          <li>Blood chemistry menu</li>
+          <li>Full neural mapping</li>
+        </ul>
+        <a href="#" class="btn">Reserve</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact" class="footer">
+  <p>OASIS RETREAT &copy; 2026 &mdash; REYKJAVIK, ICELAND &mdash; NO SMALL TALK</p>
+</footer>
+</body>
+</html>

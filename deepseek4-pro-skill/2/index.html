@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Oasis — A luxury meditation retreat carved from ancient stone. Ground yourself in stillness.">
+<title>OASIS — Luxury Meditation Retreat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { background: #0F0B08; scroll-behavior: auto; }
+body { background: #0F0B08; color: #FDF8F0; font-family: 'Inter', sans-serif; font-weight: 400; overflow-x: hidden; cursor: none; }
+canvas#bg { position: fixed; top: 0; left: 0; z-index: 0; }
+
+.cursor { position: fixed; width: 10px; height: 10px; background: #D4843A; z-index: 100; pointer-events: none; transition: width 0.3s cubic-bezier(0.22,1,0.36,1), height 0.3s cubic-bezier(0.22,1,0.36,1), background 0.3s; }
+.cursor.hover { width: 44px; height: 44px; background: #FDF8F0; mix-blend-mode: difference; }
+
+.nav-hamburger { position: fixed; top: 32px; right: 32px; z-index: 50; width: 28px; height: 16px; display: flex; flex-direction: column; justify-content: space-between; background: none; border: none; cursor: none; }
+.nav-hamburger span { display: block; width: 100%; height: 2px; background: #FDF8F0; transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.2s; }
+.nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.nav-overlay { position: fixed; inset: 0; z-index: 40; background: #0F0B08; display: flex; align-items: center; justify-content: center; gap: 0; opacity: 0; pointer-events: none; transition: opacity 0.5s cubic-bezier(0.22,1,0.36,1); }
+.nav-overlay.open { opacity: 1; pointer-events: auto; }
+.nav-overlay-inner { display: flex; flex-direction: column; gap: 48px; }
+.nav-overlay a { font-family: 'Playfair Display', serif; font-size: 5vw; font-weight: 600; line-height: 1; letter-spacing: -0.02em; color: #8B7355; text-decoration: none; transition: color 0.4s, transform 0.4s cubic-bezier(0.22,1,0.36,1); }
+.nav-overlay a:hover { color: #D4843A; transform: translateX(12px); }
+
+main { position: relative; z-index: 10; }
+
+.hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding-left: 5vw; position: relative; }
+.hero-line { position: absolute; top: 20%; left: 5vw; width: 1px; height: 40vh; background: rgba(212,132,58,0.3); }
+.hero-title { font-family: 'Playfair Display', serif; font-size: 12vw; font-weight: 700; line-height: 0.88; letter-spacing: -0.04em; color: #FDF8F0; }
+.hero-sub { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: #D4843A; margin-top: 24px; }
+.hero-divider { width: 60px; height: 1px; background: #8B7355; margin-top: 32px; }
+
+.section { min-height: 100vh; display: flex; align-items: center; padding: 80px; position: relative; }
+.section-divider { position: absolute; top: 0; left: 80px; right: 80px; height: 1px; background: rgba(139,115,85,0.15); }
+.content { max-width: 550px; display: flex; flex-direction: 25column; gap: 24px; }
+.content.right { margin-left: auto; text-align: right; }
+.section-num { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.14em; color: #D4843A; }
+.section-title { font-family: 'Playfair Display', serif; font-size: 3.5vw; font-weight: 700; line-height: 1; letter-spacing: -0.03em; color: #FDF8F0; }
+.section-text { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 400; line-height: 1.7; color: #8B7355; }
+.angle-accent { position: absolute; bottom: 40px; right: 40px; width: 40px; height: 40px; border-right: 2px solid rgba(212,132,58,0.4); border-bottom: 2px solid rgba(212,132,58,0.4); }
+
+.btn { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; padding: 16px 40px; border-radius: 4px; display: inline-block; cursor: none; transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), background 0.3s; }
+.btn:hover { transform: translateY(-2px); }
+.btn-primary { background: #D4843A; color: #0F0B08; }
+.btn-primary:hover { background: #E89545; }
+.btn-ghost { background: transparent; color: #FDF8F0; border: 1px solid #8B7355; }
+.btn-ghost:hover { border-color: #D4843A; color: #D4843A; }
+
+.footer { padding: 80px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(139,115,85,0.15); }
+.footer-brand { font-family: 'Playfair Display', serif; font-size: 1.5vw; font-weight: 600; letter-spacing: -0.02em; color: #FDF8F0; }
+.footer-info { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; color: #8B7355; }
+.footer-link { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; color: #8B7355; text-decoration: none; transition: color 0.4s; }
+.footer-link:hover { color: #D4843A; }
+
+@media (max-width: 768px) {
+  body { cursor: auto; }
+  .cursor { display: none; }
+  .hero { padding-left: 24px; }
+  .hero-title { font-size: 14vw; }
+  .section { padding: 40px 24px; }
+  .section-title { font-size: 7vw; }
+  .section-text { font-size: 14px; }
+  .footer { flex-direction: column; gap: 16px; padding: 40px 24px; }
+  .footer-brand { font-size: 4vw; }
+  canvas#bg { opacity: 0.5; }
+}
+</style>
+</head>
+<body>
+<div class="cursor" aria-hidden="true"></div>
+
+<button class="nav-hamburger" aria-label="Toggle navigation menu" data-magnetic>
+  <span></span><span></span><span></span>
+</button>
+
+<nav class="nav-overlay" role="navigation" aria-label="Main navigation">
+  <div class="nav-overlay-inner">
+    <a href="#philosophy">Philosophy</a>
+    <a href="#space">The Space</a>
+    <a href="#practice">Practice</a>
+    <a href="#arrive">Arrive</a>
+  </div>
+</nav>
+
+<canvas id="bg"></canvas>
+
+<main role="main">
+  <section class="hero">
+    <div class="hero-line"></div>
+    <h1 class="hero-title">Oasis</h1>
+    <p class="hero-sub">Carved from stillness</p>
+    <div class="hero-divider"></div>
+  </section>
+
+  <section class="section" id="philosophy">
+    <div class="section-divider"></div>
+    <div class="content">
+      <span class="section-num">01 — Philosophy</span>
+      <h2 class="section-title">Silence is not empty. It is full.</h2>
+      <p class="section-text">At Oasis, we believe that true luxury is not more — it is less. Less noise, less distraction, less anything that stands between you and the simple fact of being. Our retreat is built from desert stone, ancient timber, and12 the understanding that
+the deepest peace is26 found in what is already here.</p>
+    </div>
+    <div class="angle-accent"></div>
+  </section>
+
+  <section class="section" id="space">
+    <div class="section-divider"></div>
+    <div class="content right">
+      <span class="section-num">02 — The Space</span>
+      <h2 class="section-title">Architecture of silence.</h2>
+      <p class="section-text">Twenty-eight suites carved into the cliff face, each with a private thermal spring and12 uninterrupted views of the canyon. Common spaces feature walls of rammed earth,16 floors of polished obsidian, and ceilings open to the desert sky. Every material, every angle, every shadow is intentional.</p>
+      <a href="#arrive" class="btn btn-primary" data-magnetic style="margin-left:auto;display:block;width:fit-content">Reserve a Suite</a>
+    </div>
+  </section>
+
+  <section class="section" id="practice">
+    <div class="section-divider"></div>
+    <div class="content">
+      <span class="section-num">03 — Practice</span>
+      <h2 class="section-title">Four disciplines.<br>One ground.</h2>
+      <p class="section-text">Stillness Meditation — taught by monks from the Himalayan tradition. Stone Walking — a contemplative practice through our desert labyrinths. Thermal Immersion — guided breathwork in mineral springs. Silence Immersion — seven days without speech, without screens, without self.</p>
+    </div>
+  </section>
+
+  <section class="section" id="arrive">
+    <div class="section-divider"></div>
+    <div class="content right">
+      <span class="section-num">04 — Arrive</span>
+      <h2 class="section-title">Your ground<br>awaits.</h2>
+      <p class="section-text">Oasis welcomes twenty-four guests at a time. Each stay begins with a private consultation. We design every experience around the individual — your practice, your pace, your peace.</p>
+      <a href="#" class="btn btn-ghost" data-magnetic style="margin-left:auto;display:block;width:fit-content">Begin Inquiry</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span class="footer-info">Oasis Retreat · The Sonoran Desert · Arizona</span>
+    <a href="#" class="footer-link">© Est. 2025</a>
+  </footer>
+</main>
+
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+<script type="module">
+import * as THREE from 'three';
+
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (!prefersReducedMotion) {
+  gsap.registerPlugin(ScrollTrigger);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 50);
+  camera.position.set(3, 1.5, 10);
+
+  const canvas = document.getElementById('bg');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x0F0B08);
+  renderer.shadowMap.enabled = true;
+
+  const light = new THREE.DirectionalLight(0xD4843A, 6);
+  light.position.set(5, 8, 5);
+  light.castShadow = true;
+  light.shadow.mapSize.set(1024, 1024);
+  scene.add(light);
+
+  const fillLight = new THREE.DirectionalLight(0x8B7355, 1.2);
+  fillLight.position.set(-3, 2, -2);
+  scene.add(fillLight);
+  scene.add(new THREE.AmbientLight(0x1a100a, 1.5));
+
+  const group = new THREE.Group();
+
+  function createFacetedStone(baseGeom, pos) {
+    const geom = baseGeom.clone();
+    const mat = new THREE.MeshStandardMaterial({
+      color: new THREE.Color().setHSL(0.08, 0.3, 0.15 + Math.random() * 0.2),
+      roughness: 0.3,
+      metalness: 0.1,
+      flatShading: true
+    });
+    const mesh = new THREE.Mesh(geom, mat);
+    mesh.position.copy(pos);
+    mesh.rotation.set(Math.random() * 0.5, Math.random() * Math.PI, Math.random() * 0.5);
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    group.add(mesh);
+    return mesh;
+  }
+
+  const coreGeom = new THREE.IcosahedronGeometry(1.2, 2);
+  createFacetedStone(coreGeom, new THREE.Vector3(0, 0, 0));
+
+  for (let i = 0; i < 8; i++) {
+    const angle = (i / 8) * Math.PI * 2;
+    const radius = 2.0 + Math.random() * 1.5;
+    const y = (Math.random() - 0.5) * 3;
+    const g = new THREE.DodecahedronGeometry(0.3 + Math.random() * 0.5, 1);
+    createFacetedStone(g, new THREE.Vector3(Math.cos(angle) * radius, y, Math.sin(angle) * radius));
+  }
+
+  for (let i = 0; i < 20; i++) {
+    const g = new THREE.OctahedronGeometry(0.08 + Math.random() * 0.15, 0);
+    createFacetedStone(g, new THREE.Vector3(
+      (Math.random() - 0.5) * 8,
+      (Math.random() - 0.5) * 6,
+      (Math.random() - 0.5) * 4
+    ));
+  }
+
+  const floorGeom = new THREE.PlaneGeometry(20, 20);
+  const floorMat = new THREE.MeshStandardMaterial({ color: 0x1a120c, roughness: 0.9 });
+  const floor = new THREE.Mesh(floorGeom, floorMat);
+  floor.rotation.x = -Math.PI / 2;
+  floor.position.y = -3;
+  floor.receiveShadow = true;
+  scene.add(floor);
+
+  scene.add(group);
+
+  function animate(time) {
+    requestAnimationFrame(animate);
+    group.rotation.y += 0.002;
+    group.rotation.x = Math.sin(time * 0.0003) * 0.1;
+    light.intensity = 5 + Math.sin(time * 0.0005) * 0.5;
+    renderer.render(scene, camera);
+  }
+  requestAnimationFrame(animate);
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  ScrollTrigger.create({
+    trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: 1.5,
+    onUpdate: (self) => {
+      group.rotation.y = self.progress * Math.PI * 3;
+      camera.position.x = 3 + Math.sin(self.progress * Math.PI * 2) * 1;
+      camera.position.y = 1.5 + self.progress * 0.5;
+    }
+  });
+
+  const lenis = new Lenis({ lerp: 0.07, smoothWheel: true });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+
+  gsap.from('.hero-title', {
+    scrollTrigger: { trigger: '.hero', start: 'top top', toggleActions: 'play none none reverse' },
+    y: 100, opacity: 0, duration: 1.4, ease: 'power4.out'
+  });
+  gsap.from(['.hero-sub', '.hero-divider', '.hero-line'], {
+    scrollTrigger: { trigger: '.hero', start: 'top top', toggleActions: 'play none none reverse' },
+    y: 30, opacity: 0, duration: 1, stagger: 0.15, delay: 0.3, ease: 'power4.out'
+  });
+
+  document.querySelectorAll('.content').forEach((el, i) => {
+    const dir = el.classList.contains('right') ? 60 : -60;
+    gsap.from(el.children, {
+      scrollTrigger: { trigger: el.closest('.section'), start: 'top 75%', toggleActions: 'play none none reverse' },
+      x: dir, opacity: 0, duration: 1, ease: 'power4.out', stagger: 0.1
+    });
+  });
+
+  const cursor = document.querySelector('.cursor');
+  let cx = 0, cy = 0, tx = 0, ty = 0;
+  document.addEventListener('mousemove', (e) => { tx = e.clientX; ty = e.clientY; });
+  document.querySelectorAll('[data-magnetic], a, .btn, .nav-hamburger').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+  function animCursor() {
+    cx += (tx - cx) * 0.1;
+    cy += (ty - cy) * 0.1;
+    cursor.style.left = (cx - cursor.offsetWidth / 2) + 'px';
+    cursor.style.top = (cy - cursor.offsetHeight / 2) + 'px';
+    requestAnimationFrame(animCursor);
+  }
+  requestAnimationFrame(animCursor);
+
+  const hamburger = document.querySelector('.nav-hamburger');
+  const nav = document.querySelector('.nav-overlay');
+  hamburger.addEventListener('click', () => { hamburger.classList.toggle('open'); nav.classList.toggle('open'); });
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { hamburger.classList.remove('open'); nav.classList.remove('open'); }));
+
+  document.querySelectorAll('[data-magnetic]').forEach(el => {
+    el.addEventListener('mousemove', (e) => {
+      const rect = el.getBoundingClientRect();
+      gsap.to(el, { x: (e.clientX - rect.left - rect.width / 2) * 0.25, y: (e.clientY - rect.top - rect.height / 2) * 0.25, duration: 0.35, ease: 'power2.out' });
+    });
+    el.addEventListener('mouseleave', () => gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)' }));
+  });
+} else {
+  document.querySelectorAll('.cursor').forEach(e => e.remove());
+  document.body.style.cursor = 'auto';
+}
+</script>
+</body>
+</html>

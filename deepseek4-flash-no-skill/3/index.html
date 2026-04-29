@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oasis — Where Silence Lives</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400;9..40,500&display=swap');
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #faf8f5;
+      color: #1d1b18;
+      font-weight: 300;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+    }
+
+    .hero-left {
+      padding: 3rem 3rem 3rem 4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .hero-right {
+      position: relative;
+      overflow: hidden;
+      background: #e8e2d8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .abstract-shape {
+      width: 70%;
+      height: 70%;
+      background: radial-gradient(ellipse at 40% 50%, #d4ccc0 0%, #c4baaa 100%);
+      border-radius: 50%;
+      opacity: 0.6;
+    }
+
+    .abstract-shape-2 {
+      position: absolute;
+      width: 40%;
+      height: 40%;
+      background: radial-gradient(ellipse at 50% 50%, #c8beb0 0%, transparent 70%);
+      border-radius: 50%;
+      top: 10%;
+      right: 5%;
+    }
+
+    .abstract-line {
+      position: absolute;
+      background: rgba(0,0,0,0.04);
+    }
+
+    .abstract-line.h {
+      height: 1px;
+      width: 30%;
+      top: 50%;
+      left: 10%;
+    }
+
+    .abstract-line.v {
+      width: 1px;
+      height: 40%;
+      top: 30%;
+      right: 25%;
+    }
+
+    .hero-nav {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 2rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(29, 27, 24, 0.3);
+      z-index: 2;
+    }
+
+    .hero-nav .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.05em;
+      color: rgba(29, 27, 24, 0.6);
+      text-transform: none;
+    }
+
+    .hero-nav a {
+      color: rgba(29, 27, 24, 0.3);
+      text-decoration: none;
+      margin-left: 2rem;
+      transition: color 0.3s;
+    }
+
+    .hero-nav a:hover {
+      color: rgba(29, 27, 24, 0.6);
+    }
+
+    .hero-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: rgba(29, 27, 24, 0.2);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      line-height: 1;
+      letter-spacing: 0.01em;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title .fade {
+      color: rgba(29, 27, 24, 0.2);
+      font-style: italic;
+    }
+
+    .hero-sub {
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: rgba(29, 27, 24, 0.4);
+      font-weight: 200;
+      max-width: 400px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2.5rem;
+    }
+
+    .btn {
+      padding: 0.9rem 2.5rem;
+      text-decoration: none;
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: #1d1b18;
+      color: #faf8f5;
+    }
+
+    .btn-primary:hover {
+      background: #333;
+    }
+
+    .btn-ghost {
+      border: 1px solid rgba(29, 27, 24, 0.12);
+      color: #1d1b18;
+    }
+
+    .btn-ghost:hover {
+      border-color: rgba(29, 27, 24, 0.3);
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid rgba(29, 27, 24, 0.04);
+    }
+
+    .grid-card {
+      padding: 3rem;
+      border-right: 1px solid rgba(29, 27, 24, 0.04);
+      border-bottom: 1px solid rgba(29, 27, 24, 0.04);
+      transition: background 0.3s;
+    }
+
+    .grid-card:nth-child(3n) {
+      border-right: none;
+    }
+
+    .grid-card:hover {
+      background: rgba(0,0,0,0.01);
+    }
+
+    .grid-card .icon {
+      font-size: 2rem;
+      color: rgba(29, 27, 24, 0.06);
+      font-family: 'DM Serif Display', serif;
+      margin-bottom: 1.5rem;
+    }
+
+    .grid-card h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.2rem;
+      font-weight: 400;
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.01em;
+    }
+
+    .grid-card p {
+      font-size: 0.8rem;
+      line-height: 1.8;
+      color: rgba(29, 27, 24, 0.4);
+      font-weight: 200;
+    }
+
+    .split-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 60vh;
+    }
+
+    .split-visual {
+      background: #e8e2d8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem;
+    }
+
+    .split-visual-inner {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 1px solid rgba(29, 27, 24, 0.06);
+      position: relative;
+    }
+
+    .split-visual-inner::after {
+      content: '';
+      position: absolute;
+      inset: 2rem;
+      border-radius: 50%;
+      border: 1px solid rgba(29, 27, 24, 0.04);
+    }
+
+    .split-content {
+      padding: 5rem 4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .split-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: rgba(29, 27, 24, 0.2);
+      margin-bottom: 1rem;
+    }
+
+    .split-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      line-height: 1.15;
+      font-weight: 400;
+      margin-bottom: 1.5rem;
+    }
+
+    .split-text {
+      font-size: 0.85rem;
+      line-height: 1.9;
+      color: rgba(29, 27, 24, 0.4);
+      font-weight: 200;
+      max-width: 460px;
+    }
+
+    .pricing {
+      padding: 6rem 2rem;
+      text-align: center;
+      background: #f5f2ec;
+    }
+
+    .pricing-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: rgba(29, 27, 24, 0.2);
+      margin-bottom: 1rem;
+    }
+
+    .pricing-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3.2rem);
+      font-weight: 400;
+      margin-bottom: 3rem;
+    }
+
+    .pricing-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      max-width: 900px;
+      margin: 0 auto;
+      gap: 0;
+      border: 1px solid rgba(29, 27, 24, 0.06);
+    }
+
+    .pricing-card {
+      padding: 3rem 2rem;
+      border-right: 1px solid rgba(29, 27, 24, 0.06);
+      background: #faf8f5;
+    }
+
+    .pricing-card:last-child {
+      border-right: none;
+    }
+
+    .pricing-card.featured {
+      background: #1d1b18;
+      color: #faf8f5;
+      transform: scale(1.02);
+      position: relative;
+      z-index: 1;
+    }
+
+    .pricing-card.featured p {
+      color: rgba(250, 248, 245, 0.5);
+    }
+
+    .pricing-card .plan-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+    }
+
+    .pricing-card .plan-price {
+      font-size: 2.5rem;
+      font-family: 'DM Serif Display', serif;
+      margin-bottom: 0.25rem;
+    }
+
+    .pricing-card .plan-duration {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(29, 27, 24, 0.2);
+      margin-bottom: 1.5rem;
+    }
+
+    .pricing-card.featured .plan-duration {
+      color: rgba(250, 248, 245, 0.3);
+    }
+
+    .pricing-card p {
+      font-size: 0.78rem;
+      line-height: 1.7;
+      color: rgba(29, 27, 24, 0.35);
+      font-weight: 200;
+    }
+
+    .footer {
+      padding: 3rem 2rem;
+      text-align: center;
+      background: #1d1b18;
+      color: rgba(250, 248, 245, 0.2);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .hero-left {
+        padding: 6rem 2rem 3rem;
+      }
+      .hero-right {
+        min-height: 40vh;
+      }
+      .hero-nav {
+        padding: 1.5rem 2rem;
+      }
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+      .grid-card:nth-child(3n) {
+        border-right: 1px solid rgba(29, 27, 24, 0.04);
+      }
+      .split-section {
+        grid-template-columns: 1fr;
+      }
+      .split-content {
+        padding: 3rem 2rem;
+      }
+      .pricing-cards {
+        grid-template-columns: 1fr;
+      }
+      .pricing-card {
+        border-right: none;
+        border-bottom: 1px solid rgba(29, 27, 24, 0.06);
+      }
+      .pricing-card.featured {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="hero-nav">
+    <span class="logo">Oasis</span>
+    <div>
+      <a href="#">Retreats</a>
+      <a href="#">Sanctuary</a>
+      <a href="#">Philosophy</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-label">Luxury Meditation Retreat</div>
+      <h1 class="hero-title">Where <span class="fade">silence</span> lives</h1>
+      <p class="hero-sub">Hidden retreats in the world's most secluded landscapes. Designed for those who have everything — and seek nothing.</p>
+      <div class="btn-group">
+        <a href="#" class="btn btn-primary">Explore</a>
+        <a href="#" class="btn btn-ghost">Journal</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="abstract-shape"></div>
+      <div class="abstract-shape-2"></div>
+      <div class="abstract-line h"></div>
+      <div class="abstract-line v"></div>
+    </div>
+  </section>
+
+  <div class="content-grid">
+    <div class="grid-card">
+      <div class="icon">&#9670;</div>
+      <h3>Silent Mornings</h3>
+      <p>Each day begins before sunrise with guided sitting meditation. The only sound is the bell — and the growing stillness within.</p>
+    </div>
+    <div class="grid-card">
+      <div class="icon">&#9670;</div>
+      <h3>Somatic Practice</h3>
+      <p>Daily movement and breathwork sessions designed to release stored tension and restore the body's natural equilibrium.</p>
+    </div>
+    <div class="grid-card">
+      <div class="icon">&#9670;</div>
+      <h3>Private Mentorship</h3>
+      <p>One-on-one sessions with meditation masters, somatic therapists, and breathwork guides. Tailored to your inner landscape.</p>
+    </div>
+    <div class="grid-card">
+      <div class="icon">&#9670;</div>
+      <h3>Forest Immersion</h3>
+      <p>Guided walks through ancient forests, alpine meadows, and along mountain streams. Nature as the ultimate meditation teacher.</p>
+    </div>
+    <div class="grid-card">
+      <div class="icon">&#9670;</div>
+      <h3>Plant-Based Cuisine</h3>
+      <p>Seasonal menus crafted by world-class chefs. Every meal is a meditation in itself — prepared with intention, eaten in silence.</p>
+    </div>
+    <div class="grid-card">
+      <div class="icon">&#9670;</div>
+      <h3>Integration</h3>
+      <p>Post-retreat support to help you carry the silence home. Weekly calls, guided recordings, and a community of fellow travelers.</p>
+    </div>
+  </div>
+
+  <div class="split-section">
+    <div class="split-visual">
+      <div class="split-visual-inner"></div>
+    </div>
+    <div class="split-content">
+      <div class="split-label">The Sanctuary</div>
+      <h2 class="split-title">A room with a view of forever.</h2>
+      <p class="split-text">Perched at the edge of a Himalayan valley, our flagship sanctuary is a study in radical minimalism. Heated basalt floors, hand-loomed linen, windows that frame the mountains like living paintings. No television. No telephone. No internet. The only connection is to yourself.</p>
+    </div>
+  </div>
+
+  <section class="pricing">
+    <div class="pricing-label">Investment</div>
+    <h2 class="pricing-title">Choose your depth of return.</h2>
+    <div class="pricing-cards">
+      <div class="pricing-card">
+        <div class="plan-name">The Stillness</div>
+        <div class="plan-price">$4,800</div>
+        <div class="plan-duration">7 Days</div>
+        <p>Noble silence retreat. All meals, accommodation, and daily guided sessions included. Maximum 14 guests.</p>
+      </div>
+      <div class="pricing-card featured">
+        <div class="plan-name">The Depth</div>
+        <div class="plan-price">$9,200</div>
+        <div class="plan-duration">14 Days</div>
+        <p>Extended immersion with private mentorship, breathwork sessions, and a personalized integration plan.</p>
+      </div>
+      <div class="pricing-card">
+        <div class="plan-name">The Return</div>
+        <div class="plan-price">$18,000</div>
+        <div class="plan-duration">21 Days</div>
+        <p>Our most profound offering. Includes plant medicine sessions, depth psychology, and lifetime integration support.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    Oasis &mdash; Luxury Meditation Retreats &bull; Est. 2024
+  </footer>
+</body>
+</html>

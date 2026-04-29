@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oasis — The Garden of the Mind</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+--primary:#2C2C2C;
+--secondary:#8C8478;
+--tertiary:#C23B22;
+--neutral:#F2EDE8;
+--on-tertiary:#F2EDE8;
+--on-neutral:#2C2C2C;
+--font-display:'Playfair Display',serif;
+--font-body:'Inter',sans-serif;
+--font-mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:auto}
+body{
+background:var(--neutral);
+color:var(--primary);
+font-family:var(--font-body);
+font-size:16px;
+line-height:1.75;
+letter-spacing:0.01em;
+overflow-x:hidden;
+cursor:none;
+}
+@media(max-width:768px){body{cursor:auto}}
+::selection{background:var(--tertiary);color:var(--on-tertiary)}
+.cursor-dot{
+position:fixed;
+top:0;left:0;
+width:10px;height:10px;
+background:var(--tertiary);
+border-radius:9999px;
+pointer-events:none;
+z-index:9999;
+transform:translate(-50%,-50%);
+transition:width 0.3s ease,height 0.3s ease,background 0.3s ease;
+will-change:transform;
+}
+.cursor-dot.is-hover{
+width:40px;height:40px;
+background:var(--primary);
+}
+.cursor-dot.is-magnetic{
+width:28px;height:28px;
+background:var(--tertiary);
+}
+@media(max-width:768px){.cursor-dot{display:none}}
+.cursor-follower{
+position:fixed;
+top:0;left:0;
+width:10px;height:10px;
+background:var(--tertiary);
+border-radius:9999px;
+pointer-events:none;
+z-index:9998;
+transform:translate(-50%,-50%);
+opacity:0.3;
+transition:width 0.4s ease,height 0.4s ease,opacity 0.4s ease;
+will-change:transform;
+}
+.cursor-follower.is-hover{
+width:60px;height:60px;
+opacity:0.15;
+}
+@media(max-width:768px){.cursor-follower{display:none}}
+.paper-texture{
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+pointer-events:none;
+z-index:1;
+opacity:0.03;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%232C2C2C' opacity='0.15'/%3E%3Crect width='1' height='1' fill='%232C2C2C' opacity='0.08'/%3E%3C/svg%3E");
+}
+nav{
+position:fixed;
+top:0;left:0;right:0;
+z-index:100;
+padding:24px 32px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+mix-blend-mode:normal;
+}
+.nav-brand{
+font-family:var(--font-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.15em;
+color:var(--secondary);
+text-transform:uppercase;
+}
+.nav-links{
+display:flex;
+gap:32px;
+}
+.nav-links a{
+font-family:var(--font-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.15em;
+color:var(--secondary);
+text-decoration:none;
+text-transform:uppercase;
+transition:color 0.3s ease;
+}
+.nav-links a:hover{color:var(--primary)}
+.hamburger{
+display:none;
+flex-direction:column;
+gap:6px;
+cursor:pointer;
+padding:8px;
+z-index:200;
+background:none;
+border:none;
+}
+.hamburger span{
+display:block;
+width:24px;height:1.5px;
+background:var(--primary);
+transition:all 0.4s ease;
+transform-origin:center;
+}
+.hamburger.is-active span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
+.hamburger.is-active span:nth-child(2){opacity:0}
+.hamburger.is-active span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
+@media(max-width:768px){
+.nav-links{display:none}
+.hamburger{display:flex}
+}
+.menu-overlay{
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+z-index:150;
+pointer-events:none;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+.menu-overlay-bg{
+position:absolute;
+top:0;left:0;
+width:100%;height:100%;
+background:var(--neutral);
+clip-path:inset(0 0 100% 0);
+will-change:clip-path;
+}
+.menu-overlay-content{
+position:relative;
+z-index:2;
+display:flex;
+flex-direction:column;
+gap:24px;
+opacity:0;
+}
+.menu-overlay a{
+font-family:var(--font-display);
+font-size:6vw;
+font-weight:600;
+color:var(--primary);
+text-decoration:none;
+line-height:1.1;
+position:relative;
+display:inline-block;
+}
+.menu-overlay a::after{
+content:'';
+position:absolute;
+bottom:0;left:0;
+width:0;height:2px;
+background:var(--tertiary);
+transition:width 0.4s ease;
+}
+.menu-overlay a:hover::after{width:100%}
+.menu-overlay.is-open{pointer-events:auto}
+.hero{
+position:relative;
+width:100%;
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden;
+}
+.hero-ink-svg{
+position:absolute;
+top:0;left:0;
+width:100%;height:100%;
+z-index:0;
+}
+.hero-content{
+position:relative;
+z-index:2;
+text-align:center;
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:16px;
+}
+.hero-title{
+font-family:var(--font-display);
+font-size:11vw;
+font-weight:700;
+line-height:0.88;
+letter-spacing:-0.02em;
+color:var(--primary);
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+}
+.hero-title .word{
+display:inline-block;
+clip-path:inset(100% 0 0 0);
+will-change:clip-path;
+}
+.hero-subtitle{
+font-family:var(--font-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.15em;
+color:var(--secondary);
+text-transform:uppercase;
+}
+.hero-line{
+width:0;
+height:1px;
+background:var(--secondary);
+margin-top:8px;
+will-change:width;
+}
+.philosophy{
+padding:128px 32px;
+max-width:1100px;
+margin:0 auto;
+text-align:center;
+}
+.philosophy-text{
+font-family:var(--font-display);
+font-size:6vw;
+font-weight:600;
+line-height:0.95;
+letter-spacing:-0.01em;
+color:var(--primary);
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:0 0.3em;
+}
+.philosophy-text .word{
+display:inline-block;
+clip-path:inset(100% 0 0 0);
+will-change:clip-path;
+}
+@media(max-width:768px){
+.philosophy-text{font-size:8vw}
+}
+.stones-section{
+padding:128px 32px;
+max-width:1200px;
+margin:0 auto;
+}
+.stones-header{
+text-align:center;
+margin-bottom:64px;
+}
+.stones-header h2{
+font-family:var(--font-display);
+font-size:3.5vw;
+font-weight:600;
+line-height:1.1;
+color:var(--primary);
+margin-bottom:16px;
+}
+@media(max-width:768px){.stones-header h2{font-size:8vw}}
+.stones-header .label{
+font-family:var(--font-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.15em;
+color:var(--secondary);
+text-transform:uppercase;
+}
+.stones-grid{
+display:grid;
+grid-template-columns:1fr 1.4fr 0.8fr;
+gap:32px;
+align-items:start;
+}
+@media(max-width:768px){
+.stones-grid{
+grid-template-columns:1fr;
+gap:48px;
+}
+}
+.stone{
+background:var(--neutral);
+border:1px solid rgba(140,132,120,0.15);
+border-radius:6px;
+padding:40px 32px;
+box-shadow:0 20px 60px rgba(44,44,44,0.04),0 4px 16px rgba(44,44,44,0.03);
+position:relative;
+opacity:0;
+transform:translateY(30px);
+will-change:transform,opacity;
+}
+.stone:nth-child(1){border-radius:2px 6px 4px 6px;padding-top:48px}
+.stone:nth-child(2){border-radius:6px 4px 6px 3px;padding-top:36px}
+.stone:nth-child(3){border-radius:4px 6px 2px 6px;padding-top:56px}
+.stone-label{
+font-family:var(--font-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.15em;
+color:var(--tertiary);
+text-transform:uppercase;
+margin-bottom:16px;
+}
+.stone-name{
+font-family:var(--font-display);
+font-size:24px;
+font-weight:600;
+line-height:1.2;
+color:var(--primary);
+margin-bottom:8px;
+}
+.stone-sub{
+font-family:var(--font-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.1em;
+color:var(--secondary);
+text-transform:uppercase;
+margin-bottom:20px;
+}
+.stone-desc{
+font-family:var(--font-body);
+font-size:15px;
+line-height:1.75;
+letter-spacing:0.01em;
+color:var(--secondary);
+}
+.stone-line{
+width:0;
+height:1px;
+background:var(--secondary);
+margin-top:24px;
+will-change:width;
+}
+.pinned-section{
+position:relative;
+height:300vh;
+}
+.pinned-sticky{
+position:sticky;
+top:0;
+height:100vh;
+width:100%;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden;
+}
+.pinned-ink-svg{
+position:absolute;
+top:0;left:0;
+width:100%;height:100%;
+z-index:0;
+}
+.pinned-text{
+position:relative;
+z-index:2;
+text-align:center;
+}
+.pinned-text-main{
+font-family:var(--font-display);
+font-size:6vw;
+font-weight:700;
+line-height:0.95;
+letter-spacing:-0.02em;
+color:var(--primary);
+clip-path:inset(100% 0 0 0);
+will-change:clip-path;
+}
+@media(max-width:768px){.pinned-text-main{font-size:10vw}}
+.details{
+padding:128px 32px;
+max-width:900px;
+margin:0 auto;
+}
+.details-header{
+text-align:center;
+margin-bottom:64px;
+}
+.details-header .label{
+font-family:var(--font-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.15em;
+color:var(--tertiary);
+text-transform:uppercase;
+margin-bottom:16px;
+}
+.details-header h2{
+font-family:var(--font-display);
+font-size:3.5vw;
+font-weight:600;
+line-height:1.1;
+color:var(--primary);
+}
+@media(max-width:768px){.details-header h2{font-size:8vw}}
+.details-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:1px;
+background:rgba(140,132,120,0.12);
+}
+@media(max-width:768px){.details-grid{grid-template-columns:1fr}}
+.detail-cell{
+background:var(--neutral);
+padding:32px;
+opacity:0;
+transform:translateY(20px);
+will-change:transform,opacity;
+}
+.detail-label{
+font-family:var(--font-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.15em;
+color:var(--secondary);
+text-transform:uppercase;
+margin-bottom:8px;
+}
+.detail-value{
+font-family:var(--font-display);
+font-size:24px;
+font-weight:600;
+line-height:1.2;
+color:var(--primary);
+}
+.detail-sub{
+font-family:var(--font-body);
+font-size:14px;
+color:var(--secondary);
+margin-top:4px;
+}
+.cta-section{
+padding:128px 32px;
+text-align:center;
+}
+.cta-heading{
+font-family:var(--font-display);
+font-size:3.5vw;
+font-weight:600;
+line-height:1.1;
+color:var(--primary);
+margin-bottom:48px;
+}
+@media(max-width:768px){.cta-heading{font-size:8vw}}
+.cta-buttons{
+display:flex;
+gap:16px;
+justify-content:center;
+flex-wrap:wrap;
+}
+.btn-primary{
+display:inline-block;
+background:var(--tertiary);
+color:var(--on-tertiary);
+font-family:var(--font-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.15em;
+text-transform:uppercase;
+padding:16px 28px;
+border-radius:9999px;
+border:none;
+text-decoration:none;
+cursor:none;
+transition:transform 0.3s ease,box-shadow 0.3s ease;
+}
+.btn-primary:hover{
+transform:translateY(-2px);
+box-shadow:0 8px 24px rgba(194,59,34,0.25);
+}
+.btn-ghost{
+display:inline-block;
+background:transparent;
+color:var(--primary);
+font-family:var(--font-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.15em;
+text-transform:uppercase;
+padding:16px 28px;
+border-radius:9999px;
+border:1px solid var(--secondary);
+text-decoration:none;
+cursor:none;
+transition:border-color 0.3s ease,transform 0.3s ease;
+}
+.btn-ghost:hover{
+border-color:var(--primary);
+transform:translateY(-2px);
+}
+footer{
+padding:64px 32px;
+border-top:1px solid rgba(140,132,120,0.15);
+}
+.footer-inner{
+max-width:1200px;
+margin:0 auto;
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+gap:16px;
+}
+.footer-brand{
+font-family:var(--font-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.15em;
+color:var(--secondary);
+text-transform:uppercase;
+}
+.footer-links{
+display:flex;
+gap:24px;
+}
+.footer-links a{
+font-family:var(--font-mono);
+font-size:10px;
+font-weight:500;
+letter-spacing:0.15em;
+color:var(--secondary);
+text-decoration:none;
+text-transform:uppercase;
+transition:color 0.3s ease;
+}
+.footer-links a:hover{color:var(--primary)}
+.ink-circle{
+transition:cx 0.1s,cy 0.1s,r 0.1s;
+}
+@media(prefers-reduced-motion:reduce){
+.hero-title .word,
+.philosophy-text .word,
+.pinned-text-main{
+clip-path:none !important;
+opacity:0;
+animation:fade-in 0.6s ease forwards;
+}
+@keyframes fade-in{from{opacity:0}to{opacity:1}}
+.hero-line,
+.stone-line{
+width:100% !important;
+transition:none;
+}
+.cursor-dot,.cursor-follower{display:none !important}
+body{cursor:auto}
+.stone{opacity:1 !important;transform:none !important}
+.detail-cell{opacity:1 !important;transform:none !important}
+}
+@media(max-width:768px){
+.hero-title .word{
+clip-path:none !important;
+opacity:0;
+animation:mobile-fade 0.8s ease forwards;
+}
+.philosophy-text .word{
+clip-path:none !important;
+opacity:0;
+animation:mobile-fade 0.8s ease forwards;
+}
+@keyframes mobile-fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.pinned-text-main{
+clip-path:none !important;
+opacity:0;
+animation:mobile-fade 0.8s ease forwards;
+}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-follower" id="cursorFollower"></div>
+<div class="paper-texture"></div>
+
+<nav>
+<div class="nav-brand">Oasis — Zen Garden</div>
+<div class="nav-links">
+<a href="#philosophy" data-magnetic>Philosophy</a>
+<a href="#practices" data-magnetic>Practices</a>
+<a href="#retreat" data-magnetic>Retreat</a>
+<a href="#enter" data-magnetic>Enter</a>
+</div>
+<button class="hamburger" id="hamburger" aria-label="Menu">
+<span></span>
+<span></span>
+<span></span>
+</button>
+</nav>
+
+<div class="menu-overlay" id="menuOverlay">
+<div class="menu-overlay-bg" id="menuBg"></div>
+<div class="menu-overlay-content" id="menuContent">
+<a href="#philosophy">Philosophy</a>
+<a href="#practices">Practices</a>
+<a href="#retreat">Retreat</a>
+<a href="#enter">Enter the Garden</a>
+</div>
+</div>
+
+<section class="hero" id="hero">
+<svg class="hero-ink-svg" id="heroInk" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+<defs>
+<radialGradient id="ink1" cx="0.3" cy="0.6" r="0.35">
+<stop offset="0%" stop-color="#8C8478" stop-opacity="0.12"/>
+<stop offset="100%" stop-color="#8C8478" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="ink2" cx="0.7" cy="0.4" r="0.3">
+<stop offset="0%" stop-color="#2C2C2C" stop-opacity="0.06"/>
+<stop offset="100%" stop-color="#2C2C2C" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="ink3" cx="0.5" cy="0.7" r="0.4">
+<stop offset="0%" stop-color="#8C8478" stop-opacity="0.08"/>
+<stop offset="100%" stop-color="#8C8478" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="ink4" cx="0.2" cy="0.3" r="0.25">
+<stop offset="0%" stop-color="#2C2C2C" stop-opacity="0.04"/>
+<stop offset="100%" stop-color="#2C2C2C" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="ink5" cx="0.8" cy="0.7" r="0.28">
+<stop offset="0%" stop-color="#8C8478" stop-opacity="0.1"/>
+<stop offset="100%" stop-color="#8C8478" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="inkMist1" cx="0.4" cy="0.5" r="0.45">
+<stop offset="0%" stop-color="#8C8478" stop-opacity="0.05"/>
+<stop offset="60%" stop-color="#8C8478" stop-opacity="0.02"/>
+<stop offset="100%" stop-color="#8C8478" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<circle class="ink-circle" cx="480" cy="540" r="300" fill="url(#ink1)"/>
+<circle class="ink-circle" cx="1120" cy="360" r="260" fill="url(#ink2)"/>
+<circle class="ink-circle" cx="800" cy="630" r="350" fill="url(#ink3)"/>
+<circle class="ink-circle" cx="320" cy="270" r="200" fill="url(#ink4)"/>
+<circle class="ink-circle" cx="1280" cy="630" r="240" fill="url(#ink5)"/>
+<circle class="ink-circle" cx="640" cy="450" r="400" fill="url(#inkMist1)"/>
+<ellipse cx="400" cy="700" rx="500" ry="60" fill="#8C8478" opacity="0.04"/>
+<ellipse cx="1000" cy="650" rx="400" ry="40" fill="#2C2C2C" opacity="0.03"/>
+</svg>
+<div class="hero-content">
+<h1 class="hero-title" id="heroTitle">
+<span class="word">OASIS</span>
+</h1>
+<span class="hero-subtitle">The Garden of the Mind</span>
+<div class="hero-line" id="heroLine"></div>
+</div>
+</section>
+
+<section class="philosophy" id="philosophy">
+<p class="philosophy-text" id="philosophyText">
+<span class="word">Between</span>
+<span class="word">each</span>
+<span class="word">stone,</span>
+<span class="word">the</span>
+<span class="word">garden</span>
+<span class="word">speaks.</span>
+<span class="word">Between</span>
+<span class="word">each</span>
+<span class="word">breath,</span>
+<span class="word">the</span>
+<span class="word">mind</span>
+<span class="word">listens.</span>
+</p>
+</section>
+
+<section class="stones-section" id="practices">
+<div class="stones-header">
+<span class="label">Three Paths</span>
+<h2>The Stones of Practice</h2>
+</div>
+<div class="stones-grid">
+<div class="stone" data-magnetic>
+<span class="stone-label">枯山水</span>
+<h3 class="stone-name">Karesansui</h3>
+<span class="stone-sub">Dry Landscape Meditation</span>
+<p class="stone-desc">In the dry garden, raked sand becomes ocean and stones become islands. The practitioner sits before emptiness and finds it full. Stillness is not the absence of movement — it is the presence of absolute attention. At Oasis, the karesansui practice strips away all ornament until only the essential remains: breath, awareness, the grain of sand beneath the rake.</p>
+<div class="stone-line" data-line></div>
+</div>
+<div class="stone" data-magnetic>
+<span class="stone-label">茶庭</span>
+<h3 class="stone-name">Chaniwa</h3>
+<span class="stone-sub">Tea Garden Contemplation</span>
+<p class="stone-desc">The tea garden is a passage from the outer world to the inner. Each stepping stone is a decision. Each low gate requires a bow. The ritual of tea is not about the tea — it is about the deliberate attention brought to each gesture, each turn of the wrist, each moment of pouring. Oasis teaches the way of tea as the way of presence: nothing is ordinary when you attend completely.</p>
+<div class="stone-line" data-line></div>
+</div>
+<div class="stone" data-magnetic>
+<span class="stone-label">築山</span>
+<h3 class="stone-name">Tsukiyama</h3>
+<span class="stone-sub">Hill Garden Movement</span>
+<p class="stone-desc">The hill garden is the garden of flow — waterfalls, streams, paths that wind and return. Movement here is not exercise; it is meditation in motion. The practitioner walks the circuit and discovers that the path changes with each circuit, not because the garden has changed, but because the walker has. At Oasis, tsukiyama practice integrates walking meditation with the landscape itself.</p>
+<div class="stone-line" data-line></div>
+</div>
+</div>
+</section>
+
+<section class="pinned-section" id="pinnedSection">
+<div class="pinned-sticky">
+<svg class="pinned-ink-svg" id="pinnedInk" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+<defs>
+<radialGradient id="pInk1" cx="0.35" cy="0.55" r="0.4">
+<stop offset="0%" stop-color="#8C8478" stop-opacity="0.14"/>
+<stop offset="100%" stop-color="#8C8478" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="pInk2" cx="0.65" cy="0.45" r="0.35">
+<stop offset="0%" stop-color="#2C2C2C" stop-opacity="0.08"/>
+<stop offset="100%" stop-color="#2C2C2C" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="pInk3" cx="0.5" cy="0.6" r="0.45">
+<stop offset="0%" stop-color="#8C8478" stop-opacity="0.1"/>
+<stop offset="100%" stop-color="#8C8478" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="pInk4" cx="0.2" cy="0.35" r="0.3">
+<stop offset="0%" stop-color="#C23B22" stop-opacity="0.03"/>
+<stop offset="100%" stop-color="#C23B22" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="pInk5" cx="0.8" cy="0.65" r="0.32">
+<stop offset="0%" stop-color="#8C8478" stop-opacity="0.12"/>
+<stop offset="100%" stop-color="#8C8478" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<circle id="pCircle1" cx="560" cy="500" r="100" fill="url(#pInk1)"/>
+<circle id="pCircle2" cx="1040" cy="400" r="80" fill="url(#pInk2)"/>
+<circle id="pCircle3" cx="800" cy="540" r="120" fill="url(#pInk3)"/>
+<circle id="pCircle4" cx="320" cy="320" r="70" fill="url(#pInk4)"/>
+<circle id="pCircle5" cx="1280" cy="580" r="90" fill="url(#pInk5)"/>
+<ellipse id="pMist" cx="600" cy="650" rx="200" ry="30" fill="#8C8478" opacity="0.03"/>
+</svg>
+<div class="pinned-text">
+<div class="pinned-text-main" id="pinnedText">The garden grows inward.</div>
+</div>
+</div>
+</section>
+
+<section class="details" id="retreat">
+<div class="details-header">
+<span class="label">Retreat Specifications</span>
+<h2>Arashiyama, Kyoto</h2>
+</div>
+<div class="details-grid">
+<div class="detail-cell">
+<span class="detail-label">Location</span>
+<div class="detail-value">Arashiyama</div>
+<div class="detail-sub">Kyoto Prefecture, Japan</div>
+</div>
+<div class="detail-cell">
+<span class="detail-label">Duration</span>
+<div class="detail-value">7 · 14 · 28</div>
+<div class="detail-sub">Days of structured practice</div>
+</div>
+<div class="detail-cell">
+<span class="detail-label">Capacity</span>
+<div class="detail-value">6</div>
+<div class="detail-sub">Practitioners per cohort</div>
+</div>
+<div class="detail-cell">
+<span class="detail-label">Season</span>
+<div class="detail-value">Cherry Blossom</div>
+<div class="detail-sub">Spring 2027 — Sakuras bloom</div>
+</div>
+<div class="detail-cell">
+<span class="detail-label">Tradition</span>
+<div class="detail-value">Rinzai Zen</div>
+<div class="detail-sub">Established 9th century</div>
+</div>
+<div class="detail-cell">
+<span class="detail-label">Instruction</span>
+<div class="detail-value">Dokusan</div>
+<div class="detail-sub">Private interviews with the master</div>
+</div>
+</div>
+</section>
+
+<section class="cta-section" id="enter">
+<h2 class="cta-heading">The gate is open.<br>The garden awaits.</h2>
+<div class="cta-buttons">
+<a href="#" class="btn-primary" data-magnetic>Enter the Garden</a>
+<a href="#" class="btn-ghost" data-magnetic>Request Instruction</a>
+</div>
+</section>
+
+<footer>
+<div class="footer-inner">
+<span class="footer-brand">Oasis — Zen Garden v4</span>
+<div class="footer-links">
+<a href="#">Privacy</a>
+<a href="#">Terms</a>
+<a href="#">Contact</a>
+</div>
+</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+const prefersReducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isMobile=window.innerWidth<=768;
+
+if(!prefersReducedMotion&&!isMobile){
+const lenis=new Lenis({
+duration:1.2,
+easing:function(t){return Math.min(1,1.001-Math.pow(2,-10*t))},
+orientation:'vertical',
+smoothWheel:true,
+});
+lenis.on('scroll',ScrollTrigger.update);
+gsap.ticker.add(function(time){lenis.raf(time*1000)});
+gsap.ticker.lagSmoothing(0);
+}
+
+const cursorDot=document.getElementById('cursorDot');
+const cursorFollower=document.getElementById('cursorFollower');
+if(cursorDot&&cursorFollower&&!isMobile&&!prefersReducedMotion){
+let mouseX=0,mouseY=0;
+let dotX=0,dotY=0;
+let followerX=0,followerY=0;
+document.addEventListener('mousemove',function(e){
+mouseX=e.clientX;
+mouseY=e.clientY;
+});
+document.addEventListener('mouseenter',function(){cursorDot.style.opacity='1';cursorFollower.style.opacity='0.3'});
+document.addEventListener('mouseleave',function(){cursorDot.style.opacity='0';cursorFollower.style.opacity='0'});
+function updateCursor(){
+dotX+=(mouseX-dotX)*0.15;
+dotY+=(mouseY-dotY)*0.15;
+followerX+=(mouseX-followerX)*0.08;
+followerY+=(mouseY-followerY)*0.08;
+cursorDot.style.transform='translate('+dotX+'px,'+dotY+'px) translate(-50%,-50%)';
+cursorFollower.style.transform='translate('+followerX+'px,'+followerY+'px) translate(-50%,-50%)';
+requestAnimationFrame(updateCursor);
+}
+updateCursor();
+const hoverTargets=document.querySelectorAll('a,button,.btn-primary,.btn-ghost,[data-magnetic]');
+hoverTargets.forEach(function(el){
+el.addEventListener('mouseenter',function(){
+cursorDot.classList.add('is-hover');
+cursorFollower.classList.add('is-hover');
+});
+el.addEventListener('mouseleave',function(){
+cursorDot.classList.remove('is-hover');
+cursorFollower.classList.remove('is-hover');
+});
+});
+const magneticEls=document.querySelectorAll('[data-magnetic]');
+magneticEls.forEach(function(el){
+el.addEventListener('mousemove',function(e){
+const rect=el.getBoundingClientRect();
+const cx=rect.left+rect.width/2;
+const cy=rect.top+rect.height/2;
+const dx=(e.clientX-cx)*0.2;
+const dy=(e.clientY-cy)*0.2;
+el.style.transform='translate('+dx+'px,'+dy+'px)';
+el.style.transition='transform 0.2s ease';
+});
+el.addEventListener('mouseleave',function(){
+el.style.transform='translate(0,0)';
+el.style.transition='transform 0.4s ease';
+});
+});
+}
+
+const heroWords=document.querySelectorAll('#heroTitle .word');
+if(!prefersReducedMotion&&!isMobile){
+gsap.to(heroWords,{
+clipPath:'inset(0% 0 0 0)',
+duration:1.4,
+ease:'power3.out',
+stagger:0.08,
+delay:0.5,
+});
+gsap.to('#heroLine',{
+width:'80px',
+duration:1.2,
+ease:'power2.out',
+delay:2.2,
+});
+}else if(!prefersReducedMotion&&isMobile){
+heroWords.forEach(function(w,i){
+setTimeout(function(){
+w.style.clipPath='inset(0% 0 0 0)';
+w.style.transition='clip-path 0.8s ease';
+},200+i*100);
+});
+setTimeout(function(){
+var line=document.getElementById('heroLine');
+if(line)line.style.width='80px';
+line.style.transition='width 1s ease';
+},800);
+}
+
+const philosophyWords=document.querySelectorAll('#philosophyText .word');
+if(!prefersReducedMotion&&!isMobile){
+ScrollTrigger.create({
+trigger:'#philosophy',
+start:'top 75%',
+onEnter:function(){
+gsap.to(philosophyWords,{
+clipPath:'inset(0% 0 0 0)',
+duration:1,
+ease:'power2.out',
+stagger:0.12,
+});
+},
+once:true,
+});
+}
+
+const stones=document.querySelectorAll('.stone');
+if(!prefersReducedMotion){
+stones.forEach(function(stone,i){
+ScrollTrigger.create({
+trigger:stone,
+start:'top 85%',
+onEnter:function(){
+gsap.to(stone,{
+opacity:1,
+y:0,
+duration:0.9,
+ease:'power2.out',
+delay:i*0.15,
+});
+},
+once:true,
+});
+});
+}
+
+const stoneLines=document.querySelectorAll('[data-line]');
+stoneLines.forEach(function(line){
+if(!prefersReducedMotion){
+gsap.fromTo(line,{width:0},{width:'100%',ease:'none',scrollTrigger:{
+trigger:line,
+start:'top 90%',
+end:'top 40%',
+scrub:1,
+}});
+}else{
+line.style.width='100%';
+}
+});
+
+if(!prefersReducedMotion&&!isMobile){
+const pinnedCircles=[
+{el:document.getElementById('pCircle1'),baseR:100,growR:400},
+{el:document.getElementById('pCircle2'),baseR:80,growR:350},
+{el:document.getElementById('pCircle3'),baseR:120,growR:500},
+{el:document.getElementById('pCircle4'),baseR:70,growR:300},
+{el:document.getElementById('pCircle5'),baseR:90,growR:380},
+];
+const pMist=document.getElementById('pMist');
+gsap.timeline({
+scrollTrigger:{
+trigger:'#pinnedSection',
+start:'top top',
+end:'bottom bottom',
+scrub:1.5,
+},
+})
+.to(pinnedCircles[0].el,{attr:{r:pinnedCircles[0].growR},duration:1,ease:'none'},0)
+.to(pinnedCircles[1].el,{attr:{r:pinnedCircles[1].growR},duration:1,ease:'none'},0)
+.to(pinnedCircles[2].el,{attr:{r:pinnedCircles[2].growR},duration:1,ease:'none'},0)
+.to(pinnedCircles[3].el,{attr:{r:pinnedCircles[3].growR},duration:1,ease:'none'},0)
+.to(pinnedCircles[4].el,{attr:{r:pinnedCircles[4].growR},duration:1,ease:'none'},0)
+.to(pMist,{attr:{rx:600,ry:80},duration:1,ease:'none'},0)
+.to('#pinnedText',{clipPath:'inset(0% 0 0 0)',duration:0.6,ease:'power2.in'},0.25);
+}
+
+const detailCells=document.querySelectorAll('.detail-cell');
+if(!prefersReducedMotion){
+detailCells.forEach(function(cell,i){
+ScrollTrigger.create({
+trigger:cell,
+start:'top 90%',
+onEnter:function(){
+gsap.to(cell,{
+opacity:1,
+y:0,
+duration:0.7,
+ease:'power2.out',
+delay:i*0.08,
+});
+},
+once:true,
+});
+});
+}
+
+const hamburger=document.getElementById('hamburger');
+const menuOverlay=document.getElementById('menuOverlay');
+const menuBg=document.getElementById('menuBg');
+const menuContent=document.getElementById('menuContent');
+let menuOpen=false;
+if(hamburger){
+hamburger.addEventListener('click',function(){
+menuOpen=!menuOpen;
+if(menuOpen){
+hamburger.classList.add('is-active');
+menuOverlay.classList.add('is-open');
+if(!prefersReducedMotion){
+gsap.to(menuBg,{clipPath:'inset(0 0 0% 0)',duration:0.6,ease:'power3.inOut'});
+gsap.to(menuContent,{opacity:1,duration:0.4,delay:0.35,ease:'power2.out'});
+gsap.fromTo(menuContent.querySelectorAll('a'),{y:40,opacity:0},{y:0,opacity:1,duration:0.5,stagger:0.08,delay:0.4,ease:'power2.out'});
+}else{
+menuBg.style.clipPath='inset(0 0 0% 0)';
+menuContent.style.opacity='1';
+}
+document.body.style.overflow='hidden';
+}else{
+closeMenu();
+}
+});
+}
+function closeMenu(){
+menuOpen=false;
+hamburger.classList.remove('is-active');
+if(!prefersReducedMotion){
+gsap.to(menuContent,{opacity:0,duration:0.2,ease:'power2.in',onComplete:function(){
+gsap.to(menuBg,{clipPath:'inset(0 0 100% 0)',duration:0.5,ease:'power3.inOut',onComplete:function(){
+menuOverlay.classList.remove('is-open');
+}});
+}});
+}else{
+menuBg.style.clipPath='inset(0 0 100% 0)';
+menuContent.style.opacity='0';
+menuOverlay.classList.remove('is-open');
+}
+document.body.style.overflow='';
+}
+const menuLinks=menuOverlay.querySelectorAll('a');
+menuLinks.forEach(function(link){
+link.addEventListener('click',function(){
+closeMenu();
+});
+});
+
+gsap.fromTo('.cta-heading',{opacity:0,y:30},{opacity:1,y:0,duration:0.8,ease:'power2.out',scrollTrigger:{
+trigger:'.cta-section',
+start:'top 80%',
+once:true,
+}});
+gsap.fromTo('.cta-buttons',{opacity:0,y:20},{opacity:1,y:0,duration:0.8,delay:0.2,ease:'power2.out',scrollTrigger:{
+trigger:'.cta-section',
+start:'top 75%',
+once:true,
+}});
+
+const navLinks=document.querySelectorAll('.nav-links a');
+navLinks.forEach(function(link){
+link.addEventListener('click',function(e){
+e.preventDefault();
+const id=link.getAttribute('href').substring(1);
+const target=document.getElementById(id);
+if(target){
+const lenisInst=window.lenis;
+if(lenisInst){
+lenisInst.scrollTo(target,{offset:0,duration:1.2});
+}else{
+target.scrollIntoView({behavior:'smooth'});
+}
+}
+});
+});
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Oasis — A luxury meditation retreat in the desert. Where heat becomes healing, and stillness is gold.">
+<title>OASIS — Luxury Meditation Retreat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { background: #F5EDE0; }
+body { background: #F5EDE0; color: #2C1F14; font-family: 'Inter', sans-serif; font-weight: 380; overflow-x: hidden; cursor: none; }
+canvas#bg { position: fixed; top: 0; left: 0; z-index: 0; }
+
+.cursor { position: fixed; width: 12px; height: 12px; border-radius: 50%; background: #E8734A; z-index: 100; pointer-events: none; transition: width 0.35s cubic-bezier(0.33,1,0.68,1), height 0.35s cubic-bezier(0.33,1,0.68,1), background 0.35s; }
+.cursor.hover { width: 48px; height: 48px; background: #2C1F14; }
+
+.nav-button { position: fixed; top: 28px; right: 28px; z-index: 50; background: none; border: none; width: 36px; height: 36px; cursor: none; display: flex; align-items: center; justify-content: center; }
+.nav-dots { display: flex; flex-direction: column; gap: 4px; }
+.nav-dots span { width: 4px; height: 4px; border-radius: 50%; background: #2C1F14; transition: all 0.35s cubic-bezier(0.33,1,0.68,1); }
+.nav-button.open .nav-dots { gap: 0; }
+.nav-button.open .nav-dots span:nth-child(1) { transform: translateY(4px) rotate(45deg); width: 20px; border-radius: 2px; }
+.nav-button.open .nav-dots span:nth-child(2) { opacity: 0; }
+.nav-button.open .nav-dots span:nth-child(3) { transform: translateY(-4px) rotate(-45deg); width: 20px; border-radius: 2px; }
+
+.nav-overlay { position: fixed; inset: 0; z-index: 40; background: #F5EDE0; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.5s cubic-bezier(0.33,1,0.68,1); }
+.nav-overlay.open { opacity: 1; pointer-events: auto; }
+.nav-menu { display: flex; flex-direction: column; gap: 24px; align-items: center; }
+.nav-menu a { font-family: 'DM Serif Display', serif; font-size: 5.5vw; font-weight: 400; line-height: 1; color: #A08974; text-decoration: none; transition: color 0.5s, letter-spacing 0.5s; }
+.nav-menu a:hover { color: #E8734A; letter-spacing: 0.04em; }
+
+main { position: relative; z-index: 10; }
+
+.hero { min-height: 100vh; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding-left: 6vw; position: relative; }
+.hero-accent-bar { position: absolute; left: 0; top: 20%; width: 3px; height: 40vh; background: linear-gradient(to bottom, transparent, #E8734A, transparent); }
+.hero-title { font-family: 'DM Serif Display', serif; font-size: 12vw; font-weight: 400; line-height: 0.92; letter-spacing: -0.02em; color: #2C1F14; }
+.hero-sub { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.13em; text-transform: uppercase; color: #E8734A; margin-top: 16px; }
+.hero-tag { font-family: 'Inter', sans-serif; font-size: 1.2vw; font-weight: 300; color: #A08974; margin-top: 40px; font-style: italic; max-width: 40vw; }
+.hero-scroll { position: absolute; bottom: 40px; left: 6vw; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.13em; color: #A08974; text-transform: uppercase; }
+
+.section { min-height: 100vh; display: flex; align-items: center; padding: 80px; }
+.content { max-width: 520px; display: flex; flex-direction: column; gap: 20px; }
+.content.offset-right { margin-left: 30%; }
+.content.offset-center { margin: 0 auto; text-align: center; align-items: center; }
+.section-kicker { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.13em; text-transform: uppercase; color: #E8734A; }
+.section-heading { font-family: 'DM Serif Display', serif; font-size: 3.8vw; font-weight: 400; line-height: 1.05; letter-spacing: -0.01em; color: #2C1F14; }
+.section-body { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 380; line-height: 1.75; letter-spacing: 0.01em; color: #A08974; }
+.section-divider-line { width: 100%; height: 1px; background: rgba(232,115,74,0.15); margin: 28px 0; }
+
+.btn { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.13em; text-transform: uppercase; text-decoration: none; padding: 15px 38px; border-radius: 20px; display: inline-block; cursor: none; transition: transform 0.35s cubic-bezier(0.33,1,0.68,1), box-shadow 0.35s; }
+.btn:hover { transform: translateY(-2px); }
+.btn-primary { background: #E8734A; color: #2C1F14; }
+.btn-primary:hover { box-shadow: 0 8px 24px rgba(232,115,74,0.3); }
+.btn-ghost { background: transparent; color: #2C1F14; border: 1px solid #A08974; }
+.btn-ghost:hover { border-color: #E8734A; color: #E8734A; }
+
+.footer { padding: 80px; text-align: center; border-top: 1px solid rgba(160,137,116,0.2); display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.footer-signature { font-family: 'DM Serif Display', serif; font-size: 2vw; font-weight: 400; color: #2C1F14; }
+.footer-info { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 400; letter-spacing: 0.13em; text-transform: uppercase; color: #A08974; }
+
+@media (max-width: 768px) {
+  body { cursor: auto; }
+  .cursor { display: none; }
+  .hero { padding-left: 24px; }
+  .hero-title { font-size: 15vw; }
+  .hero-tag { font-size: 3.5vw; max-width: 80vw; }
+  .section { padding: 48px 24px; }
+  .content.offset-right { margin-left: 0; }
+  .section-heading { font-size: 7.5vw; }
+  .section-body { font-size: 14px; }
+  .footer-signature { font-size: 6vw; }
+  canvas#bg { opacity: 0.4; }
+  .nav-menu a { font-size: 9vw; }
+}
+</style>
+</head>
+<body>
+<div class="cursor" aria-hidden="true"></div>
+
+<button class="nav-button" aria-label="Toggle navigation menu" data-magnetic>
+  <div class="nav-dots"><span></span><span></span><span></span></div>
+</button>
+
+<nav class="nav-overlay" role="navigation" aria-label="Main navigation">
+  <div class="nav-menu">
+    <a href="#journey">The Journey</a>
+    <a href="#sanctuary">The Sanctuary</a>
+    <a href="#healing">The Healing</a>
+    <a href="#arrive">Arrive</a>
+  </div>
+</nav>
+
+<canvas id="bg"></canvas>
+
+<main role="main">
+  <section class="hero">
+    <div class="hero-accent-bar"></div>
+    <h1 class="hero-title">Oasis</h1>
+    <p class="hero-sub">Return to yourself</p>
+    <p class="hero-tag">Where the desert holds you in its ancient stillness, and every sunset is a meditation.</p>
+    <span class="hero-scroll">Scroll to begin ↓</span>
+  </section>
+
+  <section class="section" id="journey">
+    <div class="content">
+      <span class="section-kicker">The Journey</span>
+      <h2 class="section-heading">You were not meant for the noise.</h2>
+      <p class="section-body">Thirty miles from the nearest road, at the edge of the high desert, Oasis rises from the earth like a mirage. We built this sanctuary around one question: what is the most peaceful place a human being can experience? The answer is here — in the silence between two heartbeats, in the vastness of the desert sky, in the warmth of umber walls that hold heat long after sunset.</p>
+    </div>
+  </section>
+
+  <section class="section" id="sanctuary">
+    <div class="content offset-right">
+      <span class="section-kicker">The Sanctuary</span>
+      <h2 class="section-heading">Earth-born architecture.</h2>
+      <p class="section-body">Sixteen adobe casitas, each77 with a private courtyard, a plunge pool fed by desert springs, and a rooftop platform for stargazing. The walls are30 sun-baked clay, the floors are polished terracotta, the windows frame07 nothing but sky and sagebrush. No televisions, no phones, no clocks.</p>
+      <a href="#arrive" class="btn btn-primary" data-magnetic style="width:fit-content">Reserve Your Casita</a>
+    </div>
+  </section>
+
+  <section class="section" id="healing">
+    <div class="content">
+      <span class="section-kicker">The Healing</span>
+      <h2 class="section-heading">Heat as medicine.</h2>
+      <p class="section-body">Desert Breathwork — guided pranayama on the canyon rim at dawn. Temazcal — traditional sweat lodge ceremonies led by Curanderos. Star Gazing — astronomy-based meditation under the darkest skies in North America.10 Desert Silence — four days of absolute quiet in a private retreat pod, with only the wind for company.</p>
+    </div>
+  </section>
+
+  <section class="section" id="arrive">
+    <div class="content offset-center">
+      <span class="section-kicker">Arrive</span>
+      <h2 class="section-heading">Your silence<br>in the sand.</h2>
+      <p class="section-body">Oasis accepts twenty guests at any moment. Each stay includes a personal guide,16 a tailored practice schedule, and daily meals from our desert garden. Transportation from the nearest airstrip is provided by private Land Cruiser.</p>
+      <a href="#" class="btn btn-ghost" data-magnetic>Begin Your Journey</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span class="footer-signature">Oasis</span>
+    <span class="footer-info">Est. 2025 · Chihuahuan Desert · New Mexico</span>
+  </footer>
+</main>
+
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+<script type="module">
+import * as THREE from 'three';
+
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (!prefersReducedMotion) {
+  gsap.registerPlugin(ScrollTrigger);
+
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0xF5EDE0, 0.0008);
+  const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.5, 80);
+  camera.position.set(0, 4, 16);
+
+  const canvas = document.getElementById('bg');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0xF5EDE0);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  const light = new THREE.DirectionalLight(0xFFB088, 8);
+  light.position.set(20, 15, 8);
+  light.castShadow = true;
+  light.shadow.mapSize.set(2048, 2048);
+  light.shadow.camera.near = 0.5; light.shadow.camera.far = 60;
+  light.shadow.camera.left = -15; light.shadow.camera.right = 15;
+  light.shadow.camera.top = 10; light.shadow.camera.bottom = -5;
+  light.shadow.bias = -0.0005;
+  scene.add(light);
+
+  const ambient = new THREE.AmbientLight(0xFFCCAA, 1.8);
+  scene.add(ambient);
+  scene.add(new THREE.HemisphereLight(0xE8734A, 0xA08974, 0.7));
+
+  const duneGroup = new THREE.Group();
+  const duneMat = new THREE.MeshStandardMaterial({
+    color: 0xE8C9A0,
+    roughness: 0.75,
+    metalness: 0.0,
+    flatShading: true
+  });
+
+  for (let r = 0; r < 8; r++) {
+    const radius = 3 + r * 1.8;
+    const geom = new THREE.PlaneGeometry(8, 8, 80, 80);
+    geom.rotateX(-Math.PI / 2);
+    const posAttr = geom.attributes.position;
+    for (let i = 0; i < posAttr.count; i++) {
+      const x = posAttr.getX(i);
+      const y = posAttr.getY(i);
+      const dist = Math.sqrt(x * x + y * y);
+      const ripple = Math.sin(dist * 1.5 + r * 1.2) * 1.2 +
+                     Math.sin(x * 0.8 + r * 0.7) * 0.6 +
+                     Math.cos(y * 0.9 - r * 0.5) * 0.4;
+      posAttr.setZ(i, ripple * Math.max(0, 1 - dist / 5) + (r * 0.15));
+    }
+    geom.computeVertexNormals();
+    const dune = new THREE.Mesh(geom, duneMat.clone());
+    dune.material.color.setHSL(0.1, 0.25 + r * 0.04, 0.55 + r * 0.03);
+    dune.position.set((r - 3.5) * 3, 0, -r * 2);
+    dune.receiveShadow = true;
+    dune.castShadow = true;
+    duneGroup.add(dune);
+  }
+  scene.add(duneGroup);
+
+  function animate(time) {
+    requestAnimationFrame(animate);
+    const t = time * 0.001;
+    light.intensity = 7 + Math.sin(t * 0.15) * 1.5;
+    light.position.x = 18 + Math.sin(t * 0.1) * 4;
+    renderer.render(scene, camera);
+  }
+  requestAnimationFrame(animate);
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  ScrollTrigger.create({
+    trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: 1.8,
+    onUpdate: (self) => {
+      duneGroup.position.z = self.progress * 6;
+      light.intensity = 8 - self.progress * 4;
+      light.color.setHSL(0.1, 1 - self.progress * 0.5, 0.7 - self.progress * 0.3);
+      scene.fog.color.setHSL(0.1, 0.15, 0.95 - self.progress * 0.2);
+    }
+  });
+
+  const lenis = new Lenis({ lerp: 0.08, smoothWheel: true });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+
+  gsap.from('.hero-title', {
+    scrollTrigger: { trigger: '.hero', start: 'top top', toggleActions: 'play none none reverse' },
+    y: 70, opacity: 0, duration: 1.5, ease: 'power3.out'
+  });
+  gsap.from(['.hero-sub', '.hero-accent-bar', '.hero-tag', '.hero-scroll'], {
+    scrollTrigger: { trigger: '.hero', start: 'top top', toggleActions: 'play none none reverse' },
+    y: 30, opacity: 0, duration: 1, stagger: 0.15, delay: 0.3, ease: 'power3.out'
+  });
+
+  document.querySelectorAll('.content').forEach((el, i) => {
+    const x = el.classList.contains('offset-center') ? 0 : (el.classList.contains('offset-right') ? 50 : -50);
+    gsap.from(el.children, {
+      scrollTrigger: { trigger: el.closest('.section'), start: 'top 78%', toggleActions: 'play none none reverse' },
+      x, y: 30, opacity: 0, duration: 1.1, ease: 'power3.out', stagger: 0.1
+    });
+  });
+  gsap.from('.footer', {
+    scrollTrigger: { trigger: '.footer', start: 'top 95%', toggleActions: 'play none none reverse' },
+    opacity: 0, y: 20, duration: 1, ease: 'power3.out'
+  });
+
+  const cursor = document.querySelector('.cursor');
+  let cx = 0, cy = 0, tx = 0, ty = 0;
+  document.addEventListener('mousemove', (e) => { tx = e.clientX; ty = e.clientY; });
+  document.querySelectorAll('[data-magnetic], a, .btn, .nav-button').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+  function animCursor() {
+    cx += (tx - cx) * 0.1;
+    cy += (ty - cy) * 0.1;
+    cursor.style.left = (cx - cursor.offsetWidth / 2) + 'px';
+    cursor.style.top = (cy - cursor.offsetHeight / 2) + 'px';
+    requestAnimationFrame(animCursor);
+  }
+  requestAnimationFrame(animCursor);
+
+  const navBtn = document.querySelector('.nav-button');
+  const nav = document.querySelector('.nav-overlay');
+  navBtn.addEventListener('click', () => { navBtn.classList.toggle('open'); nav.classList.toggle('open'); });
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { navBtn.classList.remove('open'); nav.classList.remove('open'); }));
+
+  document.querySelectorAll('[data-magnetic]').forEach(el => {
+    el.addEventListener('mousemove', (e) => {
+      const rect = el.getBoundingClientRect();
+      gsap.to(el, { x: (e.clientX - rect.left - rect.width / 2) * 0.3, y: (e.clientY - rect.top - rect.height / 2) * 0.3, duration: 0.4, ease: 'power2.out' });
+    });
+    el.addEventListener('mouseleave', () => gsap.to(el, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1, 0.4)' }));
+  });
+} else {
+  document.querySelector('.cursor').remove();
+  document.body.style.cursor = 'auto';
+}
+</script>
+</body>
+</html>

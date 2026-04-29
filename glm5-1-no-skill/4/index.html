@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis — Luxury Meditation Retreat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --ink: #1A1A1A;
+            --wash: #E8E4DF;
+            --paper: #F7F5F1;
+            --warm-gray: #B5AFA6;
+            --vermillion: #C2533A;
+            --stone: #6B6560;
+            --light-ink: #3D3835;
+            --rice: #F0EDE8;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.7;
+            font-weight: 300;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Noto Serif JP', serif;
+            font-weight: 200;
+            line-height: 1.3;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.5s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(247, 245, 241, 0.92);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--wash);
+        }
+
+        nav .logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.3rem;
+            font-weight: 300;
+            letter-spacing: 0.6em;
+            color: var(--ink);
+            text-decoration: none;
+        }
+
+        nav .nav-right {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        nav .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav .nav-links a {
+            text-decoration: none;
+            color: var(--stone);
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            transition: color 0.3s;
+        }
+
+        nav .nav-links a:hover { color: var(--ink); }
+
+        .hero {
+            height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            position: relative;
+        }
+
+        .hero-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 0 4rem 6rem;
+        }
+
+        .hero-left .kanji {
+            font-family: 'Noto Serif JP', serif;
+            font-size: clamp(6rem, 15vw, 12rem);
+            font-weight: 200;
+            color: var(--ink);
+            opacity: 0.06;
+            position: absolute;
+            top: 10%;
+            left: 5%;
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        .hero-left .pre {
+            font-size: 0.68rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--vermillion);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-left h1 {
+            font-size: clamp(3.5rem, 7vw, 6rem);
+            font-weight: 200;
+            color: var(--ink);
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .hero-left .sub {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.05rem;
+            font-weight: 300;
+            color: var(--stone);
+            max-width: 380px;
+            line-height: 1.9;
+        }
+
+        .hero-right {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: var(--rice);
+        }
+
+        .hero-right .ensou {
+            width: 320px;
+            height: 320px;
+            border: 2px solid var(--ink);
+            border-radius: 50%;
+            opacity: 0.12;
+            position: relative;
+        }
+
+        .hero-right .ensou::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px;
+            height: 6px;
+            background: var(--vermillion);
+            border-radius: 50%;
+        }
+
+        .hero-right .zen-text {
+            position: absolute;
+            font-family: 'Noto Serif JP', serif;
+            font-size: 0.9rem;
+            color: var(--warm-gray);
+            writing-mode: vertical-rl;
+            right: 3rem;
+            top: 3rem;
+            letter-spacing: 0.3em;
+        }
+
+        .philosophy-section {
+            padding: 8rem 4rem;
+            display: grid;
+            grid-template-columns: 2fr 3fr;
+            gap: 4rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .philosophy-section .side-label {
+            font-size: 0.68rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--vermillion);
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--wash);
+        }
+
+        .philosophy-section .content h2 {
+            font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+            font-weight: 200;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .philosophy-section .content p {
+            color: var(--stone);
+            font-size: 0.92rem;
+            line-height: 2;
+            margin-bottom: 1.5rem;
+        }
+
+        .horizontal-rule {
+            max-width: 1100px;
+            margin: 0 auto;
+            height: 1px;
+            background: var(--wash);
+        }
+
+        .practice-section {
+            padding: 8rem 4rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .practice-section .section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 4rem;
+            border-bottom: 1px solid var(--wash);
+            padding-bottom: 2rem;
+        }
+
+        .practice-section .section-head h2 {
+            font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+            font-weight: 200;
+        }
+
+        .practice-section .section-head .label {
+            font-size: 0.68rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--vermillion);
+        }
+
+        .practice-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem 6rem;
+        }
+
+        .practice-item {
+            position: relative;
+            padding-top: 2rem;
+        }
+
+        .practice-item::before {
+            content: attr(data-number);
+            position: absolute;
+            top: 0;
+            left: 0;
+            font-family: 'Noto Serif JP', serif;
+            font-size: 0.75rem;
+            color: var(--vermillion);
+            letter-spacing: 0.1em;
+        }
+
+        .practice-item h3 {
+            font-size: 1.4rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            color: var(--ink);
+        }
+
+        .practice-item p {
+            font-size: 0.88rem;
+            color: var(--stone);
+            line-height: 1.9;
+        }
+
+        .space-section {
+            padding: 8rem 4rem;
+            background: var(--rice);
+        }
+
+        .space-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            gap: 5rem;
+            align-items: center;
+        }
+
+        .space-visual {
+            aspect-ratio: 4/3;
+            background: var(--wash);
+            position: relative;
+            border: 1px solid var(--wash);
+        }
+
+        .space-visual .ink-mark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            border: 1px solid var(--ink);
+            border-radius: 50%;
+            opacity: 0.15;
+        }
+
+        .space-visual .ink-mark::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 4px;
+            height: 4px;
+            background: var(--vermillion);
+            border-radius: 50%;
+        }
+
+        .space-content .label {
+            font-size: 0.68rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--vermillion);
+            margin-bottom: 2rem;
+        }
+
+        .space-content h2 {
+            font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+            font-weight: 200;
+            margin-bottom: 2rem;
+        }
+
+        .space-content p {
+            color: var(--stone);
+            font-size: 0.9rem;
+            line-height: 2;
+            margin-bottom: 1.5rem;
+        }
+
+        .space-content .features {
+            list-style: none;
+        }
+
+        .space-content .features li {
+            padding: 0.7rem 0;
+            border-bottom: 1px solid var(--wash);
+            font-size: 0.85rem;
+            color: var(--stone);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .space-content .features li span {
+            color: var(--ink);
+        }
+
+        .quote-section {
+            padding: 6rem 4rem;
+            text-align: center;
+        }
+
+        .quote-section .mark {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 4rem;
+            color: var(--vermillion);
+            opacity: 0.2;
+            line-height: 1;
+        }
+
+        .quote-section blockquote {
+            font-family: 'Noto Serif JP', serif;
+            font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+            font-weight: 200;
+            font-style: normal;
+            color: var(--light-ink);
+            max-width: 600px;
+            margin: 1rem auto 2rem;
+            line-height: 1.8;
+        }
+
+        .quote-section .attr {
+            font-size: 0.68rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--warm-gray);
+        }
+
+        .booking-section {
+            padding: 8rem 4rem;
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .booking-section .label {
+            font-size: 0.68rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--vermillion);
+            margin-bottom: 2rem;
+        }
+
+        .booking-section h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 200;
+            margin-bottom: 1.5rem;
+        }
+
+        .booking-section p {
+            color: var(--stone);
+            font-size: 0.92rem;
+            line-height: 1.9;
+            margin-bottom: 3rem;
+        }
+
+        .booking-section .cta {
+            display: inline-block;
+            padding: 1rem 3rem;
+            background: var(--ink);
+            color: var(--paper);
+            text-decoration: none;
+            font-size: 0.72rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            transition: all 0.4s ease;
+            border: none;
+        }
+
+        .booking-section .cta:hover {
+            background: var(--vermillion);
+        }
+
+        footer {
+            padding: 3rem 4rem;
+            border-top: 1px solid var(--wash);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        footer .logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1rem;
+            letter-spacing: 0.5em;
+            color: var(--ink);
+        }
+
+        footer .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        footer .footer-links a {
+            font-size: 0.68rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--warm-gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        footer .footer-links a:hover { color: var(--ink); }
+
+        @media (max-width: 768px) {
+            nav { padding: 1.5rem 2rem; }
+            nav .nav-links { display: none; }
+            .hero { grid-template-columns: 1fr; }
+            .hero-right { display: none; }
+            .hero-left { padding: 0 2rem 4rem; justify-content: center; }
+            .hero-left .kanji { display: none; }
+            .philosophy-section { grid-template-columns: 1fr; }
+            .practice-grid { grid-template-columns: 1fr; }
+            .space-inner { grid-template-columns: 1fr; }
+            footer { flex-direction: column; gap: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav id="nav">
+        <a href="#" class="logo">OASIS</a>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="#philosophy">Way</a></li>
+                <li><a href="#practice">Practice</a></li>
+                <li><a href="#space">Space</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-left">
+            <span class="kanji">靜</span>
+            <p class="pre">Luxury Meditation Retreat</p>
+            <h1>Oasis</h1>
+            <p class="sub">In the tradition of stillness, we find what the world has drowned — a voice older than language, deeper than thought.</p>
+        </div>
+        <div class="hero-right">
+            <div class="ensou"></div>
+            <span class="zen-text">靜寂</span>
+        </div>
+    </section>
+
+    <div class="horizontal-rule"></div>
+
+    <section class="philosophy-section" id="philosophy">
+        <div class="side-label">The Way</div>
+        <div class="content">
+            <h2>Between each breath lies an entire universe</h2>
+            <p>Oasis is rooted in the principle that true luxury is the spaciousness to simply be. Our retreat draws from Zen contemplative tradition, refined over millennia and expressed through architecture, ritual, and silence.</p>
+            <p>We do not offer escape. We offer return — to the ground beneath your feet, to the rhythm of your own breath, to the quiet wisdom that lives in the pause between heartbeats.</p>
+        </div>
+    </section>
+
+    <div class="horizontal-rule"></div>
+
+    <section class="practice-section" id="practice">
+        <div class="section-head">
+            <h2>Practice</h2>
+            <span class="label">Three Gates</span>
+        </div>
+        <div class="practice-grid">
+            <div class="practice-item" data-number="壹">
+                <h3>Zazen</h3>
+                <p>Seated meditation in our cedar-lined zendo. Morning and evening sessions guided by teachers with decades of practice. The foundation of all that follows.</p>
+            </div>
+            <div class="practice-item" data-number="弐">
+                <h3>Kinhin</h3>
+                <p>Walking meditation through the forest paths — each step a return to the present moment. The boundary between meditation and life dissolves.</p>
+            </div>
+            <div class="practice-item" data-number="参">
+                <h3>Chado</h3>
+                <p>The way of tea as contemplative practice. Each bowl is an invitation to presence — to receive this moment fully, and let it pass.</p>
+            </div>
+            <div class="practice-item" data-number="肆">
+                <h3>Shinrin-yoku</h3>
+                <p>Forest bathing along ancient trails. The pines and moss become your teachers, and the silence between trees becomes your shelter.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="space-section" id="space">
+        <div class="space-inner">
+            <div class="space-visual">
+                <div class="ink-mark"></div>
+            </div>
+            <div class="space-content">
+                <p class="label">The Space</p>
+                <h2>Architecture of emptiness</h2>
+                <p>Our pavilions embody the principle of ma — the meaningful void. Every room breathes. Every view frames the wild. Nothing is excessive; nothing is missing.</p>
+                <ul class="features">
+                    <li><span>Retreat Length</span><span>7 or 14 nights</span></li>
+                    <li><span>Capacity</span><span>12 guests</span></li>
+                    <li><span>Location</span><span>Highlands, Scotland</span></li>
+                    <li><span>Season</span><span>March — November</span></li>
+                    <li><span>From</span><span>£8,500</span></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="quote-section">
+        <p class="mark">"</p>
+        <blockquote>Before I came to Oasis, I was searching. After, I understood that what I sought was already here — had always been here.</blockquote>
+        <p class="attr">— Y.T., Kyoto</p>
+    </section>
+
+    <section class="booking-section" id="booking">
+        <p class="label">Enter the Gate</p>
+        <h2>The path begins with a single step</h2>
+        <p>Our retreats welcome a maximum of twelve guests. Each application is considered with care to ensure the right conditions for deep practice.</p>
+        <a href="#" class="cta">Begin Application</a>
+    </section>
+
+    <footer>
+        <span class="logo">OASIS</span>
+        <div class="footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Contact</a>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+        });
+    </script>
+</body>
+</html>

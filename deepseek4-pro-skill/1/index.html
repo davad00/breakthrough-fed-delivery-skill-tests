@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Oasis — A luxury meditation retreat where stillness becomes art. Find your stillness in our serene sanctuary.">
+<title>OASIS — Luxury Meditation Retreat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@300;400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { background: #080E12; }
+body { background: #080E12; color: #F0F5F8; font-family: 'Inter', sans-serif; font-weight: 300; overflow-x: hidden; cursor: none; }
+canvas#bg { position: fixed; top: 0; left: 0; z-index: 0; pointer-events: auto; }
+
+.cursor { position: fixed; width: 12px; height: 12px; border-radius: 50%; background: #00E5A0; z-index: 100; pointer-events: none; mix-blend-mode: normal; transition: width 0.3s cubic-bezier(0.45,0,0.55,1), height 0.3s cubic-bezier(0.45,0,0.55,1), background 0.3s cubic-bezier(0.45,0,0.55,1); }
+.cursor.hover { width: 48px; height: 48px; background: #F0F5F8; mix-blend-mode: difference; }
+.cursor-dot { position: fixed; width: 4px; height: 4px; border-radius: 50%; background: #F0F5F8; z-index: 101; pointer-events: none; }
+
+.nav-hamburger { position: fixed; top: 32px; right: 32px; z-index: 50; width: 26px; height: 18px; display: flex; flex-direction: column; justify-content: space-between; background: none; border: none; cursor: none; mix-blend-mode: difference; }
+.nav-hamburger span { display: block; width: 100%; height: 2px; background: #F0F5F8; transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.2s; }
+.nav-hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+.nav-overlay { position: fixed; inset: 0; z-index: 40; background: #080E12; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 48px; opacity: 0; pointer-events: none; transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1); }
+.nav-overlay.open { opacity: 1; pointer-events: auto; }
+.nav-overlay a { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: #708090; text-decoration: none; transition: color 0.4s; }
+.nav-overlay a:hover { color: #00E5A0; }
+
+main { position: relative; z-index: 10; }
+.section { min-height: 100vh; display: flex; align-items: center; padding: 64px; position: relative; }
+.section.full { min-height: auto; padding-top: 20vw; padding-bottom: 20vw; }
+
+.hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-end; padding-right: 8vw; position: relative; }
+.hero-title { font-family: 'Cormorant Garamond', serif; font-size: 12vw; font-weight: 300; line-height: 0.9; letter-spacing: -0.03em; color: #F0F5F8; text-align: right; }
+.hero-sub { font-family: 'Cormorant Garamond', serif; font-size: 2.5vw; font-weight: 300; line-height: 1; letter-spacing: 0.05em; color: #708090; margin-top: 16px; text-align: right; font-style: italic; }
+.hero-accent { position: absolute; bottom: 48px; left: 64px; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: #00E5A0; }
+
+.content-grid { max-width: 600px; display: flex; flex-direction: column; gap: 32px; }
+.content-grid.right { margin-left: auto; text-align: right; }
+.content-grid.left { margin-right: auto; }
+.section-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: #00E5A0; }
+.section-heading { font-family: 'Cormorant Garamond', serif; font-size: 4vw; font-weight: 400; line-height: 1; letter-spacing: -0.01em; color: #F0F5F8; }
+.section-body { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 300; line-height: 1.8; letter-spacing: 0.01em; color: #708090; max-width: 440px; }
+.section-body.right { margin-left: auto; }
+
+.btn { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; padding: 16px 40px; border-radius: 9999px; display: inline-block; cursor: none; transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); position: relative; z-index: 15; }
+.btn:hover { transform: scale(1.05); }
+.btn-primary { background: #00E5A0; color: #080E12; }
+.btn-ghost { background: transparent; color: #F0F5F8; border: 1px solid #708090; }
+
+.footer { padding: 64px; display: flex; justify-content: space-between; border-top: 1px solid rgba(112,128,144,0.2); }
+.footer-info { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; color: #708090; }
+.footer-links { display: flex; gap: 32px; }
+.footer-links a { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; color: #708090; text-decoration: none; transition: color 0.4s; }
+.footer-links a:hover { color: #00E5A0; }
+
+@media (max-width: 768px) {
+  body { cursor: auto; }
+  .cursor, .cursor-dot { display: none; }
+  .hero { padding-right: 5vw; }
+  .hero-title { font-size: 15vw; }
+  .hero-sub { font-size: 5vw; }
+  .section { padding: 32px 24px; }
+  .section-heading { font-size: 7vw; }
+  .section-body { font-size: 14px; }
+  .footer { flex-direction: column; gap: 16px; }
+  canvas#bg { opacity: 0.3; }
+}
+</style>
+</head>
+<body>
+<div class="cursor" aria-hidden="true"></div>
+<div class="cursor-dot" aria-hidden="true"></div>
+
+<button class="nav-hamburger" aria-label="Toggle navigation menu" data-magnetic>
+  <span></span><span></span><span></span>
+</button>
+
+<nav class="nav-overlay" role="navigation" aria-label="Main navigation">
+  <a href="#about">About</a>
+  <a href="#retreats">Retreats</a>
+  <a href="#experience">Experience</a>
+  <a href="#reserve">Reserve</a>
+</nav>
+
+<canvas id="bg"></canvas>
+
+<main role="main">
+  <section class="hero">
+    <span class="hero-accent">Find Your Stillness</span>
+    <h1 class="hero-title">Oasis</h1>
+    <p class="hero-sub">Where silence becomes sanctuary</p>
+  </section>
+
+  <section class="section" id="about">
+    <div class="content-grid left">
+      <span class="section-label">About</span>
+      <h2 class="section-heading">A stillness deeper than silence.</h2>
+      <p class="section-body">Nestled where the ocean meets ancient cliffs, Oasis is not a destination — it is a return. Our retreat is designed by masters of contemplative practice, architects of tranquility, and artisans of the sensory world. Every stone, every ripple, every breath of wind has been considered.</p>
+    </div>
+  </section>
+
+  <section class="section" id="retreats">
+    <div class="content-grid right">
+      <span class="section-label">Retreats</span>
+      <h2 class="section-heading">Four paths. One stillness.</h2>
+      <p class="section-body right">Silent Immersion — 7 days of absolute silence. Ocean Meditation — guided practice at the water's edge. Deep Rest — restorative yoga and sound bathing. Private Sanctuary — a bespoke retreat designed entirely around you.</p>
+    </div>
+  </section>
+
+  <section class="section" id="experience">
+    <div class="content-grid left">
+      <span class="section-label">Experience</span>
+      <h2 class="section-heading">Beyond meditation.</h2>
+      <p class="section-body">Float in our saltwater infinity pools suspended over the Pacific. Walk the stone labyrinths at dawn. Dine on cuisine cultivated from our own coastal gardens. Sleep in suites where the only sound is the rhythm of waves. This is05 not escape. This is arrival.</p>
+      <a href="#reserve" class="btn btn-primary" data-magnetic>Begin Your Journey</a>
+    </div>
+  </section>
+
+  <section class="section" id="reserve">
+    <div class="content-grid right">
+      <span class="section-label">Reserve</span>
+      <h2 class="section-heading">Your stillness awaits.</h2>
+      <p class="section-body right">Limited to thirty guests at any moment. Each stay is carefully curated. Inquire below and our concierge will craft your experience.</p>
+      <a href="#" class="btn btn-ghost" style="margin-left:auto;display:block;width:fit-content" data-magnetic>Request Invitation</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span class="footer-info">Oasis Retreat · Est. 2025 · Big Sur, California</span>
+    <div class="footer-links">
+      <a href="#">Instagram</a>
+      <a href="#">Journal</a>
+      <a href="#">Contact</a>
+    </div>
+  </footer>
+</main>
+
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+<script type="module">
+import * as THREE from 'three';
+
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (!prefersReducedMotion) {
+  gsap.registerPlugin(ScrollTrigger);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera.position.set(0, 0, 15);
+
+  const canvas = document.getElementById('bg');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x080E12);
+
+  const uniforms = {
+    uTime: { value: 0 },
+    uMouse: { value: new THREE.Vector2(0, 0) }
+  };
+
+  const geometry = new THREE.PlaneGeometry(20, 20, 128, 128);
+  geometry.rotateX(-Math.PI / 2.2);
+
+  const material = new THREE.ShaderMaterial({
+    uniforms,
+    vertexShader: `
+      varying vec2 vUv;
+      varying float vElevation;
+      uniform float uTime;
+      uniform vec2 uMouse;
+      float wave(vec2 p, float t) {
+        float d = length(p);
+        return sin(d * 3.0 - t * 1.2) * 0.3 +
+               sin(p.x * 2.5 + t * 0.8) * 0.2 +
+               sin(p.y * 2.8 - t * 0.6) * 0.2 +
+               cos(d * 5.0 + t * 0.5) * 0.15;
+      }
+      void main() {
+        vec3 pos = position;
+        vec2 uv = pos.xy * 0.5;
+        float distToMouse = length(uv - uMouse * 2.0);
+        float ripple = exp(-distToMouse * 2.5) * sin(distToMouse * 6.0 - uTime * 3.0) * 0.25;
+        float elevation = wave(uv, uTime) + ripple;
+        pos.z += elevation;
+        vElevation = elevation;
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+      }
+    `,
+    fragmentShader: `
+      varying vec2 vUv;
+      varying float vElevation;
+      uniform float uTime;
+      void main() {
+        vec3 deep = vec3(0.031, 0.055, 0.071);
+        vec3 mid = vec3(0.02, 0.09, 0.12);
+        vec3 shallow = vec3(0.0, 0.4, 0.35);
+        vec3 foam = vec3(0.0, 0.898, 0.627);
+        float h = vElevation * 0.5 + 0.5;
+        vec3 col = mix(deep, mid, smoothstep(0.3, 0.45, h));
+        col = mix(col, shallow, smoothstep(0.45, 0.55, h));
+        col = mix(col, foam, smoothstep(0.65, 0.75, h));
+        float sparkle = step(0.98, sin(vUv.x * 80.0) * sin(vUv.y * 80.0) * sin(uTime * 0.5));
+        col += sparkle * 0.04 * vec3(0.0, 0.898, 0.627);
+        gl_FragColor = vec4(col, 1.0);
+      }
+    `
+  });
+
+  const water = new THREE.Mesh(geometry, material);
+  scene.add(water);
+
+  const ambientLight = new THREE.AmbientLight(0x0a1a20, 1.2);
+  scene.add(ambientLight);
+
+  let mouseX = 0, mouseY = 0;
+  document.addEventListener('mousemove', (e) => {
+    mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+    mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+    uniforms.uMouse.value.set(mouseX * 0.5, mouseY * 0.4);
+  });
+
+  let targetScroll = 0, currentScroll = 0;
+
+  function animate(time) {
+    requestAnimationFrame(animate);
+    uniforms.uTime.value = time * 0.001;
+    water.rotation.z = Math.sin(time * 0.0003) * 0.03;
+    water.rotation.x = -Math.PI / 2.2 + Math.cos(time * 0.0004) * 0.02;
+    renderer.render(scene, camera);
+  }
+  requestAnimationFrame(animate);
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  const lenis = new Lenis({ lerp: 0.08, smoothWheel: true });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+
+  gsap.from('.hero-title', {
+    scrollTrigger: { trigger: '.hero', start: 'top top', toggleActions: 'play none none reverse' },
+    y: 80, opacity: 0, duration: 1.6, ease: 'power4.out'
+  });
+  gsap.from('.hero-sub', {
+    scrollTrigger: { trigger: '.hero', start: 'top top', toggleActions: 'play none none reverse' },
+    y: 40, opacity: 0, duration: 1.6, delay: 0.3, ease: 'power4.out'
+  });
+  gsap.from('.hero-accent', {
+    scrollTrigger: { trigger: '.hero', start: 'top top', toggleActions: 'play none none reverse' },
+    x: -30, opacity: 0, duration: 1.2, delay: 0.6, ease: 'power4.out'
+  });
+
+  document.querySelectorAll('.content-grid').forEach((el, i) => {
+    const xDir = el.classList.contains('right') ? 80 : -80;
+    gsap.from(el.querySelectorAll('.section-label, .section-heading, .section-body, .btn'), {
+      scrollTrigger: { trigger: el, start: 'top 80%', toggleActions: 'play none none reverse' },
+      x: xDir, opacity: 0, duration: 1.2, ease: 'power4.out', stagger: 0.1
+    });
+  });
+
+  gsap.from('.footer', {
+    scrollTrigger: { trigger: '.footer', start: 'top 95%', toggleActions: 'play none none reverse' },
+    opacity: 0, y: 30, duration: 1, ease: 'power4.out'
+  });
+
+  const cursor = document.querySelector('.cursor');
+  const cursorDot = document.querySelector('.cursor-dot');
+  let cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+  let tx = cx, ty = cy;
+
+  document.addEventListener('mousemove', (e) => {
+    tx = e.clientX;
+    ty = e.clientY;
+  });
+
+  document.querySelectorAll('[data-magnetic], a, .btn, .nav-hamburger').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+
+  function animateCursor() {
+    cx += (tx - cx) * 0.12;
+    cy += (ty - cy) * 0.12;
+    cursor.style.left = (cx - cursor.offsetWidth / 2) + 'px';
+    cursor.style.top = (cy - cursor.offsetHeight / 2) + 'px';
+    cursorDot.style.left = (tx - 2) + 'px';
+    cursorDot.style.top = (ty - 2) + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  requestAnimationFrame(animateCursor);
+
+  const hamburger = document.querySelector('.nav-hamburger');
+  const navOverlay = document.querySelector('.nav-overlay');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    navOverlay.classList.toggle('open');
+  });
+  navOverlay.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      navOverlay.classList.remove('open');
+    });
+  });
+
+  const magneticEls = document.querySelectorAll('[data-magnetic]');
+  magneticEls.forEach(el => {
+    el.addEventListener('mousemove', (e) => {
+      const rect = el.getBoundingClientRect();
+      const relX = e.clientX - rect.left - rect.width / 2;
+      const relY = e.clientY - rect.top - rect.height / 2;
+      gsap.to(el, { x: relX * 0.3, y: relY * 0.3, duration: 0.4, ease: 'power2.out' });
+    });
+    el.addEventListener('mouseleave', () => {
+      gsap.to(el, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1, 0.4)' });
+    });
+  });
+} else {
+  document.querySelectorAll('.cursor, .cursor-dot').forEach(e => e.remove());
+  document.body.style.cursor = 'auto';
+  document.querySelector('.hero-title').style.opacity = '1';
+  document.querySelector('.hero-sub').style.opacity = '1';
+}
+</script>
+</body>
+</html>

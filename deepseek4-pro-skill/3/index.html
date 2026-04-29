@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Oasis — A luxury meditation retreat where light itself becomes practice. Breathe. Be still.">
+<title>OASIS — Luxury Meditation Retreat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { background: #F2EEF7; }
+body { background: #F2EEF7; color: #1A1520; font-family: 'Inter', sans-serif; font-weight: 350; overflow-x: hidden; cursor: none; }
+canvas#bg { position: fixed; top: 0; left: 0; z-index: 0; pointer-events: none; }
+
+.cursor { position: fixed; width: 14px; height: 14px; border-radius: 50%; background: #C4A8FF; z-index: 100; pointer-events: none; box-shadow: 0 0 20px rgba(196,168,255,0.5); transition: width 0.4s cubic-bezier(0.45,0,0.55,1), height 0.4s cubic-bezier(0.45,0,0.55,1), background 0.4s, box-shadow 0.4s; }
+.cursor.hover { width: 52px; height: 52px; background: #1A1520; box-shadow: 0 0 30px rgba(196,168,255,0.8); }
+.cursor-ring { position: fixed; width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(196,168,255,0.4); z-index: 99; pointer-events: none; }
+
+.nav-fog { position: fixed; top: 28px; right: 28px; z-index: 50; width: 40px; height: 40px; border-radius: 28 50%; background: rgba(196,168,255,0.12); display: flex; align-items: center; justify-content: center; cursor: none; border: none; transition: background 0.4s; }
+.nav-fog:hover { background: rgba(196,168,255,0.25); }
+.nav-fog-inner { width: 18px; height:18 2px; background: #1A1520; position: relative; transition: transform 0.3s, background 0.3s; }
+.nav-fog-inner::before, .nav-fog-inner::after { content: ''; position: absolute; width: 18px; height: 2px; background: #1A1520; transition: transform 0.35s cubic-bezier(0.45,0,0.55,1); }
+.nav-fog-inner::before { top: -6px; }
+.nav-fog-inner::after { top: 6px; }
+.nav-fog.open .nav-fog-inner { background: transparent; }
+.nav-fog.open .nav-fog-inner::before { top: 0; transform: rotate(45deg); }
+.nav-fog.open .nav-fog-inner::after { top: 0; transform: rotate(-45deg); }
+
+.nav-overlay { position: fixed; inset: 0; z-index: 40; background: rgba(242,238,247,0.97); backdrop-filter: blur(20px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.6s cubic-bezier(0.45,0,0.55,1); }
+.nav-overlay.open { opacity: 1; pointer-events: auto; }
+.nav-links { display: flex; flex-direction: column; gap: 32px; align-items: center; }
+.nav-links a { font-family: 'DM Serif Display', serif; font-size: 6vw; font-weight: 400; line-height: 1; color: #8B82A0; text-decoration: none; transition: color 0.5s, transform 0.5s cubic-bezier(0.45,0,0.55,1); }
+.nav-links a:hover { color: #C4A8FF; transform: scale(1.05); }
+
+main { position: relative; z-index: 10; }
+
+.hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 5vw; position: relative; }
+.hero-title { font-family: 'DM Serif Display', serif; font-size: 12vw; font-weight: 400; line-height: 0.92; letter-spacing: -0.02em; color: #1A1520; transition: transform 6s cubic-bezier(0.45,0,0.55,1); }
+.hero-sub { font-family: 'Inter', sans-serif; font-size: 1.3vw; font-weight: 300; letter-spacing: 0.06em; color: #8B82A0; margin-top: 10px; text-transform: uppercase; }
+.hero-breath-line { margin-top: 48px; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 400; letter-spacing: 0.16em; text-transform: uppercase; color: #C4A8FF; }
+
+.section { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 64px; position: relative; }
+.content { max-width: 500px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+.section-icon { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 400; letter-spacing: 0.16em; text-transform: uppercase; color: #C4A8FF; }
+.section-title { font-family: 'DM Serif Display', serif; font-size: 4vw; font-weight: 400; line-height: 1; letter-spacing: -0.01em; color: #1A1520; }
+.section-text { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 350; line-height: 1.75; letter-spacing: 0.02em; color: #8B82A0; }
+
+.btn { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 400; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; padding: 16px 42px; border-radius: 9999px; display: inline-block; cursor: none; transition: transform 0.5s cubic-bezier(0.45,0,0.55,1), box-shadow 0.5s; }
+.btn:hover { transform: scale(1.04); }
+.btn-primary { background: #C4A8FF; color: #1A1520; }
+.btn-primary:hover { box-shadow: 0 0 30px rgba(196,168,255,0.5); }
+.btn-ghost { background: transparent; color: #1A1520; border: 1px solid #8B82A0; }
+.btn-ghost:hover { border-color: #C4A8FF; }
+
+.footer { padding: 64px; text-align: center; border-top: 1px solid rgba(139,130,160,0.15); }
+.footer-text { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 400; letter-spacing: 0.16em; text-transform: uppercase; color: #8B82A0; }
+.footer-text a { color: #C4A8FF; text-decoration: none; transition: opacity 0.4s; }
+.footer-text a:hover { opacity: 0.7; }
+
+@media (max-width: 768px) {
+  body { cursor: auto; }
+  .cursor, .cursor-ring { display: none; }
+  .hero-title { font-size: 15vw; }
+  .hero-sub { font-size: 3.5vw; }
+  .section { padding: 48px 24px; }
+  .section-title { font-size: 8vw; }
+  .section-text { font-size: 14px; }
+  canvas#bg { opacity: 0.5; }
+  .nav-links a { font-size: 10vw; }
+}
+</style>
+</head>
+<body>
+<div class="cursor" aria-hidden="true"></div>
+<div class="cursor-ring" aria-hidden="true"></div>
+
+<button class="nav-fog" aria-label="Toggle navigation menu" data-magnetic>
+  <div class="nav-fog-inner"></div>
+</button>
+
+<nav class="nav-overlay" role="navigation" aria-label="Main navigation">
+  <div class="nav-links">
+    <a href="#presence">Presence</a>
+    <a href="#spaces">Spaces</a>
+    <a href="#practices">Practices</a>
+    <a href="#breathe">Breathe</a>
+  </div>
+</nav>
+
+<canvas id="bg"></canvas>
+
+<main role="main">
+  <section class="hero">
+    <h1 class="hero-title" id="breath-title">Oasis</h1>
+    <p class="hero-sub">Breathe into stillness</p>
+    <span class="hero-breath-line">Inhale · Exhale · Arrive</span>
+  </section>
+
+  <section class="section" id="presence">
+    <div class="content">
+      <span class="section-icon">✦ Presence</span>
+      <h2 class="section-title">The air itself is practice.</h2>
+      <p class="section-text">Suspended above the mist-laden valleys of the Pacific Northwest, Oasis exists where cloud meets canopy. Here, the only instruction is to breathe. The only practice is presence. Every surface, every window, every open-air pavilion is designed to dissolve the boundary between interior and the living world beyond.</p>
+    </div>
+  </section>
+
+  <section class="section" id="spaces">
+    <div class="content">
+      <span class="section-icon">✦ Spaces</span>
+      <h2 class="section-title">Rooms that breathe.</h2>
+      <p class="section-text">Eighteen floating suites suspended among ancient Douglas firs. Each features retractable walls opening to forest canopy, a private meditation platform extending into the mist, and760 a lavender stone bath fed by natural geothermal springs. The architecture is light — glass, pale timber,040 linen — as if the building itself is exhaling.</p>
+      <a href="#breathe" class="btn btn-primary" data-magnetic>Explore Spaces</a>
+    </div>
+  </section>
+
+  <section class="section" id="practices">
+    <div class="content">
+      <span class="section-icon">✦ Practices</span>
+      <h2 class="section-title">Four breaths.<br>One stillness.</h2>
+      <p class="section-text" style="text-align:left;max-width:400px">Morning Fog — guided breathwork at dawn in open-air pavilions. Forest Bathing — the Japanese practice of shinrin-yoku through ancient trails. Cloud Meditation — floating practice on geothermal pools. Deep Listening — sound meditation with Himalayan bowls and forest silence.</p>
+    </div>
+  </section>
+
+  <section class="section" id="breathe">
+    <div class="content">
+      <span class="section-icon">✦ Arrive</span>
+      <h2 class="section-title">Let go. Breathe in.</h2>
+      <p class="section-text">Oasis welcomes eighteen guests at a time. Your stay begins the moment you step onto the forest path. No check-in desk. No paperwork. Just a warm tea, a deep breath, and the trees.</p>
+      <a href="#" class="btn btn-ghost" data-magnetic>Request Presence</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p class="footer-text">Oasis Retreat · Est. 2025 · Olympic Peninsula, Washington &nbsp;·&nbsp; <a href="#">@oasis.retreat</a></p>
+  </footer>
+</main>
+
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+<script type="module">
+import * as THREE from 'three';
+
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (!prefersReducedMotion) {
+  gsap.registerPlugin(ScrollTrigger);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 60);
+  camera.position.set(0, 1, 18);
+
+  const canvas = document.getElementById('bg');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x000000, 0);
+
+  const particleCount = 600;
+  const geometry = new THREE.BufferGeometry();
+  const positions = new Float32Array(particleCount * 3);
+  const sizes = new Float32Array(particleCount);
+  const colors = new Float32Array(particleCount * 3);
+  const velocities = new Float32Array(particleCount * 3);
+
+  for (let i = 0; i < particleCount; i++) {
+    positions[i * 3] = (Math.random() - 0.5) * 24;
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 16;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
+    sizes[i] = Math.random() * 3 + 0.5;
+    const lightness = 0.55 + Math.random() * 0.45;
+    colors[i * 3] = 0.5 + Math.random() * 0.5;
+    colors[i * 3 + 1] = 0.2 + Math.random() * 0.4;
+    colors[i * 3 + 2] = 0.6 + Math.random() * 0.4;
+    velocities[i * 3] = (Math.random() - 0.5) * 0.004;
+    velocities[i * 3 + 1] = (Math.random() - 0.5) * 0.006;
+    velocities[i * 3 + 2] = (Math.random() - 0.5) * 0.003;
+  }
+
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+  geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+  const spriteTex = (() => {
+    const c = document.createElement('canvas');
+    c.width = 32; c.height = 32;
+    const ctx = c.getContext('2d');
+    const grad = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
+    grad.addColorStop(0, 'rgba(255,255,255,0.9)');
+    grad.addColorStop(0.3, 'rgba(200,170,255,0.6)');
+    grad.addColorStop(0.7, 'rgba(180,150,240,0.1)');
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 32, 32);
+    return new THREE.CanvasTexture(c);
+  })();
+
+  const material = new THREE.PointsMaterial({
+    size: 0.25,
+    map: spriteTex,
+    vertexColors: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    transparent: true,
+    opacity: 0.7
+  });
+
+  const particles = new THREE.Points(geometry, material);
+  scene.add(particles);
+
+  let mouseX = 0, mouseY = 0;
+  document.addEventListener('mousemove', (e) => {
+    mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+    mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+  });
+
+  function animate(time) {
+    requestAnimationFrame(animate);
+    const t = time * 0.001;
+    const posArr = geometry.attributes.position.array;
+    for (let i = 0; i < particleCount; i++) {
+      posArr[i * 3] += velocities[i * 3] + Math.sin(t + i) * 0.002 + mouseX * 0.005;
+      posArr[i * 3 + 1] += velocities[i * 3 + 1] + Math.cos(t * 0.7 + i) * 0.003 + mouseY * 0.005;
+      posArr[i * 3 + 2] += velocities[i * 3 + 2];
+      if (posArr[i * 3] > 12) posArr[i * 3] = -12;
+      if (posArr[i * 3] < -12) posArr[i * 3] = 12;
+      if (posArr[i * 3 + 1] > 8) posArr[i * 3 + 1] = -8;
+      if (posArr[i * 3 + 1] < -8) posArr[i * 3 + 1] = 8;
+    }
+    geometry.attributes.position.needsUpdate = true;
+    particles.rotation.y += 0.0002;
+    material.opacity = 0.55 + Math.sin(t * 0.5) * 0.15;
+    renderer.render(scene, camera);
+  }
+  requestAnimationFrame(animate);
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+
+  gsap.from('.hero-title', {
+    scrollTrigger: { trigger: '.hero', start: 'top top', toggleActions: 'play none none reverse' },
+    y: 60, opacity: 0, duration: 1.8, ease: 'power3.out'
+  });
+  gsap.from(['.hero-sub', '.hero-breath-line'], {
+    scrollTrigger: { trigger: '.hero', start: 'top top', toggleActions: 'play none none reverse' },
+    y: 30, opacity: 0, duration: 1.4, stagger: 0.2, delay: 0.4, ease: 'power3.out'
+  });
+
+  gsap.to('#breath-title', {
+    scale: 1.03,
+    duration: 6,
+    ease: 'sine.inOut',
+    repeat: -1,
+    yoyo: true,
+    repeatDelay: 0
+  });
+
+  document.querySelectorAll('.content').forEach((el, i) => {
+    gsap.from(el.children, {
+      scrollTrigger: { trigger: el.closest('.section'), start: 'top 75%', toggleActions: 'play none none reverse' },
+      y: 40, opacity: 0, duration: 1.2, ease: 'power3.out', stagger: 0.12
+    });
+  });
+  gsap.from('.footer', {
+    scrollTrigger: { trigger: '.footer', start: 'top 95%', toggleActions: 'play none none reverse' },
+    opacity: 0, y: 20, duration: 1, ease: 'power3.out'
+  });
+
+  const cursor = document.querySelector('.cursor');
+  const ring = document.querySelector('.cursor-ring');
+  let cx = 0, cy = 0, tx = 0, ty = 0;
+  let rcx = 0, rcy = 0;
+  document.addEventListener('mousemove', (e) => { tx = e.clientX; ty = e.clientY; });
+  document.querySelectorAll('[data-magnetic], a, .btn, .nav-fog').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+  function animCursor() {
+    cx += (tx - cx) * 0.1;
+    cy += (ty - cy) * 0.1;
+    rcx += (tx - rcx) * 0.05;
+    rcy += (ty - rcy) * 0.05;
+    cursor.style.left = (cx - 7) + 'px';
+    cursor.style.top = (cy - 7) + 'px';
+    ring.style.left = (rcx - 18) + 'px';
+    ring.style.top = (rcy - 18) + 'px';
+    requestAnimationFrame(animCursor);
+  }
+  requestAnimationFrame(animCursor);
+
+  const navBtn = document.querySelector('.nav-fog');
+  const nav = document.querySelector('.nav-overlay');
+  navBtn.addEventListener('click', () => { navBtn.classList.toggle('open'); nav.classList.toggle('open'); });
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { navBtn.classList.remove('open'); nav.classList.remove('open'); }));
+
+  document.querySelectorAll('[data-magnetic]').forEach(el => {
+    el.addEventListener('mousemove', (e) => {
+      const rect = el.getBoundingClientRect();
+      gsap.to(el, { x: (e.clientX - rect.left - rect.width / 2) * 0.3, y: (e.clientY - rect.top - rect.height / 2) * 0.3, duration: 0.5, ease: 'power2.out' });
+    });
+    el.addEventListener('mouseleave', () => gsap.to(el, { x: 0, y: 0, duration: 0.7, ease: 'power3.out' }));
+  });
+} else {
+  document.querySelectorAll('.cursor, .cursor-ring').forEach(e => e.remove());
+  document.body.style.cursor = 'auto';
+  document.querySelector('#breath-title').style.opacity = '1';
+}
+</script>
+</body>
+</html>

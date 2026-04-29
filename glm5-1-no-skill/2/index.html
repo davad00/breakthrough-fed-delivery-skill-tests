@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis — Luxury Meditation Retreat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --noir: #0A0A0A;
+            --charcoal: #1A1A1A;
+            --graphite: #2A2A2A;
+            --silver: #8A8A8A;
+            --platinum: #B8B8B8;
+            --gold: #C9A96E;
+            --gold-light: #D4BA8A;
+            --gold-dark: #A68B5B;
+            --off-white: #F5F0EB;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--noir);
+            color: var(--platinum);
+            line-height: 1.8;
+            font-weight: 300;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 400;
+            line-height: 1.2;
+        }
+
+        ::selection {
+            background: var(--gold);
+            color: var(--noir);
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 2.5rem 5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid transparent;
+            transition: all 0.6s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(10, 10, 10, 0.92);
+            backdrop-filter: blur(30px);
+            border-bottom-color: var(--graphite);
+            padding: 1.5rem 5rem;
+        }
+
+        nav .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--gold);
+            letter-spacing: 0.3em;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        nav .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        nav .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        nav .nav-links a {
+            text-decoration: none;
+            color: var(--silver);
+            font-size: 0.68rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            font-weight: 400;
+            transition: color 0.3s;
+        }
+
+        nav .nav-links a:hover { color: var(--gold); }
+
+        nav .book-btn {
+            padding: 0.7rem 2rem;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            text-decoration: none;
+            font-size: 0.65rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            transition: all 0.4s ease;
+        }
+
+        nav .book-btn:hover {
+            background: var(--gold);
+            color: var(--noir);
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            background: radial-gradient(ellipse at center, var(--charcoal) 0%, var(--noir) 70%);
+        }
+
+        .hero-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(201, 169, 110, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero h1 {
+            font-size: clamp(5rem, 12vw, 10rem);
+            color: var(--off-white);
+            letter-spacing: 0.12em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 1px;
+            background: var(--gold);
+            margin: 2rem auto 0;
+        }
+
+        .hero .subtitle {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            font-style: italic;
+            color: var(--gold);
+            margin-top: 2rem;
+            letter-spacing: 0.08em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero .desc {
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: var(--silver);
+            letter-spacing: 0.05em;
+            max-width: 450px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .scroll-down span {
+            font-size: 0.6rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold-dark);
+            writing-mode: vertical-rl;
+        }
+
+        .gold-line {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+            animation: goldPulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes goldPulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        .divider {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--graphite), transparent);
+        }
+
+        .intro {
+            padding: 8rem 5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            max-width: 1300px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .intro-left .label {
+            font-size: 0.65rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 2rem;
+        }
+
+        .intro-left h2 {
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            color: var(--off-white);
+        }
+
+        .intro-right p {
+            font-size: 0.95rem;
+            line-height: 2;
+            color: var(--silver);
+        }
+
+        .services {
+            padding: 8rem 5rem;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .services .section-head {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .services .section-head .label {
+            font-size: 0.65rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+        }
+
+        .services .section-head h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--off-white);
+        }
+
+        .service-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+        }
+
+        .service-item {
+            padding: 3rem 2.5rem;
+            border: 1px solid var(--graphite);
+            position: relative;
+            transition: all 0.5s ease;
+            background: var(--charcoal);
+        }
+
+        .service-item:hover {
+            border-color: var(--gold-dark);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 60px rgba(201, 169, 110, 0.05);
+        }
+
+        .service-item .num {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: var(--gold);
+            opacity: 0.3;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-item h3 {
+            font-size: 1.5rem;
+            color: var(--off-white);
+            margin-bottom: 1rem;
+        }
+
+        .service-item p {
+            font-size: 0.85rem;
+            color: var(--silver);
+            line-height: 1.9;
+        }
+
+        .ambience {
+            padding: 10rem 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ambience-bg {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--charcoal) 0%, var(--noir) 50%, var(--charcoal) 100%);
+        }
+
+        .ambience-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .ambience-content .label {
+            font-size: 0.65rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 2rem;
+        }
+
+        .ambience-content h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            color: var(--off-white);
+            margin-bottom: 2rem;
+        }
+
+        .ambience-content p {
+            font-size: 0.95rem;
+            color: var(--silver);
+            line-height: 2;
+            max-width: 550px;
+            margin: 0 auto 3rem;
+        }
+
+        .ambience-stats {
+            display: flex;
+            justify-content: center;
+            gap: 5rem;
+            margin-top: 4rem;
+        }
+
+        .ambience-stats .stat {
+            text-align: center;
+        }
+
+        .ambience-stats .stat .number {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: var(--gold);
+            display: block;
+        }
+
+        .ambience-stats .stat .stat-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--silver);
+            margin-top: 0.5rem;
+        }
+
+        .quote-section {
+            padding: 8rem 5rem;
+            text-align: center;
+        }
+
+        .quote-section blockquote {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            font-style: italic;
+            font-weight: 400;
+            color: var(--off-white);
+            max-width: 750px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+
+        .quote-section .attrib {
+            font-size: 0.7rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        .booking-section {
+            padding: 10rem 5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .booking-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 80px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+        }
+
+        .booking-section .label {
+            font-size: 0.65rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 2rem;
+        }
+
+        .booking-section h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            color: var(--off-white);
+            margin-bottom: 1.5rem;
+        }
+
+        .booking-section p {
+            color: var(--silver);
+            max-width: 480px;
+            margin: 0 auto 3.5rem;
+            font-size: 0.9rem;
+            line-height: 1.9;
+        }
+
+        .booking-section .cta-group {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 1.1rem 3.5rem;
+            background: var(--gold);
+            color: var(--noir);
+            text-decoration: none;
+            font-size: 0.68rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            font-weight: 600;
+            transition: all 0.4s ease;
+        }
+
+        .btn-primary:hover {
+            background: var(--gold-light);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(201, 169, 110, 0.2);
+        }
+
+        .btn-outline {
+            display: inline-block;
+            padding: 1.1rem 3.5rem;
+            border: 1px solid var(--graphite);
+            color: var(--platinum);
+            text-decoration: none;
+            font-size: 0.68rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            font-weight: 400;
+            transition: all 0.4s ease;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        footer {
+            padding: 4rem 5rem;
+            border-top: 1px solid var(--graphite);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        footer .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--gold);
+            letter-spacing: 0.25em;
+        }
+
+        footer .footer-right {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        footer .footer-right a {
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--silver);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        footer .footer-right a:hover { color: var(--gold); }
+
+        @media (max-width: 768px) {
+            nav { padding: 1.5rem 2rem; }
+            nav .nav-links { display: none; }
+            .intro { grid-template-columns: 1fr; padding: 5rem 2rem; }
+            .service-list { grid-template-columns: 1fr; }
+            .ambience-stats { flex-direction: column; gap: 2rem; }
+            .booking-section .cta-group { flex-direction: column; align-items: center; }
+            footer { flex-direction: column; gap: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav id="nav">
+        <a href="#" class="logo">OASIS</a>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="#intro">About</a></li>
+                <li><a href="#services">Rituals</a></li>
+                <li><a href="#ambience">Ambience</a></li>
+            </ul>
+            <a href="#booking" class="book-btn">Reserve</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-glow"></div>
+        <h1>Oasis</h1>
+        <p class="subtitle">Luxury Meditation Retreat</p>
+        <p class="desc">An exclusive sanctuary of silence, meticulously crafted for the discerning seeker of inner peace.</p>
+        <div class="scroll-down">
+            <div class="gold-line"></div>
+            <span>Scroll</span>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section class="intro" id="intro">
+        <div class="intro-left">
+            <p class="label">The Philosophy</p>
+            <h2>In silence, we find what noise has drowned</h2>
+        </div>
+        <div class="intro-right">
+            <p>Oasis exists at the intersection of ancient contemplative practice and contemporary luxury. Set within 200 acres of pristine highland wilderness, our retreat offers an experience of stillness that is increasingly rare — and increasingly essential. Each detail, from the architecture to the cuisine, serves a single purpose: your return to presence.</p>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section class="services" id="services">
+        <div class="section-head">
+            <p class="label">Sacred Rituals</p>
+            <h2>Curated Paths to Stillness</h2>
+        </div>
+        <div class="service-list">
+            <div class="service-item">
+                <span class="num">01</span>
+                <h3>Vipassana</h3>
+                <p>Ten days of profound silence in our mountain pavilion. Guided by master teachers with over forty years of practice.</p>
+            </div>
+            <div class="service-item">
+                <span class="num">02</span>
+                <h3>Sound Alchemy</h3>
+                <p>Crystal bowl resonance, Tibetan overtone singing, and bespoke frequency sessions in our acoustically engineered chamber.</p>
+            </div>
+            <div class="service-item">
+                <span class="num">03</span>
+                <h3>Earth Practice</h3>
+                <p>Barefoot forest meditation, thermal spring immersion, and sunrise ceremonies at the stone circle on the ridge.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="ambience" id="ambience">
+        <div class="ambience-bg"></div>
+        <div class="ambience-content">
+            <p class="label">The Sanctuary</p>
+            <h2>Architecture that breathes</h2>
+            <p>Our pavilions dissolve the boundary between shelter and landscape. Natural stone, reclaimed timber, and floor-to-ceiling glass frame the wild beauty that surrounds you.</p>
+            <div class="ambience-stats">
+                <div class="stat">
+                    <span class="number">200</span>
+                    <span class="stat-label">Acres of Wilderness</span>
+                </div>
+                <div class="stat">
+                    <span class="number">12</span>
+                    <span class="stat-label">Guests Maximum</span>
+                </div>
+                <div class="stat">
+                    <span class="number">7</span>
+                    <span class="stat-label">Day Immersion</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section class="quote-section">
+        <blockquote>"Oasis gave me what no amount of success could — the ability to sit with myself and feel complete."</blockquote>
+        <p class="attrib">— Private Guest, 2024</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <section class="booking-section" id="booking">
+        <p class="label">Reserve Your Silence</p>
+        <h2>The journey inward begins</h2>
+        <p>Our retreats welcome a maximum of twelve guests. Each application is personally reviewed to ensure alignment with the Oasis experience.</p>
+        <div class="cta-group">
+            <a href="#" class="btn-primary">Apply for Retreat</a>
+            <a href="#" class="btn-outline">Download Brochure</a>
+        </div>
+    </section>
+
+    <footer>
+        <span class="logo">OASIS</span>
+        <div class="footer-right">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Contact</a>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('nav');
+            nav.classList.toggle('scrolled', window.scrollY > 50);
+        });
+    </script>
+</body>
+</html>
